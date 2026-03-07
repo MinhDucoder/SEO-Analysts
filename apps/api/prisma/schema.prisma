@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String?    @map("password_hash")
+  provider     String     @default("local") // local | google
+  providerId   String?    @map("provider_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  auditJobs    AuditJob[]
+
+  @@map("users")
+}
+
+model AuditJob {
+  id          String       @id @default(uuid())
+  userId      String?      @map("user_id")
+  url         String
+  status      String       @default("pending") // pending | crawling | analyzing | scoring | generating_report | completed | failed
+  progress    Int          @default(0)
+  errorMessage String?     @map("error_message")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  completedAt DateTime?    @map("completed_at")
+  user        User?        @relation(fields: [userId], references: [id])
+  result      AuditResult?
+  pages       Page[]
+
+  @@index([url, createdAt])
+  @@index([userId])
+  @@map("audit_jobs")
+}
+
+model AuditResult {
+  id             String   @id @default(uuid())
+  jobId          String   @unique @map("job_id")
+  overallScore   Float    @map("overall_score")
+  categoryScores Json     @map("category_scores")
+  issues         Json
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  job            AuditJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("audit_results")
+}
+
+model Page {
+  id            String   @id @default(uuid())
+  jobId         String   @map("job_id")
+  url           String
+  htmlSize      Int      @map("html_size")
+  responseTime  Int      @map("response_time")
+  statusCode    Int      @map("status_code")
+  extractedData Json     @map("extracted_data")
+  createdAt     DateTime @default(now()) @map("created_at")
+  job           AuditJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("pages")
+}

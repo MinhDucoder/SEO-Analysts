@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: apps/api
+        run: npx prisma generate
+
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Type Check
+        run: npx turbo run check-types
+
+      - name: Unit Tests (API)
+        working-directory: apps/api
+        run: npx jest --no-coverage --passWithNoTests
+
+      - name: Build
+        run: npx turbo run build
