@@ -1,0 +1,362 @@
+@startuml SEO_Analyst_Activity_Diagram
+' ============================================================
+'  SEO ANALYST PLATFORM - ACTIVITY DIAGRAM
+'  Main Flow: User submits URL -> Receives SEO Analysis Result
+'  Version: 1.0
+' ============================================================
+
+' --- Theme & Styling ---
+skinparam backgroundColor #FEFEFE
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+
+skinparam swimlane {
+  BorderColor #37474F
+  TitleFontSize 14
+  TitleFontStyle bold
+}
+
+skinparam activity {
+  BackgroundColor #FFFFFF
+  BorderColor #78909C
+  FontColor #263238
+  DiamondBackgroundColor #FFF9C4
+  DiamondBorderColor #F9A825
+  BarColor #546E7A
+}
+
+skinparam arrow {
+  Color #546E7A
+  FontColor #78909C
+  FontSize 10
+}
+
+skinparam note {
+  BackgroundColor #FFFDE7
+  BorderColor #FBC02D
+  FontSize 10
+}
+
+' ============================================================
+'  SWIMLANES
+' ============================================================
+
+|#E3F2FD| User |
+|#E8F5E9| Frontend |
+|#FFF3E0| API Gateway |
+|#F3E5F5| Microservices |
+|#ECEFF1| Database |
+
+' ============================================================
+'  FLOW START
+' ============================================================
+
+|User|
+start
+:Nhap URL can phan tich SEO;
+
+|Frontend|
+:Nhan URL tu form input;
+:Validate dinh dang URL
+(protocol, domain, length);
+
+if (URL hop le?) then (khong)
+  :Hien thi thong bao loi
+  "URL khong hop le";
+  |User|
+  :Xem thong bao loi;
+  stop
+else (co)
+endif
+
+:Gui POST /api/audits
+voi JWT token trong header;
+
+' ============================================================
+'  AUTHENTICATION
+' ============================================================
+
+|API Gateway|
+:Nhan request POST /api/audits;
+:Kiem tra JWT token;
+
+if (Token hop le?) then (khong / het han)
+  :Tra ve HTTP 401
+  Unauthorized;
+  |Frontend|
+  :Redirect den trang
+  dang nhap;
+  |User|
+  :Yeu cau dang nhap lai;
+  stop
+else (co)
+endif
+
+:Kiem tra Rate Limit
+(Redis counter);
+
+if (Con quota?) then (khong)
+  :Tra ve HTTP 429
+  Too Many Requests;
+  |Frontend|
+  :Hien thi "Da vuot gioi han,
+  vui long thu lai sau";
+  |User|
+  :Xem thong bao gioi han;
+  stop
+else (co)
+endif
+
+' ============================================================
+'  JOB CREATION
+' ============================================================
+
+|API Gateway|
+:Validate URL (Zod schema)
+Kiem tra URL co truy cap duoc;
+:Tao Audit Job
+(status: PENDING);
+
+|Database|
+:Luu audit_jobs record
+vao PostgreSQL;
+
+|API Gateway|
+:Dua job vao BullMQ Queue
+(Redis);
+:Tra ve response
+{ jobId, status: "queued" };
+
+|Frontend|
+:Nhan jobId;
+:Ket noi Socket.IO
+room = jobId;
+:Hien thi Progress Tracker
+"Dang cho xu ly...";
+
+|User|
+:Xem trang tien trinh
+audit dang chay;
+
+' ============================================================
+'  CRAWLER SERVICE
+' ============================================================
+
+|Microservices|
+:<<BullMQ Worker>>
+Nhan job tu queue;
+:Cap nhat status: CRAWLING;
+
+|Frontend|
+:Socket.IO event:
+"crawling - Dang thu thap du lieu...";
+
+|Microservices|
+:Kiem tra robots.txt
+cua domain;
+:Gui HTTP request
+lay HTML (Cheerio);
+
+if (Truy cap URL thanh cong?) then (khong)
+  :Ghi log loi;
+  :Cap nhat status: FAILED
+  reason: "Khong the truy cap URL";
+
+  |Database|
+  :Luu trang thai FAILED
+  vao PostgreSQL;
+
+  |Frontend|
+  :Socket.IO event: "failed";
+  :Hien thi loi
+  "Khong the truy cap URL"
+  + nut Thu lai;
+
+  |User|
+  :Xem thong bao loi;
+  stop
+else (co)
+endif
+
+|Microservices|
+:Kiem tra can JS rendering?
+(body text < 100 ky tu);
+
+if (Can JS rendering?) then (co)
+  :Khoi dong Playwright
+  render full page;
+  :Lay HTML sau khi render;
+else (khong)
+  :Su dung HTML tu Cheerio;
+endif
+
+:Trich xuat du lieu:
+- Title, Meta tags
+- Headings (H1-H6)
+- Images, Links
+- Schema.org markup
+- HTTP headers;
+
+|Database|
+:Luu extracted data
+vao bang pages;
+
+' ============================================================
+'  PARALLEL ANALYSIS (Fork/Join)
+' ============================================================
+
+|Microservices|
+:Cap nhat status: ANALYZING;
+
+|Frontend|
+:Socket.IO event:
+"analyzing - Dang phan tich SEO...";
+
+|Microservices|
+fork
+  ' --- Nhanh 1: SEO Rule Engine ---
+  :<<SEO Rule Engine>>
+  Chay 20 SEO rules qua Registry;
+
+  partition "Technical SEO" {
+    :Kiem tra HTTPS, Canonical,
+    Robots.txt, Sitemap,
+    Redirect chain, Schema markup,
+    Meta robots;
+  }
+
+  partition "On-Page SEO" {
+    :Kiem tra Title, Meta Description,
+    H1, Image Alt text,
+    Internal links;
+  }
+
+  partition "Performance" {
+    :Kiem tra TTFB, Page size,
+    External requests,
+    Compression, Cache headers;
+  }
+
+  :Tong hop Issues[]
+  voi severity & fix suggestions;
+
+fork again
+  ' --- Nhanh 2: Lighthouse / Performance ---
+  :<<Lighthouse Service>>
+  Chay Lighthouse headless Chrome;
+  :Do Core Web Vitals:
+  LCP, CLS, INP, TTFB;
+  :Danh gia: Good / Needs
+  Improvement / Poor;
+
+fork again
+  ' --- Nhanh 3: Keyword Analyzer ---
+  :<<Keyword Analyzer>>
+  Phan tich noi dung text;
+  :Tinh keyword density;
+  :Phat hien keyword stuffing;
+  :Kiem tra keyword trong
+  title, H1, meta description;
+
+end fork
+
+' ============================================================
+'  SCORING & REPORT
+' ============================================================
+
+:Cap nhat status: SCORING;
+
+|Frontend|
+:Socket.IO event:
+"scoring - Dang tinh diem...";
+
+|Microservices|
+:<<Score Calculator>>
+Tinh diem theo trong so:
+- Technical SEO: 30%
+- On-Page SEO: 35%
+- Performance: 20%
+- Content: 15%;
+
+:<<Priority Ranker>>
+Xep hang issues theo:
+priority = impact x (10 - difficulty);
+
+:Tong hop bao cao:
+- Overall Score (0-100)
+- Category Scores
+- Ranked Issues
+- Fix Recommendations;
+
+:Cap nhat status: COMPLETED;
+
+' ============================================================
+'  PERSIST & CACHE
+' ============================================================
+
+|Database|
+fork
+  :Luu audit_results vao
+  PostgreSQL (Prisma);
+fork again
+  :Cache ket qua vao Redis
+  (TTL: 1 gio);
+end fork
+
+' ============================================================
+'  DELIVER RESULTS
+' ============================================================
+
+|Frontend|
+:Socket.IO event:
+"completed - Hoan tat!";
+
+:Chuyen sang trang
+ket qua phan tich;
+
+:GET /api/audits/:id
+Lay du lieu ket qua;
+
+:Render Dashboard:
+- Score gauge (circular chart)
+- Category score bars
+- Issues list (grouped, filtered)
+- Fix recommendations
+- PDF download button;
+
+|User|
+:Xem ket qua phan tich SEO
+tren Dashboard;
+
+if (Muon xuat PDF?) then (co)
+  |Frontend|
+  :GET /api/audits/:id/report/pdf;
+
+  |Microservices|
+  :Generate PDF report;
+
+  |Frontend|
+  :Download file PDF;
+
+  |User|
+  :Nhan file bao cao PDF;
+else (khong)
+endif
+
+|User|
+stop
+
+' ============================================================
+'  NOTES
+' ============================================================
+
+note right of |Microservices|
+  **Song song hoa:**
+  SEO Rules, Lighthouse, va
+  Keyword Analyzer chay
+  dong thoi de giam thoi gian
+  xu ly tu ~30s xuong ~15s
+end note
+
+@enduml

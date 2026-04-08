@@ -1,0 +1,30 @@
+schema: spec-driven
+
+context: |
+  Project: SEO Analysis Platform (Personal - Do An)
+  Tech stack: TypeScript, React (Next.js 14), NestJS 10, PostgreSQL (Prisma), Redis (BullMQ)
+  Architecture: Microservice-ready monorepo (Turborepo)
+  Frontend: Next.js 14 App Router + Tailwind CSS + shadcn/ui + TanStack Query
+  Backend: NestJS 10 modules (Module → Controller → Service → PrismaService)
+  Database: PostgreSQL (Supabase) + Redis (Bull queue + cache)
+  Crawling: Cheerio + Playwright (fallback)
+  Analysis: Lighthouse CI + Custom SEO Rule Engine (20 rules)
+  Real-time: Socket.IO via @nestjs/websockets
+  Deployment: Vercel (frontend) + Railway (backend) + Supabase (DB)
+  Convention: Vietnamese comments/docs, English code
+  Testing: Vitest + Supertest
+
+rules:
+  proposal:
+    - Focus on MVP scope first, defer complex features to Phase 2
+    - Keep infrastructure cost under $40/month
+    - Include deployment strategy for Vercel + Railway + Supabase
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - Each task should be independently testable
+    - Include unit test task for each feature module
+  specs:
+    - Include TypeScript interfaces for all data types
+    - Include API endpoint specification (method, path, auth, request/response)
+    - Include database schema changes (Prisma model)
+    - Include NestJS module/controller/service structure

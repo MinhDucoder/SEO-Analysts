@@ -1,0 +1,169 @@
+@startuml SEO_Analyst_Platform_ERD
+' ============================================================
+'  SEO ANALYST PLATFORM - ENTITY RELATIONSHIP DIAGRAM
+'  Version: 1.0
+' ============================================================
+
+' --- Theme & Styling ---
+skinparam backgroundColor #FEFEFE
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam linetype ortho
+
+skinparam entity {
+  BackgroundColor #FFFFFF
+  BorderColor #546E7A
+  FontColor #263238
+  FontSize 13
+  StereotypeFontSize 11
+}
+
+skinparam arrow {
+  Color #37474F
+  FontColor #546E7A
+  FontSize 11
+  Thickness 1.5
+}
+
+' ============================================================
+'  ENTITIES
+' ============================================================
+
+entity "users" as users <<Table>> #E3F2FD {
+  * **id** : UUID <<PK>>
+  --
+  * email : VARCHAR(255) <<UNIQUE, NOT NULL>>
+  password_hash : VARCHAR(255)
+  * full_name : VARCHAR(100) <<NOT NULL>>
+  * role : ENUM {user, admin} <<DEFAULT user>>
+  * is_verified : BOOLEAN <<DEFAULT false>>
+  oauth_provider : VARCHAR(50) <<NULLABLE>>
+  * created_at : TIMESTAMPTZ <<DEFAULT now()>>
+  * updated_at : TIMESTAMPTZ <<DEFAULT now()>>
+}
+
+entity "audits" as audits <<Table>> #E8F5E9 {
+  * **id** : UUID <<PK>>
+  --
+  * user_id : UUID <<FK -> users.id>>
+  * url : TEXT <<NOT NULL>>
+  * domain : VARCHAR(255)
+  * status : ENUM {pending, processing, completed, failed} <<DEFAULT pending>>
+  seo_score : DECIMAL(5,2) <<NULLABLE, 0-100>>
+  target_keyword : VARCHAR(255) <<NULLABLE>>
+  completed_at : TIMESTAMPTZ <<NULLABLE>>
+  * created_at : TIMESTAMPTZ <<DEFAULT now()>>
+}
+
+entity "audit_results" as audit_results <<Table>> #FFF3E0 {
+  * **id** : UUID <<PK>>
+  --
+  * audit_id : UUID <<FK -> audits.id>>
+  * category : VARCHAR(50) <<NOT NULL>>
+  * check_name : VARCHAR(100) <<NOT NULL>>
+  * status : ENUM {pass, warn, fail}
+  * score : DECIMAL(5,2) <<0-100>>
+  * message : TEXT <<NOT NULL>>
+  suggestion : TEXT <<NULLABLE>>
+  metadata : JSONB <<NULLABLE>>
+}
+
+entity "keywords" as keywords <<Table>> #F3E5F5 {
+  * **id** : UUID <<PK>>
+  --
+  * audit_id : UUID <<FK -> audits.id>>
+  * keyword : VARCHAR(255) <<NOT NULL>>
+  * frequency : INTEGER <<DEFAULT 0>>
+  * density : DECIMAL(5,2) <<0-100%>>
+  * in_title : BOOLEAN <<DEFAULT false>>
+  * in_h1 : BOOLEAN <<DEFAULT false>>
+  * in_first_paragraph : BOOLEAN <<DEFAULT false>>
+}
+
+' ============================================================
+'  RELATIONSHIPS (Crow's Foot Notation)
+' ============================================================
+
+' users 1 --o{ N audits
+' Mot user co the co nhieu audits (0..N)
+' Moi audit bat buoc thuoc ve 1 user
+users ||--o{ audits : "so huu\n(1 user -> N audits)"
+
+' audits 1 --o{ N audit_results
+' Mot audit co the co nhieu ket qua check (0..N)
+' Moi audit_result bat buoc thuoc ve 1 audit
+audits ||--o{ audit_results : "chua\n(1 audit -> N results)"
+
+' audits 1 --o{ N keywords
+' Mot audit co the co nhieu keywords (0..N)
+' Moi keyword bat buoc thuoc ve 1 audit
+audits ||--o{ keywords : "phan tich\n(1 audit -> N keywords)"
+
+' ============================================================
+'  NOTES
+' ============================================================
+
+note top of users
+  **Index:**
+  - UNIQUE(email)
+  - INDEX(role)
+  - INDEX(created_at)
+
+  **Ghi chu:**
+  - password_hash NULL khi dang nhap qua OAuth
+  - oauth_provider: "google" | NULL
+end note
+
+note top of audits
+  **Index:**
+  - INDEX(user_id)
+  - INDEX(domain)
+  - INDEX(status)
+  - INDEX(created_at)
+  - COMPOSITE(user_id, url)
+
+  **Ghi chu:**
+  - seo_score duoc tinh sau khi audit hoan tat
+  - domain tu dong trich xuat tu url
+end note
+
+note bottom of audit_results
+  **Index:**
+  - INDEX(audit_id)
+  - INDEX(category)
+  - INDEX(status)
+  - COMPOSITE(audit_id, category)
+
+  **category values:**
+  meta | headings | images
+  links | performance | keywords
+end note
+
+note bottom of keywords
+  **Index:**
+  - INDEX(audit_id)
+  - INDEX(density DESC)
+  - COMPOSITE(audit_id, keyword)
+
+  **Ghi chu:**
+  - density = (frequency / total_words) * 100
+  - Phat hien keyword stuffing khi density > 3%
+end note
+
+' ============================================================
+'  LEGEND
+' ============================================================
+
+legend bottom right
+  |= Ky hieu |= Y nghia |
+  | **PK** | Primary Key |
+  | **FK** | Foreign Key |
+  | * field | Bat buoc (NOT NULL) |
+  | field | Tuy chon (NULLABLE) |
+  | \|\|--o{ | One-to-Many (1..N) |
+  | \|\| phia trai | Bat buoc 1 (mandatory) |
+  | o{ phia phai | Tuy chon nhieu (0..N) |
+endlegend
+
+@enduml
