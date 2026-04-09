@@ -1,0 +1,83 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("GATEWAY_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum AuditStatus {
+  pending
+  crawling
+  analyzing
+  reporting
+  completed
+  failed
+}
+
+model User {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String   @unique @db.VarChar(255)
+  passwordHash  String?  @map("password_hash") @db.VarChar(255)
+  fullName      String   @map("full_name") @db.VarChar(100)
+  role          UserRole @default(user)
+  isVerified    Boolean  @default(false) @map("is_verified")
+  isLocked      Boolean  @default(false) @map("is_locked")
+  oauthProvider String?  @map("oauth_provider") @db.VarChar(50)
+  avatarUrl     String?  @map("avatar_url") @db.VarChar(500)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  refreshTokens RefreshToken[]
+  audits        Audit[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tokenHash String   @map("token_hash") @db.VarChar(255)
+  userAgent String?  @map("user_agent") @db.VarChar(500)
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz
+  isRevoked Boolean  @default(false) @map("is_revoked")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], name: "idx_rt_user")
+  @@index([tokenHash], name: "idx_rt_token")
+  @@index([expiresAt], name: "idx_rt_expires")
+  @@map("refresh_tokens")
+}
+
+model Audit {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String      @map("user_id") @db.Uuid
+  url             String      @db.Text
+  domain          String      @db.VarChar(255)
+  status          AuditStatus @default(pending)
+  seoScore        Decimal?    @map("seo_score") @db.Decimal(5, 2)
+  targetKeyword   String?     @map("target_keyword") @db.VarChar(255)
+  errorMessage    String?     @map("error_message") @db.Text
+  crawlerType     String?     @map("crawler_type") @db.VarChar(20)
+  crawlDurationMs Int?        @map("crawl_duration_ms")
+  completedAt     DateTime?   @map("completed_at") @db.Timestamptz
+  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)], name: "idx_audits_user_created")
+  @@index([domain], name: "idx_audits_domain")
+  @@index([status], name: "idx_audits_status")
+  @@map("audits")
+}
