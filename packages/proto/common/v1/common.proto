@@ -1,0 +1,54 @@
+syntax = "proto3";
+package common.v1;
+
+enum AuditStatus {
+  AUDIT_STATUS_UNSPECIFIED = 0;
+  AUDIT_STATUS_PENDING = 1;
+  AUDIT_STATUS_CRAWLING = 2;
+  AUDIT_STATUS_ANALYZING = 3;
+  AUDIT_STATUS_REPORTING = 4;
+  AUDIT_STATUS_COMPLETED = 5;
+  AUDIT_STATUS_FAILED = 6;
+}
+
+enum CheckStatus {
+  CHECK_STATUS_UNSPECIFIED = 0;
+  CHECK_STATUS_PASS = 1;
+  CHECK_STATUS_WARN = 2;
+  CHECK_STATUS_FAIL = 3;
+}
+
+enum IssueCategory {
+  ISSUE_CATEGORY_UNSPECIFIED = 0;
+  ISSUE_CATEGORY_META = 1;
+  ISSUE_CATEGORY_HEADINGS = 2;
+  ISSUE_CATEGORY_IMAGES = 3;
+  ISSUE_CATEGORY_LINKS = 4;
+  ISSUE_CATEGORY_PERFORMANCE = 5;
+  ISSUE_CATEGORY_TECHNICAL = 6;
+}
+
+message CoreWebVitals {
+  double lcp_ms = 1;
+  double inp_ms = 2;
+  double cls = 3;
+  int32 performance_score = 4;
+  int32 accessibility_score = 5;
+  int32 best_practices_score = 6;
+  int32 seo_score = 7;
+}
+
+message ImageInfo {
+  string src = 1;
+  optional string alt = 2;
+  int64 size_bytes = 3;
+  string format = 4;
+}
+
+message LinkInfo {
+  string href = 1;
+  string anchor_text = 2;
+  bool is_internal = 3;
+  optional string rel = 4;
+  int32 status_code = 5;
+}

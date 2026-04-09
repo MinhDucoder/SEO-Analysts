@@ -1,0 +1,52 @@
+syntax = "proto3";
+package keyword.v1;
+
+service KeywordAnalyzerService {
+  rpc AnalyzeKeywords(KeywordRequest) returns (KeywordResponse);
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message KeywordRequest {
+  string audit_id = 1;
+  string text_content = 2;
+  string url = 3;
+  optional string title = 4;
+  optional string h1_text = 5;
+  optional string meta_description = 6;
+  optional string target_keyword = 7;
+  string language = 8;
+}
+
+message KeywordResponse {
+  string audit_id = 1;
+  repeated KeywordResult keywords = 2;
+  int32 total_words = 3;
+  int32 unique_words = 4;
+  optional TargetKeywordAnalysis target_analysis = 5;
+}
+
+message KeywordResult {
+  string keyword = 1;
+  int32 frequency = 2;
+  double density_percent = 3;
+  bool in_title = 4;
+  bool in_h1 = 5;
+  bool in_first_paragraph = 6;
+  bool in_meta_description = 7;
+  int32 rank = 8;
+}
+
+message TargetKeywordAnalysis {
+  string keyword = 1;
+  int32 frequency = 2;
+  double density_percent = 3;
+  bool in_title = 4;
+  bool in_h1 = 5;
+  bool in_first_paragraph = 6;
+  bool in_meta_description = 7;
+  bool is_stuffing = 8;
+  string verdict = 9;
+}
+
+message HealthCheckRequest {}
+message HealthCheckResponse { bool healthy = 1; string version = 2; }

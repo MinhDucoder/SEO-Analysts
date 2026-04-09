@@ -1,0 +1,77 @@
+syntax = "proto3";
+package crawler.v1;
+
+import "common/v1/common.proto";
+
+service CrawlerService {
+  rpc CrawlUrl(CrawlRequest) returns (CrawlResponse);
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message CrawlRequest {
+  string url = 1;
+  string audit_id = 2;
+  CrawlOptions options = 3;
+}
+
+message CrawlOptions {
+  int32 timeout_ms = 1;
+  bool force_playwright = 2;
+  bool include_lighthouse = 3;
+  string user_agent = 4;
+}
+
+message CrawlResponse {
+  string audit_id = 1;
+  PageData page_data = 2;
+  common.v1.CoreWebVitals cwv_metrics = 3;
+  CrawlMetadata metadata = 4;
+}
+
+message PageData {
+  string url = 1;
+  string final_url = 2;
+  int32 status_code = 3;
+  int64 response_time_ms = 4;
+  int64 html_size_bytes = 5;
+  optional string title = 6;
+  optional string meta_description = 7;
+  optional string meta_robots = 8;
+  optional string canonical_url = 9;
+  optional string language = 10;
+  optional string favicon_url = 11;
+  repeated string h1_tags = 20;
+  repeated string h2_tags = 21;
+  repeated string h3_tags = 22;
+  repeated string h4_tags = 23;
+  repeated string h5_tags = 24;
+  repeated string h6_tags = 25;
+  repeated common.v1.ImageInfo images = 30;
+  repeated common.v1.LinkInfo internal_links = 31;
+  repeated common.v1.LinkInfo external_links = 32;
+  repeated string schema_json_ld = 40;
+  map<string, string> open_graph = 41;
+  map<string, string> twitter_card = 42;
+  bool is_https = 50;
+  repeated string redirect_chain = 51;
+  string content_encoding = 52;
+  string cache_control = 53;
+  optional string viewport_content = 54;
+  string text_content = 60;
+  string raw_html = 61;
+}
+
+message CrawlMetadata {
+  string crawler_type = 1;
+  bool is_spa = 2;
+  int64 crawl_duration_ms = 3;
+  int64 lighthouse_duration_ms = 4;
+  bool lighthouse_cached = 5;
+}
+
+message HealthCheckRequest {}
+message HealthCheckResponse {
+  bool healthy = 1;
+  string version = 2;
+  int64 uptime_seconds = 3;
+}

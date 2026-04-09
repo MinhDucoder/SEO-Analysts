@@ -1,0 +1,66 @@
+syntax = "proto3";
+package analyzer.v1;
+
+import "common/v1/common.proto";
+import "crawler/v1/crawler.proto";
+
+service SeoAnalyzerService {
+  rpc AnalyzePage(AnalyzeRequest) returns (AnalyzeResponse);
+  rpc ListRules(ListRulesRequest) returns (ListRulesResponse);
+  rpc UpdateRuleWeight(UpdateRuleWeightRequest) returns (UpdateRuleWeightResponse);
+  rpc GetRulesByCategory(GetRulesByCategoryRequest) returns (ListRulesResponse);
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message AnalyzeRequest {
+  string audit_id = 1;
+  crawler.v1.PageData page_data = 2;
+  optional string target_keyword = 3;
+}
+
+message AnalyzeResponse {
+  string audit_id = 1;
+  repeated RuleResult rule_results = 2;
+  repeated CategoryScore category_scores = 3;
+  double overall_score = 4;
+  string classification = 5;
+}
+
+message RuleResult {
+  string rule_id = 1;
+  string rule_name = 2;
+  common.v1.CheckStatus status = 3;
+  double score = 4;
+  int32 weight = 5;
+  common.v1.IssueCategory category = 6;
+  string message = 7;
+  optional string suggestion = 8;
+  map<string, string> metadata = 9;
+}
+
+message CategoryScore {
+  common.v1.IssueCategory category = 1;
+  double score = 2;
+  int32 total_rules = 3;
+  int32 passed = 4;
+  int32 warned = 5;
+  int32 failed = 6;
+}
+
+message SeoRule {
+  string id = 1;
+  string name = 2;
+  string display_name = 3;
+  string description = 4;
+  common.v1.IssueCategory category = 5;
+  int32 weight = 6;
+  bool is_enabled = 7;
+}
+
+message ListRulesRequest {}
+message ListRulesResponse { repeated SeoRule rules = 1; }
+message UpdateRuleWeightRequest { string rule_id = 1; int32 new_weight = 2; }
+message UpdateRuleWeightResponse { SeoRule rule = 1; }
+message GetRulesByCategoryRequest { common.v1.IssueCategory category = 1; }
+message HealthCheckRequest {}
+message HealthCheckResponse { bool healthy = 1; string version = 2; }

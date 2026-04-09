@@ -1,0 +1,79 @@
+syntax = "proto3";
+package report.v1;
+
+import "analyzer/v1/analyzer.proto";
+import "keyword/v1/keyword.proto";
+import "common/v1/common.proto";
+
+service ReportService {
+  rpc GenerateReport(GenerateReportRequest) returns (GenerateReportResponse);
+  rpc GetReport(GetReportRequest) returns (GetReportResponse);
+  rpc CompareReports(CompareRequest) returns (CompareResponse);
+  rpc CreateShareLink(CreateShareLinkRequest) returns (CreateShareLinkResponse);
+  rpc GetSharedReport(GetSharedReportRequest) returns (GetReportResponse);
+  rpc RevokeShareLink(RevokeShareLinkRequest) returns (RevokeShareLinkResponse);
+  rpc GeneratePdf(GeneratePdfRequest) returns (GeneratePdfResponse);
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message GenerateReportRequest {
+  string audit_id = 1;
+  string url = 2;
+  string domain = 3;
+  analyzer.v1.AnalyzeResponse analysis = 4;
+  keyword.v1.KeywordResponse keywords = 5;
+  common.v1.CoreWebVitals cwv_metrics = 6;
+}
+
+message GenerateReportResponse {
+  string report_id = 1;
+  string audit_id = 2;
+  double final_score = 3;
+  string classification = 4;
+  int32 total_issues = 5;
+  int32 critical_issues = 6;
+}
+
+message GetReportRequest { string audit_id = 1; }
+
+message GetReportResponse {
+  string report_id = 1;
+  string audit_id = 2;
+  string url = 3;
+  string domain = 4;
+  double final_score = 5;
+  string classification = 6;
+  repeated analyzer.v1.RuleResult rule_results = 7;
+  repeated analyzer.v1.CategoryScore category_scores = 8;
+  repeated keyword.v1.KeywordResult keywords = 9;
+  common.v1.CoreWebVitals cwv_metrics = 10;
+  optional keyword.v1.TargetKeywordAnalysis target_keyword = 11;
+  string created_at = 12;
+}
+
+message CompareRequest { string audit_id_1 = 1; string audit_id_2 = 2; }
+
+message CompareResponse {
+  double score_delta = 1;
+  repeated RuleDelta rule_deltas = 2;
+  repeated string issues_fixed = 3;
+  repeated string issues_new = 4;
+}
+
+message RuleDelta {
+  string rule_id = 1;
+  string rule_name = 2;
+  common.v1.CheckStatus status_before = 3;
+  common.v1.CheckStatus status_after = 4;
+  double score_delta = 5;
+}
+
+message CreateShareLinkRequest { string audit_id = 1; }
+message CreateShareLinkResponse { string share_token = 1; string share_url = 2; }
+message GetSharedReportRequest { string share_token = 1; }
+message RevokeShareLinkRequest { string audit_id = 1; }
+message RevokeShareLinkResponse { bool success = 1; }
+message GeneratePdfRequest { string audit_id = 1; }
+message GeneratePdfResponse { bytes pdf_content = 1; string filename = 2; int64 size_bytes = 3; }
+message HealthCheckRequest {}
+message HealthCheckResponse { bool healthy = 1; string version = 2; }
