@@ -1,5 +1,6 @@
 services:
-  # ─── Databases ───
+  # ─── Infrastructure ───
+
   gateway-db:
     image: postgres:16-alpine
     container_name: seo-gateway-db
@@ -63,6 +64,110 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # ─── Application Services ───
+
+  gateway:
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+    container_name: seo-gateway
+    ports:
+      - "3000:3000"
+      - "50051:50051"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      GRPC_PORT: "50051"
+      DATABASE_URL: "postgresql://gateway_user:gateway_pass@gateway-db:5432/seo_gateway"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      JWT_SECRET: "dev-jwt-secret-change-in-production"
+      JWT_REFRESH_SECRET: "dev-refresh-secret-change-in-production"
+      FRONTEND_URL: "http://localhost:3001"
+      CRAWLER_GRPC_URL: "crawler:50052"
+      ANALYZER_GRPC_URL: "seo-analyzer:50053"
+      KEYWORD_GRPC_URL: "keyword-analyzer:50054"
+      REPORT_GRPC_URL: "report:50055"
+      GOOGLE_CLIENT_ID: ""
+      GOOGLE_CLIENT_SECRET: ""
+      GOOGLE_CALLBACK_URL: "http://localhost:3000/api/v1/auth/google/callback"
+    depends_on:
+      gateway-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  crawler:
+    build:
+      context: .
+      dockerfile: apps/crawler/Dockerfile
+    container_name: seo-crawler
+    environment:
+      NODE_ENV: production
+      GRPC_PORT: "50052"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  seo-analyzer:
+    build:
+      context: .
+      dockerfile: apps/seo-analyzer/Dockerfile
+    container_name: seo-seo-analyzer
+    environment:
+      NODE_ENV: production
+      GRPC_PORT: "50053"
+      DATABASE_URL: "postgresql://analyzer_user:analyzer_pass@analyzer-db:5432/seo_analyzer"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      analyzer-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  keyword-analyzer:
+    build:
+      context: .
+      dockerfile: apps/keyword-analyzer/Dockerfile
+    container_name: seo-keyword-analyzer
+    environment:
+      NODE_ENV: production
+      GRPC_PORT: "50054"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  report:
+    build:
+      context: .
+      dockerfile: apps/report/Dockerfile
+    container_name: seo-report
+    ports:
+      - "3004:3004"
+      - "50055:50055"
+    environment:
+      NODE_ENV: production
+      HTTP_PORT: "3004"
+      GRPC_PORT: "50055"
+      DATABASE_URL: "postgresql://report_user:report_pass@report-db:5432/seo_report"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      report-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   gateway_db_data:
