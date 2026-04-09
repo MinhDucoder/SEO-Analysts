@@ -60,10 +60,11 @@ export class CrawlerWorker extends WorkerHost {
           'keyword',
           {
             auditId,
+            url,
             textContent: result.pageData.textContent,
             title: result.pageData.title,
+            h1Text: result.pageData.h1Tags?.[0] ?? '',
             metaDescription: result.pageData.metaDescription,
-            h1Tags: result.pageData.h1Tags,
             targetKeyword,
           },
           { removeOnComplete: true, removeOnFail: false },
