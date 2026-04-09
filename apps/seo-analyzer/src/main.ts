@@ -4,7 +4,11 @@ import { join } from 'path';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+  // Use a standalone application so BullMQ workers (providers) initialise
+  // alongside the gRPC microservice transport.
+  const app = await NestFactory.create(AppModule);
+
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
       package: ['analyzer.v1'],
@@ -20,7 +24,10 @@ async function bootstrap() {
       },
     },
   });
-  await app.listen();
+
+  await app.startAllMicroservices();
+  await app.init();
   console.log(`SEO Analyzer gRPC service running on port ${process.env.GRPC_PORT || 50053}`);
+  console.log(`SEO Analyzer BullMQ worker listening on queue "analyze.start"`);
 }
 bootstrap();
