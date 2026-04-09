@@ -1,15 +1,55 @@
 services:
-  postgres:
+  # ─── Databases ───
+  gateway-db:
     image: postgres:16-alpine
-    container_name: seo-postgres
+    container_name: seo-gateway-db
     environment:
-      POSTGRES_USER: seo_user
-      POSTGRES_PASSWORD: seo_password
-      POSTGRES_DB: seo_platform
+      POSTGRES_USER: gateway_user
+      POSTGRES_PASSWORD: gateway_pass
+      POSTGRES_DB: seo_gateway
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - gateway_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gateway_user -d seo_gateway"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  analyzer-db:
+    image: postgres:16-alpine
+    container_name: seo-analyzer-db
+    environment:
+      POSTGRES_USER: analyzer_user
+      POSTGRES_PASSWORD: analyzer_pass
+      POSTGRES_DB: seo_analyzer
+    ports:
+      - "5433:5432"
+    volumes:
+      - analyzer_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analyzer_user -d seo_analyzer"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  report-db:
+    image: postgres:16-alpine
+    container_name: seo-report-db
+    environment:
+      POSTGRES_USER: report_user
+      POSTGRES_PASSWORD: report_pass
+      POSTGRES_DB: seo_report
+    ports:
+      - "5434:5432"
+    volumes:
+      - report_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U report_user -d seo_report"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
@@ -18,7 +58,14 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  postgres_data:
+  gateway_db_data:
+  analyzer_db_data:
+  report_db_data:
   redis_data:
