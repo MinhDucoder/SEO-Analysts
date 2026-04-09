@@ -73,3 +73,72 @@
 - **Real-time**: Socket.IO via @nestjs/websockets
 - **Deployment**: Vercel (frontend) + Railway (backend) + Supabase (DB)
 - **Cost target**: < $40/month
+## Workflow Rules (3-Framework Integration)
+
+### Size Detection (Auto)
+- **Small:** <= 2 files, no arch change, bug fix/config/typo, no research
+- **Medium:** 3-7 files, 1 module feature, needs discuss, has edge cases
+- **Large:** > 7 files or > 2 modules, arch/data model change, needs research, multi-step
+- **Unsure?** Pick higher tier.
+
+### Phase Ownership
+| Phase | Owner | Skills |
+|-------|-------|--------|
+| THIET KE | GStack wins | /office-hours, /plan-ceo-review, /plan-eng-review |
+| CHIA NHO | GSD wins | gsd:discuss-phase, gsd:plan-phase |
+| CODE | Superpowers wins | SP:TDD (test->fail->implement->pass), gsd:execute (large) |
+| KIEM DINH | GStack wins | /review, /cso, /qa |
+| SHIP | GStack wins | /ship, /land-and-deploy, /canary |
+
+### Conflict Rule
+Phase owner decides HOW. Co-owner decides WHEN/ORDER.
+
+### Quick Route
+- **Small:** SP:TDD -> SP:verify -> done
+- **Medium:** /office-hours -> gsd:quick -> SP:TDD -> /review -> done
+- **Large:** /office-hours + /plan-eng-review -> gsd:discuss + gsd:plan -> SP:TDD + gsd:execute -> /review + /cso + /qa -> /ship -> done
+
+### Domain Skills (tools in CODE phase)
+backend/ frontend/ database/ crawler/ seo-rules/ testing/ deployment/
+
+### Ref: docs/workflow/ for detailed guides
+
+## gstack
+
+Khi cần browse web, luôn dùng /browse của gstack.
+
+Danh sách skills có sẵn:
+
+/office-hours
+/plan-ceo-review
+/plan-eng-review
+/plan-design-review
+/design-consultation
+/design-shotgun
+/design-html
+/review
+/ship
+/land-and-deploy
+/canary
+/benchmark
+/browse
+/connect-chrome
+/qa
+/qa-only
+/design-review
+/setup-browser-cookies
+/setup-deploy
+/retro
+/investigate
+/document-release
+/codex
+/cso
+/autoplan
+/plan-devex-review
+/devex-review
+/careful
+/freeze
+/guard
+/unfreeze
+/gstack-upgrade
+/learn
