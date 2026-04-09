@@ -17,6 +17,9 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:reset": "docker compose down -v && docker compose up -d",
+    "e2e:smoke": "./scripts/e2e-smoke-test.sh",
+    "docker:build": "docker compose build",
+    "docker:e2e": "docker compose up -d --build && sleep 30 && ./scripts/e2e-smoke-test.sh",
     "prisma:migrate": "turbo run prisma:migrate",
     "prisma:seed": "turbo run prisma:seed",
     "prepare": "husky"
