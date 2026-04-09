@@ -175,7 +175,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/media/minhducoder/New Volume2/Learn_On_Drive/DO_AN/apps/gateway/src/generated/prisma",
+      "value": "/media/minhducoder/New Volume2/Learn_On_Drive/DO_AN/.worktrees/plan-2-gateway/apps/gateway/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -189,12 +189,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/media/minhducoder/New Volume2/Learn_On_Drive/DO_AN/apps/gateway/prisma/schema.prisma",
+    "sourceFilePath": "/media/minhducoder/New Volume2/Learn_On_Drive/DO_AN/.worktrees/plan-2-gateway/apps/gateway/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "5.22.0",
@@ -203,6 +202,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
