@@ -25,10 +25,28 @@ skip ──> skip ──> CODE ──> KIEM DINH ──> skip
 
 ### 2. KIEM DINH (Superpowers verify)
 
+> **Note:** Small tasks use SP:verify instead of GStack. GStack /review + /qa overhead not justified for <= 2 file changes.
+
 ```
 1. Run full test suite → all pass
 2. Check no regressions introduced
 3. Done
+```
+
+### Failure Handling
+
+```
+SP:verify fail → return to CODE → fix → re-verify
+Max 2 retries. If still fails → STOP, ask user.
+```
+
+### Size Escalation
+
+```
+If during CODE you discover scope > 2 files or needs arch change:
+→ STOP → re-classify as Medium or Large
+→ Restart from THIET KE (/office-hours)
+→ Code already written is KEPT
 ```
 
 ## Example: Fix title analyzer returning wrong score

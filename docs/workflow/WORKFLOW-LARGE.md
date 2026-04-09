@@ -8,7 +8,11 @@
 THIET KE ──────> CHIA NHO ────> CODE ──────────> KIEM DINH ──────> SHIP
 /office-hours     gsd:discuss    SP:TDD +          /review +         /ship +
 /plan-ceo-review  gsd:plan       gsd:execute       /cso +            /land +
-/plan-eng-review                 (waves)           /qa               /canary
+ (optional)                      (waves)           /qa               /canary
+/plan-eng-review
+ (required)
+
+FAILURE LOOP: KIEM DINH fail ──> CODE fix ──> re-run failed checks (max 2)
 ```
 
 ## Step-by-step
@@ -21,7 +25,7 @@ THIET KE ──────> CHIA NHO ────> CODE ───────�
 - PM role: 6 forcing questions — what, who, why, constraints, risks, success criteria
 
 ```
-/plan-ceo-review
+/plan-ceo-review (OPTIONAL — only when task involves strategic scope decisions)
 ```
 - Strategic challenge: scope expansion vs reduction, 4 modes
 
@@ -74,6 +78,8 @@ Domain skills used as tools:
 - `database/` — Prisma ORM patterns
 - `crawler/` — Cheerio/Playwright patterns
 - `seo-rules/` — Rule engine patterns
+- `testing/` — Vitest patterns, Playwright E2E
+- `deployment/` — Docker, Vercel, Railway, Supabase, CI/CD
 
 ### Phase 4: KIEM DINH (GStack owns)
 
@@ -178,13 +184,34 @@ GSD decides:          SP decides:
 - Atomic commits      - Domain skill selection
 ```
 
+## Failure Handling
+
+```
+KIEM DINH fail → return to CODE → fix issues found
+Re-run ONLY the failed checks (not all 3)
+Max 2 retries. If still fails → STOP, report to user:
+  - Remaining issues list
+  - Options: continue fixing / skip / abandon
+```
+
+## Cross-Phase Context Passing
+
+```
+THIET KE output (architecture.md) → CHIA NHO must read before planning
+CHIA NHO output (task plans)      → CODE must read before implementing
+CODE output (test results)        → KIEM DINH must read before reviewing
+KIEM DINH output (review results) → SHIP must read before shipping
+
+If conflict → earlier phase's locked decisions win.
+```
+
 ## Cheat Sheet
 
 ```
 /office-hours + /plan-eng-review
   -> gsd:discuss + gsd:plan
   -> SP:TDD + gsd:execute (waves)
-  -> /review + /cso + /qa
+  -> /review + /cso + /qa (fail? → fix → retry, max 2)
   -> /ship + /land-and-deploy + /canary
   -> done
 ```

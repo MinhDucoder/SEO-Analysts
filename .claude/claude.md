@@ -79,19 +79,30 @@
 - **Small:** <= 2 files, no arch change, bug fix/config/typo, no research
 - **Medium:** 3-7 files, 1 module feature, needs discuss, has edge cases
 - **Large:** > 7 files or > 2 modules, arch/data model change, needs research, multi-step
+- **Overlap:** If task matches multiple tiers → pick HIGHEST tier.
 - **Unsure?** Pick higher tier.
 
 ### Phase Ownership
 | Phase | Owner | Skills |
 |-------|-------|--------|
-| THIET KE | GStack wins | /office-hours, /plan-ceo-review, /plan-eng-review |
+| THIET KE | GStack wins | /office-hours, /plan-ceo-review (optional), /plan-eng-review |
 | CHIA NHO | GSD wins | gsd:discuss-phase, gsd:plan-phase |
 | CODE | Superpowers wins | SP:TDD (test->fail->implement->pass), gsd:execute (large) |
 | KIEM DINH | GStack wins | /review, /cso, /qa |
 | SHIP | GStack wins | /ship, /land-and-deploy, /canary |
 
+**Exception:** Small tasks: KIEM DINH uses SP:verify (GStack skipped — overhead not justified for ≤2 files).
+
 ### Conflict Rule
-Phase owner decides HOW. Co-owner decides WHEN/ORDER.
+- Phase owner decides HOW. Co-owner decides WHEN/ORDER.
+- Cross-phase: output phase N = mandatory input for phase N+1. If conflict → earlier phase wins.
+
+### Failure Handling
+KIEM DINH fail → return to CODE → fix → re-run KIEM DINH. Max 2 retries → STOP, ask user.
+Large: re-run ONLY failed checks.
+
+### Size Escalation
+If scope grows beyond current tier mid-CODE → STOP → re-classify → restart from first skipped phase. Code already written is kept.
 
 ### Quick Route
 - **Small:** SP:TDD -> SP:verify -> done

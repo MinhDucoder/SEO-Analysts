@@ -78,6 +78,23 @@ Task: Add og:title, og:description, og:image analyzer
    /review → staff-engineer review, auto-fix issues
 ```
 
+## Failure Handling
+
+```
+/review fail → return to CODE → fix issues → /review again
+Max 2 retries. If still fails → STOP, ask user.
+```
+
+## Size Escalation
+
+```
+If during CODE you discover scope > 7 files or > 2 modules:
+→ STOP → re-classify as Large
+→ Add /plan-eng-review to existing THIET KE output
+→ Run gsd:discuss + gsd:plan for full breakdown
+→ Code already written is KEPT
+```
+
 ## Cheat Sheet
 
 ```
