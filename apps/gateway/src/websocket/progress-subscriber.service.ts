@@ -27,7 +27,20 @@ export class ProgressSubscriberService implements OnModuleInit {
     await this.redis.subscribe('audit.progress', (data) => this.handleProgress(data as ProgressPayload));
     await this.redis.subscribe('audit.completed', (data) => this.handleCompleted(data as ProgressPayload));
     await this.redis.subscribe('audit.failed', (data) => this.handleFailed(data as ProgressPayload));
-    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed channels');
+    await this.redis.subscribe('report.done', (data) => this.handleReportDone(data as ProgressPayload));
+    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / report.done channels');
+  }
+
+  private async handleReportDone(p: ProgressPayload) {
+    if (!p?.auditId) return;
+    // Only process if audit is not already completed (idempotent guard)
+    const audit = await this.prisma.audit.findUnique({
+      where: { id: p.auditId },
+      select: { status: true },
+    });
+    if (audit && audit.status !== AuditStatus.COMPLETED) {
+      await this.handleCompleted(p);
+    }
   }
 
   private async handleProgress(p: ProgressPayload) {
