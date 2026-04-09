@@ -69,14 +69,25 @@ export class ReportService {
       cwv: input.cwv,
     });
 
-    const event = {
+    // Publish report.done (for any service that cares about report lifecycle)
+    const reportEvent = {
       auditId: input.auditId,
       reportId: report.id,
       finalScore: aggregated.finalScore,
       classification: aggregated.classification,
     };
-    await this.redis.client().publish('report.done', JSON.stringify(event));
+    await this.redis.client().publish('report.done', JSON.stringify(reportEvent));
     this.logger.log(`report.done published for ${input.auditId} (reportId=${report.id})`);
+
+    // Publish audit.completed (Gateway listens to this to update audit status + Socket.IO)
+    const completedEvent = {
+      auditId: input.auditId,
+      finalScore: aggregated.finalScore,
+      reportId: report.id,
+      classification: aggregated.classification,
+    };
+    await this.redis.client().publish('audit.completed', JSON.stringify(completedEvent));
+    this.logger.log(`audit.completed published for ${input.auditId}`);
 
     return report;
   }

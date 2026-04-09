@@ -56,8 +56,17 @@ export class ReportWorker extends WorkerHost {
   }
 
   @OnWorkerEvent('failed')
-  onFailed(job: Job, err: Error): void {
+  async onFailed(job: Job, err: Error): Promise<void> {
     this.logger.error(`report.start ${job?.id} failed: ${err.message}`);
+    if (job?.data?.auditId) {
+      await this.redis.client().publish(
+        'audit.failed',
+        JSON.stringify({
+          auditId: job.data.auditId,
+          error: `Report generation failed: ${err.message}`,
+        }),
+      );
+    }
   }
 
   private async publishProgress(auditId: string, progress: number, stage: string): Promise<void> {
