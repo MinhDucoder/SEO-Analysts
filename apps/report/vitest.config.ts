@@ -5,7 +5,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['test/**/*.spec.ts', 'src/**/*.spec.ts'],
+    setupFiles: ['reflect-metadata'],
+    include: ['test/**/*.spec.ts', 'test/**/*.e2e-spec.ts', 'src/**/*.spec.ts'],
     testTimeout: 20_000, // PDF generation can be slow
     coverage: {
       provider: 'v8',
