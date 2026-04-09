@@ -5,7 +5,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['test/**/*.spec.ts', 'src/**/*.spec.ts'],
+    setupFiles: ['test/setup.ts'],
+    include: ['test/**/*.spec.ts', 'test/**/*.e2e-spec.ts', 'src/**/*.spec.ts'],
     testTimeout: 60_000, // Playwright + Lighthouse can be slow
     hookTimeout: 60_000,
     coverage: {
