@@ -40,3 +40,4 @@ Thumbs.db
 
 # Prisma
 apps/api/src/generated
+.worktrees/
