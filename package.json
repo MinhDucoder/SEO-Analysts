@@ -4,9 +4,21 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:gateway": "turbo run dev --filter=@seo/gateway",
+    "dev:crawler": "turbo run dev --filter=@seo/crawler",
+    "dev:analyzer": "turbo run dev --filter=@seo/seo-analyzer",
+    "dev:keyword": "turbo run dev --filter=@seo/keyword-analyzer",
+    "dev:report": "turbo run dev --filter=@seo/report",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:reset": "docker compose down -v && docker compose up -d",
+    "prisma:migrate": "turbo run prisma:migrate",
+    "prisma:seed": "turbo run prisma:seed",
     "prepare": "husky"
   },
   "devDependencies": {
