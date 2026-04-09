@@ -35,11 +35,12 @@ export class EventPublisher implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
-   * Publishes the `keyword.done` event on the `events` Pub/Sub channel.
+   * Publishes the `keyword.done` event on the `keyword.done` Pub/Sub channel.
+   * Report service's KeywordDoneListener subscribes to this channel.
    */
   async publishDone(event: KeywordDoneEvent): Promise<void> {
-    const message = JSON.stringify({ type: 'keyword.done', ...event });
-    const subs = await this.client.publish('events', message);
+    const message = JSON.stringify(event);
+    const subs = await this.client.publish('keyword.done', message);
     this.logger.log(`Published keyword.done audit=${event.auditId} status=${event.status} subscribers=${subs}`);
   }
 }

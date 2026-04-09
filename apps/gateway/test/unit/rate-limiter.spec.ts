@@ -6,24 +6,24 @@ class FakeRedis {
   store = new Map<string, Array<{ score: number; member: string }>>();
   multi() {
     const ops: Array<() => unknown> = [];
-    const self = this;
+    const store = this.store;
     const chain = {
       zremrangebyscore(key: string, min: number, max: number) {
         ops.push(() => {
-          const arr = self.store.get(key) ?? [];
-          self.store.set(key, arr.filter((e) => e.score < min || e.score > max));
+          const arr = store.get(key) ?? [];
+          store.set(key, arr.filter((e) => e.score < min || e.score > max));
         });
         return chain;
       },
       zcard(key: string) {
-        ops.push(() => (self.store.get(key) ?? []).length);
+        ops.push(() => (store.get(key) ?? []).length);
         return chain;
       },
       zadd(key: string, score: number, member: string) {
         ops.push(() => {
-          const arr = self.store.get(key) ?? [];
+          const arr = store.get(key) ?? [];
           arr.push({ score, member });
-          self.store.set(key, arr);
+          store.set(key, arr);
         });
         return chain;
       },

@@ -34,7 +34,7 @@ export class ReportGrpcClient implements OnModuleInit {
 
   private call<TReq, TRes>(method: keyof ReportService, req: TReq): Promise<TRes> {
     return new Promise((resolve, reject) => {
-      const fn = (this.client[method] as unknown as Function).bind(this.client);
+      const fn = (this.client[method] as unknown as (...args: unknown[]) => void).bind(this.client);
       fn(req, (err: Error | null, res?: TRes) => {
         if (err) {
           this.logger.warn(`Report ${String(method)} failed: ${err.message}`);
