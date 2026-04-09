@@ -1,0 +1,83 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("REPORT_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+model Report {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  auditId          String   @unique @map("audit_id") @db.Uuid
+  url              String   @db.Text
+  domain           String   @db.VarChar(255)
+  finalScore       Decimal  @map("final_score") @db.Decimal(5, 2)
+  classification   String   @db.VarChar(20)
+  totalIssues      Int      @map("total_issues")
+  criticalIssues   Int      @map("critical_issues")
+  warnIssues       Int      @map("warn_issues")
+  passCount        Int      @map("pass_count")
+  analysisSnapshot Json     @map("analysis_snapshot") @db.JsonB
+  cwvSnapshot      Json     @map("cwv_snapshot") @db.JsonB
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  keywords  ReportKeyword[]
+  cwv       ReportCwv?
+  shareLink ShareLink?
+
+  @@index([domain], name: "idx_reports_domain")
+  @@map("reports")
+}
+
+model ReportKeyword {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reportId          String  @map("report_id") @db.Uuid
+  keyword           String  @db.VarChar(255)
+  frequency         Int
+  densityPercent    Decimal @map("density_percent") @db.Decimal(5, 2)
+  inTitle           Boolean @map("in_title")
+  inH1              Boolean @map("in_h1")
+  inFirstParagraph  Boolean @map("in_first_paragraph")
+  inMetaDescription Boolean @map("in_meta_description")
+  rank              Int
+  isTarget          Boolean @default(false) @map("is_target")
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId], name: "idx_rk_report")
+  @@map("report_keywords")
+}
+
+model ReportCwv {
+  id                 String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reportId           String  @unique @map("report_id") @db.Uuid
+  lcpMs              Decimal @map("lcp_ms") @db.Decimal(10, 2)
+  inpMs              Decimal @map("inp_ms") @db.Decimal(10, 2)
+  cls                Decimal @db.Decimal(5, 4)
+  performanceScore   Int     @map("performance_score")
+  accessibilityScore Int     @map("accessibility_score")
+  bestPracticesScore Int     @map("best_practices_score")
+  lighthouseSeoScore Int     @map("lighthouse_seo_score")
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("report_cwv")
+}
+
+model ShareLink {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reportId       String    @unique @map("report_id") @db.Uuid
+  auditId        String    @map("audit_id") @db.Uuid
+  token          String    @unique @db.VarChar(64)
+  isActive       Boolean   @default(true) @map("is_active")
+  accessedCount  Int       @default(0) @map("accessed_count")
+  lastAccessedAt DateTime? @map("last_accessed_at") @db.Timestamptz
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([auditId], name: "idx_sl_audit")
+  @@map("share_links")
+}
