@@ -7,11 +7,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
+  const protoRoot = join(__dirname, '../../..', 'packages/proto');
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
       package: ['report.v1'],
-      protoPath: [join(__dirname, '../../..', 'packages/proto/report/v1/report.proto')],
+      protoPath: [join(protoRoot, 'report/v1/report.proto')],
       url: `0.0.0.0:${process.env.GRPC_PORT || 50055}`,
       loader: {
         keepCase: false,
@@ -19,7 +21,12 @@ async function bootstrap() {
         enums: String,
         defaults: true,
         oneofs: true,
-        includeDirs: [join(__dirname, '../../..', 'packages/proto')],
+        includeDirs: [
+          protoRoot,
+          join(protoRoot, 'analyzer/v1'),
+          join(protoRoot, 'keyword/v1'),
+          join(protoRoot, 'common/v1'),
+        ],
       },
     },
   });
@@ -30,5 +37,6 @@ async function bootstrap() {
   await app.listen(httpPort);
   console.log(`Report HTTP service running on port ${httpPort}`);
   console.log(`Report gRPC service running on port ${process.env.GRPC_PORT || 50055}`);
+  console.log(`Report worker listening on BullMQ queue: report.start`);
 }
 bootstrap();
