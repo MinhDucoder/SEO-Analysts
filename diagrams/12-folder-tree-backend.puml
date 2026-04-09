@@ -1,0 +1,71 @@
+@startwbs 12-folder-tree-backend
+' Figure 3.3 — apps/backend Folder Structure
+title Figure 3.3 — apps/backend Folder Structure (NestJS 10)
+
+<style>
+wbsDiagram {
+  .root {
+    BackgroundColor #0F4761
+    FontColor #FFFFFF
+    FontStyle bold
+  }
+  .folder {
+    BackgroundColor #E7EEF5
+    BorderColor #0F4761
+    FontColor #0F4761
+  }
+  .file {
+    BackgroundColor #FFF9E6
+    BorderColor #B8860B
+    FontColor #6B4F00
+  }
+}
+</style>
+
+* apps/backend/ <<root>>
+** src/ <<folder>>
+*** auth/ <<folder>>
+**** auth.module.ts <<file>>
+**** auth.controller.ts <<file>>
+**** auth.service.ts <<file>>
+**** jwt.strategy.ts <<file>>
+**** dto/ <<folder>>
+*** users/ <<folder>>
+**** users.module.ts <<file>>
+**** users.controller.ts <<file>>
+**** users.service.ts <<file>>
+*** audit/ <<folder>>
+**** audit.module.ts <<file>>
+**** audit.controller.ts <<file>>
+**** audit.service.ts <<file>>
+**** audit.processor.ts <<file>>
+*** crawler/ <<folder>>
+**** crawler.service.ts <<file>>
+**** cheerio-strategy.ts <<file>>
+**** playwright-strategy.ts <<file>>
+*** analyzer/ <<folder>>
+**** analyzer.service.ts <<file>>
+**** rules/ <<folder>>
+***** title.rule.ts <<file>>
+***** meta-description.rule.ts <<file>>
+***** heading.rule.ts <<file>>
+***** (17 more rules) <<file>>
+*** report/ <<folder>>
+**** report.service.ts <<file>>
+**** pdf-generator.ts <<file>>
+*** common/ <<folder>>
+**** guards/ <<folder>>
+**** filters/ <<folder>>
+**** interceptors/ <<folder>>
+*** main.ts <<file>>
+*** app.module.ts <<file>>
+** prisma/ <<folder>>
+*** schema.prisma <<file>>
+*** migrations/ <<folder>>
+*** seed.ts <<file>>
+** test/ <<folder>>
+*** unit/ <<folder>>
+*** e2e/ <<folder>>
+** Dockerfile <<file>>
+** package.json <<file>>
+@endwbs

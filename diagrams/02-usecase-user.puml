@@ -1,0 +1,54 @@
+@startuml 02-usecase-user
+' Figure 2.2 — End User Use Case Diagram
+!include _style.iuml
+title
+  Figure 2.2 — End User Use Case Diagram
+  .
+end title
+left to right direction
+skinparam titleFontSize 14
+skinparam titleFontStyle bold
+
+actor "Guest" as guest
+actor "Registered User" as user
+
+rectangle "SEO Analyst Platform" {
+  usecase "Browse landing page" as UC1
+  usecase "Register account" as UC2
+  usecase "Login" as UC3
+  usecase "Logout" as UC4
+  usecase "Reset password" as UC5
+  usecase "Submit URL for analysis" as UC6
+  usecase "View audit detail" as UC7
+  usecase "View audit history" as UC8
+  usecase "Export PDF report" as UC9
+  usecase "Delete audit" as UC10
+  usecase "Update profile" as UC11
+  usecase "Change password" as UC12
+}
+
+guest --> UC1
+guest --> UC2
+guest --> UC3
+guest --> UC5
+
+user --> UC3
+user --> UC4
+user --> UC6
+user --> UC7
+user --> UC8
+user --> UC9
+user --> UC10
+user --> UC11
+user --> UC12
+
+UC6 ..> UC7 : <<include>>
+UC9 ..> UC7 : <<include>>
+
+legend bottom right
+  <b>Note:</b> UC6 Submit URL is rate limited
+  10 audits / hour (free tier)
+  100 audits / hour (verified)
+endlegend
+
+@enduml

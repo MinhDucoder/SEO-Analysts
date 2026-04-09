@@ -1,0 +1,40 @@
+@startmindmap 04-function-decomposition
+' Figure 2.4 — Functional Decomposition Diagram
+title Figure 2.4 — Functional Decomposition
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Helvetica"
+skinparam shadowing false
+
+* SEO Analyst\nPlatform
+** Account\nManagement
+*** Register
+*** Login
+*** Logout
+*** Reset password
+*** Update profile
+*** Change password
+** SEO Analysis
+*** Submit URL
+*** Crawl HTML / DOM
+*** Apply 20 SEO rules
+*** Compute score
+*** Extract keywords
+*** Measure Core\nWeb Vitals
+** Reporting
+*** View audit detail
+*** View audit history
+*** Filter / search
+*** Compare audits
+*** Export PDF
+*** Delete audit
+** Notifications
+*** Audit complete\nalert
+*** Email alerts
+** Administration
+*** Manage users
+*** Configure rule\nweights
+*** Enable / disable\nrules
+*** View statistics
+*** Handle abuse\nreports
+@endmindmap

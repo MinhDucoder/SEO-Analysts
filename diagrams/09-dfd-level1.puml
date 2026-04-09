@@ -1,0 +1,46 @@
+@startuml 09-dfd-level1
+' Figure 2.9 — Data Flow Diagram Level 1
+!include _style.iuml
+title Figure 2.9 — Data Flow Diagram (Level 1)
+left to right direction
+
+actor "User" as user
+actor "Target Website" as web
+
+rectangle "1.0\nAuthentication" as P1 #FFE0B2
+rectangle "2.0\nCrawl & Fetch" as P2 #E7EEF5
+rectangle "3.0\nSEO Analysis" as P3 #E7EEF5
+rectangle "4.0\nReport Generation" as P4 #E8F5E9
+rectangle "5.0\nUser Management" as P5 #FFE0B2
+
+database "D1: users" as D1
+database "D2: audits" as D2
+database "D3: audit_results" as D3
+database "D4: rules_config" as D4
+
+user --> P1 : credentials
+P1 --> D1 : verify
+D1 --> P1 : user data
+P1 --> user : JWT token
+
+user --> P2 : URL + token
+P2 --> web : HTTP request
+web --> P2 : HTML / DOM
+P2 --> D2 : save audit
+P2 --> P3 : DOM data
+
+P3 --> D4 : read rule weights
+D4 --> P3 : config
+P3 --> D3 : save scores
+P3 --> P4 : analysis data
+
+P4 --> D3 : read results
+D3 --> P4 : scores
+P4 --> user : report (JSON / PDF)
+
+user --> P5 : profile updates
+P5 --> D1 : update
+D1 --> P5 : confirmation
+P5 --> user : success
+
+@enduml

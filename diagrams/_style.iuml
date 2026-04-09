@@ -1,0 +1,90 @@
+' Shared style for all SEO Analyst Platform diagrams
+' Include via: !include _style.iuml
+
+!pragma layout smetana
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Helvetica"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #0F4761
+skinparam ArrowThickness 1.3
+
+' Class / ERD
+skinparam class {
+  BackgroundColor #E7EEF5
+  BorderColor #0F4761
+  FontColor #0F4761
+  HeaderBackgroundColor #0F4761
+  HeaderFontColor #FFFFFF
+  AttributeFontColor #333333
+}
+
+' Component
+skinparam component {
+  BackgroundColor #E7EEF5
+  BorderColor #0F4761
+  FontColor #0F4761
+}
+skinparam database {
+  BackgroundColor #FFF4D6
+  BorderColor #B8860B
+  FontColor #6B4F00
+}
+skinparam queue {
+  BackgroundColor #F3E5F5
+  BorderColor #6A1B9A
+  FontColor #4A148C
+}
+skinparam cloud {
+  BackgroundColor #E8F5E9
+  BorderColor #2E7D32
+  FontColor #1B5E20
+}
+skinparam actor {
+  BackgroundColor #FFE0B2
+  BorderColor #E65100
+}
+
+' Use case
+skinparam usecase {
+  BackgroundColor #E7EEF5
+  BorderColor #0F4761
+  FontColor #0F4761
+}
+skinparam rectangle {
+  BackgroundColor #F6F8FB
+  BorderColor #0F4761
+  FontColor #0F4761
+}
+
+' Sequence
+skinparam sequence {
+  ArrowColor #0F4761
+  LifeLineBorderColor #0F4761
+  LifeLineBackgroundColor #E7EEF5
+  ParticipantBorderColor #0F4761
+  ParticipantBackgroundColor #E7EEF5
+  ParticipantFontColor #0F4761
+  ActorBorderColor #E65100
+  ActorBackgroundColor #FFE0B2
+}
+
+' Activity
+skinparam activity {
+  BackgroundColor #E7EEF5
+  BorderColor #0F4761
+  FontColor #0F4761
+  DiamondBackgroundColor #FFF4D6
+  DiamondBorderColor #B8860B
+  StartColor #2E7D32
+  EndColor #C62828
+}
+
+' Note
+skinparam note {
+  BackgroundColor #FFF9E6
+  BorderColor #B8860B
+  FontColor #6B4F00
+}

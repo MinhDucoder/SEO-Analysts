@@ -1,0 +1,63 @@
+@startwbs 11-folder-tree-frontend
+' Figure 3.2 — apps/frontend Folder Structure
+title Figure 3.2 — apps/frontend Folder Structure (Next.js 14 App Router)
+
+<style>
+wbsDiagram {
+  .root {
+    BackgroundColor #0F4761
+    FontColor #FFFFFF
+    FontStyle bold
+  }
+  .folder {
+    BackgroundColor #E7EEF5
+    BorderColor #0F4761
+    FontColor #0F4761
+  }
+  .file {
+    BackgroundColor #FFF9E6
+    BorderColor #B8860B
+    FontColor #6B4F00
+  }
+}
+</style>
+
+* apps/frontend/ <<root>>
+** app/ <<folder>>
+*** (auth)/ <<folder>>
+**** login/page.tsx <<file>>
+**** register/page.tsx <<file>>
+**** forgot-password/page.tsx <<file>>
+*** (dashboard)/ <<folder>>
+**** dashboard/page.tsx <<file>>
+**** audits/[id]/page.tsx <<file>>
+**** profile/page.tsx <<file>>
+*** (admin)/ <<folder>>
+**** admin/users/page.tsx <<file>>
+**** admin/rules/page.tsx <<file>>
+*** layout.tsx <<file>>
+*** page.tsx <<file>>
+** components/ <<folder>>
+*** ui/ <<folder>>
+**** button.tsx <<file>>
+**** dialog.tsx <<file>>
+**** table.tsx <<file>>
+*** feature/ <<folder>>
+**** audit-card.tsx <<file>>
+**** score-chart.tsx <<file>>
+**** progress-bar.tsx <<file>>
+** hooks/ <<folder>>
+*** use-audit-socket.ts <<file>>
+*** use-auth.ts <<file>>
+** lib/ <<folder>>
+*** api-client.ts <<file>>
+*** socket.ts <<file>>
+** schemas/ <<folder>>
+*** auth.schema.ts <<file>>
+*** audit.schema.ts <<file>>
+** store/ <<folder>>
+*** auth-store.ts <<file>>
+** next.config.js <<file>>
+** tailwind.config.ts <<file>>
+** package.json <<file>>
+@endwbs

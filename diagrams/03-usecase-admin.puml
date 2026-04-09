@@ -1,0 +1,43 @@
+@startuml 03-usecase-admin
+' Figure 2.3 — Admin Use Case Diagram
+!include _style.iuml
+title
+  Figure 2.3 — Administrator Use Case Diagram
+  .
+end title
+left to right direction
+skinparam titleFontSize 14
+skinparam titleFontStyle bold
+
+actor "Administrator" as admin
+
+rectangle "Admin Panel" {
+  usecase "View user list" as UC1
+  usecase "Lock / unlock account" as UC2
+  usecase "Delete user" as UC3
+  usecase "Configure SEO rule weights" as UC4
+  usecase "Enable / disable rules" as UC5
+  usecase "View system statistics" as UC6
+  usecase "Handle abuse reports" as UC7
+  usecase "Export audit logs" as UC8
+}
+
+admin --> UC1
+admin --> UC2
+admin --> UC3
+admin --> UC4
+admin --> UC5
+admin --> UC6
+admin --> UC7
+admin --> UC8
+
+UC2 ..> UC1 : <<extend>>
+UC3 ..> UC1 : <<extend>>
+
+legend bottom right
+  <b>Note:</b> Rule weights range 1-10
+  Used by Analyzer Service
+  when computing total score
+endlegend
+
+@enduml

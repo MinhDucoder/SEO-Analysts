@@ -1,0 +1,37 @@
+@startuml 05-sequence-login
+' Figure 2.5 — Login Sequence Diagram with JWT
+!include _style.iuml
+title Figure 2.5 — Login Sequence Diagram (JWT Authentication)
+autonumber "<b>[00]</b>"
+
+actor User
+participant "Frontend\n(Next.js)" as FE
+participant "API Gateway\n(NestJS)" as API
+participant "AuthService" as AUTH
+participant "UserRepository" as REPO
+database "PostgreSQL" as DB
+
+User -> FE : Enter email + password
+FE -> API : POST /auth/login\n{email, password}
+API -> AUTH : validateUser(email, password)
+AUTH -> REPO : findByEmail(email)
+REPO -> DB : SELECT * FROM users\nWHERE email = ?
+DB --> REPO : user record
+REPO --> AUTH : User entity
+
+alt Password matches
+  AUTH -> AUTH : bcrypt.compare()\n→ true
+  AUTH -> AUTH : sign access token\n(expires 15m)
+  AUTH -> AUTH : sign refresh token\n(expires 7d)
+  AUTH -> DB : INSERT INTO refresh_tokens
+  AUTH --> API : {accessToken, refreshToken}
+  API -> FE : 200 OK\nSet-Cookie: refreshToken (HttpOnly)\nBody: accessToken
+  FE -> FE : Store accessToken\nin memory
+  FE --> User : Redirect to /dashboard
+else Password invalid
+  AUTH --> API : throw UnauthorizedException
+  API --> FE : 401 Unauthorized
+  FE --> User : Show "Invalid credentials"
+end
+
+@enduml

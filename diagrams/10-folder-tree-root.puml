@@ -1,0 +1,46 @@
+@startwbs 10-folder-tree-root
+' Figure 3.1 — Project Root Folder Structure
+title Figure 3.1 — Project Root Folder Structure (Turborepo Monorepo)
+
+<style>
+wbsDiagram {
+  .root {
+    BackgroundColor #0F4761
+    FontColor #FFFFFF
+    FontStyle bold
+  }
+  .folder {
+    BackgroundColor #E7EEF5
+    BorderColor #0F4761
+    FontColor #0F4761
+  }
+  .file {
+    BackgroundColor #FFF9E6
+    BorderColor #B8860B
+    FontColor #6B4F00
+  }
+}
+</style>
+
+* SEO-Analysts/ <<root>>
+** apps/ <<folder>>
+*** frontend/ <<folder>>
+*** backend/ <<folder>>
+** packages/ <<folder>>
+*** types/ <<folder>>
+*** utils/ <<folder>>
+*** config/ <<folder>>
+** scripts/ <<folder>>
+*** seed.ts <<file>>
+*** migrate.sh <<file>>
+** diagrams/ <<folder>>
+** .github/ <<folder>>
+*** workflows/ <<folder>>
+**** ci.yml <<file>>
+**** deploy.yml <<file>>
+** docker-compose.yml <<file>>
+** turbo.json <<file>>
+** pnpm-workspace.yaml <<file>>
+** package.json <<file>>
+** README.md <<file>>
+@endwbs

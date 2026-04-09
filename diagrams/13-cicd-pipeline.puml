@@ -1,0 +1,58 @@
+@startuml 13-cicd-pipeline
+' Figure 3.11 — CI/CD Pipeline
+!include _style.iuml
+title Figure 3.11 — CI/CD Pipeline (GitHub Actions → Vercel / Railway)
+
+|#FFE0B2|Developer|
+|#E7EEF5|GitHub Actions|
+|#FFF4D6|Build & Test|
+|#E8F5E9|Deploy|
+
+|Developer|
+start
+:git push / open Pull Request;
+
+|GitHub Actions|
+:Trigger workflow\n(.github/workflows/ci.yml);
+
+fork
+  :Lint (ESLint + Prettier);
+fork again
+  :Type check (tsc --noEmit);
+fork again
+  :Unit + Integration tests\n(Vitest + TestContainers);
+end fork
+
+if (All checks passed?) then (yes)
+
+  |Build & Test|
+  :Build frontend\n(next build);
+  :Build backend\n(nest build);
+  :Build Docker images;
+  :Push images to registry;
+
+  if (Target branch = main?) then (yes)
+    |Deploy|
+    fork
+      :Deploy frontend\nto Vercel (production);
+    fork again
+      :Deploy backend\nto Railway (production);
+    fork again
+      :Run Prisma migrate deploy\non Supabase;
+    end fork
+    :Send Slack notification\n(success);
+    stop
+  else (no – feature branch)
+    |Deploy|
+    :Deploy preview URL\n(Vercel preview);
+    stop
+  endif
+
+else (no)
+  |GitHub Actions|
+  #FF6B6B:Mark PR as failing;
+  :Block merge;
+  stop
+endif
+
+@enduml

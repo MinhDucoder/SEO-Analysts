@@ -1,0 +1,51 @@
+@startuml 06-sequence-audit
+' Figure 2.6 — SEO Audit Sequence Diagram
+!include _style.iuml
+title Figure 2.6 — SEO Audit Flow (End to End)
+autonumber "<b>[00]</b>"
+
+actor User
+participant "Frontend" as FE
+participant "API Gateway" as API
+database "PostgreSQL" as DB
+queue "BullMQ\n(Redis)" as MQ
+participant "Crawler\nWorker" as CR
+participant "Analyzer\nWorker" as AN
+participant "Report\nWorker" as RP
+participant "Socket.IO\nGateway" as WS
+
+User -> FE : Submit URL
+FE -> API : POST /audits { url }
+API -> API : Validate JWT & URL
+API -> DB : INSERT audit\n(status=pending)
+DB --> API : audit_id
+API -> MQ : enqueue audit.crawl(audit_id)
+API --> FE : 201 Created { audit_id }
+FE -> WS : subscribe room: audit_id
+FE --> User : Redirect to detail page\n(progress UI)
+
+MQ -> CR : pickup job
+CR -> DB : UPDATE status='crawling'
+CR -> WS : emit audit.progress (25%)
+WS -->> FE : progress event
+CR -> CR : fetch HTML\n(Cheerio → Playwright fallback)
+CR -> MQ : enqueue audit.analyze(dom)
+
+MQ -> AN : pickup job
+AN -> DB : UPDATE status='analyzing'
+AN -> WS : emit audit.progress (60%)
+WS -->> FE : progress event
+AN -> AN : apply 20 SEO rules\ncompute weighted score
+AN -> MQ : enqueue audit.report
+
+MQ -> RP : pickup job
+RP -> DB : INSERT audit_results\nUPDATE status='completed'
+RP -> WS : emit audit.completed
+WS -->> FE : completed event
+FE -> API : GET /audits/{id}
+API -> DB : SELECT audit + results
+DB --> API : full result
+API --> FE : 200 OK
+FE --> User : Render result page
+
+@enduml

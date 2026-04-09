@@ -1,0 +1,38 @@
+@startuml 07-sequence-export-pdf
+' Figure 2.7 — PDF Export Sequence Diagram
+!include _style.iuml
+title Figure 2.7 — PDF Export Flow
+autonumber "<b>[00]</b>"
+
+actor User
+participant "Frontend" as FE
+participant "Report\nController" as CTL
+participant "Report\nService" as SVC
+database "PostgreSQL" as DB
+participant "Handlebars\nEngine" as TPL
+participant "Playwright\nBrowser" as PW
+
+User -> FE : Click "Download PDF"
+FE -> CTL : GET /audits/{id}/export?format=pdf\nAuthorization: Bearer <token>
+CTL -> CTL : Verify JWT\nCheck ownership
+
+alt audit not completed
+  CTL --> FE : 400 Bad Request\n"Audit not completed"
+  FE --> User : Show error toast
+else audit completed
+  CTL -> SVC : exportPdf(auditId)
+  SVC -> DB : SELECT audit, audit_results\nWHERE audit_id = ?
+  DB --> SVC : audit + results data
+  SVC -> TPL : render(template, data)
+  TPL --> SVC : HTML string
+  SVC -> PW : browser.newPage()
+  SVC -> PW : page.setContent(html)
+  SVC -> PW : page.pdf({format: 'A4',\n  printBackground: true})
+  PW --> SVC : PDF Buffer
+  SVC -> PW : browser.close()
+  SVC --> CTL : PDF Buffer
+  CTL --> FE : 200 OK\nContent-Type: application/pdf\nContent-Disposition: attachment
+  FE --> User : Browser download dialog
+end
+
+@enduml

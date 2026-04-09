@@ -1,0 +1,55 @@
+@startuml 08-architecture-microservices
+' Figure 2.8 — Microservices Architecture Overview
+!include _style.iuml
+title Figure 2.8 — Microservices Architecture Overview
+
+actor "End User" as user
+actor "Admin" as admin
+
+package "Presentation Layer" {
+  [Next.js Frontend\n(SSR + Client)] as FE
+}
+
+package "API Gateway Layer" {
+  [NestJS API Gateway\n(Auth, Validation,\nRate Limit)] as GW
+}
+
+package "Microservices Layer" {
+  [Crawler Service\n(Cheerio + Playwright)] as CR
+  [SEO Analyzer\n(20 rules)] as AN
+  [Keyword Analyzer] as KW
+  [Report Service\n(PDF export)] as RP
+}
+
+package "Infrastructure Layer" {
+  queue "BullMQ\nJob Queue" as MQ
+  database "PostgreSQL 16" as DB
+  database "Redis 7\n(Cache + Queue)" as RD
+}
+
+cloud "External" {
+  [Target Website] as WEB
+  [Lighthouse CI] as LH
+}
+
+user --> FE
+admin --> FE
+FE --> GW : REST / WebSocket
+GW --> MQ : enqueue jobs
+GW --> DB : CRUD
+
+MQ --> CR : audit.crawl
+MQ --> AN : audit.analyze
+MQ --> KW : audit.keywords
+MQ --> RP : audit.report
+
+CR --> WEB : HTTP fetch
+CR --> LH : run audit
+CR --> RD : cache HTML
+AN --> DB : save scores
+KW --> DB : save keywords
+RP --> DB : read / write
+
+GW ..> FE : Socket.IO events\n(progress, completed)
+
+@enduml
