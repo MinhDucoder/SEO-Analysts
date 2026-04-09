@@ -1,0 +1,39 @@
+{
+  "name": "@seo/crawler",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "nest build",
+    "dev": "nest start --watch",
+    "start": "node dist/main",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.4.0",
+    "@nestjs/config": "^3.3.0",
+    "@nestjs/core": "^10.4.0",
+    "@nestjs/microservices": "^10.4.0",
+    "@nestjs/bullmq": "^10.2.0",
+    "@grpc/grpc-js": "^1.12.0",
+    "@grpc/proto-loader": "^0.7.13",
+    "@repo/shared": "*",
+    "@repo/proto": "*",
+    "axios": "^1.7.0",
+    "bullmq": "^5.25.0",
+    "cheerio": "^1.0.0",
+    "ioredis": "^5.4.1",
+    "playwright": "^1.48.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.4.5",
+    "@nestjs/testing": "^10.4.0",
+    "@repo/typescript-config": "*",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.0"
+  }
+}
