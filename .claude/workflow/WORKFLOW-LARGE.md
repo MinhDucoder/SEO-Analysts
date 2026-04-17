@@ -124,53 +124,85 @@ Domain skills used as tools:
 - Post-deploy SRE monitoring
 - Watch for errors and regressions
 
-## Example: Build PDF Report Module
+## Example: Add new gRPC method `AnalyzeBatch` to seo-analyzer
 
 ```
-Task: Add PDF report generation for audit results
+Task: Add batch-mode analyzer gRPC method (single-URL → N-URL at once)
+Impact: proto-breaking (new method in packages/proto/analyzer/*.proto)
+Services affected: seo-analyzer (producer), gateway (consumer)
 
 PHASE 1 — THIET KE:
   /office-hours
-  → Who needs PDF? What data? What layout? File size constraints?
-  
+  → Who calls batch mode? What batch size limit? Timeout semantics?
+
   /plan-eng-review
-  → Data: Audit + Issues + Scores + Recommendations
-  → API: GET /api/audits/:id/report/pdf
-  → Lib: @react-pdf/renderer or puppeteer
-  → Output: architecture.md updated with report module
+  → Proto contract: AnalyzeBatchRequest { urls: repeated string; max_parallel: int32 }
+                    AnalyzeBatchResponse { results: repeated AnalyzeResponse }
+  → Data flow: gateway receives POST /audits/batch → fan out via new gRPC method
+  → Additive change: new method, no existing method modified
 
 PHASE 2 — CHIA NHO:
-  gsd:discuss-phase 3
-  → Decision: use puppeteer (already have Playwright dep)
-  → Decision: generate HTML template → convert to PDF
-  
-  gsd:plan-phase 3
+  gsd:discuss-phase 8
+  → Decision: add method as additive (packages/proto version stays backwards-compatible)
+  → Decision: BullMQ NOT involved (synchronous gRPC for MVP, async in future)
+
+  gsd:plan-phase 8
   → Wave 1 (parallel):
-     Task 1: PDF template service (HTML → PDF)
-     Task 2: Report data aggregator service
+     Task 1: Update packages/proto/analyzer/analyzer.proto + regenerate
+     Task 2: Implement seo-analyzer gRPC handler (new method)
   → Wave 2 (depends on wave 1):
-     Task 3: Report controller + endpoint
-     Task 4: Frontend download button
+     Task 3: gateway calls new gRPC method via ClientGrpc
+     Task 4: gateway exposes POST /audits/batch endpoint
+  → Wave 3: e2e:smoke covering batch flow
 
 PHASE 3 — CODE:
-  gsd:execute-phase 3
+  gsd:execute-phase 8
   → Wave 1:
-     Task 1: TDD pdf.generator.ts (test → fail → implement → pass)
-     Task 2: TDD report.service.ts (test → fail → implement → pass)
+     Task 1: Edit packages/proto/analyzer/analyzer.proto; npm run build --filter=@repo/proto
+     Task 2: TDD apps/seo-analyzer/src/controllers/analyze.controller.ts → add @GrpcMethod
   → Wave 2:
-     Task 3: TDD report.controller.ts (test → fail → implement → pass)
-     Task 4: TDD DownloadButton component (test → fail → implement → pass)
+     Task 3: TDD apps/gateway/src/infra/grpc/analyzer.client.ts → call new method
+     Task 4: TDD apps/gateway/src/controllers/audit.controller.ts → add POST /batch
+  → Wave 3:
+     Task 5: Update test/e2e/smoke.e2e-spec.ts → add batch flow
 
 PHASE 4 — KIEM DINH:
-  /review → code quality check all 4 tasks
-  /cso → check file injection, path traversal in PDF endpoint
-  /qa → open browser, trigger audit, click download, verify PDF opens
+  /review → code quality check all 5 tasks
+  /cso → check input validation (batch size DoS, URL allowlist)
+  /qa → (skipped — no UI; rely on integration smoke)
+
+  MICROSERVICES GATES:
+    npm run build --filter=@repo/proto && npm run type-check  (proto typecheck)
+    npm run e2e:smoke                                          (gRPC smoke)
+    (No Prisma / BullMQ / pub/sub changes → those gates skipped)
 
 PHASE 5 — SHIP:
-  /ship → PR with 4 atomic commits
-  /land-and-deploy → merge, verify deploy
-  /canary → monitor PDF endpoint errors for 30min
+  /ship → PR with 5 atomic commits
+  /land-and-deploy → merge, verify Railway CI
+  /canary → monitor seo-analyzer error rate for 30min
+  Staged rollout: deploy seo-analyzer (producer) first, gateway (consumer) second
+     → so gateway calling new method always hits an updated producer
 ```
+
+## Proto-breaking change protocol (mandatory when packages/proto/** schema changes)
+
+```
+PR 1 — additive (expand):
+  1. Add new field as OPTIONAL in .proto (never replace / reorder tags)
+  2. npm run build --filter=@repo/proto → commit regenerated .d.ts
+  3. Producer writes BOTH old + new field
+  4. Consumer reads new field with fallback to old
+  5. npm run e2e:smoke passes with mixed-version consumers
+  6. Deploy consumer first, producer second
+
+PR 2 — cleanup (contract), ≥1 release cycle later:
+  7. Remove old field from .proto
+  8. Regenerate @repo/proto, commit
+  9. Producer stops writing old field
+  10. Deploy in single wave (safe: no consumer still reads old)
+```
+
+Emergency (security patch requiring breaking change in one PR) → escalate to user + DECISIONS log.
 
 ## Conflict Handling in CODE Phase
 
@@ -208,10 +240,15 @@ If conflict → earlier phase's locked decisions win.
 ## Cheat Sheet
 
 ```
-/office-hours + /plan-eng-review
-  -> gsd:discuss + gsd:plan
-  -> SP:TDD + gsd:execute (waves)
-  -> /review + /cso + /qa (fail? → fix → retry, max 2)
-  -> /ship + /land-and-deploy + /canary
-  -> done
+Standard Large:
+  /office-hours + /plan-eng-review
+  → gsd:discuss + gsd:plan
+  → gsd:execute (SP:TDD inside each task, waves)
+  → /review + /cso + /qa + applicable microservices gates
+  → /ship + /land-and-deploy + /canary
+
+Proto-breaking Large:
+  standard-large + proto-breaking protocol PR 1 (additive expand)
+  → staged rollout (consumer first, producer second)
+  → PR 2 cleanup ≥1 release later (remove old field)
 ```
