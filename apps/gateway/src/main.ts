@@ -27,7 +27,43 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('SEO Analyst Platform API')
-    .setDescription('Gateway REST API for SEO analysis microservices')
+    .setDescription(
+      `Gateway REST API for SEO analysis microservices.
+
+## Test Accounts (seeded data)
+| Email | Password | Role | Status |
+|-------|----------|------|--------|
+| \`admin@test.seo.local\` | _(use /register)_ | admin | verified |
+| \`duc@test.seo.local\` | _(use /register)_ | user | verified, 10 audits |
+| \`linh@test.seo.local\` | _(use /register)_ | user | verified, 2 audits |
+| \`nam@test.seo.local\` | _(use /register)_ | user | verified, 0 audits |
+| \`unverified@test.seo.local\` | _(use /register)_ | user | NOT verified |
+| \`locked@test.seo.local\` | _(use /register)_ | user | LOCKED |
+
+## Test Audit IDs (user: duc)
+| Audit ID | Domain | Status | Score |
+|----------|--------|--------|-------|
+| \`b0000001-0000-0000-0000-000000000001\` | google.com | completed | 92.50 |
+| \`b0000001-0000-0000-0000-000000000002\` | facebook.com | completed | 78.30 |
+| \`b0000001-0000-0000-0000-000000000003\` | github.com | completed | 85.70 |
+| \`b0000001-0000-0000-0000-000000000005\` | shopee.vn | completed | 64.80 |
+| \`b0000001-0000-0000-0000-000000000006\` | google.com | completed | 94.10 |
+| \`b0000001-0000-0000-0000-000000000007\` | tiki.vn | crawling | — |
+| \`b0000001-0000-0000-0000-000000000008\` | vnexpress.net | analyzing | — |
+| \`b0000001-0000-0000-0000-000000000009\` | example.com | failed | — |
+| \`b0000001-0000-0000-0000-000000000010\` | fpt.com.vn | pending | — |
+
+## Share Link Tokens
+| Token | Domain | Active |
+|-------|--------|--------|
+| \`share_google_abc123def456\` | google.com | yes |
+| \`share_github_xyz789ghi012\` | github.com | yes |
+| \`share_shopee_revoked00001\` | shopee.vn | revoked |
+
+## Compare Audits
+So sanh 2 lan audit google.com: \`audit1=b0000001-...01\` vs \`audit2=b0000001-...06\`
+`,
+    )
     .setVersion('1.0')
     .addBearerAuth()
     .addCookieAuth('refresh_token')
