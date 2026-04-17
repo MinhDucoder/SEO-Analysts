@@ -1,3 +1,7 @@
+/**
+ * @file Text tokenization — splits raw content into keyword candidates.
+ * Pure function, no side effects. Used by `KeywordAnalyzerService`.
+ */
 import type { LanguageCode } from './language-detector';
 import { getStopwords } from './stopwords';
 

@@ -1,3 +1,7 @@
+/**
+ * @file Verdict classification for the target keyword density.
+ * Thresholds sourced from the microservices architecture spec §8.1.
+ */
 export type Verdict = 'low' | 'optimal' | 'high' | 'stuffing';
 
 /**

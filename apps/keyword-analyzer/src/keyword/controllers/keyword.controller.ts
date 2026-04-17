@@ -1,3 +1,7 @@
+/**
+ * @file gRPC entrypoint for the keyword-analyzer service.
+ * Proto: `packages/proto/keyword/v1/keyword.proto`.
+ */
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { KeywordAnalyzerService } from '../services/keyword-analyzer.service';
@@ -44,12 +48,17 @@ interface KeywordResponseProto {
   };
 }
 
+/**
+ * Sync gRPC surface for on-demand keyword analysis (used by admin tooling
+ * and E2E tests). The production async path goes through `KeywordWorker`.
+ */
 @Controller()
 export class KeywordController {
   private readonly logger = new Logger(KeywordController.name);
 
   constructor(private readonly analyzer: KeywordAnalyzerService) {}
 
+  /** Run analysis synchronously and return the full result. */
   @GrpcMethod('KeywordAnalyzerService', 'AnalyzeKeywords')
   async analyzeKeywords(req: KeywordRequestProto): Promise<KeywordResponseProto> {
     this.logger.log(`gRPC AnalyzeKeywords audit=${req.auditId} url=${req.url}`);
@@ -72,6 +81,7 @@ export class KeywordController {
     };
   }
 
+  /** Liveness probe used by Docker healthcheck and Gateway /health. */
   @GrpcMethod('KeywordAnalyzerService', 'HealthCheck')
   healthCheck(): { healthy: boolean; version: string } {
     return { healthy: true, version: '0.0.1' };

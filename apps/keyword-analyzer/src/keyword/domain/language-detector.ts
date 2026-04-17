@@ -1,4 +1,9 @@
 /**
+ * @file Language detection for keyword analysis (EN vs VI only).
+ * Heuristic-based — callers may override via the DTO `language` field.
+ */
+
+/**
  * Detects document language using a simple heuristic:
  *   - If the text contains any Vietnamese diacritic character → 'vi'
  *   - Otherwise → 'en'

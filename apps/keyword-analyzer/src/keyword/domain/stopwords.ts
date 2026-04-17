@@ -1,3 +1,8 @@
+/**
+ * @file Language-specific stopword sets (English + Vietnamese).
+ * Stopwords are excluded from keyword extraction so frequency results
+ * surface meaningful terms, not function words.
+ */
 import type { LanguageCode } from './language-detector';
 
 /**

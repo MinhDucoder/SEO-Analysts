@@ -1,3 +1,8 @@
+/**
+ * @file Keyword placement detection — flags whether a keyword appears in
+ * title / H1 / first paragraph / meta description of the crawled page.
+ * Whole-word matching is Unicode-aware to support Vietnamese diacritics.
+ */
 export interface PlacementContext {
   title?: string;
   h1?: string;

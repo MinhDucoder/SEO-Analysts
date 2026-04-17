@@ -1,3 +1,8 @@
+/**
+ * @file Term-frequency counting and top-N ranking.
+ * Output is deterministic (alphabetical tie-break) so downstream
+ * reports remain reproducible across runs.
+ */
 export interface KeywordCount {
   keyword: string;
   frequency: number;

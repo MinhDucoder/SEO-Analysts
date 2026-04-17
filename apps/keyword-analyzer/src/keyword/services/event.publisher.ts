@@ -1,3 +1,8 @@
+/**
+ * @file Emits pipeline events for the keyword-analysis step.
+ * Writes the result to Redis cache + publishes `keyword.done` so the
+ * Report service can proceed with aggregation.
+ */
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import Redis from 'ioredis';
 import { REDIS_KEYS } from '@repo/shared';
@@ -8,6 +13,10 @@ export interface KeywordDoneEvent {
   error?: string;
 }
 
+/**
+ * Owns a dedicated Redis connection for caching + pub/sub. Separate
+ * from BullMQ's own Redis client to avoid blocking the queue loop.
+ */
 @Injectable()
 export class EventPublisher implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(EventPublisher.name);

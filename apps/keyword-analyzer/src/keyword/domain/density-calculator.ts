@@ -1,4 +1,8 @@
 /**
+ * @file Keyword density calculation (frequency ÷ total words × 100).
+ */
+
+/**
  * Keyword density expressed as a percentage, rounded to 2 decimal places.
  * Protected against divide-by-zero (returns 0 if totalWords <= 0).
  */

@@ -1,3 +1,8 @@
+/**
+ * @file BullMQ worker for the `keyword.start` queue — main async entrypoint.
+ * Triggered by the Crawler after `crawl.done`; publishes `keyword.done`
+ * on success so Report service can aggregate.
+ */
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
@@ -22,6 +27,10 @@ interface KeywordStartJobData {
   language?: string;
 }
 
+/**
+ * Processes keyword jobs with concurrency 4 (stateless pipeline step, so
+ * safe to parallelize — bottleneck is CPU for tokenization on large pages).
+ */
 @Processor(BULLMQ_QUEUES.KEYWORD_START, { concurrency: 4 })
 export class KeywordWorker extends WorkerHost {
   private readonly logger = new Logger(KeywordWorker.name);
@@ -33,6 +42,11 @@ export class KeywordWorker extends WorkerHost {
     super();
   }
 
+  /**
+   * Handle a single keyword job. Result is cached in Redis; `keyword.done`
+   * is always published (with status=failed on error) so the Report
+   * service's "wait for both" counter never stalls.
+   */
   async process(job: Job<KeywordStartJobData>): Promise<void> {
     const { auditId } = job.data;
     this.logger.log(`Processing keyword.start audit=${auditId} jobId=${job.id}`);

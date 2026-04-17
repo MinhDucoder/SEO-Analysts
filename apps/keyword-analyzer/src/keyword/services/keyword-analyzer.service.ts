@@ -1,3 +1,8 @@
+/**
+ * @file Orchestrates the keyword-analysis pipeline:
+ * language detect → tokenize → term frequency → top-N → density & placement
+ * → optional target-keyword verdict. Pure in-memory; no DB or I/O.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { detectLanguage, type LanguageCode } from '../domain/language-detector';
 import { tokenize, countTotalWords } from '../domain/tokenizer';
@@ -14,10 +19,20 @@ import type {
 
 const TOP_N = 20;
 
+/**
+ * Core keyword-analysis service — invoked by both the gRPC controller
+ * (sync API) and the BullMQ worker (async pipeline step).
+ */
 @Injectable()
 export class KeywordAnalyzerService {
   private readonly logger = new Logger(KeywordAnalyzerService.name);
 
+  /**
+   * Runs the full keyword pipeline on a single page's extracted text.
+   *
+   * @param input Page text + placement context + optional target keyword.
+   * @returns Top-20 keywords + density/placement + optional target verdict.
+   */
   async analyze(input: KeywordAnalyzeInput): Promise<KeywordAnalyzeOutput> {
     const start = Date.now();
 
