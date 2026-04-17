@@ -119,6 +119,7 @@ export const REDIS_KEYS = {
   auditCompletedSteps: (auditId: string) => `audit:${auditId}:completed_steps`,
   auditAnalyzeResult: (auditId: string) => `audit:${auditId}:analyze_result`,
   auditKeywordResult: (auditId: string) => `audit:${auditId}:keyword_result`,
+  auditCrawlResult:   (auditId: string) => `audit:${auditId}:crawl_result`,
   rateLimit: (userId: string) => `rate_limit:${userId}`,
 } as const;
 
