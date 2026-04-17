@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
 import * as cheerio from 'cheerio';
-import { FetchResult, IFetcher } from './interfaces/fetcher.interface';
+import { FetchResult, IFetcher } from '../../domain/fetcher.interface';
 
 const DEFAULT_USER_AGENT = 'SEOAnalystBot/1.0 (+https://seo-analyst.local)';
 const DEFAULT_TIMEOUT_MS = 10_000;

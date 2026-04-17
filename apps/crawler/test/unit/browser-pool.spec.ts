@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { BrowserPool } from '../../src/crawler/browser-pool';
+import { BrowserPool } from '../../src/crawler/infra/fetchers/browser-pool';
 
 vi.mock('playwright', () => ({
   chromium: {

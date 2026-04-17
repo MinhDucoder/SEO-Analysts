@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { CrawlerOrchestrator } from '../../src/crawler/crawler.orchestrator';
+import { CrawlerOrchestrator } from '../../src/crawler/services/crawler.orchestrator';
 
 const baseFetch = {
   finalUrl: 'https://example.com/',

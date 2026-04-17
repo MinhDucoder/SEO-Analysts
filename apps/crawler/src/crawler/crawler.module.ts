@@ -3,17 +3,17 @@ import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import { BULLMQ_QUEUES } from '@repo/shared';
-import { CacheService, REDIS_CLIENT } from './cache.service';
-import { CheerioFetcher } from './cheerio-fetcher';
-import { PlaywrightFetcher } from './playwright-fetcher';
-import { BrowserPool } from './browser-pool';
-import { LighthouseRunner } from './lighthouse-runner';
-import { PageDataExtractor } from './page-data-extractor';
-import { UrlValidator } from './url-validator';
-import { CrawlerOrchestrator } from './crawler.orchestrator';
-import { CrawlerController } from './crawler.controller';
-import { CrawlerWorker } from './crawler.worker';
-import { EventPublisher } from './event-publisher';
+import { CacheService, REDIS_CLIENT } from './persistence/cache.service';
+import { CheerioFetcher } from './infra/fetchers/cheerio-fetcher';
+import { PlaywrightFetcher } from './infra/fetchers/playwright-fetcher';
+import { BrowserPool } from './infra/fetchers/browser-pool';
+import { LighthouseRunner } from './services/lighthouse-runner';
+import { PageDataExtractor } from './services/page-data-extractor';
+import { UrlValidator } from './domain/url-validator';
+import { CrawlerOrchestrator } from './services/crawler.orchestrator';
+import { CrawlerController } from './controllers/crawler.controller';
+import { CrawlerWorker } from './controllers/crawler.worker';
+import { EventPublisher } from './services/event-publisher';
 
 const redisFactory = {
   provide: REDIS_CLIENT,

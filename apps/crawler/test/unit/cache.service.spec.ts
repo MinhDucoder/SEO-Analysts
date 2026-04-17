@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { CacheService } from '../../src/crawler/cache.service';
+import { CacheService } from '../../src/crawler/persistence/cache.service';
 import { CACHE_TTL } from '@repo/shared';
 
 const fakeRedis = {

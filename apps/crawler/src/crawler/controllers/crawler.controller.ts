@@ -1,6 +1,6 @@
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { CrawlerOrchestrator } from './crawler.orchestrator';
+import { CrawlerOrchestrator } from '../services/crawler.orchestrator';
 
 interface CrawlRequestProto {
   url: string;
@@ -61,7 +61,7 @@ export class CrawlerController {
     };
   }
 
-  private toProtoPageData(pd: import('./interfaces/page-data.interface').PageData) {
+  private toProtoPageData(pd: import('../domain/page-data.interface').PageData) {
     return {
       url: pd.url,
       final_url: pd.finalUrl,

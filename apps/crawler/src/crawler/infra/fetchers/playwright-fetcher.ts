@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BrowserPool } from './browser-pool';
-import { FetchResult, IFetcher } from './interfaces/fetcher.interface';
+import { FetchResult, IFetcher } from '../../domain/fetcher.interface';
 
 const DEFAULT_TIMEOUT_MS = 30_000;
 

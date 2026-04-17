@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import { ImageInfo, LinkInfo } from '@repo/shared';
-import { FetchResult } from './interfaces/fetcher.interface';
-import { PageData } from './interfaces/page-data.interface';
+import { FetchResult } from '../domain/fetcher.interface';
+import { PageData } from '../domain/page-data.interface';
 
 @Injectable()
 export class PageDataExtractor {

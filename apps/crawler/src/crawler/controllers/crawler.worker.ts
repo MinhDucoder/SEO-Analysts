@@ -2,8 +2,8 @@ import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
 import { AuditStatus, BULLMQ_QUEUES } from '@repo/shared';
-import { CrawlerOrchestrator } from './crawler.orchestrator';
-import { EventPublisher } from './event-publisher';
+import { CrawlerOrchestrator } from '../services/crawler.orchestrator';
+import { EventPublisher } from '../services/event-publisher';
 
 interface CrawlJobData {
   auditId: string;

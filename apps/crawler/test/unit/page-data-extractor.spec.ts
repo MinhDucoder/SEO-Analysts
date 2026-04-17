@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { PageDataExtractor } from '../../src/crawler/page-data-extractor';
-import { FetchResult } from '../../src/crawler/interfaces/fetcher.interface';
+import { PageDataExtractor } from '../../src/crawler/services/page-data-extractor';
+import { FetchResult } from '../../src/crawler/domain/fetcher.interface';
 
 const SAMPLE_HTML = `
 <!DOCTYPE html>

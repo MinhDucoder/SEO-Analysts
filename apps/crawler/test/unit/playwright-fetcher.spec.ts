@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { PlaywrightFetcher } from '../../src/crawler/playwright-fetcher';
+import { PlaywrightFetcher } from '../../src/crawler/infra/fetchers/playwright-fetcher';
 
 describe('PlaywrightFetcher', () => {
   let fetcher: PlaywrightFetcher;

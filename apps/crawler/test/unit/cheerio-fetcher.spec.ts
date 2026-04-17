@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { CheerioFetcher } from '../../src/crawler/cheerio-fetcher';
+import { CheerioFetcher } from '../../src/crawler/infra/fetchers/cheerio-fetcher';
 
 vi.mock('axios');
 import axios from 'axios';

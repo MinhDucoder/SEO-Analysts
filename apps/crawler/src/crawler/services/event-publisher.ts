@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { AuditStatus } from '@repo/shared';
-import { REDIS_CLIENT } from './cache.service';
-import { CrawlResult } from './interfaces/crawl-result.interface';
+import { REDIS_CLIENT } from '../persistence/cache.service';
+import { CrawlResult } from '../domain/crawl-result.interface';
 
 @Injectable()
 export class EventPublisher {

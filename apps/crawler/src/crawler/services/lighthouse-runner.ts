@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CoreWebVitals } from '@repo/shared';
-import { CacheService } from './cache.service';
+import { CacheService } from '../persistence/cache.service';
 
 export interface LighthouseRunResult {
   cwv: CoreWebVitals;

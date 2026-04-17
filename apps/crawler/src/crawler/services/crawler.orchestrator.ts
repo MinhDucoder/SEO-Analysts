@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CoreWebVitals } from '@repo/shared';
-import { CacheService } from './cache.service';
-import { CheerioFetcher } from './cheerio-fetcher';
+import { CacheService } from '../persistence/cache.service';
+import { CheerioFetcher } from '../infra/fetchers/cheerio-fetcher';
 import { LighthouseRunner } from './lighthouse-runner';
 import { PageDataExtractor } from './page-data-extractor';
-import { PlaywrightFetcher } from './playwright-fetcher';
-import { UrlValidator } from './url-validator';
-import { CrawlOptions, CrawlResult } from './interfaces/crawl-result.interface';
-import { FetchResult } from './interfaces/fetcher.interface';
+import { PlaywrightFetcher } from '../infra/fetchers/playwright-fetcher';
+import { UrlValidator } from '../domain/url-validator';
+import { CrawlOptions, CrawlResult } from '../domain/crawl-result.interface';
+import { FetchResult } from '../domain/fetcher.interface';
 
 const ZERO_CWV: CoreWebVitals = {
   lcpMs: 0,

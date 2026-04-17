@@ -1,12 +1,12 @@
 import { describe, expect, it, beforeAll, afterAll, vi } from 'vitest';
-import { CrawlerController } from '../../src/crawler/crawler.controller';
-import { CrawlerOrchestrator } from '../../src/crawler/crawler.orchestrator';
-import { CacheService } from '../../src/crawler/cache.service';
-import { UrlValidator } from '../../src/crawler/url-validator';
-import { CheerioFetcher } from '../../src/crawler/cheerio-fetcher';
-import { PlaywrightFetcher } from '../../src/crawler/playwright-fetcher';
-import { PageDataExtractor } from '../../src/crawler/page-data-extractor';
-import { BrowserPool } from '../../src/crawler/browser-pool';
+import { CrawlerController } from '../../src/crawler/controllers/crawler.controller';
+import { CrawlerOrchestrator } from '../../src/crawler/services/crawler.orchestrator';
+import { CacheService } from '../../src/crawler/persistence/cache.service';
+import { UrlValidator } from '../../src/crawler/domain/url-validator';
+import { CheerioFetcher } from '../../src/crawler/infra/fetchers/cheerio-fetcher';
+import { PlaywrightFetcher } from '../../src/crawler/infra/fetchers/playwright-fetcher';
+import { PageDataExtractor } from '../../src/crawler/services/page-data-extractor';
+import { BrowserPool } from '../../src/crawler/infra/fetchers/browser-pool';
 
 // In-memory Redis stub — keeps the test self-contained
 const memory = new Map<string, string>();

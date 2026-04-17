@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { UrlValidator, UrlValidationError } from '../../src/crawler/url-validator';
+import { UrlValidator, UrlValidationError } from '../../src/crawler/domain/url-validator';
 
 describe('UrlValidator', () => {
   let validator: UrlValidator;

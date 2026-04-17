@@ -10,8 +10,8 @@ vi.mock('lighthouse', () => ({
   default: (...args: unknown[]) => mockLighthouse(...args),
 }));
 
-import { LighthouseRunner } from '../../src/crawler/lighthouse-runner';
-import { CacheService } from '../../src/crawler/cache.service';
+import { LighthouseRunner } from '../../src/crawler/services/lighthouse-runner';
+import { CacheService } from '../../src/crawler/persistence/cache.service';
 
 describe('LighthouseRunner', () => {
   let runner: LighthouseRunner;
