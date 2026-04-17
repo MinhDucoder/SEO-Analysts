@@ -34,7 +34,7 @@ export class AnalyzerGrpcClient implements OnModuleInit {
     this.client = this.factory.create<AnalyzerService>({
       protoPath: 'analyzer/v1/analyzer.proto',
       packageName: 'analyzer.v1',
-      serviceName: 'AnalyzerService',
+      serviceName: 'SeoAnalyzerService',
       url,
     });
   }

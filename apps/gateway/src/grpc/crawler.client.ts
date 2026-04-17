@@ -18,7 +18,7 @@ export class CrawlerGrpcClient implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    const url = this.config.get<string>('CRAWLER_GRPC_URL') ?? 'localhost:50051';
+    const url = this.config.get<string>('CRAWLER_GRPC_URL') ?? 'localhost:50052';
     this.client = this.factory.create<CrawlerService>({
       protoPath: 'crawler/v1/crawler.proto',
       packageName: 'crawler.v1',
