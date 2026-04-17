@@ -14,6 +14,11 @@ import { CrawlerOrchestrator } from './services/crawler.orchestrator';
 import { CrawlerController } from './controllers/crawler.controller';
 import { CrawlerWorker } from './controllers/crawler.worker';
 import { EventPublisher } from './services/event-publisher';
+import { PoliteFetcher } from './infra/fetchers/polite-fetcher';
+import { SitemapDiscovery } from './infra/sitemap/sitemap-discovery';
+import { UndiciSitemapHttpClient } from './infra/sitemap/undici-sitemap-http-client';
+import { SiteCrawlCounter } from './services/site-crawl-counter.service';
+import { SiteCrawlStartWorker } from './controllers/site-crawl-start.worker';
 
 const redisFactory = {
   provide: REDIS_CLIENT,
@@ -49,6 +54,9 @@ const browserPoolFactory = {
       { name: BULLMQ_QUEUES.CRAWL_START },
       { name: BULLMQ_QUEUES.ANALYZE_START },
       { name: BULLMQ_QUEUES.KEYWORD_START },
+      { name: BULLMQ_QUEUES.SITE_CRAWL_START },
+      { name: BULLMQ_QUEUES.SITE_CRAWL_URL_AUDIT },
+      { name: BULLMQ_QUEUES.SITE_CRAWL_AGGREGATE },
     ),
   ],
   controllers: [CrawlerController],
@@ -64,6 +72,19 @@ const browserPoolFactory = {
     CrawlerOrchestrator,
     EventPublisher,
     CrawlerWorker,
+    // F1 site-wide crawl
+    {
+      provide: PoliteFetcher,
+      useFactory: () => new PoliteFetcher(globalThis.fetch.bind(globalThis) as typeof fetch),
+    },
+    {
+      provide: SitemapDiscovery,
+      useFactory: (client: UndiciSitemapHttpClient) => new SitemapDiscovery(client),
+      inject: [UndiciSitemapHttpClient],
+    },
+    UndiciSitemapHttpClient,
+    SiteCrawlCounter,
+    SiteCrawlStartWorker,
   ],
   exports: [CrawlerOrchestrator],
 })
