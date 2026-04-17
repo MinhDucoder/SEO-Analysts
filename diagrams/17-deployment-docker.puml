@@ -1,0 +1,119 @@
+@startuml 17-deployment-docker
+' ========================================
+' Figure 2.17 — Docker Compose Deployment (9 Containers)
+' Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md
+' Generated: 2026-04-10
+' Type: deployment
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+
+title Figure 2.17 — Docker Compose Deployment\n(9 Containers — docker-compose up)
+
+node "Docker Compose Environment" as DOCKER {
+
+  ' ===== Database Layer =====
+  frame "Database Layer" as DB_LAYER #FFF4D6 {
+    database "seo-gateway-db\npostgres:16-alpine\nport **5432**" as GDB {
+      card "seo_gateway" as GDB_DATA
+      card "users, refresh_tokens, audits" as GDB_TBL
+    }
+
+    database "seo-analyzer-db\npostgres:16-alpine\nport **5433**" as ADB {
+      card "seo_analyzer" as ADB_DATA
+      card "seo_rules, rule_results" as ADB_TBL
+    }
+
+    database "seo-report-db\npostgres:16-alpine\nport **5434**" as RDB {
+      card "seo_report" as RDB_DATA
+      card "reports, keywords, cwv, links" as RDB_TBL
+    }
+
+    database "seo-redis\nredis:7-alpine\nport **6379**" as REDIS {
+      card "BullMQ + Cache + Pub/Sub" as REDIS_DATA
+    }
+  }
+
+  ' ===== Service Layer =====
+  frame "Service Layer" as SVC_LAYER #E7EEF5 {
+
+    node "seo-gateway\nNestJS" as GW {
+      [REST API :3000]
+      [gRPC :50051]
+      [Socket.IO]
+      [Swagger UI /api/docs]
+    }
+
+    node "seo-crawler\nNestJS" as CR {
+      [gRPC :50052]
+      [Cheerio + Playwright]
+      [Lighthouse]
+    }
+
+    node "seo-analyzer\nNestJS" as AN {
+      [gRPC :50053]
+      [Rule Engine (20 rules)]
+    }
+
+    node "seo-keyword-analyzer\nNestJS" as KW {
+      [gRPC :50054]
+      [Tokenizer + TF Calc]
+    }
+
+    node "seo-report\nNestJS" as RP {
+      [HTTP :3004 (PDF)]
+      [gRPC :50055]
+      [PDF Generator]
+    }
+  }
+}
+
+' ===== External =====
+actor "User\n(Browser)" as USER
+cloud "Target\nWebsite" as WEB
+
+' ===== User connections =====
+USER --> GW : REST :3000\nWebSocket
+
+' ===== Service → DB dependencies =====
+GW -[#2E7D32,thickness=2]-> GDB : depends_on\n(service_healthy)
+GW -[#2E7D32,thickness=2]-> REDIS : depends_on
+
+AN -[#1565C0,thickness=2]-> ADB : depends_on\n(service_healthy)
+AN -[#1565C0,thickness=2]-> REDIS : depends_on
+
+RP -[#E65100,thickness=2]-> RDB : depends_on\n(service_healthy)
+RP -[#E65100,thickness=2]-> REDIS : depends_on
+
+CR -[#0F4761,thickness=2]-> REDIS : depends_on
+KW -[#0F4761,thickness=2]-> REDIS : depends_on
+
+' ===== Service → Service =====
+GW -[#0F4761,dashed]-> CR : gRPC :50052
+GW -[#0F4761,dashed]-> AN : gRPC :50053
+GW -[#0F4761,dashed]-> KW : gRPC :50054
+GW -[#0F4761,dashed]-> RP : gRPC :50055\nHTTP :3004
+
+' ===== External =====
+CR --> WEB : HTTP fetch
+
+legend right
+  |= Container |= Image |= Ports |
+  | seo-gateway-db | postgres:16-alpine | 5432 |
+  | seo-analyzer-db | postgres:16-alpine | 5433 |
+  | seo-report-db | postgres:16-alpine | 5434 |
+  | seo-redis | redis:7-alpine | 6379 |
+  | seo-gateway | NestJS custom | 3000, 50051 |
+  | seo-crawler | NestJS custom | 50052 |
+  | seo-analyzer | NestJS custom | 50053 |
+  | seo-keyword-analyzer | NestJS custom | 50054 |
+  | seo-report | NestJS custom | 3004, 50055 |
+  --
+  **Total: 9 containers**
+  Start: docker-compose up -d
+endlegend
+
+caption Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md §10
+
+@enduml

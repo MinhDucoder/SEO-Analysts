@@ -1,0 +1,208 @@
+@startuml 14-erd-microservices
+' ========================================
+' Figure 2.14 — Microservices ERD (3 Databases)
+' Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md
+' Generated: 2026-04-10
+' Type: class (ERD)
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+hide circle
+
+title Figure 2.14 — Microservices Database ERD\n(Database-per-Service Pattern)
+
+' ===== PostgreSQL #1: Gateway DB =====
+package "PostgreSQL #1 — seo_gateway\n(Gateway Service)" as GW_DB #E8F5E9 {
+
+  class users << (T,#0F4761) >> {
+    + **id** : UUID «PK»
+    --
+    email : VARCHAR(255) «UQ»
+    password_hash : VARCHAR(255) NULL
+    full_name : VARCHAR(100)
+    role : ENUM(user, admin)
+    is_verified : BOOLEAN
+    is_locked : BOOLEAN
+    oauth_provider : VARCHAR(50) NULL
+    avatar_url : VARCHAR(500) NULL
+    created_at : TIMESTAMPTZ
+    updated_at : TIMESTAMPTZ
+    --
+    «IDX» idx_users_email (email)
+  }
+
+  class refresh_tokens << (T,#0F4761) >> {
+    + **id** : UUID «PK»
+    --
+    # user_id : UUID «FK → users»
+    token_hash : VARCHAR(255)
+    user_agent : VARCHAR(500) NULL
+    ip_address : VARCHAR(45) NULL
+    expires_at : TIMESTAMPTZ
+    is_revoked : BOOLEAN
+    created_at : TIMESTAMPTZ
+    --
+    «IDX» idx_rt_user (user_id)
+    «IDX» idx_rt_token (token_hash)
+    «IDX» idx_rt_expires (expires_at)
+  }
+
+  class audits << (T,#0F4761) >> {
+    + **id** : UUID «PK»
+    --
+    # user_id : UUID «FK → users»
+    url : TEXT
+    domain : VARCHAR(255)
+    status : ENUM(pending, crawling,
+    \tanalyzing, reporting,
+    \tcompleted, failed)
+    seo_score : DECIMAL(5,2) NULL
+    target_keyword : VARCHAR(255) NULL
+    error_message : TEXT NULL
+    crawler_type : VARCHAR(20) NULL
+    crawl_duration_ms : INT NULL
+    completed_at : TIMESTAMPTZ NULL
+    created_at : TIMESTAMPTZ
+    updated_at : TIMESTAMPTZ
+    --
+    «IDX» idx_audits_user_created
+    \t(user_id, created_at DESC)
+    «IDX» idx_audits_domain (domain)
+    «IDX» idx_audits_status (status)
+  }
+
+  users "1" --o{ "N" refresh_tokens : has many
+  users "1" --o{ "N" audits : has many
+}
+
+' ===== PostgreSQL #2: Analyzer DB =====
+package "PostgreSQL #2 — seo_analyzer\n(SEO Analyzer Service)" as AN_DB #E3F2FD {
+
+  class seo_rules << (T,#1565C0) >> {
+    + **id** : UUID «PK»
+    --
+    name : VARCHAR(100) «UQ»
+    display_name : VARCHAR(100)
+    description : TEXT
+    category : ENUM(meta, headings,
+    \timages, links,
+    \tperformance, technical)
+    weight : INT CHECK(1..10)
+    is_enabled : BOOLEAN
+    check_config : JSONB NULL
+    created_at : TIMESTAMPTZ
+    updated_at : TIMESTAMPTZ
+    --
+    «IDX» idx_rules_category (category)
+  }
+
+  class rule_results << (T,#1565C0) >> {
+    + **id** : UUID «PK»
+    --
+    audit_id : UUID «cross-DB ref»
+    rule_id : VARCHAR(100)
+    rule_name : VARCHAR(100)
+    category : ENUM(rule_category)
+    status : ENUM(pass, warn, fail)
+    score : DECIMAL(5,2)
+    weight : INT
+    message : TEXT
+    suggestion : TEXT NULL
+    metadata : JSONB NULL
+    created_at : TIMESTAMPTZ
+    --
+    «IDX» idx_rr_audit (audit_id)
+    «IDX» idx_rr_audit_status
+    \t(audit_id, status)
+    «GIN» idx_rr_metadata (metadata)
+  }
+}
+
+' ===== PostgreSQL #3: Report DB =====
+package "PostgreSQL #3 — seo_report\n(Report Service)" as RP_DB #FFF3E0 {
+
+  class reports << (T,#E65100) >> {
+    + **id** : UUID «PK»
+    --
+    audit_id : UUID «UQ, cross-DB ref»
+    url : TEXT
+    domain : VARCHAR(255)
+    final_score : DECIMAL(5,2)
+    classification : VARCHAR(20)
+    total_issues : INT
+    critical_issues : INT
+    warn_issues : INT
+    pass_count : INT
+    analysis_snapshot : JSONB
+    cwv_snapshot : JSONB
+    created_at : TIMESTAMPTZ
+    --
+    «IDX» idx_reports_domain (domain)
+  }
+
+  class report_keywords << (T,#E65100) >> {
+    + **id** : UUID «PK»
+    --
+    # report_id : UUID «FK → reports»
+    keyword : VARCHAR(255)
+    frequency : INT
+    density_percent : DECIMAL(5,2)
+    in_title : BOOLEAN
+    in_h1 : BOOLEAN
+    in_first_paragraph : BOOLEAN
+    in_meta_description : BOOLEAN
+    rank : INT
+    is_target : BOOLEAN
+    --
+    «IDX» idx_rk_report (report_id)
+  }
+
+  class report_cwv << (T,#E65100) >> {
+    + **id** : UUID «PK»
+    --
+    # report_id : UUID «FK → reports» «UQ»
+    lcp_ms : DECIMAL(10,2)
+    inp_ms : DECIMAL(10,2)
+    cls : DECIMAL(5,4)
+    performance_score : INT
+    accessibility_score : INT
+    best_practices_score : INT
+    lighthouse_seo_score : INT
+  }
+
+  class share_links << (T,#E65100) >> {
+    + **id** : UUID «PK»
+    --
+    # report_id : UUID «FK → reports» «UQ»
+    audit_id : UUID «cross-DB ref»
+    token : VARCHAR(64) «UQ»
+    is_active : BOOLEAN
+    accessed_count : INT
+    last_accessed_at : TIMESTAMPTZ NULL
+    created_at : TIMESTAMPTZ
+    --
+    «IDX» idx_sl_audit (audit_id)
+  }
+
+  reports "1" --o{ "N" report_keywords : has many
+  reports "1" --|| "0..1" report_cwv : has one
+  reports "1" --|| "0..1" share_links : has one
+}
+
+' ===== Cross-Database References (dashed) =====
+audits::id <..[#FF6B6B,dashed,thickness=2]. rule_results::audit_id : <color:#FF6B6B>cross-DB ref\n(app logic, no FK)
+audits::id <..[#FF6B6B,dashed,thickness=2]. reports::audit_id : <color:#FF6B6B>cross-DB ref\n(app logic, no FK)
+audits::id <..[#FF6B6B,dashed,thickness=2]. share_links::audit_id : <color:#FF6B6B>cross-DB ref\n(app logic, no FK)
+
+legend right
+  |= Color |= Meaning |
+  | <#E8F5E9> | PostgreSQL #1 — Gateway |
+  | <#E3F2FD> | PostgreSQL #2 — Analyzer |
+  | <#FFF3E0> | PostgreSQL #3 — Report |
+  | <#FF6B6B> | Cross-DB reference (no FK) |
+endlegend
+
+caption Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md §5
+
+@enduml

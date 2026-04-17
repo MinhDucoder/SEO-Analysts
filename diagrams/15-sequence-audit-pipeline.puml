@@ -1,0 +1,140 @@
+@startuml 15-sequence-audit-pipeline
+' ========================================
+' Figure 2.15 — Audit Pipeline (Hybrid Orchestration + Choreography)
+' Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md
+' Generated: 2026-04-10
+' Type: sequence
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+
+title Figure 2.15 — Audit Pipeline\n(Hybrid Orchestration + Choreography)
+autonumber "<b>[00]</b>"
+
+actor "User" as U
+participant "Frontend\n(Next.js)" as FE
+box "Gateway Service" #E8F5E9
+  participant "REST API\n(port 3000)" as API
+  participant "Socket.IO\nGateway" as WS
+end box
+queue "BullMQ\n(Redis)" as MQ #F3E5F5
+database "Gateway DB\n(PG #1)" as GDB #FFF4D6
+
+box "Workers" #F5F5F5
+  participant "Crawler\nWorker" as CR
+  participant "SEO Analyzer\nWorker" as AN
+  participant "Keyword\nAnalyzer Worker" as KW
+  participant "Report\nWorker" as RP
+end box
+
+database "Redis\n(Cache + Pub/Sub)" as RD #FFE0E0
+
+== Phase 1: Submit (Orchestration — Gateway controls) ==
+
+U -> FE : Submit URL
+FE -> API : POST /api/v1/audits\n{url, targetKeyword?}
+activate API
+API -> API : Validate JWT\n+ Rate limit check\n+ SSRF URL check
+API -> GDB : INSERT audit\n(status: pending, 0%)
+GDB --> API : audit_id
+API -> MQ : enqueue **crawl.start**\n{auditId, url, options}
+API --> FE : **202** {auditId, status: "pending"}
+deactivate API
+FE -> WS : Socket.IO: join room(auditId)
+
+== Phase 2: Crawling (Orchestration) ==
+
+MQ -> CR : pick job **crawl.start**
+activate CR #E3F2FD
+CR ->> WS : emit **audit.progress** (10%)
+WS -->> FE : progress event
+FE --> U : "Crawling..." (10%)
+
+CR -> CR : Cheerio fetch HTML\n(SPA? → Playwright fallback)
+CR ->> WS : emit **audit.progress** (25%)
+WS -->> FE : progress event
+
+CR -> CR : Run Lighthouse\n(CWV metrics)
+CR ->> WS : emit **audit.progress** (40%)
+WS -->> FE : progress event
+
+CR -> RD : Cache crawl result (30min)
+CR -> MQ : emit **crawl.done**\n{auditId, pageData, cwvMetrics, textContent}
+deactivate CR
+
+== Phase 3: Analysis (Choreography — Event-driven, PARALLEL) ==
+
+note over MQ : BullMQ listener picks\ncrawl.done → enqueues\n2 parallel jobs
+
+MQ -> AN : enqueue **analyze.start**\n{auditId, pageData, cwvMetrics}
+MQ -> KW : enqueue **keyword.start**\n{auditId, textContent, targetKeyword}
+
+activate AN #E8F5E9
+activate KW #FFF8E1
+
+AN ->> WS : emit **audit.progress** (55%)
+WS -->> FE : progress event
+FE --> U : "Analyzing..." (55%)
+
+AN -> AN : Apply 20 SEO rules\nCalc category scores\nCalc weighted overall
+KW -> KW : Tokenize\nRemove stopwords\nCalc TF & density
+
+AN -> RD : Store analyze result\naudit:{id}:analyze_result
+AN -> RD : INCR audit:{id}:completed_steps → **1**
+AN -> MQ : emit **analyze.done**\n{auditId, ruleResults[], categoryScores[]}
+deactivate AN
+AN ->> WS : emit **audit.progress** (70%)
+
+KW -> RD : Store keyword result\naudit:{id}:keyword_result
+KW -> RD : INCR audit:{id}:completed_steps → **2**
+KW -> MQ : emit **keyword.done**\n{auditId, keywords[]}
+deactivate KW
+KW ->> WS : emit **audit.progress** (75%)
+
+note over RD : completed_steps = 2\n→ Both done!\n→ Trigger report.start
+
+== Phase 4: Reporting (Choreography) ==
+
+MQ -> RP : enqueue **report.start**\n{auditId}
+activate RP #FFF3E0
+RP -> RD : GET audit:{id}:analyze_result\nGET audit:{id}:keyword_result
+RP ->> WS : emit **audit.progress** (85%)
+WS -->> FE : progress event
+FE --> U : "Generating report..." (85%)
+
+RP -> RP : Aggregate scores\nCalc final score\nClassify (excellent/good/fair/poor)
+RP -> RP : Persist to Report DB\n(reports, report_keywords, report_cwv)
+
+RP -> MQ : emit **report.done**\n{auditId, finalScore, reportId}
+deactivate RP
+
+== Phase 5: Completion ==
+
+MQ -> API : event: **report.done**
+activate API
+API -> GDB : UPDATE audit\nstatus=completed\nseo_score=finalScore
+API -> WS : emit **audit.completed**\n{auditId, score, 100%}
+deactivate API
+WS -->> FE : completed event
+FE --> U : Show results (100%)
+
+U -> FE : View full report
+FE -> API : GET /api/v1/audits/{id}
+API -> RP : gRPC: GetReport(auditId)
+RP --> API : GetReportResponse
+API --> FE : 200 {full report data}
+FE --> U : Render SEO report
+
+legend right
+  |= Color |= Meaning |
+  | <#E8F5E9> | Gateway / Normal flow |
+  | <#E3F2FD> | Crawler Service |
+  | <#FFF8E1> | Keyword Analyzer |
+  | <#FFF3E0> | Report Service |
+  | <#F3E5F5> | BullMQ (Redis) |
+endlegend
+
+caption Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md §3
+
+@enduml

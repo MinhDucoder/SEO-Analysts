@@ -1,0 +1,103 @@
+@startuml 16-component-grpc-bullmq
+' ========================================
+' Figure 2.16 — gRPC + BullMQ Communication Map
+' Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md
+' Generated: 2026-04-10
+' Type: component
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+
+title Figure 2.16 — Inter-Service Communication\n(gRPC Contracts + BullMQ Queues + Redis Pub/Sub)
+
+actor "Browser /\nMobile" as Client
+
+' ===== Gateway =====
+package "Gateway Service" as GW #E8F5E9 {
+  [REST API\nport 3000] as GW_REST
+  [gRPC Server\nport 50051] as GW_GRPC
+  [WebSocket\n(Socket.IO)] as GW_WS
+  [BullMQ\nProducer] as GW_PROD
+  [Event\nListener] as GW_LISTEN
+}
+
+' ===== Crawler =====
+package "Crawler Service" as CR #E3F2FD {
+  [gRPC Server\nport 50052] as CR_GRPC
+  [BullMQ\nConsumer] as CR_CONS
+  [Cheerio +\nPlaywright +\nLighthouse] as CR_ENGINE
+}
+
+' ===== SEO Analyzer =====
+package "SEO Analyzer Service" as AN #DCEDC8 {
+  [gRPC Server\nport 50053] as AN_GRPC
+  [BullMQ\nConsumer] as AN_CONS
+  [Rule Engine\n(20 rules)] as AN_ENGINE
+}
+
+' ===== Keyword Analyzer =====
+package "Keyword Analyzer Service" as KW #FFF8E1 {
+  [gRPC Server\nport 50054] as KW_GRPC
+  [BullMQ\nConsumer] as KW_CONS
+  [Tokenizer +\nTF Calculator] as KW_ENGINE
+}
+
+' ===== Report =====
+package "Report Service" as RP #FFF3E0 {
+  [gRPC Server\nport 50055] as RP_GRPC
+  [HTTP Server\nport 3004] as RP_HTTP
+  [BullMQ\nConsumer] as RP_CONS
+  [Aggregator +\nPDF Generator] as RP_ENGINE
+}
+
+' ===== Infrastructure =====
+queue "BullMQ Queues\n(Redis)" as MQ #F3E5F5
+database "Redis\nPub/Sub + Cache" as RD #FFE0E0
+
+' ===== External =====
+cloud "Target\nWebsite" as WEB
+
+' ===== Client connections =====
+Client --> GW_REST : REST (HTTPS)
+Client <--> GW_WS : WebSocket\n(progress events)
+
+' ===== gRPC calls (sync, request-response) =====
+GW_REST -[#0F4761,thickness=2]-> CR_GRPC : <color:#0F4761>**gRPC** CrawlUrl\nHealthCheck
+GW_REST -[#0F4761,thickness=2]-> AN_GRPC : <color:#0F4761>**gRPC** ListRules\nUpdateRuleWeight
+GW_REST -[#0F4761,thickness=2]-> RP_GRPC : <color:#0F4761>**gRPC** GetReport\nCompareReports\nCreateShareLink\nRevokeShareLink
+GW_REST -[#0F4761,thickness=2]-> RP_HTTP : <color:#0F4761>**HTTP** PDF download\n(binary stream)
+
+' ===== BullMQ job queues (async) =====
+GW_PROD -[#6A1B9A,dashed,thickness=2]-> MQ : <color:#6A1B9A>enqueue\n**crawl.start**
+MQ -[#6A1B9A,dashed,thickness=2]-> CR_CONS : <color:#6A1B9A>consume\n**crawl.start**
+MQ -[#6A1B9A,dashed,thickness=2]-> AN_CONS : <color:#6A1B9A>consume\n**analyze.start**
+MQ -[#6A1B9A,dashed,thickness=2]-> KW_CONS : <color:#6A1B9A>consume\n**keyword.start**
+MQ -[#6A1B9A,dashed,thickness=2]-> RP_CONS : <color:#6A1B9A>consume\n**report.start**
+
+' ===== Redis Pub/Sub events =====
+CR_ENGINE -[#C62828,dotted,thickness=2]-> RD : <color:#C62828>emit **crawl.done**
+AN_ENGINE -[#C62828,dotted,thickness=2]-> RD : <color:#C62828>emit **analyze.done**
+KW_ENGINE -[#C62828,dotted,thickness=2]-> RD : <color:#C62828>emit **keyword.done**
+RP_ENGINE -[#C62828,dotted,thickness=2]-> RD : <color:#C62828>emit **report.done**
+RD -[#C62828,dotted,thickness=2]-> GW_LISTEN : <color:#C62828>subscribe events\n(progress, done)
+
+' ===== External =====
+CR_ENGINE --> WEB : HTTP fetch
+
+' ===== Internal engine flows =====
+CR_CONS --> CR_ENGINE
+AN_CONS --> AN_ENGINE
+KW_CONS --> KW_ENGINE
+RP_CONS --> RP_ENGINE
+
+legend right
+  |= Line Style |= Protocol |= Pattern |
+  | <color:#0F4761>━━━━</color> Solid | gRPC / HTTP | Sync request-response |
+  | <color:#6A1B9A>╌╌╌╌</color> Dashed | BullMQ | Async job queue |
+  | <color:#C62828>┄┄┄┄</color> Dotted | Redis Pub/Sub | Event broadcast |
+endlegend
+
+caption Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md §4, §3.3
+
+@enduml

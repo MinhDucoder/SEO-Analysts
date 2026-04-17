@@ -1,0 +1,136 @@
+@startuml 18-activity-crawler
+' ========================================
+' Figure 2.18 — Crawler Service Decision Tree
+' Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md
+' Generated: 2026-04-10
+' Type: activity
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+
+title Figure 2.18 — Crawler Service Flow\n(SSRF Protection → Cheerio/Playwright → Lighthouse)
+
+start
+
+:Receive **CrawlRequest**\n{url, auditId, options};
+
+' ===== SSRF Check =====
+partition "**1. SSRF Protection**" #FFE0E0 {
+  :Validate URL format\n(http/https only);
+
+  if (URL is localhost, 127.0.0.1,\n10.x, 172.16-31.x,\n192.168.x, [::1]?) then (blocked)
+    #FF6B6B:Return **SSRF_BLOCKED** error;
+    stop
+  else (safe)
+  endif
+
+  :DNS resolve URL →\nget resolved IP;
+
+  if (Resolved IP is\nprivate/loopback?) then (blocked)
+    #FF6B6B:Return **SSRF_BLOCKED** error\n(DNS rebinding protection);
+    stop
+  else (safe)
+  endif
+}
+
+' ===== Cache Check =====
+partition "**2. Cache Check**" #FFF8E1 {
+  :Check Redis cache\n"crawl:{sha256(url)}";
+
+  if (Cache hit?) then (hit)
+    :Return cached\nCrawlResponse;
+    note right: TTL 30 min
+    stop
+  else (miss)
+  endif
+}
+
+' ===== Crawl Strategy =====
+partition "**3. Crawl Strategy**" #E3F2FD {
+
+  if (options.force_playwright?) then (yes)
+    :Go to Playwright path;
+  else (no)
+    ' ===== Cheerio Path =====
+    partition "Cheerio Path (~200ms)" #E8F5E9 {
+      :axios.get(url)\ntimeout: 10000ms;
+
+      if (HTTP error\n4xx/5xx?) then (error)
+        :Record as issue\n(continue with limited data);
+      else (success)
+        :Parse HTML with Cheerio;
+
+        if (SPA detected?\n- <div id="root"> empty\n- <div id="app"> + noscript\n- __NEXT_DATA__ empty) then (SPA)
+          :Fallback to Playwright;
+        else (Static)
+          :Extract PageData fields;
+          note right
+            title, meta, headings,
+            images, links, schema,
+            OG, viewport, etc.
+          end note
+        endif
+      endif
+    }
+  endif
+
+  if (Need Playwright?) then (yes)
+    ' ===== Playwright Path =====
+    partition "Playwright Path (~3-10s)" #E3F2FD {
+      :Acquire browser\nfrom BrowserPool\n(max 3 concurrent);
+      :page.goto(url)\nwaitUntil: 'networkidle'\ntimeout: 30000ms;
+
+      if (Timeout?) then (timeout)
+        #FF6B6B:Mark crawl_timeout\n(retry up to 3x);
+        :Release browser;
+        stop
+      else (success)
+        :Extract PageData\nfrom rendered DOM;
+        :Release browser;
+      endif
+    }
+  else (no)
+  endif
+}
+
+' ===== Lighthouse =====
+partition "**4. Lighthouse**" #F3E5F5 {
+  if (options.include_lighthouse?) then (yes)
+    :Check Lighthouse cache\n"lighthouse:{sha256(url)}";
+
+    if (Cache hit?) then (hit)
+      :Use cached CWV metrics;
+      note right: TTL 1 hour
+    else (miss)
+      :Run Lighthouse audit\n(Performance, A11y,\nBest Practices, SEO);
+      :Extract CoreWebVitals\n{LCP, INP, CLS,\nscores x 4};
+      :Cache result (1h TTL);
+    endif
+  else (skip)
+    :CWV metrics = null;
+  endif
+}
+
+' ===== Finalize =====
+partition "**5. Finalize**" #E8F5E9 {
+  :Build CrawlResponse\n{pageData, cwvMetrics, metadata};
+  :Cache result in Redis\n"crawl:{sha256(url)}" TTL 30min;
+  :Return **CrawlResponse**;
+}
+
+stop
+
+legend right
+  |= Color |= Meaning |
+  | <#E8F5E9> | Normal flow |
+  | <#E3F2FD> | Playwright path |
+  | <#FFF8E1> | Cache check |
+  | <#F3E5F5> | Lighthouse |
+  | <#FFE0E0> | SSRF protection |
+  | <#FF6B6B> | Error / blocked |
+endlegend
+
+caption Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md §7
+
+@enduml

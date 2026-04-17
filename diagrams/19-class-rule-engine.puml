@@ -1,0 +1,260 @@
+@startuml 19-class-rule-engine
+' ========================================
+' Figure 2.19 — SEO Rule Engine Class Diagram
+' Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md
+' Generated: 2026-04-10
+' Type: class
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+
+title Figure 2.19 — SEO Rule Engine\n(Strategy Pattern — 20 Rules)
+
+' ===== Core Interface =====
+interface ISeoRule <<interface>> {
+  + {abstract} id : string
+  + {abstract} category : RuleCategory
+  + check(pageData: PageData, keyword?: string) : RuleCheckOutput
+}
+
+class RuleCheckOutput <<value object>> {
+  status : 'pass' | 'warn' | 'fail'
+  score : 0 | 50 | 100
+  message : string
+  suggestion : string | null
+  metadata : Record<string, any>
+}
+
+' ===== Core Services =====
+class RuleRegistry <<service>> {
+  - rules : Map<string, ISeoRule>
+  + register(rule: ISeoRule) : void
+  + getEnabled() : ISeoRule[]
+  + getByCategory(cat: RuleCategory) : ISeoRule[]
+}
+
+class RuleRunner <<service>> {
+  - registry : RuleRegistry
+  + runAll(pageData, rules[]) : RuleResult[]
+  - runSingle(rule, pageData) : RuleResult
+}
+
+class ScoreCalculator <<service>> {
+  + weightedAverage(results[]) : number
+  + classify(score) : string
+  + calcCategoryScores(results[]) : CategoryScore[]
+}
+
+' ===== Enums =====
+enum RuleCategory {
+  META
+  HEADINGS
+  IMAGES
+  LINKS
+  PERFORMANCE
+  TECHNICAL
+}
+
+enum CheckStatus {
+  PASS = 100
+  WARN = 50
+  FAIL = 0
+}
+
+' ===== META Rules (4) =====
+package "META Rules (weight sum: 23)" as META #E8F5E9 {
+  class TitleTagRule {
+    id = "title_tag"
+    weight = 8
+    --
+    PASS: 50-60 chars
+    WARN: 30-49 or 61-70
+    FAIL: missing/<30/>70
+  }
+  class MetaDescriptionRule {
+    id = "meta_description"
+    weight = 7
+    --
+    PASS: 120-160 chars
+    WARN: 80-119 or 161-200
+    FAIL: missing/<80/>200
+  }
+  class OpenGraphRule {
+    id = "open_graph"
+    weight = 5
+    --
+    PASS: og:title+desc+image
+    WARN: 1-2 present
+    FAIL: none
+  }
+  class TwitterCardRule {
+    id = "twitter_card"
+    weight = 3
+    --
+    PASS: twitter:card present
+    FAIL: missing
+  }
+}
+
+' ===== HEADINGS Rules (2) =====
+package "HEADINGS Rules (weight sum: 14)" as HEAD #E3F2FD {
+  class H1TagRule {
+    id = "h1_tag"
+    weight = 8
+    --
+    PASS: exactly 1 H1 + keyword
+    WARN: 1 H1 no keyword
+    FAIL: 0 or >1 H1
+  }
+  class HeadingHierarchyRule {
+    id = "heading_hierarchy"
+    weight = 6
+    --
+    PASS: correct H1>H2>H3
+    WARN: minor skip (H2>H4)
+    FAIL: no headings/major issues
+  }
+}
+
+' ===== IMAGES Rules (2) =====
+package "IMAGES Rules (weight sum: 12)" as IMG #FFF8E1 {
+  class ImageAltRule {
+    id = "image_alt"
+    weight = 7
+    --
+    PASS: >90% have alt
+    WARN: 70-90% have alt
+    FAIL: <70% have alt
+  }
+  class ImageOptimizationRule {
+    id = "image_optimization"
+    weight = 5
+    --
+    PASS: all <200KB, modern fmt
+    WARN: some oversized
+    FAIL: many issues
+  }
+}
+
+' ===== LINKS Rules (2) =====
+package "LINKS Rules (weight sum: 8)" as LNK #F3E5F5 {
+  class InternalLinksRule {
+    id = "internal_links"
+    weight = 5
+    --
+    PASS: >=3 internal links
+    WARN: 1-2 links
+    FAIL: 0 links
+  }
+  class ExternalLinksRule {
+    id = "external_links"
+    weight = 3
+    --
+    PASS: all have rel=noopener
+    WARN: some missing rel
+    FAIL: broken links
+  }
+}
+
+' ===== PERFORMANCE Rules (1) =====
+package "PERFORMANCE Rules (weight: 4)" as PERF #FFE0E0 {
+  class PageSizeRule {
+    id = "page_size"
+    weight = 4
+    --
+    PASS: <2MB
+    WARN: 2-5MB
+    FAIL: >5MB
+  }
+}
+
+' ===== TECHNICAL Rules (8) =====
+package "TECHNICAL Rules (weight sum: 52)" as TECH #FFF3E0 {
+  class CanonicalUrlRule {
+    id = "canonical_url"
+    weight = 5
+  }
+  class RobotsMetaRule {
+    id = "robots_meta"
+    weight = 6
+  }
+  class ViewportMetaRule {
+    id = "viewport_meta"
+    weight = 10
+  }
+  class HttpsCheckRule {
+    id = "https_check"
+    weight = 10
+  }
+  class SchemaOrgRule {
+    id = "schema_org"
+    weight = 6
+  }
+  class HttpStatusRule {
+    id = "http_status"
+    weight = 8
+  }
+  class UrlStructureRule {
+    id = "url_structure"
+    weight = 4
+  }
+  class LanguageTagRule {
+    id = "language_tag"
+    weight = 3
+  }
+  class FaviconRule {
+    id = "favicon"
+    weight = 2
+  }
+}
+
+' ===== Relationships =====
+ISeoRule --> RuleCheckOutput : returns
+ISeoRule --> RuleCategory : categorized by
+ISeoRule --> CheckStatus : uses
+
+RuleRegistry o-- ISeoRule : registers many
+RuleRunner --> RuleRegistry : uses
+RuleRunner --> ScoreCalculator : delegates scoring
+
+' All rules implement ISeoRule
+TitleTagRule ..|> ISeoRule
+MetaDescriptionRule ..|> ISeoRule
+OpenGraphRule ..|> ISeoRule
+TwitterCardRule ..|> ISeoRule
+H1TagRule ..|> ISeoRule
+HeadingHierarchyRule ..|> ISeoRule
+ImageAltRule ..|> ISeoRule
+ImageOptimizationRule ..|> ISeoRule
+InternalLinksRule ..|> ISeoRule
+ExternalLinksRule ..|> ISeoRule
+PageSizeRule ..|> ISeoRule
+CanonicalUrlRule ..|> ISeoRule
+RobotsMetaRule ..|> ISeoRule
+ViewportMetaRule ..|> ISeoRule
+HttpsCheckRule ..|> ISeoRule
+SchemaOrgRule ..|> ISeoRule
+HttpStatusRule ..|> ISeoRule
+UrlStructureRule ..|> ISeoRule
+LanguageTagRule ..|> ISeoRule
+FaviconRule ..|> ISeoRule
+
+legend right
+  |= Category |= Rules |= Total Weight |
+  | <#E8F5E9> META | 4 | 23 |
+  | <#E3F2FD> HEADINGS | 2 | 14 |
+  | <#FFF8E1> IMAGES | 2 | 12 |
+  | <#F3E5F5> LINKS | 2 | 8 |
+  | <#FFE0E0> PERFORMANCE | 1 | 4 |
+  | <#FFF3E0> TECHNICAL | 9 | 52 |
+  --
+  **Total: 20 rules, max score: 113**
+  Score = weighted_avg(rule.score * rule.weight)
+  Classification: >=80 excellent, >=60 good,
+  >=40 fair, <40 poor
+endlegend
+
+caption Source: docs/superpowers/specs/2026-04-09-microservices-architecture-design.md §6
+
+@enduml
