@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "nest build",
-    "dev": "nest start --watch",
+    "dev": "nest build && nest start --watch",
     "start": "node dist/main",
     "lint": "eslint .",
     "check-types": "tsc --noEmit",
@@ -27,7 +27,7 @@
     "chrome-launcher": "^1.1.2",
     "ioredis": "^5.4.1",
     "lighthouse": "^12.2.0",
-    "playwright": "^1.48.0",
+    "playwright": "1.50.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
