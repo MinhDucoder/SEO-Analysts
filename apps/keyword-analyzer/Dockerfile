@@ -22,6 +22,9 @@ COPY apps/keyword-analyzer/ apps/keyword-analyzer/
 
 RUN npx turbo run build --filter=@seo/keyword-analyzer
 
+# Prune devDependencies for production
+RUN npm prune --omit=dev
+
 # ─── Stage 2: Production ───
 FROM node:20-alpine AS production
 

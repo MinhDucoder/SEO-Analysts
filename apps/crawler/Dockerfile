@@ -22,6 +22,9 @@ COPY apps/crawler/ apps/crawler/
 
 RUN npx turbo run build --filter=@seo/crawler
 
+# Prune devDependencies for production
+RUN npm prune --omit=dev
+
 # ─── Stage 2: Production ───
 # Use playwright base image (Debian-based, includes browsers + deps)
 FROM mcr.microsoft.com/playwright:v1.50.0-noble AS production
@@ -47,7 +50,7 @@ COPY --from=builder --chown=nestjs:nodejs /app/packages/proto ./packages/proto
 COPY --from=builder --chown=nestjs:nodejs /app/packages/shared ./packages/shared
 
 # Install playwright browsers in production image
-RUN npx playwright install chromium --with-deps 2>/dev/null || true
+RUN npx playwright install chromium --with-deps
 
 USER nestjs
 

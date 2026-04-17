@@ -23,6 +23,9 @@ COPY apps/report/ apps/report/
 RUN cd apps/report && npx prisma generate
 RUN npx turbo run build --filter=@seo/report
 
+# Prune devDependencies for production
+RUN npm prune --omit=dev
+
 # ─── Stage 2: Production ───
 FROM mcr.microsoft.com/playwright:v1.50.0-noble AS production
 
@@ -46,7 +49,7 @@ COPY --from=builder --chown=nestjs:nodejs /app/apps/report/docker-entrypoint.sh 
 RUN chmod +x ./docker-entrypoint.sh
 
 # Install playwright browsers in production image
-RUN npx playwright install chromium --with-deps 2>/dev/null || true
+RUN npx playwright install chromium --with-deps
 
 USER nestjs
 

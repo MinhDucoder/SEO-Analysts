@@ -23,6 +23,9 @@ COPY apps/seo-analyzer/ apps/seo-analyzer/
 RUN cd apps/seo-analyzer && npx prisma generate
 RUN npx turbo run build --filter=@seo/seo-analyzer
 
+# Prune devDependencies for production
+RUN npm prune --omit=dev
+
 # ─── Stage 2: Production ───
 FROM node:20-alpine AS production
 

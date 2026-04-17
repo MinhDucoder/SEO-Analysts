@@ -32,6 +32,9 @@ RUN cd apps/gateway && npx prisma generate
 # Build the gateway
 RUN npx turbo run build --filter=@seo/gateway
 
+# Prune devDependencies for production
+RUN npm prune --omit=dev
+
 # ─── Stage 2: Production ───
 FROM node:20-alpine AS production
 
