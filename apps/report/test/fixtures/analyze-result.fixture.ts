@@ -1,5 +1,5 @@
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { AnalyzeResult } from '../interfaces/analyze-result.interface';
+import { AnalyzeResult } from '../../src/report/domain/analyze-result.interface';
 
 export function makeAnalyzeResult(overrides: Partial<AnalyzeResult> = {}): AnalyzeResult {
   return {

@@ -1,9 +1,9 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { ReportService } from '../../src/report/report.service';
-import { ReportAggregator } from '../../src/report/report.aggregator';
-import { makeAnalyzeResult } from '../../src/report/test-fixtures/analyze-result.fixture';
-import { makeKeywordResult } from '../../src/report/test-fixtures/keyword-result.fixture';
-import { makeCwv } from '../../src/report/test-fixtures/cwv.fixture';
+import { ReportService } from '../../src/report/services/report.service';
+import { ReportAggregator } from '../../src/report/services/report.aggregator';
+import { makeAnalyzeResult } from '../fixtures/analyze-result.fixture';
+import { makeKeywordResult } from '../fixtures/keyword-result.fixture';
+import { makeCwv } from '../fixtures/cwv.fixture';
 
 const repo: any = {
   createFullReport: vi.fn(),

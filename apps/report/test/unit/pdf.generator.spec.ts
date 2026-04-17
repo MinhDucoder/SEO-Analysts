@@ -1,9 +1,9 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { PdfGenerator } from '../../src/pdf/pdf.generator';
+import { PdfGenerator } from '../../src/infra/pdf/pdf.generator';
 import { Classification } from '@repo/shared';
-import { makeAnalyzeResult } from '../../src/report/test-fixtures/analyze-result.fixture';
-import { makeKeywordResult } from '../../src/report/test-fixtures/keyword-result.fixture';
-import { makeCwv } from '../../src/report/test-fixtures/cwv.fixture';
+import { makeAnalyzeResult } from '../fixtures/analyze-result.fixture';
+import { makeKeywordResult } from '../fixtures/keyword-result.fixture';
+import { makeCwv } from '../fixtures/cwv.fixture';
 
 const fakePage = {
   setContent: vi.fn().mockResolvedValue(undefined),

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CheckStatus } from '@repo/shared';
-import { AnalyzeRuleResult } from './interfaces/analyze-result.interface';
+import { AnalyzeRuleResult } from '../domain/analyze-result.interface';
 
 export interface RuleDeltaItem {
   ruleId: string;

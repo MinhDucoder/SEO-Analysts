@@ -2,19 +2,19 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BULLMQ_QUEUES } from '@repo/shared';
-import { PrismaModule } from '../prisma/prisma.module';
-import { PdfModule } from '../pdf/pdf.module';
-import { ReportRepository } from './report.repository';
-import { ReportAggregator } from './report.aggregator';
-import { ReportComparator } from './report.comparator';
-import { ShareLinkService } from './share-link.service';
-import { WaitForBothService } from './wait-for-both.service';
-import { ReportService } from './report.service';
-import { ReportGrpcController } from './report.grpc.controller';
-import { ReportHttpController } from './report.http.controller';
-import { AnalyzeDoneListener } from './analyze-done.listener';
-import { KeywordDoneListener } from './keyword-done.listener';
-import { ReportWorker } from './report.worker';
+import { PrismaModule } from '../infra/prisma/prisma.module';
+import { PdfModule } from '../infra/pdf/pdf.module';
+import { ReportRepository } from './persistence/report.repository';
+import { ReportAggregator } from './services/report.aggregator';
+import { ReportComparator } from './services/report.comparator';
+import { ShareLinkService } from './services/share-link.service';
+import { WaitForBothService } from './services/wait-for-both.service';
+import { ReportService } from './services/report.service';
+import { ReportGrpcController } from './controllers/report.grpc.controller';
+import { ReportHttpController } from './controllers/report.http.controller';
+import { AnalyzeDoneListener } from './controllers/analyze-done.listener';
+import { KeywordDoneListener } from './controllers/keyword-done.listener';
+import { ReportWorker } from './controllers/report.worker';
 
 @Module({
   imports: [

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { ReportComparator } from '../../src/report/report.comparator';
+import { ReportComparator } from '../../src/report/services/report.comparator';
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { AnalyzeRuleResult } from '../../src/report/interfaces/analyze-result.interface';
+import { AnalyzeRuleResult } from '../../src/report/domain/analyze-result.interface';
 
 function rule(id: string, status: CheckStatus, score = status === CheckStatus.PASS ? 100 : status === CheckStatus.WARN ? 50 : 0): AnalyzeRuleResult {
   return {

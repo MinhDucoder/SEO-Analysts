@@ -187,7 +187,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/media/minhducoder/New Volume2/Learn_On_Drive/DO_AN/apps/report/src/generated/prisma",
+      "value": "/Users/minhducoder/SEO-Analysts/apps/report/src/infra/prisma/generated",
       "fromEnvVar": null
     },
     "config": {
@@ -196,25 +196,25 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/media/minhducoder/New Volume2/Learn_On_Drive/DO_AN/apps/report/prisma/schema.prisma",
+    "sourceFilePath": "/Users/minhducoder/SEO-Analysts/apps/report/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
-  "relativePath": "../../../prisma",
+  "relativePath": "../../../../prisma",
   "clientVersion": "5.22.0",
   "engineVersion": "605197351a3c8bdd595af2d2a9bc3025bca48ea2",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -223,8 +223,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "datasource db {\n  provider = \"postgresql\"\n  url      = env(\"REPORT_DATABASE_URL\")\n}\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\nmodel Report {\n  id               String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  auditId          String   @unique @map(\"audit_id\") @db.Uuid\n  url              String   @db.Text\n  domain           String   @db.VarChar(255)\n  finalScore       Decimal  @map(\"final_score\") @db.Decimal(5, 2)\n  classification   String   @db.VarChar(20)\n  totalIssues      Int      @map(\"total_issues\")\n  criticalIssues   Int      @map(\"critical_issues\")\n  warnIssues       Int      @map(\"warn_issues\")\n  passCount        Int      @map(\"pass_count\")\n  analysisSnapshot Json     @map(\"analysis_snapshot\") @db.JsonB\n  cwvSnapshot      Json     @map(\"cwv_snapshot\") @db.JsonB\n  createdAt        DateTime @default(now()) @map(\"created_at\") @db.Timestamptz\n\n  keywords  ReportKeyword[]\n  cwv       ReportCwv?\n  shareLink ShareLink?\n\n  @@index([domain], name: \"idx_reports_domain\")\n  @@map(\"reports\")\n}\n\nmodel ReportKeyword {\n  id                String  @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  reportId          String  @map(\"report_id\") @db.Uuid\n  keyword           String  @db.VarChar(255)\n  frequency         Int\n  densityPercent    Decimal @map(\"density_percent\") @db.Decimal(5, 2)\n  inTitle           Boolean @map(\"in_title\")\n  inH1              Boolean @map(\"in_h1\")\n  inFirstParagraph  Boolean @map(\"in_first_paragraph\")\n  inMetaDescription Boolean @map(\"in_meta_description\")\n  rank              Int\n  isTarget          Boolean @default(false) @map(\"is_target\")\n\n  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)\n\n  @@index([reportId], name: \"idx_rk_report\")\n  @@map(\"report_keywords\")\n}\n\nmodel ReportCwv {\n  id                 String  @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  reportId           String  @unique @map(\"report_id\") @db.Uuid\n  lcpMs              Decimal @map(\"lcp_ms\") @db.Decimal(10, 2)\n  inpMs              Decimal @map(\"inp_ms\") @db.Decimal(10, 2)\n  cls                Decimal @db.Decimal(5, 4)\n  performanceScore   Int     @map(\"performance_score\")\n  accessibilityScore Int     @map(\"accessibility_score\")\n  bestPracticesScore Int     @map(\"best_practices_score\")\n  lighthouseSeoScore Int     @map(\"lighthouse_seo_score\")\n\n  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)\n\n  @@map(\"report_cwv\")\n}\n\nmodel ShareLink {\n  id             String    @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  reportId       String    @unique @map(\"report_id\") @db.Uuid\n  auditId        String    @map(\"audit_id\") @db.Uuid\n  token          String    @unique @db.VarChar(64)\n  isActive       Boolean   @default(true) @map(\"is_active\")\n  accessedCount  Int       @default(0) @map(\"accessed_count\")\n  lastAccessedAt DateTime? @map(\"last_accessed_at\") @db.Timestamptz\n  createdAt      DateTime  @default(now()) @map(\"created_at\") @db.Timestamptz\n\n  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)\n\n  @@index([auditId], name: \"idx_sl_audit\")\n  @@map(\"share_links\")\n}\n",
-  "inlineSchemaHash": "21e580b05a2a6f2e7e1f8afdf800eac6461edb9e7b637ea2a45afb24e3c70c9c",
+  "inlineSchema": "datasource db {\n  provider = \"postgresql\"\n  url      = env(\"REPORT_DATABASE_URL\")\n}\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/infra/prisma/generated\"\n}\n\nmodel Report {\n  id               String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  auditId          String   @unique @map(\"audit_id\") @db.Uuid\n  url              String   @db.Text\n  domain           String   @db.VarChar(255)\n  finalScore       Decimal  @map(\"final_score\") @db.Decimal(5, 2)\n  classification   String   @db.VarChar(20)\n  totalIssues      Int      @map(\"total_issues\")\n  criticalIssues   Int      @map(\"critical_issues\")\n  warnIssues       Int      @map(\"warn_issues\")\n  passCount        Int      @map(\"pass_count\")\n  analysisSnapshot Json     @map(\"analysis_snapshot\") @db.JsonB\n  cwvSnapshot      Json     @map(\"cwv_snapshot\") @db.JsonB\n  createdAt        DateTime @default(now()) @map(\"created_at\") @db.Timestamptz\n\n  keywords  ReportKeyword[]\n  cwv       ReportCwv?\n  shareLink ShareLink?\n\n  @@index([domain], name: \"idx_reports_domain\")\n  @@map(\"reports\")\n}\n\nmodel ReportKeyword {\n  id                String  @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  reportId          String  @map(\"report_id\") @db.Uuid\n  keyword           String  @db.VarChar(255)\n  frequency         Int\n  densityPercent    Decimal @map(\"density_percent\") @db.Decimal(5, 2)\n  inTitle           Boolean @map(\"in_title\")\n  inH1              Boolean @map(\"in_h1\")\n  inFirstParagraph  Boolean @map(\"in_first_paragraph\")\n  inMetaDescription Boolean @map(\"in_meta_description\")\n  rank              Int\n  isTarget          Boolean @default(false) @map(\"is_target\")\n\n  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)\n\n  @@index([reportId], name: \"idx_rk_report\")\n  @@map(\"report_keywords\")\n}\n\nmodel ReportCwv {\n  id                 String  @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  reportId           String  @unique @map(\"report_id\") @db.Uuid\n  lcpMs              Decimal @map(\"lcp_ms\") @db.Decimal(10, 2)\n  inpMs              Decimal @map(\"inp_ms\") @db.Decimal(10, 2)\n  cls                Decimal @db.Decimal(5, 4)\n  performanceScore   Int     @map(\"performance_score\")\n  accessibilityScore Int     @map(\"accessibility_score\")\n  bestPracticesScore Int     @map(\"best_practices_score\")\n  lighthouseSeoScore Int     @map(\"lighthouse_seo_score\")\n\n  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)\n\n  @@map(\"report_cwv\")\n}\n\nmodel ShareLink {\n  id             String    @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  reportId       String    @unique @map(\"report_id\") @db.Uuid\n  auditId        String    @map(\"audit_id\") @db.Uuid\n  token          String    @unique @db.VarChar(64)\n  isActive       Boolean   @default(true) @map(\"is_active\")\n  accessedCount  Int       @default(0) @map(\"accessed_count\")\n  lastAccessedAt DateTime? @map(\"last_accessed_at\") @db.Timestamptz\n  createdAt      DateTime  @default(now()) @map(\"created_at\") @db.Timestamptz\n\n  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)\n\n  @@index([auditId], name: \"idx_sl_audit\")\n  @@map(\"share_links\")\n}\n",
+  "inlineSchemaHash": "7aa8b60da974114c7c0f697d6294b46c7a6334b030b87f0dd49555aaa4b1cc44",
   "copyEngine": true
 }
 
@@ -233,8 +233,8 @@ const fs = require('fs')
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   const alternativePaths = [
-    "src/generated/prisma",
-    "generated/prisma",
+    "src/infra/prisma/generated",
+    "infra/prisma/generated",
   ]
   
   const alternativePath = alternativePaths.find((altPath) => {
@@ -262,8 +262,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "src/generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
+path.join(process.cwd(), "src/infra/prisma/generated/libquery_engine-darwin-arm64.dylib.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "src/generated/prisma/schema.prisma")
+path.join(process.cwd(), "src/infra/prisma/generated/schema.prisma")

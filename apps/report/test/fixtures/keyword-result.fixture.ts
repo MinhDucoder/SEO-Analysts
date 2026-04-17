@@ -1,4 +1,4 @@
-import { KeywordResult } from '../interfaces/keyword-result.interface';
+import { KeywordResult } from '../../src/report/domain/keyword-result.interface';
 
 export function makeKeywordResult(overrides: Partial<KeywordResult> = {}): KeywordResult {
   return {

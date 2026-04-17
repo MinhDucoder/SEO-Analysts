@@ -1,11 +1,11 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CoreWebVitals } from '@repo/shared';
-import { ReportRepository } from './report.repository';
+import { ReportRepository } from '../persistence/report.repository';
 import { ReportAggregator } from './report.aggregator';
 import { WaitForBothService } from './wait-for-both.service';
-import { RedisService } from '../redis/redis.service';
-import { AnalyzeResult } from './interfaces/analyze-result.interface';
-import { KeywordResult } from './interfaces/keyword-result.interface';
+import { RedisService } from '../../infra/redis/redis.service';
+import { AnalyzeResult } from '../domain/analyze-result.interface';
+import { KeywordResult } from '../domain/keyword-result.interface';
 
 export interface GenerateFromPipelineInput {
   auditId: string;

@@ -2,9 +2,9 @@ import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { BULLMQ_QUEUES, AuditStatus } from '@repo/shared';
-import { ReportService } from './report.service';
-import { WaitForBothService } from './wait-for-both.service';
-import { RedisService } from '../redis/redis.service';
+import { ReportService } from '../services/report.service';
+import { WaitForBothService } from '../services/wait-for-both.service';
+import { RedisService } from '../../infra/redis/redis.service';
 
 interface ReportStartJob {
   auditId: string;

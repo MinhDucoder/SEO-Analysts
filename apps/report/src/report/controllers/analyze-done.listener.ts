@@ -1,11 +1,11 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { RedisService } from '../redis/redis.service';
-import { WaitForBothService } from './wait-for-both.service';
+import { RedisService } from '../../infra/redis/redis.service';
+import { WaitForBothService } from '../services/wait-for-both.service';
 
 @Injectable()
-export class KeywordDoneListener implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(KeywordDoneListener.name);
-  private readonly CHANNEL = 'keyword.done';
+export class AnalyzeDoneListener implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(AnalyzeDoneListener.name);
+  private readonly CHANNEL = 'analyze.done';
 
   constructor(
     private readonly redis: RedisService,
@@ -20,13 +20,13 @@ export class KeywordDoneListener implements OnModuleInit, OnModuleDestroy {
       try {
         const payload = JSON.parse(raw) as { auditId?: string };
         if (!payload?.auditId) {
-          this.logger.warn(`keyword.done missing auditId, skipping`);
+          this.logger.warn(`analyze.done missing auditId, skipping`);
           return;
         }
-        await this.waitSvc.recordKeywordDone(payload.auditId, payload);
-        this.logger.log(`recorded keyword.done for ${payload.auditId}`);
+        await this.waitSvc.recordAnalyzeDone(payload.auditId, payload);
+        this.logger.log(`recorded analyze.done for ${payload.auditId}`);
       } catch (err) {
-        this.logger.error(`failed to handle keyword.done: ${(err as Error).message}`);
+        this.logger.error(`failed to handle analyze.done: ${(err as Error).message}`);
       }
     });
     this.logger.log(`subscribed to ${this.CHANNEL}`);

@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { ShareLinkService } from '../../src/report/share-link.service';
+import { ShareLinkService } from '../../src/report/services/share-link.service';
 
 const prismaMock: any = {
   shareLink: {

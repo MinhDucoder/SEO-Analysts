@@ -8,8 +8,8 @@ import {
   AnalyzeResult,
   AnalyzeRuleResult,
   AnalyzeCategoryScore,
-} from '../report/interfaces/analyze-result.interface';
-import { KeywordResultItem } from '../report/interfaces/keyword-result.interface';
+} from '../../report/domain/analyze-result.interface';
+import { KeywordResultItem } from '../../report/domain/keyword-result.interface';
 
 export interface PdfRenderInput {
   auditId: string;

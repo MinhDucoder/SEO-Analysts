@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { ReportAggregator } from '../../src/report/report.aggregator';
+import { ReportAggregator } from '../../src/report/services/report.aggregator';
 import { Classification, CheckStatus, IssueCategory } from '@repo/shared';
-import { makeAnalyzeResult } from '../../src/report/test-fixtures/analyze-result.fixture';
-import { makeKeywordResult } from '../../src/report/test-fixtures/keyword-result.fixture';
-import { makeCwv } from '../../src/report/test-fixtures/cwv.fixture';
+import { makeAnalyzeResult } from '../fixtures/analyze-result.fixture';
+import { makeKeywordResult } from '../fixtures/keyword-result.fixture';
+import { makeCwv } from '../fixtures/cwv.fixture';
 
 describe('ReportAggregator', () => {
   const aggregator = new ReportAggregator();

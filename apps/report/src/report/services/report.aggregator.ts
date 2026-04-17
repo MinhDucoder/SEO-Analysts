@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CheckStatus, classify } from '@repo/shared';
-import { AggregatedReport, ReportInputs } from './interfaces/report-payload.interface';
+import { AggregatedReport, ReportInputs } from '../domain/report-payload.interface';
 
 const CRITICAL_WEIGHT_THRESHOLD = 7;
 const ANALYZER_WEIGHT = 0.7;

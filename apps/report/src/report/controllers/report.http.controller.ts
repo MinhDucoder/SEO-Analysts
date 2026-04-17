@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, Res, BadRequestException } from '@nestjs/common';
 import type { Response } from 'express';
-import { ReportService } from './report.service';
-import { PdfGenerator } from '../pdf/pdf.generator';
-import { AnalyzeResult } from './interfaces/analyze-result.interface';
+import { ReportService } from '../services/report.service';
+import { PdfGenerator } from '../../infra/pdf/pdf.generator';
+import { AnalyzeResult } from '../domain/analyze-result.interface';
 
 @Controller('audits')
 export class ReportHttpController {

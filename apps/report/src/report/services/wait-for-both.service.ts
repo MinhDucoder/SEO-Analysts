@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { BULLMQ_QUEUES, CACHE_TTL, REDIS_KEYS } from '@repo/shared';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../../infra/redis/redis.service';
 
 @Injectable()
 export class WaitForBothService {

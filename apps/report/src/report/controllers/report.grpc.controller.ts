@@ -1,11 +1,11 @@
 import { Controller, Logger, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { ReportService } from './report.service';
-import { ReportComparator } from './report.comparator';
-import { ShareLinkService } from './share-link.service';
-import { PdfGenerator } from '../pdf/pdf.generator';
-import { AnalyzeResult } from './interfaces/analyze-result.interface';
-import { KeywordResult } from './interfaces/keyword-result.interface';
+import { ReportService } from '../services/report.service';
+import { ReportComparator } from '../services/report.comparator';
+import { ShareLinkService } from '../services/share-link.service';
+import { PdfGenerator } from '../../infra/pdf/pdf.generator';
+import { AnalyzeResult } from '../domain/analyze-result.interface';
+import { KeywordResult } from '../domain/keyword-result.interface';
 
 @Controller()
 export class ReportGrpcController {

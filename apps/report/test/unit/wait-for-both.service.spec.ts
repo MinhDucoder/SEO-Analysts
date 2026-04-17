@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { WaitForBothService } from '../../src/report/wait-for-both.service';
+import { WaitForBothService } from '../../src/report/services/wait-for-both.service';
 
 const redisCmd = {
   setex: vi.fn(),

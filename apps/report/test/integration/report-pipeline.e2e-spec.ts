@@ -1,11 +1,11 @@
 import { describe, expect, it, beforeAll, vi } from 'vitest';
-import { ReportRepository } from '../../src/report/report.repository';
-import { ReportAggregator } from '../../src/report/report.aggregator';
-import { WaitForBothService } from '../../src/report/wait-for-both.service';
-import { ReportService } from '../../src/report/report.service';
-import { makeAnalyzeResult } from '../../src/report/test-fixtures/analyze-result.fixture';
-import { makeKeywordResult } from '../../src/report/test-fixtures/keyword-result.fixture';
-import { makeCwv } from '../../src/report/test-fixtures/cwv.fixture';
+import { ReportRepository } from '../../src/report/persistence/report.repository';
+import { ReportAggregator } from '../../src/report/services/report.aggregator';
+import { WaitForBothService } from '../../src/report/services/wait-for-both.service';
+import { ReportService } from '../../src/report/services/report.service';
+import { makeAnalyzeResult } from '../fixtures/analyze-result.fixture';
+import { makeKeywordResult } from '../fixtures/keyword-result.fixture';
+import { makeCwv } from '../fixtures/cwv.fixture';
 import { Classification } from '@repo/shared';
 
 // ─── In-memory stores to simulate Redis ────────────────────────────────────

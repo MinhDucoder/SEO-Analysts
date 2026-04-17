@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../infra/prisma/prisma.service';
 import { CoreWebVitals } from '@repo/shared';
-import { AggregatedReport } from './interfaces/report-payload.interface';
-import { KeywordResultItem } from './interfaces/keyword-result.interface';
+import { AggregatedReport } from '../domain/report-payload.interface';
+import { KeywordResultItem } from '../domain/keyword-result.interface';
 
 export interface CreateFullReportInput {
   auditId: string;
