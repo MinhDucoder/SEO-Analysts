@@ -13,3 +13,7 @@ coverage
 *.log
 .vscode
 .idea
+*.pdf
+*.docx
+diagrams/
+scripts/
