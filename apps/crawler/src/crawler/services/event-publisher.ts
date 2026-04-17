@@ -20,6 +20,7 @@ export class EventPublisher {
       auditId,
       pageData: result.pageData,
       cwvMetrics: result.cwvMetrics,
+      cwvMetricsDesktop: result.cwvMetricsDesktop,
       metadata: result.metadata,
       textContent: result.pageData.textContent,
     };

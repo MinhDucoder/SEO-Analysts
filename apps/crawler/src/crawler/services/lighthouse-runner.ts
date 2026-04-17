@@ -1,16 +1,25 @@
 /**
  * @file Runs Google Lighthouse and projects its JSON output onto our
  * `CoreWebVitals` shape. Expensive (5-30 s) — results cached in Redis
- * with longer TTL than the crawl cache.
+ * with longer TTL than the crawl cache. Supports both mobile and
+ * desktop form factors; mobile is the default (matches Google's
+ * mobile-first indexing). `runBoth()` executes both runs sequentially
+ * unless the `LIGHTHOUSE_PARALLEL` env flag is set.
  */
 import { Injectable, Logger } from '@nestjs/common';
-import { CoreWebVitals } from '@repo/shared';
+import { CoreWebVitals, FormFactor } from '@repo/shared';
 import { CacheService } from '../persistence/cache.service';
 
 export interface LighthouseRunResult {
   cwv: CoreWebVitals;
   cached: boolean;
   durationMs: number;
+  formFactor: FormFactor;
+}
+
+export interface DualLighthouseRunResult {
+  mobile: LighthouseRunResult;
+  desktop: LighthouseRunResult;
 }
 
 @Injectable()
@@ -20,13 +29,14 @@ export class LighthouseRunner {
   constructor(private readonly cache: CacheService) {}
 
   /**
-   * Return CWV metrics for `url`. Chrome is always killed in `finally`
-   * so a Lighthouse crash cannot leak headless processes.
+   * Return CWV metrics for `url` under the given `formFactor`. Chrome
+   * is always killed in `finally` so a Lighthouse crash cannot leak
+   * headless processes.
    */
-  async run(url: string): Promise<LighthouseRunResult> {
-    const cachedHit = await this.cache.getLighthouse<CoreWebVitals>(url);
+  async run(url: string, formFactor: FormFactor = FormFactor.MOBILE): Promise<LighthouseRunResult> {
+    const cachedHit = await this.cache.getLighthouse<CoreWebVitals>(url, formFactor);
     if (cachedHit) {
-      return { cwv: cachedHit, cached: true, durationMs: 0 };
+      return { cwv: cachedHit, cached: true, durationMs: 0, formFactor };
     }
 
     const start = Date.now();
@@ -39,6 +49,10 @@ export class LighthouseRunner {
       const lighthouseModule = await import('lighthouse');
       type LighthouseFn = (url: string, flags: Record<string, unknown>, config?: Record<string, unknown>) => Promise<unknown>;
       const lighthouse = (lighthouseModule as unknown as { default: LighthouseFn }).default;
+      const config: Record<string, unknown> = { extends: 'lighthouse:default' };
+      if (formFactor === FormFactor.DESKTOP) {
+        config.settings = { preset: 'desktop' };
+      }
       const runnerResult = await lighthouse(
         url,
         {
@@ -47,7 +61,7 @@ export class LighthouseRunner {
           logLevel: 'error',
           onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
         },
-        { extends: 'lighthouse:default' },
+        config,
       );
 
       const lhr = (runnerResult as { lhr: any }).lhr;
@@ -65,8 +79,8 @@ export class LighthouseRunner {
         seoScore: Math.round((lhr.categories.seo?.score ?? 0) * 100),
       };
 
-      await this.cache.setLighthouse(url, cwv);
-      return { cwv, cached: false, durationMs: Date.now() - start };
+      await this.cache.setLighthouse(url, formFactor, cwv);
+      return { cwv, cached: false, durationMs: Date.now() - start, formFactor };
     } finally {
       try {
         await chrome.kill();
@@ -74,5 +88,24 @@ export class LighthouseRunner {
         this.logger.warn(`Failed killing chrome: ${(err as Error).message}`);
       }
     }
+  }
+
+  /**
+   * Run Lighthouse once per form factor. Default sequential to cap
+   * peak RAM at a single run (~300-600 MB). Parallel mode is opt-in
+   * via `LIGHTHOUSE_PARALLEL=true` for environments with ≥1.5 GB RAM.
+   */
+  async runBoth(url: string): Promise<DualLighthouseRunResult> {
+    const parallel = process.env.LIGHTHOUSE_PARALLEL === 'true';
+    if (parallel) {
+      const [mobile, desktop] = await Promise.all([
+        this.run(url, FormFactor.MOBILE),
+        this.run(url, FormFactor.DESKTOP),
+      ]);
+      return { mobile, desktop };
+    }
+    const mobile = await this.run(url, FormFactor.MOBILE);
+    const desktop = await this.run(url, FormFactor.DESKTOP);
+    return { mobile, desktop };
   }
 }

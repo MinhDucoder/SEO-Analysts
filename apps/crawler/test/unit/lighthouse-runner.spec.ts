@@ -80,7 +80,7 @@ describe('LighthouseRunner', () => {
     expect(result.cwv.bestPracticesScore).toBe(95);
     expect(result.cwv.seoScore).toBe(90);
     expect(result.cached).toBe(false);
-    expect(cacheSet).toHaveBeenCalledWith('https://example.com/', expect.objectContaining({ lcpMs: 2100 }));
+    expect(cacheSet).toHaveBeenCalledWith('https://example.com/', 'mobile', expect.objectContaining({ lcpMs: 2100 }));
     expect(fakeChrome.kill).toHaveBeenCalled();
   });
 
@@ -88,5 +88,86 @@ describe('LighthouseRunner', () => {
     mockLighthouse.mockRejectedValueOnce(new Error('lh boom'));
     await expect(runner.run('https://example.com/')).rejects.toThrow('lh boom');
     expect(fakeChrome.kill).toHaveBeenCalled();
+  });
+
+  it('passes preset=desktop in the Lighthouse config for desktop form factor', async () => {
+    mockLighthouse.mockResolvedValueOnce({
+      lhr: {
+        audits: { 'largest-contentful-paint': { numericValue: 800 }, 'interaction-to-next-paint': { numericValue: 50 }, 'cumulative-layout-shift': { numericValue: 0.01 } },
+        categories: { performance: { score: 0.98 }, accessibility: { score: 0.95 }, 'best-practices': { score: 0.97 }, seo: { score: 0.99 } },
+      },
+    });
+    await runner.run('https://example.com/', 'desktop' as any);
+    const lhConfig = mockLighthouse.mock.calls[0][2];
+    expect(lhConfig).toEqual(expect.objectContaining({
+      extends: 'lighthouse:default',
+      settings: expect.objectContaining({ preset: 'desktop' }),
+    }));
+  });
+
+  it('does not pass desktop preset for mobile form factor (default)', async () => {
+    mockLighthouse.mockResolvedValueOnce({
+      lhr: {
+        audits: { 'largest-contentful-paint': { numericValue: 2100 }, 'interaction-to-next-paint': { numericValue: 180 }, 'cumulative-layout-shift': { numericValue: 0.08 } },
+        categories: { performance: { score: 0.87 }, accessibility: { score: 0.92 }, 'best-practices': { score: 0.95 }, seo: { score: 0.9 } },
+      },
+    });
+    await runner.run('https://example.com/');
+    const lhConfig = mockLighthouse.mock.calls[0][2];
+    expect(lhConfig.settings).toBeUndefined();
+  });
+
+  it('looks up cache per-formFactor so mobile and desktop never collide', async () => {
+    cacheGet.mockImplementation((_url: string, ff?: string) => {
+      if (ff === 'desktop') return Promise.resolve({ lcpMs: 999, inpMs: 0, cls: 0, performanceScore: 50, accessibilityScore: 0, bestPracticesScore: 0, seoScore: 0 });
+      return Promise.resolve(null);
+    });
+    mockLighthouse.mockResolvedValueOnce({
+      lhr: {
+        audits: { 'largest-contentful-paint': { numericValue: 1800 }, 'interaction-to-next-paint': { numericValue: 90 }, 'cumulative-layout-shift': { numericValue: 0.03 } },
+        categories: { performance: { score: 0.8 }, accessibility: { score: 0.8 }, 'best-practices': { score: 0.8 }, seo: { score: 0.8 } },
+      },
+    });
+    const mobile  = await runner.run('https://example.com/', 'mobile' as any);
+    const desktop = await runner.run('https://example.com/', 'desktop' as any);
+    expect(mobile.cached).toBe(false);
+    expect(desktop.cached).toBe(true);
+    expect(desktop.cwv.lcpMs).toBe(999);
+  });
+
+  describe('runBoth', () => {
+    const lhResponse = {
+      lhr: {
+        audits: { 'largest-contentful-paint': { numericValue: 1500 }, 'interaction-to-next-paint': { numericValue: 100 }, 'cumulative-layout-shift': { numericValue: 0.04 } },
+        categories: { performance: { score: 0.9 }, accessibility: { score: 0.9 }, 'best-practices': { score: 0.9 }, seo: { score: 0.9 } },
+      },
+    };
+
+    it('returns both mobile and desktop results with correct formFactor', async () => {
+      mockLighthouse.mockResolvedValue(lhResponse);
+      const result = await runner.runBoth('https://example.com/');
+      expect(result.mobile.formFactor).toBe('mobile');
+      expect(result.desktop.formFactor).toBe('desktop');
+      expect(mockLighthouse).toHaveBeenCalledTimes(2);
+    });
+
+    it('invokes Lighthouse twice in sequential mode (LIGHTHOUSE_PARALLEL unset)', async () => {
+      delete process.env.LIGHTHOUSE_PARALLEL;
+      mockLighthouse.mockResolvedValue(lhResponse);
+      const result = await runner.runBoth('https://example.com/');
+      expect(mockLighthouse).toHaveBeenCalledTimes(2);
+      expect(result.mobile.cwv.performanceScore).toBe(90);
+      expect(result.desktop.cwv.performanceScore).toBe(90);
+    });
+
+    it('invokes Lighthouse twice in parallel mode (LIGHTHOUSE_PARALLEL=true)', async () => {
+      process.env.LIGHTHOUSE_PARALLEL = 'true';
+      mockLighthouse.mockResolvedValue(lhResponse);
+      const result = await runner.runBoth('https://example.com/');
+      expect(mockLighthouse).toHaveBeenCalledTimes(2);
+      expect(result.mobile.formFactor).toBe('mobile');
+      expect(result.desktop.formFactor).toBe('desktop');
+      delete process.env.LIGHTHOUSE_PARALLEL;
+    });
   });
 });

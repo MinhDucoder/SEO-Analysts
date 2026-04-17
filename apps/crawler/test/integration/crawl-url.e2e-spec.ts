@@ -22,19 +22,20 @@ const fakeRedis = {
 };
 
 // Lighthouse stub — real LH would launch Chrome and slow the suite
+const makeCwv = (score: number) => ({
+  lcpMs: 1500,
+  inpMs: 100,
+  cls: 0.05,
+  performanceScore: score,
+  accessibilityScore: 90,
+  bestPracticesScore: 90,
+  seoScore: 90,
+});
 const fakeLighthouse = {
-  run: vi.fn().mockResolvedValue({
-    cwv: {
-      lcpMs: 1500,
-      inpMs: 100,
-      cls: 0.05,
-      performanceScore: 90,
-      accessibilityScore: 90,
-      bestPracticesScore: 90,
-      seoScore: 90,
-    },
-    cached: false,
-    durationMs: 1234,
+  run: vi.fn().mockResolvedValue({ cwv: makeCwv(90), cached: false, durationMs: 1234, formFactor: 'mobile' }),
+  runBoth: vi.fn().mockResolvedValue({
+    mobile:  { cwv: makeCwv(90), cached: false, durationMs: 1234, formFactor: 'mobile' },
+    desktop: { cwv: makeCwv(98), cached: false, durationMs: 1100, formFactor: 'desktop' },
   }),
 };
 
@@ -82,6 +83,7 @@ describe('CrawlUrl E2E', () => {
 
   it('returns the cached crawl on a second call (same URL)', async () => {
     fakeLighthouse.run.mockClear();
+    fakeLighthouse.runBoth.mockClear();
     const response = await controller.crawlUrl({
       audit_id: '00000000-0000-0000-0000-000000000002',
       url: 'https://example.com/',
@@ -89,7 +91,7 @@ describe('CrawlUrl E2E', () => {
     });
     expect(response.page_data.status_code).toBe(200);
     // Cache hit means the orchestrator returned early — Lighthouse not invoked again
-    expect(fakeLighthouse.run).not.toHaveBeenCalled();
+    expect(fakeLighthouse.runBoth).not.toHaveBeenCalled();
   });
 
   it('rejects SSRF attempts at the controller boundary', async () => {

@@ -22,11 +22,13 @@ describe('CrawlerOrchestrator', () => {
   };
   const cheerio = { fetch: vi.fn().mockResolvedValue(baseFetch) };
   const playwright = { fetch: vi.fn().mockResolvedValue({ ...baseFetch, fetcherType: 'playwright' as const }) };
+  const mobileCwv = { lcpMs: 1200, inpMs: 100, cls: 0.05, performanceScore: 90, accessibilityScore: 88, bestPracticesScore: 92, seoScore: 95 };
+  const desktopCwv = { lcpMs: 900, inpMs: 70, cls: 0.02, performanceScore: 96, accessibilityScore: 92, bestPracticesScore: 95, seoScore: 98 };
   const lighthouse = {
-    run: vi.fn().mockResolvedValue({
-      cwv: { lcpMs: 1200, inpMs: 100, cls: 0.05, performanceScore: 90, accessibilityScore: 88, bestPracticesScore: 92, seoScore: 95 },
-      cached: false,
-      durationMs: 4321,
+    run: vi.fn(),
+    runBoth: vi.fn().mockResolvedValue({
+      mobile:  { cwv: mobileCwv,  cached: false, durationMs: 4321, formFactor: 'mobile' },
+      desktop: { cwv: desktopCwv, cached: false, durationMs: 3210, formFactor: 'desktop' },
     }),
   };
   const extractor = {
@@ -101,16 +103,18 @@ describe('CrawlerOrchestrator', () => {
     expect(playwright.fetch).toHaveBeenCalled();
   });
 
-  it('runs Lighthouse when includeLighthouse is true (default)', async () => {
+  it('runs Lighthouse (both form factors) when includeLighthouse is true (default)', async () => {
     const result = await orchestrator.crawl('https://example.com/');
-    expect(lighthouse.run).toHaveBeenCalledWith('https://example.com/');
+    expect(lighthouse.runBoth).toHaveBeenCalledWith('https://example.com/');
     expect(result.cwvMetrics.lcpMs).toBe(1200);
+    expect(result.cwvMetricsDesktop?.lcpMs).toBe(900);
   });
 
   it('skips Lighthouse when includeLighthouse=false', async () => {
     const result = await orchestrator.crawl('https://example.com/', { includeLighthouse: false });
-    expect(lighthouse.run).not.toHaveBeenCalled();
+    expect(lighthouse.runBoth).not.toHaveBeenCalled();
     expect(result.cwvMetrics.lcpMs).toBe(0);
+    expect(result.cwvMetricsDesktop).toBeUndefined();
     expect(result.metadata.lighthouseDurationMs).toBe(0);
   });
 
@@ -119,13 +123,19 @@ describe('CrawlerOrchestrator', () => {
     expect(cache.setCrawl).toHaveBeenCalledWith('https://example.com/', expect.any(Object));
   });
 
-  it('reports lighthouseCached=true when LH cache hit', async () => {
-    lighthouse.run.mockResolvedValueOnce({
-      cwv: { lcpMs: 800, inpMs: 50, cls: 0.01, performanceScore: 99, accessibilityScore: 99, bestPracticesScore: 99, seoScore: 99 },
-      cached: true,
-      durationMs: 0,
+  it('reports lighthouseCached=true when LH cache hit (mobile)', async () => {
+    lighthouse.runBoth.mockResolvedValueOnce({
+      mobile:  { cwv: { lcpMs: 800, inpMs: 50, cls: 0.01, performanceScore: 99, accessibilityScore: 99, bestPracticesScore: 99, seoScore: 99 }, cached: true,  durationMs: 0, formFactor: 'mobile' },
+      desktop: { cwv: desktopCwv, cached: false, durationMs: 3000, formFactor: 'desktop' },
     });
     const result = await orchestrator.crawl('https://example.com/');
     expect(result.metadata.lighthouseCached).toBe(true);
+    expect(result.metadata.lighthouseCachedDesktop).toBe(false);
+  });
+
+  it('populates per-formFactor duration in metadata', async () => {
+    const result = await orchestrator.crawl('https://example.com/');
+    expect(result.metadata.lighthouseDurationMs).toBe(4321);
+    expect(result.metadata.lighthouseDurationMsDesktop).toBe(3210);
   });
 });

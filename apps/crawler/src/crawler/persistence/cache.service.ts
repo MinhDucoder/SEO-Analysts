@@ -1,12 +1,13 @@
 /**
  * @file Redis cache for crawl + Lighthouse results — key is SHA-256 of URL.
- * TTLs live in `@repo/shared CACHE_TTL`; corrupted entries are logged
- * and treated as misses so a bad value never poisons the pipeline.
+ * Lighthouse cache is keyed per-form-factor so mobile and desktop results
+ * never collide. TTLs live in `@repo/shared CACHE_TTL`; corrupted entries
+ * are logged and treated as misses so a bad value never poisons the pipeline.
  */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { createHash } from 'crypto';
 import type { Redis } from 'ioredis';
-import { CACHE_TTL, REDIS_KEYS } from '@repo/shared';
+import { CACHE_TTL, FormFactor, REDIS_KEYS } from '@repo/shared';
 
 export const REDIS_CLIENT = Symbol('REDIS_CLIENT');
 
@@ -30,13 +31,13 @@ export class CacheService {
     await this.redis.setex(key, CACHE_TTL.CRAWL_SECONDS, JSON.stringify(value));
   }
 
-  async getLighthouse<T = unknown>(url: string): Promise<T | null> {
-    const key = REDIS_KEYS.lighthouseCache(this.hashUrl(url));
+  async getLighthouse<T = unknown>(url: string, formFactor: FormFactor = FormFactor.MOBILE): Promise<T | null> {
+    const key = REDIS_KEYS.lighthouseCache(this.hashUrl(url), formFactor);
     return this.safeGet<T>(key);
   }
 
-  async setLighthouse(url: string, value: unknown): Promise<void> {
-    const key = REDIS_KEYS.lighthouseCache(this.hashUrl(url));
+  async setLighthouse(url: string, formFactor: FormFactor, value: unknown): Promise<void> {
+    const key = REDIS_KEYS.lighthouseCache(this.hashUrl(url), formFactor);
     await this.redis.setex(key, CACHE_TTL.LIGHTHOUSE_SECONDS, JSON.stringify(value));
   }
 

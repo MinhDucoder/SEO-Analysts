@@ -73,17 +73,23 @@ export class CrawlerOrchestrator {
       }
     }
 
-    // 3. Lighthouse (default on)
+    // 3. Lighthouse (default on) — runs both mobile + desktop
     const includeLh = options.includeLighthouse !== false;
-    let cwv: CoreWebVitals = ZERO_CWV;
+    let cwvMobile: CoreWebVitals = ZERO_CWV;
+    let cwvDesktop: CoreWebVitals | undefined;
     let lhDurationMs = 0;
     let lhCached = false;
+    let lhDurationMsDesktop = 0;
+    let lhCachedDesktop = false;
     if (includeLh) {
       try {
-        const lh = await this.lighthouse.run(url);
-        cwv = lh.cwv;
-        lhDurationMs = lh.durationMs;
-        lhCached = lh.cached;
+        const dual = await this.lighthouse.runBoth(url);
+        cwvMobile = dual.mobile.cwv;
+        lhDurationMs = dual.mobile.durationMs;
+        lhCached = dual.mobile.cached;
+        cwvDesktop = dual.desktop.cwv;
+        lhDurationMsDesktop = dual.desktop.durationMs;
+        lhCachedDesktop = dual.desktop.cached;
       } catch (err) {
         this.logger.warn(`Lighthouse failed for ${url}: ${(err as Error).message}`);
       }
@@ -95,13 +101,16 @@ export class CrawlerOrchestrator {
     // 5. Build result and cache
     const result: CrawlResult = {
       pageData,
-      cwvMetrics: cwv,
+      cwvMetrics: cwvMobile,
+      cwvMetricsDesktop: cwvDesktop,
       metadata: {
         crawlerType: fetched.fetcherType,
         isSpa: fetched.isSpa,
         crawlDurationMs: Date.now() - startedAt,
         lighthouseDurationMs: lhDurationMs,
         lighthouseCached: lhCached,
+        lighthouseDurationMsDesktop: lhDurationMsDesktop,
+        lighthouseCachedDesktop: lhCachedDesktop,
       },
     };
 

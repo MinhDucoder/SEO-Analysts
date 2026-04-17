@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { CacheService } from '../../src/crawler/persistence/cache.service';
-import { CACHE_TTL } from '@repo/shared';
+import { CACHE_TTL, FormFactor } from '@repo/shared';
 
 const fakeRedis = {
   get: vi.fn(),
@@ -49,13 +49,34 @@ describe('CacheService', () => {
     expect(result).toBeNull();
   });
 
-  it('writes lighthouse results with 1h TTL', async () => {
-    await cache.setLighthouse('https://example.com/', { lcpMs: 1200 });
+  it('writes mobile lighthouse results with 1h TTL under formFactor-keyed path', async () => {
+    await cache.setLighthouse('https://example.com/', FormFactor.MOBILE, { lcpMs: 1200 });
     expect(fakeRedis.setex).toHaveBeenCalledWith(
-      expect.stringMatching(/^lighthouse:[a-f0-9]{64}$/),
+      expect.stringMatching(/^lighthouse:mobile:[a-f0-9]{64}$/),
       CACHE_TTL.LIGHTHOUSE_SECONDS,
       JSON.stringify({ lcpMs: 1200 }),
     );
+  });
+
+  it('writes desktop lighthouse results under a separate cache key', async () => {
+    await cache.setLighthouse('https://example.com/', FormFactor.DESKTOP, { lcpMs: 900 });
+    expect(fakeRedis.setex).toHaveBeenCalledWith(
+      expect.stringMatching(/^lighthouse:desktop:[a-f0-9]{64}$/),
+      CACHE_TTL.LIGHTHOUSE_SECONDS,
+      JSON.stringify({ lcpMs: 900 }),
+    );
+  });
+
+  it('reads lighthouse by formFactor — mobile and desktop keys do not collide', async () => {
+    fakeRedis.get.mockImplementation((key: string) => {
+      if (key.startsWith('lighthouse:mobile:'))  return Promise.resolve(JSON.stringify({ lcpMs: 1500 }));
+      if (key.startsWith('lighthouse:desktop:')) return Promise.resolve(JSON.stringify({ lcpMs: 900  }));
+      return Promise.resolve(null);
+    });
+    const mobile  = await cache.getLighthouse<{ lcpMs: number }>('https://example.com/', FormFactor.MOBILE);
+    const desktop = await cache.getLighthouse<{ lcpMs: number }>('https://example.com/', FormFactor.DESKTOP);
+    expect(mobile?.lcpMs).toBe(1500);
+    expect(desktop?.lcpMs).toBe(900);
   });
 
   it('returns null when stored JSON is corrupted', async () => {
