@@ -1,6 +1,6 @@
 # 3-Framework Workflow
 
-> **→ For Avada SEO Suite: read [WORKFLOW-AVADA.md](WORKFLOW-AVADA.md) first (domain skills map + project rules + CI/CD).**
+> **→ For SEO-Analysts: read [WORKFLOW-SEO-ANALYSTS.md](WORKFLOW-SEO-ANALYSTS.md) first (microservices workflow + domain skill map + proto-breaking protocol).**
 > This file is the framework-agnostic reference.
 >
 > Superpowers + GSD + GStack — unified development workflow

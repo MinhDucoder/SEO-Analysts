@@ -1,5 +1,8 @@
 # 3-Framework Workflow
 
+> **→ For SEO-Analysts: read [WORKFLOW-SEO-ANALYSTS.md](WORKFLOW-SEO-ANALYSTS.md) first (microservices workflow + domain skill map + proto-breaking protocol).**
+> This file is the framework-agnostic reference.
+>
 > Superpowers + GSD + GStack — unified development workflow
 
 ## Frameworks & Lanes
