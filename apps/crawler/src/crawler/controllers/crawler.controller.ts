@@ -1,3 +1,8 @@
+/**
+ * @file gRPC entrypoint for the crawler — sync/on-demand surface.
+ * Production async path goes through `CrawlerWorker`.
+ * Proto: `packages/proto/crawler/v1/crawler.proto`.
+ */
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { CrawlerOrchestrator } from '../services/crawler.orchestrator';

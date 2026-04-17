@@ -1,3 +1,8 @@
+/**
+ * @file URL safety validator — first gate before any crawl.
+ * Blocks SSRF vectors: non-http(s) schemes, loopback/private/link-local
+ * addresses, and DNS-rebinding by resolving every A/AAAA record.
+ */
 import { Injectable } from '@nestjs/common';
 import { promises as dns } from 'dns';
 import { isIP } from 'net';
@@ -17,8 +22,19 @@ const LITERAL_BLOCKLIST = new Set([
   '::',
 ]);
 
+/**
+ * Validates user-submitted URLs before crawling. Reject reasons surface as
+ * `UrlValidationError` so the orchestrator can translate to a 4xx response.
+ */
 @Injectable()
 export class UrlValidator {
+  /**
+   * Throw if the URL is malformed or points to a non-public target.
+   *
+   * @param rawUrl Raw URL string from user input (untrusted).
+   * @throws UrlValidationError when scheme, host literal, or resolved IP
+   *   lies outside the allowed public range.
+   */
   async validate(rawUrl: string): Promise<void> {
     if (!rawUrl || typeof rawUrl !== 'string') {
       throw new UrlValidationError('URL is required and must be a string');

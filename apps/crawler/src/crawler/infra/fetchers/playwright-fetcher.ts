@@ -1,3 +1,7 @@
+/**
+ * @file Playwright fallback fetcher — used when the static Cheerio fetch
+ * returns an SPA shell. Waits for `networkidle` to capture JS-rendered DOM.
+ */
 import { Injectable } from '@nestjs/common';
 import { BrowserPool } from './browser-pool';
 import { FetchResult, IFetcher } from '../../domain/fetcher.interface';

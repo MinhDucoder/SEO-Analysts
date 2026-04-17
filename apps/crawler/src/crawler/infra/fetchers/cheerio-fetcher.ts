@@ -1,3 +1,8 @@
+/**
+ * @file Fast HTTP fetcher for static pages (axios + cheerio parse).
+ * Detects single-page-app markers so the orchestrator can fall back
+ * to Playwright when the body is empty / JS-rendered.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
 import * as cheerio from 'cheerio';
@@ -48,6 +53,11 @@ export class CheerioFetcher implements IFetcher {
     };
   }
 
+  /**
+   * Returns true if the HTML looks like a client-rendered SPA shell.
+   * Combines three heuristics (mount-node + size, noscript warning,
+   * Next.js __NEXT_DATA__ marker) — any match triggers Playwright fallback.
+   */
   detectSpa(html: string): boolean {
     if (!html || html.length === 0) return false;
     const $ = cheerio.load(html);

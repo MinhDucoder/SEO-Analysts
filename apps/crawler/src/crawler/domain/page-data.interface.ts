@@ -1,3 +1,7 @@
+/**
+ * @file Structured representation of a crawled page — the single
+ * input shape consumed by seo-analyzer and keyword-analyzer.
+ */
 import { ImageInfo, LinkInfo } from '@repo/shared';
 
 export interface PageData {

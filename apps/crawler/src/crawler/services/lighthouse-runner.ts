@@ -1,3 +1,8 @@
+/**
+ * @file Runs Google Lighthouse and projects its JSON output onto our
+ * `CoreWebVitals` shape. Expensive (5-30 s) — results cached in Redis
+ * with longer TTL than the crawl cache.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { CoreWebVitals } from '@repo/shared';
 import { CacheService } from '../persistence/cache.service';
@@ -14,6 +19,10 @@ export class LighthouseRunner {
 
   constructor(private readonly cache: CacheService) {}
 
+  /**
+   * Return CWV metrics for `url`. Chrome is always killed in `finally`
+   * so a Lighthouse crash cannot leak headless processes.
+   */
   async run(url: string): Promise<LighthouseRunResult> {
     const cachedHit = await this.cache.getLighthouse<CoreWebVitals>(url);
     if (cachedHit) {

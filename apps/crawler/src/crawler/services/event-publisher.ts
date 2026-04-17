@@ -1,3 +1,8 @@
+/**
+ * @file Redis pub/sub fan-out for the crawl stage:
+ * `audit.progress` (live UI ticks), `crawl.done` / `crawl.failed`
+ * (consumed by Gateway's ProgressSubscriber + Report listener).
+ */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { AuditStatus } from '@repo/shared';

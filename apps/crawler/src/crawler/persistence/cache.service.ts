@@ -1,3 +1,8 @@
+/**
+ * @file Redis cache for crawl + Lighthouse results — key is SHA-256 of URL.
+ * TTLs live in `@repo/shared CACHE_TTL`; corrupted entries are logged
+ * and treated as misses so a bad value never poisons the pipeline.
+ */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { createHash } from 'crypto';
 import type { Redis } from 'ioredis';

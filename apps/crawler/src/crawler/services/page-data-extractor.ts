@@ -1,3 +1,7 @@
+/**
+ * @file Parses raw HTML into the structured `PageData` shape — the single
+ * object all downstream analyzers consume. No network I/O; pure DOM work.
+ */
 import { Injectable } from '@nestjs/common';
 import * as cheerio from 'cheerio';
 import { ImageInfo, LinkInfo } from '@repo/shared';
@@ -6,6 +10,13 @@ import { PageData } from '../domain/page-data.interface';
 
 @Injectable()
 export class PageDataExtractor {
+  /**
+   * Build a `PageData` snapshot from a raw fetch result.
+   *
+   * Separates internal vs external links by comparing hostnames against
+   * the final (post-redirect) URL. Per-link status codes are not probed
+   * here; that is a future responsibility of the link-crawl stage.
+   */
   extract(url: string, fetched: FetchResult): PageData {
     const $ = cheerio.load(fetched.html);
     const finalUrl = fetched.finalUrl || url;

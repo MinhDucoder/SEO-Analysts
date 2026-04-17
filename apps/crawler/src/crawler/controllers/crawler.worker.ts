@@ -1,3 +1,8 @@
+/**
+ * @file BullMQ worker for `crawl.start` — the pipeline's front door.
+ * On success it fans out to `analyze.start` + `keyword.start` (parallel)
+ * and publishes progress ticks so the Gateway can update clients.
+ */
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
@@ -30,6 +35,11 @@ export class CrawlerWorker extends WorkerHost {
     super();
   }
 
+  /**
+   * Handle one crawl job. Progress events are published on success
+   * (10% start, 33% crawl-done); on failure `crawl.failed` is emitted
+   * and the error is re-thrown so BullMQ records the failure for retries.
+   */
   async process(job: Job<CrawlJobData>): Promise<void> {
     const { auditId, url, targetKeyword, options } = job.data;
     this.logger.log(`processing crawl.start job=${job.id} audit=${auditId} url=${url}`);

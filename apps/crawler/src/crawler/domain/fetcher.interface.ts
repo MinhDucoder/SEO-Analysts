@@ -1,3 +1,8 @@
+/**
+ * @file Contract for the "fetch raw HTML" step — implemented by both
+ * `CheerioFetcher` (static HTTP) and `PlaywrightFetcher` (SPA fallback).
+ */
+
 export interface FetchResult {
   finalUrl: string;
   statusCode: number;

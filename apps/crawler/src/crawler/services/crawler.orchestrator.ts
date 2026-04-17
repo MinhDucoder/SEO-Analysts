@@ -1,3 +1,8 @@
+/**
+ * @file Orchestrates the crawl pipeline:
+ * validate → cache lookup → fetch (Cheerio → Playwright fallback) →
+ * Lighthouse (best-effort) → PageData extract → cache → return.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { CoreWebVitals } from '@repo/shared';
 import { CacheService } from '../persistence/cache.service';
@@ -19,6 +24,11 @@ const ZERO_CWV: CoreWebVitals = {
   seoScore: 0,
 };
 
+/**
+ * Main crawl entrypoint. Injected by both `CrawlerController` (sync gRPC)
+ * and `CrawlerWorker` (async BullMQ). Lighthouse failures are non-fatal —
+ * we still return PageData with zeroed CWV so the audit can continue.
+ */
 @Injectable()
 export class CrawlerOrchestrator {
   private readonly logger = new Logger(CrawlerOrchestrator.name);
@@ -32,6 +42,13 @@ export class CrawlerOrchestrator {
     private readonly extractor: PageDataExtractor,
   ) {}
 
+  /**
+   * Fetch + analyze a single URL end-to-end.
+   *
+   * @param url Fully-qualified URL (validated before fetch).
+   * @param options `forcePlaywright` skips Cheerio; `includeLighthouse=false`
+   *   skips CWV; `timeoutMs`/`userAgent` forwarded to the chosen fetcher.
+   */
   async crawl(url: string, options: CrawlOptions = {}): Promise<CrawlResult> {
     const startedAt = Date.now();
     await this.validator.validate(url);

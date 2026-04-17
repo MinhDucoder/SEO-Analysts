@@ -1,3 +1,8 @@
+/**
+ * @file Lazy-growing pool of Playwright browsers (up to `maxSize`).
+ * Keeps launch cost amortized across many crawls while bounding memory;
+ * over-capacity requests wait in FIFO queue until a context is released.
+ */
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Browser, BrowserContext, chromium } from 'playwright';
 
@@ -14,6 +19,7 @@ export class BrowserPool implements OnModuleDestroy {
 
   constructor(private readonly maxSize: number = 3) {}
 
+  /** Borrow a fresh BrowserContext — always pair with `release()`. */
   async acquire(): Promise<BrowserContext> {
     const entry = await this.acquireEntry();
     const context = await entry.browser.newContext({
@@ -25,6 +31,7 @@ export class BrowserPool implements OnModuleDestroy {
     return context;
   }
 
+  /** Return a BrowserContext to the pool (hand off to next waiter if any). */
   async release(context: BrowserContext): Promise<void> {
     const tagged = context as unknown as { __poolEntry?: PoolEntry };
     try {

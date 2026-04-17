@@ -1,3 +1,7 @@
+/**
+ * @file Output contract of `CrawlerOrchestrator.crawl()` —
+ * combines extracted page data, Lighthouse CWV, and crawl metadata.
+ */
 import { CoreWebVitals } from '@repo/shared';
 import { PageData } from './page-data.interface';
 
