@@ -37,6 +37,11 @@ export enum Classification {
   POOR = 'poor',
 }
 
+export enum FormFactor {
+  MOBILE = 'mobile',
+  DESKTOP = 'desktop',
+}
+
 // ─── Shared Interfaces ───
 
 export interface CoreWebVitals {
@@ -108,7 +113,8 @@ export const BULLMQ_QUEUES = {
 } as const;
 
 export const REDIS_KEYS = {
-  lighthouseCache: (urlHash: string) => `lighthouse:${urlHash}`,
+  lighthouseCache: (urlHash: string, formFactor: FormFactor | string = FormFactor.MOBILE) =>
+    `lighthouse:${formFactor}:${urlHash}`,
   crawlCache: (urlHash: string) => `crawl:${urlHash}`,
   auditCompletedSteps: (auditId: string) => `audit:${auditId}:completed_steps`,
   auditAnalyzeResult: (auditId: string) => `audit:${auditId}:analyze_result`,
