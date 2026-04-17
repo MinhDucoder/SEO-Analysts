@@ -43,15 +43,15 @@
 
 ## Skills Quick Reference
 
-| Skill | Trigger Keywords | Domain |
+| Skill | Trigger Keywords | Applies to |
 |-------|-----------------|--------|
-| backend | NestJS, module, guard, pipe, interceptor, BullMQ, Socket.IO, gateway | NestJS Backend |
-| frontend | Next.js, React, TanStack Query, shadcn/ui, Tailwind, App Router | Next.js Frontend |
-| database | PostgreSQL, Prisma, Redis, migration, query, caching, transaction | Database |
-| crawler | web crawler, Playwright, Cheerio, robots.txt, crawl, scrape | Web Crawling |
-| seo-rules | SEO rule, analyzer, score, issue, audit, Core Web Vitals | SEO Engine |
-| testing | Vitest, unit test, E2E, Playwright test, mock, coverage | Testing |
-| deployment | Docker, Vercel, Railway, Supabase, CI/CD, GitHub Actions | DevOps |
+| backend | NestJS, module, guard, pipe, interceptor, BullMQ, Socket.IO, **gRPC**, **proto**, **service boundary**, **choreography** | All 5 services |
+| frontend | Next.js, React, TanStack Query, shadcn/ui, Tailwind, App Router, `@repo/ui` | (pending apps/web) |
+| database | PostgreSQL, Prisma, Redis, migration, query, caching, transaction, **3-DB boundary** | gateway, seo-analyzer, report |
+| crawler | web crawler, Playwright, Cheerio, robots.txt, crawl, scrape, Lighthouse | crawler only |
+| seo-rules | SEO rule, analyzer, score, issue, audit, Core Web Vitals | seo-analyzer only |
+| testing | Vitest, unit test, E2E, **e2e:smoke**, Playwright test, mock, coverage | All services |
+| deployment | Docker, **docker-compose**, Vercel, Railway, Supabase, CI/CD, GitHub Actions, **Turborepo** | Monorepo root |
 
 ## Commands Quick Reference
 
@@ -65,15 +65,23 @@
 
 - **Dự án**: SEO Analysis Platform (Đồ Án)
 - **Mục tiêu**: Công cụ phân tích SEO cho URL, thay thế Ahrefs/SEMrush ở mức cá nhân
-- **Kiến trúc**: Monorepo (Turborepo) - microservice-ready modules
-- **Frontend**: Next.js 14 (App Router) + React 18 + Tailwind CSS + shadcn/ui
-- **Backend**: NestJS 10 (modules, DI, guards, pipes, interceptors)
-- **Database**: PostgreSQL 16 (Supabase) + Prisma 5 ORM + Redis 7 (BullMQ + cache)
-- **Crawling**: Cheerio (HTTP) + Playwright (JS rendering fallback)
-- **Analysis**: Lighthouse CI + Custom SEO Rule Engine (20 rules)
-- **Real-time**: Socket.IO via @nestjs/websockets
-- **Deployment**: Vercel (frontend) + Railway (backend) + Supabase (DB)
+- **Kiến trúc**: Monorepo (Turborepo) — **5 NestJS microservices** với DDD per service
+  - `gateway` (3000 HTTP, 50051 gRPC) — public API, auth, orchestrator
+  - `crawler` (50052 gRPC) — Playwright + Cheerio + Lighthouse
+  - `seo-analyzer` (50053 gRPC) — 20 SEO rules + Prisma
+  - `keyword-analyzer` (50054 gRPC) — TF + density, stateless
+  - `report` (3004 HTTP, 50055 gRPC) — aggregate + PDF + compare
+- **Inter-service**: gRPC (sync) + BullMQ (async jobs) + Redis pub/sub (events)
+- **Shared packages**: `@repo/shared`, `@repo/proto`, `@repo/ui`, `@repo/typescript-config`, `@repo/eslint-config`
+- **Frontend**: Next.js 14 + React 18 + Tailwind + shadcn/ui — **pending scaffold** (use `@repo/ui` as primitive library)
+- **Database**: PostgreSQL 16 × 3 DBs (`seo_gateway`, `seo_analyzer`, `seo_report`) + Prisma 5 + Redis 7
+- **Crawling**: Cheerio (default) + Playwright (JS fallback)
+- **Analysis**: Lighthouse (programmatic) + Custom SEO Rule Engine (20 rules)
+- **Real-time**: Socket.IO @ gateway + Redis pub/sub choreography
+- **Deployment**: Vercel (future apps/web) + Railway (services) + Supabase (DBs)
 - **Cost target**: < $40/month
+
+> **Current service truth**: `apps/CLAUDE.md` (cross-service map) + `apps/<service>/CLAUDE.md` (per-service DDD layout).
 ## Workflow Rules (3-Framework Integration)
 
 ### Size Detection (Auto)
@@ -105,15 +113,28 @@ Large: re-run ONLY failed checks.
 ### Size Escalation
 If scope grows beyond current tier mid-CODE → STOP → re-classify → restart from first skipped phase. Code already written is kept.
 
-### Quick Route
-- **Small:** SP:TDD -> SP:verify -> done
-- **Medium:** /office-hours -> gsd:quick -> SP:TDD -> /review -> done
-- **Large:** /office-hours + /plan-eng-review -> gsd:discuss + gsd:plan -> SP:TDD + gsd:execute -> /review + /cso + /qa -> /ship -> done
+### Quick Route (per tier × impact)
+- **Small (single-service):** SP:TDD → SP:verify → commit
+- **Medium (single-service):** /office-hours → gsd:quick → SP:TDD → /review → commit
+- **Medium (cross-service):** above + proto typecheck + e2e:smoke before /review
+- **Large (standard):** /office-hours + /plan-eng-review → gsd:discuss + gsd:plan → gsd:execute (TDD waves) → /review + /cso + /qa + microservices gates → /ship + /land-and-deploy + /canary
+- **Large (proto-breaking):** standard-large + proto-breaking protocol (PR 1 additive → PR 2 cleanup ≥1 cycle later) + staged rollout (consumer first)
+
+### Forcing escalations (auto-detect)
+- Any `packages/proto/**` change → **LARGE + proto-breaking**
+- Any ≥2 `apps/*` touched → **MEDIUM minimum**
+- Any Prisma schema/migrations change → **MEDIUM minimum**
+- Any `@repo/shared` change → **MEDIUM minimum**
 
 ### Domain Skills (tools in CODE phase)
-backend/ frontend/ database/ crawler/ seo-rules/ testing/ deployment/
+`backend/` (all services) · `database/` (gateway, seo-analyzer, report) · `crawler/` (crawler) · `seo-rules/` (seo-analyzer) · `testing/` (all) · `deployment/` (root) · `frontend/` (pending apps/web)
 
-### Ref: docs/workflow/ for detailed guides
+### Ref
+- Primary: `.claude/workflow/WORKFLOW-SEO-ANALYSTS.md` (microservices-aware)
+- Framework-agnostic: `.claude/workflow/WORKFLOW.md`
+- Tier guides: `.claude/workflow/WORKFLOW-{SMALL,MEDIUM,LARGE}.md`
+- Mirrors for human reading: `docs/workflow/`
+- Current service truth: `apps/CLAUDE.md` + `apps/<service>/CLAUDE.md`
 
 ## gstack
 
