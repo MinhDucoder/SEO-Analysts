@@ -15,6 +15,16 @@ import { RolesGuard } from './guards/roles.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { PrismaModule } from '../prisma/prisma.module';
 
+const googleStrategyProvider = {
+  provide: GoogleStrategy,
+  useFactory: (config: ConfigService) => {
+    const clientID = config.get<string>('GOOGLE_CLIENT_ID');
+    if (!clientID) return null;
+    return new GoogleStrategy(config);
+  },
+  inject: [ConfigService],
+};
+
 @Module({
   imports: [
     PrismaModule,
@@ -35,7 +45,7 @@ import { PrismaModule } from '../prisma/prisma.module';
     PasswordService,
     VerificationService,
     JwtStrategy,
-    GoogleStrategy,
+    googleStrategyProvider,
     JwtAuthGuard,
     GoogleAuthGuard,
     RolesGuard,
