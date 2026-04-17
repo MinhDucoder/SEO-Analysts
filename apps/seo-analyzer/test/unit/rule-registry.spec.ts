@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { RuleRegistry } from '../../src/analyzer/rule-registry';
-import { ISeoRule, RuleCheckOutput } from '../../src/analyzer/interfaces/seo-rule.interface';
+import { RuleRegistry } from '../../src/analyzer/services/rule-registry';
+import { ISeoRule, RuleCheckOutput } from '../../src/analyzer/domain/seo-rule.interface';
 import { CheckStatus, IssueCategory } from '@repo/shared';
 
 class FakeRule implements ISeoRule {

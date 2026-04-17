@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { CheckStatus } from '@repo/shared';
-import { H1TagRule } from '../../../src/analyzer/rules/headings/h1-tag.rule';
-import { HeadingHierarchyRule } from '../../../src/analyzer/rules/headings/heading-hierarchy.rule';
-import { makePageData } from '../../../src/analyzer/test-fixtures/page-data.fixture';
+import { H1TagRule } from '../../../src/analyzer/domain/rules/headings/h1-tag.rule';
+import { HeadingHierarchyRule } from '../../../src/analyzer/domain/rules/headings/heading-hierarchy.rule';
+import { makePageData } from '../../fixtures/page-data.fixture';
 
 describe('H1TagRule', () => {
   const rule = new H1TagRule();

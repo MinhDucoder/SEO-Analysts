@@ -1,10 +1,10 @@
 import { describe, expect, it, beforeAll, vi } from 'vitest';
-import { AnalyzerController } from '../../src/analyzer/analyzer.controller';
-import { AnalyzerService } from '../../src/analyzer/analyzer.service';
-import { RuleRegistry } from '../../src/analyzer/rule-registry';
-import { RuleRunner } from '../../src/analyzer/rule-runner';
-import { ScoreCalculator } from '../../src/analyzer/score-calculator';
-import { makePageData } from '../../src/analyzer/test-fixtures/page-data.fixture';
+import { AnalyzerController } from '../../src/analyzer/controllers/analyzer.controller';
+import { AnalyzerService } from '../../src/analyzer/services/analyzer.service';
+import { RuleRegistry } from '../../src/analyzer/services/rule-registry';
+import { RuleRunner } from '../../src/analyzer/services/rule-runner';
+import { ScoreCalculator } from '../../src/analyzer/services/score-calculator';
+import { makePageData } from '../fixtures/page-data.fixture';
 import { Classification, IssueCategory } from '@repo/shared';
 
 // Mocked Prisma — returns the 20 seeded rules and captures createMany

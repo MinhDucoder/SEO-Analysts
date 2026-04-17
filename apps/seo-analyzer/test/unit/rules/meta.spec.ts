@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { CheckStatus } from '@repo/shared';
-import { TitleTagRule } from '../../../src/analyzer/rules/meta/title-tag.rule';
-import { MetaDescriptionRule } from '../../../src/analyzer/rules/meta/meta-description.rule';
-import { OpenGraphRule } from '../../../src/analyzer/rules/meta/open-graph.rule';
-import { TwitterCardRule } from '../../../src/analyzer/rules/meta/twitter-card.rule';
-import { makePageData } from '../../../src/analyzer/test-fixtures/page-data.fixture';
+import { TitleTagRule } from '../../../src/analyzer/domain/rules/meta/title-tag.rule';
+import { MetaDescriptionRule } from '../../../src/analyzer/domain/rules/meta/meta-description.rule';
+import { OpenGraphRule } from '../../../src/analyzer/domain/rules/meta/open-graph.rule';
+import { TwitterCardRule } from '../../../src/analyzer/domain/rules/meta/twitter-card.rule';
+import { makePageData } from '../../fixtures/page-data.fixture';
 
 describe('TitleTagRule', () => {
   const rule = new TitleTagRule();

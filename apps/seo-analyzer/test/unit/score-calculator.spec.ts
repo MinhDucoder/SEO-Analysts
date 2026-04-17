@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { ScoreCalculator } from '../../src/analyzer/score-calculator';
+import { ScoreCalculator } from '../../src/analyzer/services/score-calculator';
 import { CheckStatus, Classification, IssueCategory } from '@repo/shared';
-import type { RunnerResult } from '../../src/analyzer/rule-runner';
+import type { RunnerResult } from '../../src/analyzer/services/rule-runner';
 
 function r(overrides: Partial<RunnerResult>): RunnerResult {
   return {

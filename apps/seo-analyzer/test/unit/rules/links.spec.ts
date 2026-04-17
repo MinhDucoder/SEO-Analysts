@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { CheckStatus, LinkInfo } from '@repo/shared';
-import { InternalLinksRule } from '../../../src/analyzer/rules/links/internal-links.rule';
-import { ExternalLinksRule } from '../../../src/analyzer/rules/links/external-links.rule';
-import { makePageData } from '../../../src/analyzer/test-fixtures/page-data.fixture';
+import { InternalLinksRule } from '../../../src/analyzer/domain/rules/links/internal-links.rule';
+import { ExternalLinksRule } from '../../../src/analyzer/domain/rules/links/external-links.rule';
+import { makePageData } from '../../fixtures/page-data.fixture';
 
 const link = (overrides: Partial<LinkInfo> = {}): LinkInfo => ({
   href: '/x', anchorText: 'x', isInternal: true, rel: null, statusCode: 200, ...overrides,

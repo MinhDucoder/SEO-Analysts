@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { CheckStatus } from '@repo/shared';
-import { CanonicalUrlRule } from '../../../src/analyzer/rules/technical/canonical-url.rule';
-import { RobotsMetaRule } from '../../../src/analyzer/rules/technical/robots-meta.rule';
-import { ViewportMetaRule } from '../../../src/analyzer/rules/technical/viewport-meta.rule';
-import { HttpsCheckRule } from '../../../src/analyzer/rules/technical/https-check.rule';
-import { makePageData } from '../../../src/analyzer/test-fixtures/page-data.fixture';
+import { CanonicalUrlRule } from '../../../src/analyzer/domain/rules/technical/canonical-url.rule';
+import { RobotsMetaRule } from '../../../src/analyzer/domain/rules/technical/robots-meta.rule';
+import { ViewportMetaRule } from '../../../src/analyzer/domain/rules/technical/viewport-meta.rule';
+import { HttpsCheckRule } from '../../../src/analyzer/domain/rules/technical/https-check.rule';
+import { makePageData } from '../../fixtures/page-data.fixture';
 
 describe('CanonicalUrlRule', () => {
   const rule = new CanonicalUrlRule();
@@ -56,11 +56,11 @@ describe('HttpsCheckRule', () => {
   });
 });
 
-import { SchemaOrgRule } from '../../../src/analyzer/rules/technical/schema-org.rule';
-import { HttpStatusRule } from '../../../src/analyzer/rules/technical/http-status.rule';
-import { UrlStructureRule } from '../../../src/analyzer/rules/technical/url-structure.rule';
-import { LanguageTagRule } from '../../../src/analyzer/rules/technical/language-tag.rule';
-import { FaviconRule } from '../../../src/analyzer/rules/technical/favicon.rule';
+import { SchemaOrgRule } from '../../../src/analyzer/domain/rules/technical/schema-org.rule';
+import { HttpStatusRule } from '../../../src/analyzer/domain/rules/technical/http-status.rule';
+import { UrlStructureRule } from '../../../src/analyzer/domain/rules/technical/url-structure.rule';
+import { LanguageTagRule } from '../../../src/analyzer/domain/rules/technical/language-tag.rule';
+import { FaviconRule } from '../../../src/analyzer/domain/rules/technical/favicon.rule';
 
 describe('SchemaOrgRule', () => {
   const rule = new SchemaOrgRule();

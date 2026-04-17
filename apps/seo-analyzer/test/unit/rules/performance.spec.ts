@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { CheckStatus } from '@repo/shared';
-import { PageSizeRule } from '../../../src/analyzer/rules/performance/page-size.rule';
-import { registerAllRules } from '../../../src/analyzer/rules';
-import { RuleRegistry } from '../../../src/analyzer/rule-registry';
-import { makePageData } from '../../../src/analyzer/test-fixtures/page-data.fixture';
+import { PageSizeRule } from '../../../src/analyzer/domain/rules/performance/page-size.rule';
+import { registerAllRules } from '../../../src/analyzer/domain/rules';
+import { RuleRegistry } from '../../../src/analyzer/services/rule-registry';
+import { makePageData } from '../../fixtures/page-data.fixture';
 
 const MB = 1024 * 1024;
 

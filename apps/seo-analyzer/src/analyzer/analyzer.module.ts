@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrismaModule } from '../prisma/prisma.module';
-import { AnalyzerService } from './analyzer.service';
-import { AnalyzerController } from './analyzer.controller';
-import { AnalyzerWorker } from './analyzer.worker';
-import { RuleRegistry } from './rule-registry';
-import { RuleRunner } from './rule-runner';
-import { ScoreCalculator } from './score-calculator';
+import { PrismaModule } from '../infra/prisma/prisma.module';
+import { AnalyzerService } from './services/analyzer.service';
+import { AnalyzerController } from './controllers/analyzer.controller';
+import { AnalyzerWorker } from './controllers/analyzer.worker';
+import { RuleRegistry } from './services/rule-registry';
+import { RuleRunner } from './services/rule-runner';
+import { ScoreCalculator } from './services/score-calculator';
 import { BULLMQ_QUEUES } from '@repo/shared';
 
 @Module({

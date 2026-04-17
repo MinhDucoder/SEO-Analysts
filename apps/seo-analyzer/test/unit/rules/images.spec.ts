@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { CheckStatus, ImageInfo } from '@repo/shared';
-import { ImageAltRule } from '../../../src/analyzer/rules/images/image-alt.rule';
-import { ImageOptimizationRule } from '../../../src/analyzer/rules/images/image-optimization.rule';
-import { makePageData } from '../../../src/analyzer/test-fixtures/page-data.fixture';
+import { ImageAltRule } from '../../../src/analyzer/domain/rules/images/image-alt.rule';
+import { ImageOptimizationRule } from '../../../src/analyzer/domain/rules/images/image-optimization.rule';
+import { makePageData } from '../../fixtures/page-data.fixture';
 
 const img = (alt: string | null, sizeBytes = 50_000, format = 'webp'): ImageInfo => ({
   src: '/img.webp', alt, sizeBytes, format,

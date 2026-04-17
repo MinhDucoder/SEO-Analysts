@@ -1,9 +1,9 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { RuleRegistry } from '../../src/analyzer/rule-registry';
-import { RuleRunner } from '../../src/analyzer/rule-runner';
-import { ISeoRule, RuleCheckOutput } from '../../src/analyzer/interfaces/seo-rule.interface';
+import { RuleRegistry } from '../../src/analyzer/services/rule-registry';
+import { RuleRunner } from '../../src/analyzer/services/rule-runner';
+import { ISeoRule, RuleCheckOutput } from '../../src/analyzer/domain/seo-rule.interface';
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { makePageData } from '../../src/analyzer/test-fixtures/page-data.fixture';
+import { makePageData } from '../fixtures/page-data.fixture';
 
 function fakeRule(id: string, category: IssueCategory, status: CheckStatus, score: number): ISeoRule {
   return {
