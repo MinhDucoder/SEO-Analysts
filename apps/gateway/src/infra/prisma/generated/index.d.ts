@@ -28,6 +28,12 @@ export type RefreshToken = $Result.DefaultSelection<Prisma.$RefreshTokenPayload>
  * 
  */
 export type Audit = $Result.DefaultSelection<Prisma.$AuditPayload>
+/**
+ * Model PageAudit
+ * One row per URL crawled inside a SITE-mode audit. For SINGLE-mode
+ * audits this table stays empty; the Audit row itself holds the score.
+ */
+export type PageAudit = $Result.DefaultSelection<Prisma.$PageAuditPayload>
 
 /**
  * Enums
@@ -52,6 +58,14 @@ export const AuditStatus: {
 
 export type AuditStatus = (typeof AuditStatus)[keyof typeof AuditStatus]
 
+
+export const AuditMode: {
+  single: 'single',
+  site: 'site'
+};
+
+export type AuditMode = (typeof AuditMode)[keyof typeof AuditMode]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -61,6 +75,10 @@ export const UserRole: typeof $Enums.UserRole
 export type AuditStatus = $Enums.AuditStatus
 
 export const AuditStatus: typeof $Enums.AuditStatus
+
+export type AuditMode = $Enums.AuditMode
+
+export const AuditMode: typeof $Enums.AuditMode
 
 /**
  * ##  Prisma Client ʲˢ
@@ -214,6 +232,16 @@ export class PrismaClient<
     * ```
     */
   get audit(): Prisma.AuditDelegate<ExtArgs>;
+
+  /**
+   * `prisma.pageAudit`: Exposes CRUD operations for the **PageAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PageAudits
+    * const pageAudits = await prisma.pageAudit.findMany()
+    * ```
+    */
+  get pageAudit(): Prisma.PageAuditDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -657,7 +685,8 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     RefreshToken: 'RefreshToken',
-    Audit: 'Audit'
+    Audit: 'Audit',
+    PageAudit: 'PageAudit'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -673,7 +702,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "refreshToken" | "audit"
+      modelProps: "user" | "refreshToken" | "audit" | "pageAudit"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -887,6 +916,76 @@ export namespace Prisma {
           }
         }
       }
+      PageAudit: {
+        payload: Prisma.$PageAuditPayload<ExtArgs>
+        fields: Prisma.PageAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PageAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PageAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.PageAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PageAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>
+          }
+          findMany: {
+            args: Prisma.PageAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>[]
+          }
+          create: {
+            args: Prisma.PageAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>
+          }
+          createMany: {
+            args: Prisma.PageAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PageAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.PageAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>
+          }
+          update: {
+            args: Prisma.PageAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.PageAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PageAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PageAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.PageAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePageAudit>
+          }
+          groupBy: {
+            args: Prisma.PageAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PageAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PageAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<PageAuditCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1080,6 +1179,37 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAuditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditWhereInput
+  }
+
+
+  /**
+   * Count Type AuditCountOutputType
+   */
+
+  export type AuditCountOutputType = {
+    pageAudits: number
+  }
+
+  export type AuditCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pageAudits?: boolean | AuditCountOutputTypeCountPageAuditsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AuditCountOutputType without action
+   */
+  export type AuditCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditCountOutputType
+     */
+    select?: AuditCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AuditCountOutputType without action
+   */
+  export type AuditCountOutputTypeCountPageAuditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageAuditWhereInput
   }
 
 
@@ -3115,11 +3245,15 @@ export namespace Prisma {
   export type AuditAvgAggregateOutputType = {
     seoScore: Decimal | null
     crawlDurationMs: number | null
+    discoveredUrlsCount: number | null
+    auditedUrlsCount: number | null
   }
 
   export type AuditSumAggregateOutputType = {
     seoScore: Decimal | null
     crawlDurationMs: number | null
+    discoveredUrlsCount: number | null
+    auditedUrlsCount: number | null
   }
 
   export type AuditMinAggregateOutputType = {
@@ -3128,11 +3262,14 @@ export namespace Prisma {
     url: string | null
     domain: string | null
     status: $Enums.AuditStatus | null
+    mode: $Enums.AuditMode | null
     seoScore: Decimal | null
     targetKeyword: string | null
     errorMessage: string | null
     crawlerType: string | null
     crawlDurationMs: number | null
+    discoveredUrlsCount: number | null
+    auditedUrlsCount: number | null
     completedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3144,11 +3281,14 @@ export namespace Prisma {
     url: string | null
     domain: string | null
     status: $Enums.AuditStatus | null
+    mode: $Enums.AuditMode | null
     seoScore: Decimal | null
     targetKeyword: string | null
     errorMessage: string | null
     crawlerType: string | null
     crawlDurationMs: number | null
+    discoveredUrlsCount: number | null
+    auditedUrlsCount: number | null
     completedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3160,11 +3300,14 @@ export namespace Prisma {
     url: number
     domain: number
     status: number
+    mode: number
     seoScore: number
     targetKeyword: number
     errorMessage: number
     crawlerType: number
     crawlDurationMs: number
+    discoveredUrlsCount: number
+    auditedUrlsCount: number
     completedAt: number
     createdAt: number
     updatedAt: number
@@ -3175,11 +3318,15 @@ export namespace Prisma {
   export type AuditAvgAggregateInputType = {
     seoScore?: true
     crawlDurationMs?: true
+    discoveredUrlsCount?: true
+    auditedUrlsCount?: true
   }
 
   export type AuditSumAggregateInputType = {
     seoScore?: true
     crawlDurationMs?: true
+    discoveredUrlsCount?: true
+    auditedUrlsCount?: true
   }
 
   export type AuditMinAggregateInputType = {
@@ -3188,11 +3335,14 @@ export namespace Prisma {
     url?: true
     domain?: true
     status?: true
+    mode?: true
     seoScore?: true
     targetKeyword?: true
     errorMessage?: true
     crawlerType?: true
     crawlDurationMs?: true
+    discoveredUrlsCount?: true
+    auditedUrlsCount?: true
     completedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3204,11 +3354,14 @@ export namespace Prisma {
     url?: true
     domain?: true
     status?: true
+    mode?: true
     seoScore?: true
     targetKeyword?: true
     errorMessage?: true
     crawlerType?: true
     crawlDurationMs?: true
+    discoveredUrlsCount?: true
+    auditedUrlsCount?: true
     completedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3220,11 +3373,14 @@ export namespace Prisma {
     url?: true
     domain?: true
     status?: true
+    mode?: true
     seoScore?: true
     targetKeyword?: true
     errorMessage?: true
     crawlerType?: true
     crawlDurationMs?: true
+    discoveredUrlsCount?: true
+    auditedUrlsCount?: true
     completedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3323,11 +3479,14 @@ export namespace Prisma {
     url: string
     domain: string
     status: $Enums.AuditStatus
+    mode: $Enums.AuditMode
     seoScore: Decimal | null
     targetKeyword: string | null
     errorMessage: string | null
     crawlerType: string | null
     crawlDurationMs: number | null
+    discoveredUrlsCount: number | null
+    auditedUrlsCount: number | null
     completedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -3358,15 +3517,20 @@ export namespace Prisma {
     url?: boolean
     domain?: boolean
     status?: boolean
+    mode?: boolean
     seoScore?: boolean
     targetKeyword?: boolean
     errorMessage?: boolean
     crawlerType?: boolean
     crawlDurationMs?: boolean
+    discoveredUrlsCount?: boolean
+    auditedUrlsCount?: boolean
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    pageAudits?: boolean | Audit$pageAuditsArgs<ExtArgs>
+    _count?: boolean | AuditCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["audit"]>
 
   export type AuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3375,11 +3539,14 @@ export namespace Prisma {
     url?: boolean
     domain?: boolean
     status?: boolean
+    mode?: boolean
     seoScore?: boolean
     targetKeyword?: boolean
     errorMessage?: boolean
     crawlerType?: boolean
     crawlDurationMs?: boolean
+    discoveredUrlsCount?: boolean
+    auditedUrlsCount?: boolean
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3392,11 +3559,14 @@ export namespace Prisma {
     url?: boolean
     domain?: boolean
     status?: boolean
+    mode?: boolean
     seoScore?: boolean
     targetKeyword?: boolean
     errorMessage?: boolean
     crawlerType?: boolean
     crawlDurationMs?: boolean
+    discoveredUrlsCount?: boolean
+    auditedUrlsCount?: boolean
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3404,6 +3574,8 @@ export namespace Prisma {
 
   export type AuditInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    pageAudits?: boolean | Audit$pageAuditsArgs<ExtArgs>
+    _count?: boolean | AuditCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AuditIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3413,6 +3585,7 @@ export namespace Prisma {
     name: "Audit"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      pageAudits: Prisma.$PageAuditPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3420,11 +3593,14 @@ export namespace Prisma {
       url: string
       domain: string
       status: $Enums.AuditStatus
+      mode: $Enums.AuditMode
       seoScore: Prisma.Decimal | null
       targetKeyword: string | null
       errorMessage: string | null
       crawlerType: string | null
       crawlDurationMs: number | null
+      discoveredUrlsCount: number | null
+      auditedUrlsCount: number | null
       completedAt: Date | null
       createdAt: Date
       updatedAt: Date
@@ -3793,6 +3969,7 @@ export namespace Prisma {
   export interface Prisma__AuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    pageAudits<T extends Audit$pageAuditsArgs<ExtArgs> = {}>(args?: Subset<T, Audit$pageAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3827,11 +4004,14 @@ export namespace Prisma {
     readonly url: FieldRef<"Audit", 'String'>
     readonly domain: FieldRef<"Audit", 'String'>
     readonly status: FieldRef<"Audit", 'AuditStatus'>
+    readonly mode: FieldRef<"Audit", 'AuditMode'>
     readonly seoScore: FieldRef<"Audit", 'Decimal'>
     readonly targetKeyword: FieldRef<"Audit", 'String'>
     readonly errorMessage: FieldRef<"Audit", 'String'>
     readonly crawlerType: FieldRef<"Audit", 'String'>
     readonly crawlDurationMs: FieldRef<"Audit", 'Int'>
+    readonly discoveredUrlsCount: FieldRef<"Audit", 'Int'>
+    readonly auditedUrlsCount: FieldRef<"Audit", 'Int'>
     readonly completedAt: FieldRef<"Audit", 'DateTime'>
     readonly createdAt: FieldRef<"Audit", 'DateTime'>
     readonly updatedAt: FieldRef<"Audit", 'DateTime'>
@@ -4153,6 +4333,26 @@ export namespace Prisma {
   }
 
   /**
+   * Audit.pageAudits
+   */
+  export type Audit$pageAuditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    where?: PageAuditWhereInput
+    orderBy?: PageAuditOrderByWithRelationInput | PageAuditOrderByWithRelationInput[]
+    cursor?: PageAuditWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PageAuditScalarFieldEnum | PageAuditScalarFieldEnum[]
+  }
+
+  /**
    * Audit without action
    */
   export type AuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4164,6 +4364,981 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AuditInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PageAudit
+   */
+
+  export type AggregatePageAudit = {
+    _count: PageAuditCountAggregateOutputType | null
+    _avg: PageAuditAvgAggregateOutputType | null
+    _sum: PageAuditSumAggregateOutputType | null
+    _min: PageAuditMinAggregateOutputType | null
+    _max: PageAuditMaxAggregateOutputType | null
+  }
+
+  export type PageAuditAvgAggregateOutputType = {
+    score: number | null
+  }
+
+  export type PageAuditSumAggregateOutputType = {
+    score: number | null
+  }
+
+  export type PageAuditMinAggregateOutputType = {
+    id: string | null
+    auditId: string | null
+    url: string | null
+    score: number | null
+    fetchedAt: Date | null
+  }
+
+  export type PageAuditMaxAggregateOutputType = {
+    id: string | null
+    auditId: string | null
+    url: string | null
+    score: number | null
+    fetchedAt: Date | null
+  }
+
+  export type PageAuditCountAggregateOutputType = {
+    id: number
+    auditId: number
+    url: number
+    score: number
+    issues: number
+    fetchedAt: number
+    _all: number
+  }
+
+
+  export type PageAuditAvgAggregateInputType = {
+    score?: true
+  }
+
+  export type PageAuditSumAggregateInputType = {
+    score?: true
+  }
+
+  export type PageAuditMinAggregateInputType = {
+    id?: true
+    auditId?: true
+    url?: true
+    score?: true
+    fetchedAt?: true
+  }
+
+  export type PageAuditMaxAggregateInputType = {
+    id?: true
+    auditId?: true
+    url?: true
+    score?: true
+    fetchedAt?: true
+  }
+
+  export type PageAuditCountAggregateInputType = {
+    id?: true
+    auditId?: true
+    url?: true
+    score?: true
+    issues?: true
+    fetchedAt?: true
+    _all?: true
+  }
+
+  export type PageAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PageAudit to aggregate.
+     */
+    where?: PageAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PageAudits to fetch.
+     */
+    orderBy?: PageAuditOrderByWithRelationInput | PageAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PageAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PageAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PageAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PageAudits
+    **/
+    _count?: true | PageAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PageAuditAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PageAuditSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PageAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PageAuditMaxAggregateInputType
+  }
+
+  export type GetPageAuditAggregateType<T extends PageAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregatePageAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePageAudit[P]>
+      : GetScalarType<T[P], AggregatePageAudit[P]>
+  }
+
+
+
+
+  export type PageAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageAuditWhereInput
+    orderBy?: PageAuditOrderByWithAggregationInput | PageAuditOrderByWithAggregationInput[]
+    by: PageAuditScalarFieldEnum[] | PageAuditScalarFieldEnum
+    having?: PageAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PageAuditCountAggregateInputType | true
+    _avg?: PageAuditAvgAggregateInputType
+    _sum?: PageAuditSumAggregateInputType
+    _min?: PageAuditMinAggregateInputType
+    _max?: PageAuditMaxAggregateInputType
+  }
+
+  export type PageAuditGroupByOutputType = {
+    id: string
+    auditId: string
+    url: string
+    score: number
+    issues: JsonValue
+    fetchedAt: Date
+    _count: PageAuditCountAggregateOutputType | null
+    _avg: PageAuditAvgAggregateOutputType | null
+    _sum: PageAuditSumAggregateOutputType | null
+    _min: PageAuditMinAggregateOutputType | null
+    _max: PageAuditMaxAggregateOutputType | null
+  }
+
+  type GetPageAuditGroupByPayload<T extends PageAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PageAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PageAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PageAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], PageAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PageAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    auditId?: boolean
+    url?: boolean
+    score?: boolean
+    issues?: boolean
+    fetchedAt?: boolean
+    audit?: boolean | AuditDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageAudit"]>
+
+  export type PageAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    auditId?: boolean
+    url?: boolean
+    score?: boolean
+    issues?: boolean
+    fetchedAt?: boolean
+    audit?: boolean | AuditDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageAudit"]>
+
+  export type PageAuditSelectScalar = {
+    id?: boolean
+    auditId?: boolean
+    url?: boolean
+    score?: boolean
+    issues?: boolean
+    fetchedAt?: boolean
+  }
+
+  export type PageAuditInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    audit?: boolean | AuditDefaultArgs<ExtArgs>
+  }
+  export type PageAuditIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    audit?: boolean | AuditDefaultArgs<ExtArgs>
+  }
+
+  export type $PageAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PageAudit"
+    objects: {
+      audit: Prisma.$AuditPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      auditId: string
+      url: string
+      score: number
+      issues: Prisma.JsonValue
+      fetchedAt: Date
+    }, ExtArgs["result"]["pageAudit"]>
+    composites: {}
+  }
+
+  type PageAuditGetPayload<S extends boolean | null | undefined | PageAuditDefaultArgs> = $Result.GetResult<Prisma.$PageAuditPayload, S>
+
+  type PageAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PageAuditFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PageAuditCountAggregateInputType | true
+    }
+
+  export interface PageAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PageAudit'], meta: { name: 'PageAudit' } }
+    /**
+     * Find zero or one PageAudit that matches the filter.
+     * @param {PageAuditFindUniqueArgs} args - Arguments to find a PageAudit
+     * @example
+     * // Get one PageAudit
+     * const pageAudit = await prisma.pageAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PageAuditFindUniqueArgs>(args: SelectSubset<T, PageAuditFindUniqueArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PageAudit that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PageAuditFindUniqueOrThrowArgs} args - Arguments to find a PageAudit
+     * @example
+     * // Get one PageAudit
+     * const pageAudit = await prisma.pageAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PageAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, PageAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PageAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditFindFirstArgs} args - Arguments to find a PageAudit
+     * @example
+     * // Get one PageAudit
+     * const pageAudit = await prisma.pageAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PageAuditFindFirstArgs>(args?: SelectSubset<T, PageAuditFindFirstArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PageAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditFindFirstOrThrowArgs} args - Arguments to find a PageAudit
+     * @example
+     * // Get one PageAudit
+     * const pageAudit = await prisma.pageAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PageAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, PageAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PageAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PageAudits
+     * const pageAudits = await prisma.pageAudit.findMany()
+     * 
+     * // Get first 10 PageAudits
+     * const pageAudits = await prisma.pageAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pageAuditWithIdOnly = await prisma.pageAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PageAuditFindManyArgs>(args?: SelectSubset<T, PageAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PageAudit.
+     * @param {PageAuditCreateArgs} args - Arguments to create a PageAudit.
+     * @example
+     * // Create one PageAudit
+     * const PageAudit = await prisma.pageAudit.create({
+     *   data: {
+     *     // ... data to create a PageAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends PageAuditCreateArgs>(args: SelectSubset<T, PageAuditCreateArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PageAudits.
+     * @param {PageAuditCreateManyArgs} args - Arguments to create many PageAudits.
+     * @example
+     * // Create many PageAudits
+     * const pageAudit = await prisma.pageAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PageAuditCreateManyArgs>(args?: SelectSubset<T, PageAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PageAudits and returns the data saved in the database.
+     * @param {PageAuditCreateManyAndReturnArgs} args - Arguments to create many PageAudits.
+     * @example
+     * // Create many PageAudits
+     * const pageAudit = await prisma.pageAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PageAudits and only return the `id`
+     * const pageAuditWithIdOnly = await prisma.pageAudit.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PageAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, PageAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PageAudit.
+     * @param {PageAuditDeleteArgs} args - Arguments to delete one PageAudit.
+     * @example
+     * // Delete one PageAudit
+     * const PageAudit = await prisma.pageAudit.delete({
+     *   where: {
+     *     // ... filter to delete one PageAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PageAuditDeleteArgs>(args: SelectSubset<T, PageAuditDeleteArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PageAudit.
+     * @param {PageAuditUpdateArgs} args - Arguments to update one PageAudit.
+     * @example
+     * // Update one PageAudit
+     * const pageAudit = await prisma.pageAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PageAuditUpdateArgs>(args: SelectSubset<T, PageAuditUpdateArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PageAudits.
+     * @param {PageAuditDeleteManyArgs} args - Arguments to filter PageAudits to delete.
+     * @example
+     * // Delete a few PageAudits
+     * const { count } = await prisma.pageAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PageAuditDeleteManyArgs>(args?: SelectSubset<T, PageAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PageAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PageAudits
+     * const pageAudit = await prisma.pageAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PageAuditUpdateManyArgs>(args: SelectSubset<T, PageAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PageAudit.
+     * @param {PageAuditUpsertArgs} args - Arguments to update or create a PageAudit.
+     * @example
+     * // Update or create a PageAudit
+     * const pageAudit = await prisma.pageAudit.upsert({
+     *   create: {
+     *     // ... data to create a PageAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PageAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PageAuditUpsertArgs>(args: SelectSubset<T, PageAuditUpsertArgs<ExtArgs>>): Prisma__PageAuditClient<$Result.GetResult<Prisma.$PageAuditPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PageAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditCountArgs} args - Arguments to filter PageAudits to count.
+     * @example
+     * // Count the number of PageAudits
+     * const count = await prisma.pageAudit.count({
+     *   where: {
+     *     // ... the filter for the PageAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends PageAuditCountArgs>(
+      args?: Subset<T, PageAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PageAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PageAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PageAuditAggregateArgs>(args: Subset<T, PageAuditAggregateArgs>): Prisma.PrismaPromise<GetPageAuditAggregateType<T>>
+
+    /**
+     * Group by PageAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PageAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PageAuditGroupByArgs['orderBy'] }
+        : { orderBy?: PageAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PageAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPageAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PageAudit model
+   */
+  readonly fields: PageAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PageAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PageAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    audit<T extends AuditDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AuditDefaultArgs<ExtArgs>>): Prisma__AuditClient<$Result.GetResult<Prisma.$AuditPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PageAudit model
+   */ 
+  interface PageAuditFieldRefs {
+    readonly id: FieldRef<"PageAudit", 'String'>
+    readonly auditId: FieldRef<"PageAudit", 'String'>
+    readonly url: FieldRef<"PageAudit", 'String'>
+    readonly score: FieldRef<"PageAudit", 'Int'>
+    readonly issues: FieldRef<"PageAudit", 'Json'>
+    readonly fetchedAt: FieldRef<"PageAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PageAudit findUnique
+   */
+  export type PageAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * Filter, which PageAudit to fetch.
+     */
+    where: PageAuditWhereUniqueInput
+  }
+
+  /**
+   * PageAudit findUniqueOrThrow
+   */
+  export type PageAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * Filter, which PageAudit to fetch.
+     */
+    where: PageAuditWhereUniqueInput
+  }
+
+  /**
+   * PageAudit findFirst
+   */
+  export type PageAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * Filter, which PageAudit to fetch.
+     */
+    where?: PageAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PageAudits to fetch.
+     */
+    orderBy?: PageAuditOrderByWithRelationInput | PageAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PageAudits.
+     */
+    cursor?: PageAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PageAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PageAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PageAudits.
+     */
+    distinct?: PageAuditScalarFieldEnum | PageAuditScalarFieldEnum[]
+  }
+
+  /**
+   * PageAudit findFirstOrThrow
+   */
+  export type PageAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * Filter, which PageAudit to fetch.
+     */
+    where?: PageAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PageAudits to fetch.
+     */
+    orderBy?: PageAuditOrderByWithRelationInput | PageAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PageAudits.
+     */
+    cursor?: PageAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PageAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PageAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PageAudits.
+     */
+    distinct?: PageAuditScalarFieldEnum | PageAuditScalarFieldEnum[]
+  }
+
+  /**
+   * PageAudit findMany
+   */
+  export type PageAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * Filter, which PageAudits to fetch.
+     */
+    where?: PageAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PageAudits to fetch.
+     */
+    orderBy?: PageAuditOrderByWithRelationInput | PageAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PageAudits.
+     */
+    cursor?: PageAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PageAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PageAudits.
+     */
+    skip?: number
+    distinct?: PageAuditScalarFieldEnum | PageAuditScalarFieldEnum[]
+  }
+
+  /**
+   * PageAudit create
+   */
+  export type PageAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PageAudit.
+     */
+    data: XOR<PageAuditCreateInput, PageAuditUncheckedCreateInput>
+  }
+
+  /**
+   * PageAudit createMany
+   */
+  export type PageAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PageAudits.
+     */
+    data: PageAuditCreateManyInput | PageAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PageAudit createManyAndReturn
+   */
+  export type PageAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PageAudits.
+     */
+    data: PageAuditCreateManyInput | PageAuditCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PageAudit update
+   */
+  export type PageAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PageAudit.
+     */
+    data: XOR<PageAuditUpdateInput, PageAuditUncheckedUpdateInput>
+    /**
+     * Choose, which PageAudit to update.
+     */
+    where: PageAuditWhereUniqueInput
+  }
+
+  /**
+   * PageAudit updateMany
+   */
+  export type PageAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PageAudits.
+     */
+    data: XOR<PageAuditUpdateManyMutationInput, PageAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which PageAudits to update
+     */
+    where?: PageAuditWhereInput
+  }
+
+  /**
+   * PageAudit upsert
+   */
+  export type PageAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PageAudit to update in case it exists.
+     */
+    where: PageAuditWhereUniqueInput
+    /**
+     * In case the PageAudit found by the `where` argument doesn't exist, create a new PageAudit with this data.
+     */
+    create: XOR<PageAuditCreateInput, PageAuditUncheckedCreateInput>
+    /**
+     * In case the PageAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PageAuditUpdateInput, PageAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * PageAudit delete
+   */
+  export type PageAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
+    /**
+     * Filter which PageAudit to delete.
+     */
+    where: PageAuditWhereUniqueInput
+  }
+
+  /**
+   * PageAudit deleteMany
+   */
+  export type PageAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PageAudits to delete
+     */
+    where?: PageAuditWhereInput
+  }
+
+  /**
+   * PageAudit without action
+   */
+  export type PageAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageAudit
+     */
+    select?: PageAuditSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageAuditInclude<ExtArgs> | null
   }
 
 
@@ -4218,11 +5393,14 @@ export namespace Prisma {
     url: 'url',
     domain: 'domain',
     status: 'status',
+    mode: 'mode',
     seoScore: 'seoScore',
     targetKeyword: 'targetKeyword',
     errorMessage: 'errorMessage',
     crawlerType: 'crawlerType',
     crawlDurationMs: 'crawlDurationMs',
+    discoveredUrlsCount: 'discoveredUrlsCount',
+    auditedUrlsCount: 'auditedUrlsCount',
     completedAt: 'completedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -4231,12 +5409,31 @@ export namespace Prisma {
   export type AuditScalarFieldEnum = (typeof AuditScalarFieldEnum)[keyof typeof AuditScalarFieldEnum]
 
 
+  export const PageAuditScalarFieldEnum: {
+    id: 'id',
+    auditId: 'auditId',
+    url: 'url',
+    score: 'score',
+    issues: 'issues',
+    fetchedAt: 'fetchedAt'
+  };
+
+  export type PageAuditScalarFieldEnum = (typeof PageAuditScalarFieldEnum)[keyof typeof PageAuditScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -4253,6 +5450,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -4324,6 +5530,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AuditMode'
+   */
+  export type EnumAuditModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuditMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'AuditMode[]'
+   */
+  export type ListEnumAuditModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuditMode[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -4348,6 +5568,13 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
     
 
 
@@ -4535,15 +5762,19 @@ export namespace Prisma {
     url?: StringFilter<"Audit"> | string
     domain?: StringFilter<"Audit"> | string
     status?: EnumAuditStatusFilter<"Audit"> | $Enums.AuditStatus
+    mode?: EnumAuditModeFilter<"Audit"> | $Enums.AuditMode
     seoScore?: DecimalNullableFilter<"Audit"> | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: StringNullableFilter<"Audit"> | string | null
     errorMessage?: StringNullableFilter<"Audit"> | string | null
     crawlerType?: StringNullableFilter<"Audit"> | string | null
     crawlDurationMs?: IntNullableFilter<"Audit"> | number | null
+    discoveredUrlsCount?: IntNullableFilter<"Audit"> | number | null
+    auditedUrlsCount?: IntNullableFilter<"Audit"> | number | null
     completedAt?: DateTimeNullableFilter<"Audit"> | Date | string | null
     createdAt?: DateTimeFilter<"Audit"> | Date | string
     updatedAt?: DateTimeFilter<"Audit"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
+    pageAudits?: PageAuditListRelationFilter
   }
 
   export type AuditOrderByWithRelationInput = {
@@ -4552,15 +5783,19 @@ export namespace Prisma {
     url?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    mode?: SortOrder
     seoScore?: SortOrderInput | SortOrder
     targetKeyword?: SortOrderInput | SortOrder
     errorMessage?: SortOrderInput | SortOrder
     crawlerType?: SortOrderInput | SortOrder
     crawlDurationMs?: SortOrderInput | SortOrder
+    discoveredUrlsCount?: SortOrderInput | SortOrder
+    auditedUrlsCount?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    pageAudits?: PageAuditOrderByRelationAggregateInput
   }
 
   export type AuditWhereUniqueInput = Prisma.AtLeast<{
@@ -4572,15 +5807,19 @@ export namespace Prisma {
     url?: StringFilter<"Audit"> | string
     domain?: StringFilter<"Audit"> | string
     status?: EnumAuditStatusFilter<"Audit"> | $Enums.AuditStatus
+    mode?: EnumAuditModeFilter<"Audit"> | $Enums.AuditMode
     seoScore?: DecimalNullableFilter<"Audit"> | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: StringNullableFilter<"Audit"> | string | null
     errorMessage?: StringNullableFilter<"Audit"> | string | null
     crawlerType?: StringNullableFilter<"Audit"> | string | null
     crawlDurationMs?: IntNullableFilter<"Audit"> | number | null
+    discoveredUrlsCount?: IntNullableFilter<"Audit"> | number | null
+    auditedUrlsCount?: IntNullableFilter<"Audit"> | number | null
     completedAt?: DateTimeNullableFilter<"Audit"> | Date | string | null
     createdAt?: DateTimeFilter<"Audit"> | Date | string
     updatedAt?: DateTimeFilter<"Audit"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
+    pageAudits?: PageAuditListRelationFilter
   }, "id">
 
   export type AuditOrderByWithAggregationInput = {
@@ -4589,11 +5828,14 @@ export namespace Prisma {
     url?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    mode?: SortOrder
     seoScore?: SortOrderInput | SortOrder
     targetKeyword?: SortOrderInput | SortOrder
     errorMessage?: SortOrderInput | SortOrder
     crawlerType?: SortOrderInput | SortOrder
     crawlDurationMs?: SortOrderInput | SortOrder
+    discoveredUrlsCount?: SortOrderInput | SortOrder
+    auditedUrlsCount?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4613,14 +5855,79 @@ export namespace Prisma {
     url?: StringWithAggregatesFilter<"Audit"> | string
     domain?: StringWithAggregatesFilter<"Audit"> | string
     status?: EnumAuditStatusWithAggregatesFilter<"Audit"> | $Enums.AuditStatus
+    mode?: EnumAuditModeWithAggregatesFilter<"Audit"> | $Enums.AuditMode
     seoScore?: DecimalNullableWithAggregatesFilter<"Audit"> | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: StringNullableWithAggregatesFilter<"Audit"> | string | null
     errorMessage?: StringNullableWithAggregatesFilter<"Audit"> | string | null
     crawlerType?: StringNullableWithAggregatesFilter<"Audit"> | string | null
     crawlDurationMs?: IntNullableWithAggregatesFilter<"Audit"> | number | null
+    discoveredUrlsCount?: IntNullableWithAggregatesFilter<"Audit"> | number | null
+    auditedUrlsCount?: IntNullableWithAggregatesFilter<"Audit"> | number | null
     completedAt?: DateTimeNullableWithAggregatesFilter<"Audit"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Audit"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Audit"> | Date | string
+  }
+
+  export type PageAuditWhereInput = {
+    AND?: PageAuditWhereInput | PageAuditWhereInput[]
+    OR?: PageAuditWhereInput[]
+    NOT?: PageAuditWhereInput | PageAuditWhereInput[]
+    id?: UuidFilter<"PageAudit"> | string
+    auditId?: UuidFilter<"PageAudit"> | string
+    url?: StringFilter<"PageAudit"> | string
+    score?: IntFilter<"PageAudit"> | number
+    issues?: JsonFilter<"PageAudit">
+    fetchedAt?: DateTimeFilter<"PageAudit"> | Date | string
+    audit?: XOR<AuditRelationFilter, AuditWhereInput>
+  }
+
+  export type PageAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    auditId?: SortOrder
+    url?: SortOrder
+    score?: SortOrder
+    issues?: SortOrder
+    fetchedAt?: SortOrder
+    audit?: AuditOrderByWithRelationInput
+  }
+
+  export type PageAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PageAuditWhereInput | PageAuditWhereInput[]
+    OR?: PageAuditWhereInput[]
+    NOT?: PageAuditWhereInput | PageAuditWhereInput[]
+    auditId?: UuidFilter<"PageAudit"> | string
+    url?: StringFilter<"PageAudit"> | string
+    score?: IntFilter<"PageAudit"> | number
+    issues?: JsonFilter<"PageAudit">
+    fetchedAt?: DateTimeFilter<"PageAudit"> | Date | string
+    audit?: XOR<AuditRelationFilter, AuditWhereInput>
+  }, "id">
+
+  export type PageAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    auditId?: SortOrder
+    url?: SortOrder
+    score?: SortOrder
+    issues?: SortOrder
+    fetchedAt?: SortOrder
+    _count?: PageAuditCountOrderByAggregateInput
+    _avg?: PageAuditAvgOrderByAggregateInput
+    _max?: PageAuditMaxOrderByAggregateInput
+    _min?: PageAuditMinOrderByAggregateInput
+    _sum?: PageAuditSumOrderByAggregateInput
+  }
+
+  export type PageAuditScalarWhereWithAggregatesInput = {
+    AND?: PageAuditScalarWhereWithAggregatesInput | PageAuditScalarWhereWithAggregatesInput[]
+    OR?: PageAuditScalarWhereWithAggregatesInput[]
+    NOT?: PageAuditScalarWhereWithAggregatesInput | PageAuditScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PageAudit"> | string
+    auditId?: UuidWithAggregatesFilter<"PageAudit"> | string
+    url?: StringWithAggregatesFilter<"PageAudit"> | string
+    score?: IntWithAggregatesFilter<"PageAudit"> | number
+    issues?: JsonWithAggregatesFilter<"PageAudit">
+    fetchedAt?: DateTimeWithAggregatesFilter<"PageAudit"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -4810,15 +6117,19 @@ export namespace Prisma {
     url: string
     domain: string
     status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
     seoScore?: Decimal | DecimalJsLike | number | string | null
     targetKeyword?: string | null
     errorMessage?: string | null
     crawlerType?: string | null
     crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutAuditsInput
+    pageAudits?: PageAuditCreateNestedManyWithoutAuditInput
   }
 
   export type AuditUncheckedCreateInput = {
@@ -4827,14 +6138,18 @@ export namespace Prisma {
     url: string
     domain: string
     status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
     seoScore?: Decimal | DecimalJsLike | number | string | null
     targetKeyword?: string | null
     errorMessage?: string | null
     crawlerType?: string | null
     crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    pageAudits?: PageAuditUncheckedCreateNestedManyWithoutAuditInput
   }
 
   export type AuditUpdateInput = {
@@ -4842,15 +6157,19 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAuditsNestedInput
+    pageAudits?: PageAuditUpdateManyWithoutAuditNestedInput
   }
 
   export type AuditUncheckedUpdateInput = {
@@ -4859,14 +6178,18 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pageAudits?: PageAuditUncheckedUpdateManyWithoutAuditNestedInput
   }
 
   export type AuditCreateManyInput = {
@@ -4875,11 +6198,14 @@ export namespace Prisma {
     url: string
     domain: string
     status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
     seoScore?: Decimal | DecimalJsLike | number | string | null
     targetKeyword?: string | null
     errorMessage?: string | null
     crawlerType?: string | null
     crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4890,11 +6216,14 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4906,14 +6235,79 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageAuditCreateInput = {
+    id?: string
+    url: string
+    score: number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: Date | string
+    audit: AuditCreateNestedOneWithoutPageAuditsInput
+  }
+
+  export type PageAuditUncheckedCreateInput = {
+    id?: string
+    auditId: string
+    url: string
+    score: number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: Date | string
+  }
+
+  export type PageAuditUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    audit?: AuditUpdateOneRequiredWithoutPageAuditsNestedInput
+  }
+
+  export type PageAuditUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    auditId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageAuditCreateManyInput = {
+    id?: string
+    auditId: string
+    url: string
+    score: number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: Date | string
+  }
+
+  export type PageAuditUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageAuditUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    auditId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -5176,6 +6570,13 @@ export namespace Prisma {
     not?: NestedEnumAuditStatusFilter<$PrismaModel> | $Enums.AuditStatus
   }
 
+  export type EnumAuditModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuditMode | EnumAuditModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAuditModeFilter<$PrismaModel> | $Enums.AuditMode
+  }
+
   export type DecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -5209,17 +6610,30 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type PageAuditListRelationFilter = {
+    every?: PageAuditWhereInput
+    some?: PageAuditWhereInput
+    none?: PageAuditWhereInput
+  }
+
+  export type PageAuditOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AuditCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     url?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    mode?: SortOrder
     seoScore?: SortOrder
     targetKeyword?: SortOrder
     errorMessage?: SortOrder
     crawlerType?: SortOrder
     crawlDurationMs?: SortOrder
+    discoveredUrlsCount?: SortOrder
+    auditedUrlsCount?: SortOrder
     completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5228,6 +6642,8 @@ export namespace Prisma {
   export type AuditAvgOrderByAggregateInput = {
     seoScore?: SortOrder
     crawlDurationMs?: SortOrder
+    discoveredUrlsCount?: SortOrder
+    auditedUrlsCount?: SortOrder
   }
 
   export type AuditMaxOrderByAggregateInput = {
@@ -5236,11 +6652,14 @@ export namespace Prisma {
     url?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    mode?: SortOrder
     seoScore?: SortOrder
     targetKeyword?: SortOrder
     errorMessage?: SortOrder
     crawlerType?: SortOrder
     crawlDurationMs?: SortOrder
+    discoveredUrlsCount?: SortOrder
+    auditedUrlsCount?: SortOrder
     completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5252,11 +6671,14 @@ export namespace Prisma {
     url?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    mode?: SortOrder
     seoScore?: SortOrder
     targetKeyword?: SortOrder
     errorMessage?: SortOrder
     crawlerType?: SortOrder
     crawlDurationMs?: SortOrder
+    discoveredUrlsCount?: SortOrder
+    auditedUrlsCount?: SortOrder
     completedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5265,6 +6687,8 @@ export namespace Prisma {
   export type AuditSumOrderByAggregateInput = {
     seoScore?: SortOrder
     crawlDurationMs?: SortOrder
+    discoveredUrlsCount?: SortOrder
+    auditedUrlsCount?: SortOrder
   }
 
   export type EnumAuditStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5275,6 +6699,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAuditStatusFilter<$PrismaModel>
     _max?: NestedEnumAuditStatusFilter<$PrismaModel>
+  }
+
+  export type EnumAuditModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuditMode | EnumAuditModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAuditModeWithAggregatesFilter<$PrismaModel> | $Enums.AuditMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAuditModeFilter<$PrismaModel>
+    _max?: NestedEnumAuditModeFilter<$PrismaModel>
   }
 
   export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5321,6 +6755,118 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type AuditRelationFilter = {
+    is?: AuditWhereInput
+    isNot?: AuditWhereInput
+  }
+
+  export type PageAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    auditId?: SortOrder
+    url?: SortOrder
+    score?: SortOrder
+    issues?: SortOrder
+    fetchedAt?: SortOrder
+  }
+
+  export type PageAuditAvgOrderByAggregateInput = {
+    score?: SortOrder
+  }
+
+  export type PageAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    auditId?: SortOrder
+    url?: SortOrder
+    score?: SortOrder
+    fetchedAt?: SortOrder
+  }
+
+  export type PageAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    auditId?: SortOrder
+    url?: SortOrder
+    score?: SortOrder
+    fetchedAt?: SortOrder
+  }
+
+  export type PageAuditSumOrderByAggregateInput = {
+    score?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type RefreshTokenCreateNestedManyWithoutUserInput = {
@@ -5447,8 +6993,26 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type PageAuditCreateNestedManyWithoutAuditInput = {
+    create?: XOR<PageAuditCreateWithoutAuditInput, PageAuditUncheckedCreateWithoutAuditInput> | PageAuditCreateWithoutAuditInput[] | PageAuditUncheckedCreateWithoutAuditInput[]
+    connectOrCreate?: PageAuditCreateOrConnectWithoutAuditInput | PageAuditCreateOrConnectWithoutAuditInput[]
+    createMany?: PageAuditCreateManyAuditInputEnvelope
+    connect?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+  }
+
+  export type PageAuditUncheckedCreateNestedManyWithoutAuditInput = {
+    create?: XOR<PageAuditCreateWithoutAuditInput, PageAuditUncheckedCreateWithoutAuditInput> | PageAuditCreateWithoutAuditInput[] | PageAuditUncheckedCreateWithoutAuditInput[]
+    connectOrCreate?: PageAuditCreateOrConnectWithoutAuditInput | PageAuditCreateOrConnectWithoutAuditInput[]
+    createMany?: PageAuditCreateManyAuditInputEnvelope
+    connect?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+  }
+
   export type EnumAuditStatusFieldUpdateOperationsInput = {
     set?: $Enums.AuditStatus
+  }
+
+  export type EnumAuditModeFieldUpdateOperationsInput = {
+    set?: $Enums.AuditMode
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -5477,6 +7041,56 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAuditsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditsInput, UserUpdateWithoutAuditsInput>, UserUncheckedUpdateWithoutAuditsInput>
+  }
+
+  export type PageAuditUpdateManyWithoutAuditNestedInput = {
+    create?: XOR<PageAuditCreateWithoutAuditInput, PageAuditUncheckedCreateWithoutAuditInput> | PageAuditCreateWithoutAuditInput[] | PageAuditUncheckedCreateWithoutAuditInput[]
+    connectOrCreate?: PageAuditCreateOrConnectWithoutAuditInput | PageAuditCreateOrConnectWithoutAuditInput[]
+    upsert?: PageAuditUpsertWithWhereUniqueWithoutAuditInput | PageAuditUpsertWithWhereUniqueWithoutAuditInput[]
+    createMany?: PageAuditCreateManyAuditInputEnvelope
+    set?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    disconnect?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    delete?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    connect?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    update?: PageAuditUpdateWithWhereUniqueWithoutAuditInput | PageAuditUpdateWithWhereUniqueWithoutAuditInput[]
+    updateMany?: PageAuditUpdateManyWithWhereWithoutAuditInput | PageAuditUpdateManyWithWhereWithoutAuditInput[]
+    deleteMany?: PageAuditScalarWhereInput | PageAuditScalarWhereInput[]
+  }
+
+  export type PageAuditUncheckedUpdateManyWithoutAuditNestedInput = {
+    create?: XOR<PageAuditCreateWithoutAuditInput, PageAuditUncheckedCreateWithoutAuditInput> | PageAuditCreateWithoutAuditInput[] | PageAuditUncheckedCreateWithoutAuditInput[]
+    connectOrCreate?: PageAuditCreateOrConnectWithoutAuditInput | PageAuditCreateOrConnectWithoutAuditInput[]
+    upsert?: PageAuditUpsertWithWhereUniqueWithoutAuditInput | PageAuditUpsertWithWhereUniqueWithoutAuditInput[]
+    createMany?: PageAuditCreateManyAuditInputEnvelope
+    set?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    disconnect?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    delete?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    connect?: PageAuditWhereUniqueInput | PageAuditWhereUniqueInput[]
+    update?: PageAuditUpdateWithWhereUniqueWithoutAuditInput | PageAuditUpdateWithWhereUniqueWithoutAuditInput[]
+    updateMany?: PageAuditUpdateManyWithWhereWithoutAuditInput | PageAuditUpdateManyWithWhereWithoutAuditInput[]
+    deleteMany?: PageAuditScalarWhereInput | PageAuditScalarWhereInput[]
+  }
+
+  export type AuditCreateNestedOneWithoutPageAuditsInput = {
+    create?: XOR<AuditCreateWithoutPageAuditsInput, AuditUncheckedCreateWithoutPageAuditsInput>
+    connectOrCreate?: AuditCreateOrConnectWithoutPageAuditsInput
+    connect?: AuditWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type AuditUpdateOneRequiredWithoutPageAuditsNestedInput = {
+    create?: XOR<AuditCreateWithoutPageAuditsInput, AuditUncheckedCreateWithoutPageAuditsInput>
+    connectOrCreate?: AuditCreateOrConnectWithoutPageAuditsInput
+    upsert?: AuditUpsertWithoutPageAuditsInput
+    connect?: AuditWhereUniqueInput
+    update?: XOR<XOR<AuditUpdateToOneWithWhereWithoutPageAuditsInput, AuditUpdateWithoutPageAuditsInput>, AuditUncheckedUpdateWithoutPageAuditsInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -5650,6 +7264,13 @@ export namespace Prisma {
     not?: NestedEnumAuditStatusFilter<$PrismaModel> | $Enums.AuditStatus
   }
 
+  export type NestedEnumAuditModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuditMode | EnumAuditModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAuditModeFilter<$PrismaModel> | $Enums.AuditMode
+  }
+
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -5680,6 +7301,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAuditStatusFilter<$PrismaModel>
     _max?: NestedEnumAuditStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAuditModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuditMode | EnumAuditModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AuditMode[] | ListEnumAuditModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAuditModeWithAggregatesFilter<$PrismaModel> | $Enums.AuditMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAuditModeFilter<$PrismaModel>
+    _max?: NestedEnumAuditModeFilter<$PrismaModel>
   }
 
   export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5739,6 +7370,55 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+  export type NestedJsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type RefreshTokenCreateWithoutUserInput = {
     id?: string
     tokenHash: string
@@ -5774,14 +7454,18 @@ export namespace Prisma {
     url: string
     domain: string
     status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
     seoScore?: Decimal | DecimalJsLike | number | string | null
     targetKeyword?: string | null
     errorMessage?: string | null
     crawlerType?: string | null
     crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    pageAudits?: PageAuditCreateNestedManyWithoutAuditInput
   }
 
   export type AuditUncheckedCreateWithoutUserInput = {
@@ -5789,14 +7473,18 @@ export namespace Prisma {
     url: string
     domain: string
     status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
     seoScore?: Decimal | DecimalJsLike | number | string | null
     targetKeyword?: string | null
     errorMessage?: string | null
     crawlerType?: string | null
     crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    pageAudits?: PageAuditUncheckedCreateNestedManyWithoutAuditInput
   }
 
   export type AuditCreateOrConnectWithoutUserInput = {
@@ -5864,11 +7552,14 @@ export namespace Prisma {
     url?: StringFilter<"Audit"> | string
     domain?: StringFilter<"Audit"> | string
     status?: EnumAuditStatusFilter<"Audit"> | $Enums.AuditStatus
+    mode?: EnumAuditModeFilter<"Audit"> | $Enums.AuditMode
     seoScore?: DecimalNullableFilter<"Audit"> | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: StringNullableFilter<"Audit"> | string | null
     errorMessage?: StringNullableFilter<"Audit"> | string | null
     crawlerType?: StringNullableFilter<"Audit"> | string | null
     crawlDurationMs?: IntNullableFilter<"Audit"> | number | null
+    discoveredUrlsCount?: IntNullableFilter<"Audit"> | number | null
+    auditedUrlsCount?: IntNullableFilter<"Audit"> | number | null
     completedAt?: DateTimeNullableFilter<"Audit"> | Date | string | null
     createdAt?: DateTimeFilter<"Audit"> | Date | string
     updatedAt?: DateTimeFilter<"Audit"> | Date | string
@@ -5985,6 +7676,32 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutAuditsInput, UserUncheckedCreateWithoutAuditsInput>
   }
 
+  export type PageAuditCreateWithoutAuditInput = {
+    id?: string
+    url: string
+    score: number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: Date | string
+  }
+
+  export type PageAuditUncheckedCreateWithoutAuditInput = {
+    id?: string
+    url: string
+    score: number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: Date | string
+  }
+
+  export type PageAuditCreateOrConnectWithoutAuditInput = {
+    where: PageAuditWhereUniqueInput
+    create: XOR<PageAuditCreateWithoutAuditInput, PageAuditUncheckedCreateWithoutAuditInput>
+  }
+
+  export type PageAuditCreateManyAuditInputEnvelope = {
+    data: PageAuditCreateManyAuditInput | PageAuditCreateManyAuditInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutAuditsInput = {
     update: XOR<UserUpdateWithoutAuditsInput, UserUncheckedUpdateWithoutAuditsInput>
     create: XOR<UserCreateWithoutAuditsInput, UserUncheckedCreateWithoutAuditsInput>
@@ -6026,6 +7743,126 @@ export namespace Prisma {
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type PageAuditUpsertWithWhereUniqueWithoutAuditInput = {
+    where: PageAuditWhereUniqueInput
+    update: XOR<PageAuditUpdateWithoutAuditInput, PageAuditUncheckedUpdateWithoutAuditInput>
+    create: XOR<PageAuditCreateWithoutAuditInput, PageAuditUncheckedCreateWithoutAuditInput>
+  }
+
+  export type PageAuditUpdateWithWhereUniqueWithoutAuditInput = {
+    where: PageAuditWhereUniqueInput
+    data: XOR<PageAuditUpdateWithoutAuditInput, PageAuditUncheckedUpdateWithoutAuditInput>
+  }
+
+  export type PageAuditUpdateManyWithWhereWithoutAuditInput = {
+    where: PageAuditScalarWhereInput
+    data: XOR<PageAuditUpdateManyMutationInput, PageAuditUncheckedUpdateManyWithoutAuditInput>
+  }
+
+  export type PageAuditScalarWhereInput = {
+    AND?: PageAuditScalarWhereInput | PageAuditScalarWhereInput[]
+    OR?: PageAuditScalarWhereInput[]
+    NOT?: PageAuditScalarWhereInput | PageAuditScalarWhereInput[]
+    id?: UuidFilter<"PageAudit"> | string
+    auditId?: UuidFilter<"PageAudit"> | string
+    url?: StringFilter<"PageAudit"> | string
+    score?: IntFilter<"PageAudit"> | number
+    issues?: JsonFilter<"PageAudit">
+    fetchedAt?: DateTimeFilter<"PageAudit"> | Date | string
+  }
+
+  export type AuditCreateWithoutPageAuditsInput = {
+    id?: string
+    url: string
+    domain: string
+    status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
+    seoScore?: Decimal | DecimalJsLike | number | string | null
+    targetKeyword?: string | null
+    errorMessage?: string | null
+    crawlerType?: string | null
+    crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAuditsInput
+  }
+
+  export type AuditUncheckedCreateWithoutPageAuditsInput = {
+    id?: string
+    userId: string
+    url: string
+    domain: string
+    status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
+    seoScore?: Decimal | DecimalJsLike | number | string | null
+    targetKeyword?: string | null
+    errorMessage?: string | null
+    crawlerType?: string | null
+    crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AuditCreateOrConnectWithoutPageAuditsInput = {
+    where: AuditWhereUniqueInput
+    create: XOR<AuditCreateWithoutPageAuditsInput, AuditUncheckedCreateWithoutPageAuditsInput>
+  }
+
+  export type AuditUpsertWithoutPageAuditsInput = {
+    update: XOR<AuditUpdateWithoutPageAuditsInput, AuditUncheckedUpdateWithoutPageAuditsInput>
+    create: XOR<AuditCreateWithoutPageAuditsInput, AuditUncheckedCreateWithoutPageAuditsInput>
+    where?: AuditWhereInput
+  }
+
+  export type AuditUpdateToOneWithWhereWithoutPageAuditsInput = {
+    where?: AuditWhereInput
+    data: XOR<AuditUpdateWithoutPageAuditsInput, AuditUncheckedUpdateWithoutPageAuditsInput>
+  }
+
+  export type AuditUpdateWithoutPageAuditsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
+    seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
+    crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAuditsNestedInput
+  }
+
+  export type AuditUncheckedUpdateWithoutPageAuditsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    domain?: StringFieldUpdateOperationsInput | string
+    status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
+    seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
+    crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RefreshTokenCreateManyUserInput = {
     id?: string
     tokenHash: string
@@ -6041,11 +7878,14 @@ export namespace Prisma {
     url: string
     domain: string
     status?: $Enums.AuditStatus
+    mode?: $Enums.AuditMode
     seoScore?: Decimal | DecimalJsLike | number | string | null
     targetKeyword?: string | null
     errorMessage?: string | null
     crawlerType?: string | null
     crawlDurationMs?: number | null
+    discoveredUrlsCount?: number | null
+    auditedUrlsCount?: number | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6086,14 +7926,18 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pageAudits?: PageAuditUpdateManyWithoutAuditNestedInput
   }
 
   export type AuditUncheckedUpdateWithoutUserInput = {
@@ -6101,14 +7945,18 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pageAudits?: PageAuditUncheckedUpdateManyWithoutAuditNestedInput
   }
 
   export type AuditUncheckedUpdateManyWithoutUserInput = {
@@ -6116,14 +7964,49 @@ export namespace Prisma {
     url?: StringFieldUpdateOperationsInput | string
     domain?: StringFieldUpdateOperationsInput | string
     status?: EnumAuditStatusFieldUpdateOperationsInput | $Enums.AuditStatus
+    mode?: EnumAuditModeFieldUpdateOperationsInput | $Enums.AuditMode
     seoScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     targetKeyword?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     crawlerType?: NullableStringFieldUpdateOperationsInput | string | null
     crawlDurationMs?: NullableIntFieldUpdateOperationsInput | number | null
+    discoveredUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
+    auditedUrlsCount?: NullableIntFieldUpdateOperationsInput | number | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageAuditCreateManyAuditInput = {
+    id?: string
+    url: string
+    score: number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: Date | string
+  }
+
+  export type PageAuditUpdateWithoutAuditInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageAuditUncheckedUpdateWithoutAuditInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageAuditUncheckedUpdateManyWithoutAuditInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    issues?: JsonNullValueInput | InputJsonValue
+    fetchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
@@ -6136,6 +8019,10 @@ export namespace Prisma {
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use AuditCountOutputTypeDefaultArgs instead
+     */
+    export type AuditCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
@@ -6147,6 +8034,10 @@ export namespace Prisma {
      * @deprecated Use AuditDefaultArgs instead
      */
     export type AuditArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PageAuditDefaultArgs instead
+     */
+    export type PageAuditArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PageAuditDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

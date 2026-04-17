@@ -153,19 +153,35 @@ exports.Prisma.AuditScalarFieldEnum = {
   url: 'url',
   domain: 'domain',
   status: 'status',
+  mode: 'mode',
   seoScore: 'seoScore',
   targetKeyword: 'targetKeyword',
   errorMessage: 'errorMessage',
   crawlerType: 'crawlerType',
   crawlDurationMs: 'crawlDurationMs',
+  discoveredUrlsCount: 'discoveredUrlsCount',
+  auditedUrlsCount: 'auditedUrlsCount',
   completedAt: 'completedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PageAuditScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  url: 'url',
+  score: 'score',
+  issues: 'issues',
+  fetchedAt: 'fetchedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -176,6 +192,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.UserRole = exports.$Enums.UserRole = {
   user: 'user',
@@ -191,10 +213,16 @@ exports.AuditStatus = exports.$Enums.AuditStatus = {
   failed: 'failed'
 };
 
+exports.AuditMode = exports.$Enums.AuditMode = {
+  single: 'single',
+  site: 'site'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
-  Audit: 'Audit'
+  Audit: 'Audit',
+  PageAudit: 'PageAudit'
 };
 
 /**
