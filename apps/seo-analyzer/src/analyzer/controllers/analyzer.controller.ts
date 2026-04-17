@@ -1,3 +1,9 @@
+/**
+ * @file gRPC surface of the analyzer service.
+ * Sync analyze is mainly for admin tooling; production traffic goes
+ * through `AnalyzerWorker` (BullMQ). Also exposes rule-management RPCs.
+ * Proto: `packages/proto/analyzer/v1/analyzer.proto`.
+ */
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { AnalyzerService } from '../services/analyzer.service';

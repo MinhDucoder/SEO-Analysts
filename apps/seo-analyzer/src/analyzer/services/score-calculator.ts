@@ -1,3 +1,8 @@
+/**
+ * @file Weighted-average scoring on top of rule results.
+ * Overall score = Σ(ruleScore × ruleWeight) / Σ(ruleWeight).
+ * Classification thresholds: ≥80 excellent, ≥60 good, ≥40 fair, else poor.
+ */
 import { Injectable } from '@nestjs/common';
 import { CheckStatus, Classification, IssueCategory } from '@repo/shared';
 import type { RunnerResult } from './rule-runner';

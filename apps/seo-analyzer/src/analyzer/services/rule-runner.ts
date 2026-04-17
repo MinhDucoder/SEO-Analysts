@@ -1,3 +1,8 @@
+/**
+ * @file Executes every enabled rule against a single page.
+ * Rule exceptions are caught and converted to FAIL results so one
+ * buggy rule cannot abort the whole analysis for an audit.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { RuleRegistry } from './rule-registry';
@@ -24,6 +29,10 @@ export class RuleRunner {
 
   constructor(private readonly registry: RuleRegistry) {}
 
+  /**
+   * Run every DB-enabled rule that has a matching implementation. Rules
+   * missing an impl are skipped with a warn log (DB → code drift detection).
+   */
   runAll(pageData: PageData, dbRules: DbRule[], targetKeyword?: string): RunnerResult[] {
     const out: RunnerResult[] = [];
     for (const db of dbRules) {

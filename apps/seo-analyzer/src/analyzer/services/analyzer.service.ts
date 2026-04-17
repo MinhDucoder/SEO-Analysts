@@ -1,3 +1,8 @@
+/**
+ * @file Top-level orchestrator for SEO analysis. Loads enabled rules
+ * from DB, runs them against the provided PageData, persists per-rule
+ * results, and returns aggregated scores + classification.
+ */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CheckStatus, IssueCategory, Classification } from '@repo/shared';
 import { PrismaService } from '../../infra/prisma/prisma.service';
@@ -32,6 +37,13 @@ export class AnalyzerService implements OnModuleInit {
     this.logger.log(`Registered ${this.registry.getAll().length} SEO rules`);
   }
 
+  /**
+   * Analyze a single page. The DB is the source of truth for rule
+   * weights & enabled flags so admins can tune scoring without a deploy.
+   *
+   * @returns Per-rule results + category breakdown + overall score +
+   *   classification. All rule_results rows are persisted in a batch.
+   */
   async analyze(auditId: string, pageData: PageData, targetKeyword?: string): Promise<AnalyzeResult> {
     const dbRows = await this.prisma.seoRule.findMany({
       where: { isEnabled: true },

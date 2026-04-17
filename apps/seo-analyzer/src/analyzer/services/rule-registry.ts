@@ -1,3 +1,8 @@
+/**
+ * @file In-memory lookup of rule implementations by id.
+ * Registry is populated once at module init and never mutated at runtime
+ * — safe to share across concurrent requests without synchronization.
+ */
 import { Injectable } from '@nestjs/common';
 import { IssueCategory } from '@repo/shared';
 import { ISeoRule } from '../domain/seo-rule.interface';

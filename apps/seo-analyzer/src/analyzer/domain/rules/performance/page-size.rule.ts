@@ -1,3 +1,6 @@
+/**
+ * @file Rule: page weight below performance budget.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

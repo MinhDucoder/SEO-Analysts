@@ -1,3 +1,8 @@
+/**
+ * @file Central rule registration — every new rule must be added here.
+ * Called once at module init (`AnalyzerService.onModuleInit`) so the
+ * registry mirrors the 20 rows seeded in the `seo_rules` table.
+ */
 import { RuleRegistry } from '../../services/rule-registry';
 import { TitleTagRule } from './meta/title-tag.rule';
 import { MetaDescriptionRule } from './meta/meta-description.rule';
@@ -20,6 +25,7 @@ import { LanguageTagRule } from './technical/language-tag.rule';
 import { FaviconRule } from './technical/favicon.rule';
 import { PageSizeRule } from './performance/page-size.rule';
 
+/** Register all built-in rules into the given registry. Idempotent. */
 export function registerAllRules(registry: RuleRegistry): void {
   registry.register(new TitleTagRule());
   registry.register(new MetaDescriptionRule());

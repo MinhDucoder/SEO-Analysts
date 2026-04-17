@@ -1,3 +1,6 @@
+/**
+ * @file Rule: modern formats (webp/avif) + reasonable file sizes.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

@@ -1,3 +1,6 @@
+/**
+ * @file Rule: Twitter Card meta tags (twitter:card, twitter:title, twitter:description).
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

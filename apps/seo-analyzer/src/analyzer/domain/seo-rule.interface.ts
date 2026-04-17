@@ -1,3 +1,8 @@
+/**
+ * @file Core contract every SEO rule must implement. The `RuleRunner`
+ * invokes `check()` on each rule and persists the `RuleCheckOutput`.
+ * Score convention: 0 = fail, 50 = warn, 100 = pass.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { PageData } from './page-data.interface';
 

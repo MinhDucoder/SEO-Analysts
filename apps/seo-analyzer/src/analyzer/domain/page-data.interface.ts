@@ -1,3 +1,7 @@
+/**
+ * @file Analyzer-local mirror of the crawler's PageData shape.
+ * Decoupled so each service can evolve its own fields without breaking the other.
+ */
 import { ImageInfo, LinkInfo } from '@repo/shared';
 
 export interface PageData {

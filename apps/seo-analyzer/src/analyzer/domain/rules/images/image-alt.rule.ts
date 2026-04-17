@@ -1,3 +1,6 @@
+/**
+ * @file Rule: every image has a non-empty alt attribute.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

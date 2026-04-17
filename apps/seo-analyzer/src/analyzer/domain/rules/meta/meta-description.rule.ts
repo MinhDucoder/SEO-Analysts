@@ -1,3 +1,6 @@
+/**
+ * @file Rule: meta description present + optimal length (120-160 chars).
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

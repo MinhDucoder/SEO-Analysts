@@ -1,3 +1,6 @@
+/**
+ * @file Rule: HTTP status 200 (or acceptable 3xx).
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

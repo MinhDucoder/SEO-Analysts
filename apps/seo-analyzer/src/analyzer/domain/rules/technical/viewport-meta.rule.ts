@@ -1,3 +1,6 @@
+/**
+ * @file Rule: mobile-friendly viewport meta tag present.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

@@ -1,3 +1,6 @@
+/**
+ * @file Rule: proper heading hierarchy — no skipped levels.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

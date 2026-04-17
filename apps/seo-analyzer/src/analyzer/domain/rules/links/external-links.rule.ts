@@ -1,3 +1,6 @@
+/**
+ * @file Rule: external-link hygiene (rel=nofollow where appropriate).
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';

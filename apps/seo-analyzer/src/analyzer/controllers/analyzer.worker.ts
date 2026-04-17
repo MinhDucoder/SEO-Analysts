@@ -1,3 +1,8 @@
+/**
+ * @file BullMQ worker for `analyze.start`. Runs the SEO analysis,
+ * caches result in Redis for the Report service, and bumps the
+ * per-audit completed-steps set + publishes `analyze.done`.
+ */
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';

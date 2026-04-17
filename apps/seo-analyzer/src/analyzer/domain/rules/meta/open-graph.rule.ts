@@ -1,3 +1,6 @@
+/**
+ * @file Rule: required Open Graph tags (og:title, og:description, og:image, og:url).
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';
