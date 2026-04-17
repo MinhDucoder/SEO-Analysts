@@ -15,7 +15,7 @@ const CWV_WEIGHT = 0.3;
 @Injectable()
 export class ReportAggregator {
   aggregate(inputs: ReportInputs): AggregatedReport {
-    const { analyze, cwv } = inputs;
+    const { analyze, cwv, cwvDesktop } = inputs;
 
     const blended =
       analyze.overallScore * ANALYZER_WEIGHT + cwv.performanceScore * CWV_WEIGHT;
@@ -52,6 +52,7 @@ export class ReportAggregator {
       passCount,
       analysisSnapshot: analyze,
       cwvSnapshot: cwv,
+      cwvDesktopSnapshot: cwvDesktop,
     };
   }
 }

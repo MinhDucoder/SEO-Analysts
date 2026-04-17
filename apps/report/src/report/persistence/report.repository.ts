@@ -14,6 +14,7 @@ export interface CreateFullReportInput {
   aggregated: AggregatedReport;
   keywords: KeywordResultItem[];
   cwv: CoreWebVitals;
+  cwvDesktop?: CoreWebVitals;
 }
 
 @Injectable()
@@ -21,7 +22,7 @@ export class ReportRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async createFullReport(input: CreateFullReportInput) {
-    const { auditId, aggregated, keywords, cwv } = input;
+    const { auditId, aggregated, keywords, cwv, cwvDesktop } = input;
 
     return this.prisma.$transaction(async (tx) => {
       const report = await tx.report.create({
@@ -67,6 +68,17 @@ export class ReportRepository {
           accessibilityScore: cwv.accessibilityScore,
           bestPracticesScore: cwv.bestPracticesScore,
           lighthouseSeoScore: cwv.seoScore,
+          ...(cwvDesktop
+            ? {
+                desktopLcpMs: cwvDesktop.lcpMs,
+                desktopInpMs: cwvDesktop.inpMs,
+                desktopCls: cwvDesktop.cls,
+                desktopPerformanceScore: cwvDesktop.performanceScore,
+                desktopAccessibilityScore: cwvDesktop.accessibilityScore,
+                desktopBestPracticesScore: cwvDesktop.bestPracticesScore,
+                desktopLighthouseSeoScore: cwvDesktop.seoScore,
+              }
+            : {}),
         },
       });
 

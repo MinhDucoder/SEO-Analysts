@@ -68,6 +68,51 @@ describe('ReportRepository', () => {
     expect(created.id).toBe('rep-1');
   });
 
+  it('persists desktop CWV fields on ReportCwv when cwvDesktop is provided', async () => {
+    tx.report.create.mockResolvedValueOnce({ id: 'rep-2', auditId: 'aud-2', finalScore: 75 });
+    const aggregated = {
+      url: 'https://example.com/', domain: 'example.com', finalScore: 75,
+      classification: 'good', totalIssues: 0, criticalIssues: 0, warnIssues: 0, passCount: 0,
+      analysisSnapshot: makeAnalyzeResult(), cwvSnapshot: makeCwv(),
+    };
+    const mobile  = { lcpMs: 1800, inpMs: 180, cls: 0.08, performanceScore: 82, accessibilityScore: 88, bestPracticesScore: 90, seoScore: 92 };
+    const desktop = { lcpMs:  900, inpMs:  70, cls: 0.02, performanceScore: 96, accessibilityScore: 94, bestPracticesScore: 97, seoScore: 98 };
+
+    await repo.createFullReport({
+      auditId: 'aud-2',
+      aggregated,
+      keywords: [],
+      cwv: mobile,
+      cwvDesktop: desktop,
+    });
+
+    expect(tx.reportCwv.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        reportId: 'rep-2',
+        lcpMs: 1800,
+        performanceScore: 82,
+        desktopLcpMs: 900,
+        desktopPerformanceScore: 96,
+        desktopAccessibilityScore: 94,
+        desktopBestPracticesScore: 97,
+        desktopLighthouseSeoScore: 98,
+      }),
+    });
+  });
+
+  it('omits desktop fields when cwvDesktop is absent', async () => {
+    tx.report.create.mockResolvedValueOnce({ id: 'rep-3', auditId: 'aud-3', finalScore: 50 });
+    const aggregated = {
+      url: 'https://example.com/', domain: 'example.com', finalScore: 50,
+      classification: 'fair', totalIssues: 0, criticalIssues: 0, warnIssues: 0, passCount: 0,
+      analysisSnapshot: makeAnalyzeResult(), cwvSnapshot: makeCwv(),
+    };
+    await repo.createFullReport({ auditId: 'aud-3', aggregated, keywords: [], cwv: makeCwv() });
+    const call = tx.reportCwv.create.mock.calls[0][0];
+    expect(call.data.desktopLcpMs).toBeUndefined();
+    expect(call.data.desktopPerformanceScore).toBeUndefined();
+  });
+
   it('findByAuditId returns report with relations', async () => {
     prismaMock.report.findUnique.mockResolvedValueOnce({ id: 'r1', auditId: 'aud-1' });
     const found = await repo.findByAuditId('aud-1');

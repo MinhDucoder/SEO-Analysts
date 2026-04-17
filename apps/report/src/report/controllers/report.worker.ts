@@ -33,20 +33,29 @@ export class ReportWorker extends WorkerHost {
     const { auditId } = job.data;
     this.logger.log(`processing report.start for ${auditId}`);
 
-    // Read both payloads up-front to derive url + domain + cwv from the analyze snapshot
+    const ZERO_CWV = {
+      lcpMs: 0, inpMs: 0, cls: 0,
+      performanceScore: 0, accessibilityScore: 0, bestPracticesScore: 0, seoScore: 0,
+    };
+
+    // Pull analyze (required) + crawl (optional — present when the crawler
+    // published crawl.done after this service started subscribing). Crawl
+    // carries the real Lighthouse CWV for both mobile and desktop; analyze
+    // carries url/domain fallback for older pipelines.
     const { analyze } = await this.waitSvc.readBoth(auditId);
     const analyzePayload = analyze as Record<string, unknown>;
-    const url = job.data.url ?? (analyzePayload['url'] as string) ?? '';
-    const domain = job.data.domain ?? (analyzePayload['domain'] as string) ?? '';
-    const cwv = (analyzePayload['cwv'] as Record<string, number>) ?? {
-      lcpMs: 0,
-      inpMs: 0,
-      cls: 0,
-      performanceScore: 0,
-      accessibilityScore: 0,
-      bestPracticesScore: 0,
-      seoScore: 0,
-    };
+    const crawlPayload = await this.waitSvc.readCrawl(auditId);
+
+    const url = job.data.url
+      ?? (crawlPayload?.['pageData'] as Record<string, unknown> | undefined)?.['url'] as string
+      ?? (analyzePayload['url'] as string)
+      ?? '';
+    const domain = job.data.domain
+      ?? (analyzePayload['domain'] as string)
+      ?? (url ? new URL(url).hostname : '');
+
+    const cwv = (crawlPayload?.['cwvMetrics'] as Record<string, number>) ?? ZERO_CWV;
+    const cwvDesktop = crawlPayload?.['cwvMetricsDesktop'] as Record<string, number> | undefined;
 
     await this.publishProgress(auditId, 85, 'reporting');
 
@@ -55,6 +64,7 @@ export class ReportWorker extends WorkerHost {
       url,
       domain,
       cwv: cwv as any,
+      cwvDesktop: cwvDesktop as any,
     });
 
     return { reportId: report.id, finalScore: Number(report.finalScore) };

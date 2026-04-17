@@ -56,12 +56,30 @@ describe('WaitForBothService', () => {
     await expect(svc.readBoth('aud-1')).rejects.toThrow(/missing/i);
   });
 
-  it('cleanup deletes all 3 keys', async () => {
+  it('cleanup deletes all 4 keys (analyze, keyword, crawl, completed steps)', async () => {
     await svc.cleanup('aud-1');
     expect(redisCmd.del).toHaveBeenCalledWith(
       'audit:aud-1:analyze_result',
       'audit:aud-1:keyword_result',
+      'audit:aud-1:crawl_result',
       'audit:aud-1:completed_steps',
     );
+  });
+
+  it('readCrawl returns parsed JSON on hit', async () => {
+    redisCmd.get.mockResolvedValueOnce(JSON.stringify({ auditId: 'aud-1', cwvMetrics: { lcpMs: 1500 } }));
+    const result = await svc.readCrawl('aud-1');
+    expect(result).toEqual({ auditId: 'aud-1', cwvMetrics: { lcpMs: 1500 } });
+    expect(redisCmd.get).toHaveBeenCalledWith('audit:aud-1:crawl_result');
+  });
+
+  it('readCrawl returns null when payload missing', async () => {
+    redisCmd.get.mockResolvedValueOnce(null);
+    expect(await svc.readCrawl('aud-1')).toBeNull();
+  });
+
+  it('readCrawl returns null when stored JSON is corrupted', async () => {
+    redisCmd.get.mockResolvedValueOnce('{not-json');
+    expect(await svc.readCrawl('aud-1')).toBeNull();
   });
 });

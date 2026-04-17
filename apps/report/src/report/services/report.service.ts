@@ -18,6 +18,7 @@ export interface GenerateFromPipelineInput {
   url: string;
   domain: string;
   cwv: CoreWebVitals;
+  cwvDesktop?: CoreWebVitals;
 }
 
 export interface GenerateDirectInput {
@@ -27,6 +28,7 @@ export interface GenerateDirectInput {
   analyze: AnalyzeResult;
   keywords: KeywordResult;
   cwv: CoreWebVitals;
+  cwvDesktop?: CoreWebVitals;
 }
 
 @Injectable()
@@ -49,6 +51,7 @@ export class ReportService {
       analyze: analyze as AnalyzeResult,
       keywords: keywords as KeywordResult,
       cwv: input.cwv,
+      cwvDesktop: input.cwvDesktop,
     });
     await this.waitSvc.cleanup(input.auditId);
     return result;
@@ -66,6 +69,7 @@ export class ReportService {
       analyze: input.analyze,
       keywords: input.keywords,
       cwv: input.cwv,
+      cwvDesktop: input.cwvDesktop,
     });
 
     const report = await this.repo.createFullReport({
@@ -73,6 +77,7 @@ export class ReportService {
       aggregated,
       keywords: input.keywords.keywords,
       cwv: input.cwv,
+      cwvDesktop: input.cwvDesktop,
     });
 
     // Publish report.done (for any service that cares about report lifecycle)

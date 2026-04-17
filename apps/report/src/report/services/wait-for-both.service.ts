@@ -57,12 +57,26 @@ export class WaitForBothService {
     return { analyze: JSON.parse(a), keywords: JSON.parse(k) };
   }
 
+  /** Read the cached crawl.done payload (CWV mobile + desktop). Returns
+   *  null if absent, e.g. when the crawl event was published before this
+   *  service started subscribing. Caller must handle the null path. */
+  async readCrawl(auditId: string): Promise<Record<string, unknown> | null> {
+    const raw = await this.redis.client().get(REDIS_KEYS.auditCrawlResult(auditId));
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  }
+
   async cleanup(auditId: string): Promise<void> {
     await this.redis
       .client()
       .del(
         REDIS_KEYS.auditAnalyzeResult(auditId),
         REDIS_KEYS.auditKeywordResult(auditId),
+        REDIS_KEYS.auditCrawlResult(auditId),
         REDIS_KEYS.auditCompletedSteps(auditId),
       );
   }

@@ -161,7 +161,14 @@ exports.Prisma.ReportCwvScalarFieldEnum = {
   performanceScore: 'performanceScore',
   accessibilityScore: 'accessibilityScore',
   bestPracticesScore: 'bestPracticesScore',
-  lighthouseSeoScore: 'lighthouseSeoScore'
+  lighthouseSeoScore: 'lighthouseSeoScore',
+  desktopLcpMs: 'desktopLcpMs',
+  desktopInpMs: 'desktopInpMs',
+  desktopCls: 'desktopCls',
+  desktopPerformanceScore: 'desktopPerformanceScore',
+  desktopAccessibilityScore: 'desktopAccessibilityScore',
+  desktopBestPracticesScore: 'desktopBestPracticesScore',
+  desktopLighthouseSeoScore: 'desktopLighthouseSeoScore'
 };
 
 exports.Prisma.ShareLinkScalarFieldEnum = {

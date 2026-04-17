@@ -3322,6 +3322,13 @@ export namespace Prisma {
     accessibilityScore: number | null
     bestPracticesScore: number | null
     lighthouseSeoScore: number | null
+    desktopLcpMs: Decimal | null
+    desktopInpMs: Decimal | null
+    desktopCls: Decimal | null
+    desktopPerformanceScore: number | null
+    desktopAccessibilityScore: number | null
+    desktopBestPracticesScore: number | null
+    desktopLighthouseSeoScore: number | null
   }
 
   export type ReportCwvSumAggregateOutputType = {
@@ -3332,6 +3339,13 @@ export namespace Prisma {
     accessibilityScore: number | null
     bestPracticesScore: number | null
     lighthouseSeoScore: number | null
+    desktopLcpMs: Decimal | null
+    desktopInpMs: Decimal | null
+    desktopCls: Decimal | null
+    desktopPerformanceScore: number | null
+    desktopAccessibilityScore: number | null
+    desktopBestPracticesScore: number | null
+    desktopLighthouseSeoScore: number | null
   }
 
   export type ReportCwvMinAggregateOutputType = {
@@ -3344,6 +3358,13 @@ export namespace Prisma {
     accessibilityScore: number | null
     bestPracticesScore: number | null
     lighthouseSeoScore: number | null
+    desktopLcpMs: Decimal | null
+    desktopInpMs: Decimal | null
+    desktopCls: Decimal | null
+    desktopPerformanceScore: number | null
+    desktopAccessibilityScore: number | null
+    desktopBestPracticesScore: number | null
+    desktopLighthouseSeoScore: number | null
   }
 
   export type ReportCwvMaxAggregateOutputType = {
@@ -3356,6 +3377,13 @@ export namespace Prisma {
     accessibilityScore: number | null
     bestPracticesScore: number | null
     lighthouseSeoScore: number | null
+    desktopLcpMs: Decimal | null
+    desktopInpMs: Decimal | null
+    desktopCls: Decimal | null
+    desktopPerformanceScore: number | null
+    desktopAccessibilityScore: number | null
+    desktopBestPracticesScore: number | null
+    desktopLighthouseSeoScore: number | null
   }
 
   export type ReportCwvCountAggregateOutputType = {
@@ -3368,6 +3396,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs: number
+    desktopInpMs: number
+    desktopCls: number
+    desktopPerformanceScore: number
+    desktopAccessibilityScore: number
+    desktopBestPracticesScore: number
+    desktopLighthouseSeoScore: number
     _all: number
   }
 
@@ -3380,6 +3415,13 @@ export namespace Prisma {
     accessibilityScore?: true
     bestPracticesScore?: true
     lighthouseSeoScore?: true
+    desktopLcpMs?: true
+    desktopInpMs?: true
+    desktopCls?: true
+    desktopPerformanceScore?: true
+    desktopAccessibilityScore?: true
+    desktopBestPracticesScore?: true
+    desktopLighthouseSeoScore?: true
   }
 
   export type ReportCwvSumAggregateInputType = {
@@ -3390,6 +3432,13 @@ export namespace Prisma {
     accessibilityScore?: true
     bestPracticesScore?: true
     lighthouseSeoScore?: true
+    desktopLcpMs?: true
+    desktopInpMs?: true
+    desktopCls?: true
+    desktopPerformanceScore?: true
+    desktopAccessibilityScore?: true
+    desktopBestPracticesScore?: true
+    desktopLighthouseSeoScore?: true
   }
 
   export type ReportCwvMinAggregateInputType = {
@@ -3402,6 +3451,13 @@ export namespace Prisma {
     accessibilityScore?: true
     bestPracticesScore?: true
     lighthouseSeoScore?: true
+    desktopLcpMs?: true
+    desktopInpMs?: true
+    desktopCls?: true
+    desktopPerformanceScore?: true
+    desktopAccessibilityScore?: true
+    desktopBestPracticesScore?: true
+    desktopLighthouseSeoScore?: true
   }
 
   export type ReportCwvMaxAggregateInputType = {
@@ -3414,6 +3470,13 @@ export namespace Prisma {
     accessibilityScore?: true
     bestPracticesScore?: true
     lighthouseSeoScore?: true
+    desktopLcpMs?: true
+    desktopInpMs?: true
+    desktopCls?: true
+    desktopPerformanceScore?: true
+    desktopAccessibilityScore?: true
+    desktopBestPracticesScore?: true
+    desktopLighthouseSeoScore?: true
   }
 
   export type ReportCwvCountAggregateInputType = {
@@ -3426,6 +3489,13 @@ export namespace Prisma {
     accessibilityScore?: true
     bestPracticesScore?: true
     lighthouseSeoScore?: true
+    desktopLcpMs?: true
+    desktopInpMs?: true
+    desktopCls?: true
+    desktopPerformanceScore?: true
+    desktopAccessibilityScore?: true
+    desktopBestPracticesScore?: true
+    desktopLighthouseSeoScore?: true
     _all?: true
   }
 
@@ -3525,6 +3595,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs: Decimal | null
+    desktopInpMs: Decimal | null
+    desktopCls: Decimal | null
+    desktopPerformanceScore: number | null
+    desktopAccessibilityScore: number | null
+    desktopBestPracticesScore: number | null
+    desktopLighthouseSeoScore: number | null
     _count: ReportCwvCountAggregateOutputType | null
     _avg: ReportCwvAvgAggregateOutputType | null
     _sum: ReportCwvSumAggregateOutputType | null
@@ -3556,6 +3633,13 @@ export namespace Prisma {
     accessibilityScore?: boolean
     bestPracticesScore?: boolean
     lighthouseSeoScore?: boolean
+    desktopLcpMs?: boolean
+    desktopInpMs?: boolean
+    desktopCls?: boolean
+    desktopPerformanceScore?: boolean
+    desktopAccessibilityScore?: boolean
+    desktopBestPracticesScore?: boolean
+    desktopLighthouseSeoScore?: boolean
     report?: boolean | ReportDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reportCwv"]>
 
@@ -3569,6 +3653,13 @@ export namespace Prisma {
     accessibilityScore?: boolean
     bestPracticesScore?: boolean
     lighthouseSeoScore?: boolean
+    desktopLcpMs?: boolean
+    desktopInpMs?: boolean
+    desktopCls?: boolean
+    desktopPerformanceScore?: boolean
+    desktopAccessibilityScore?: boolean
+    desktopBestPracticesScore?: boolean
+    desktopLighthouseSeoScore?: boolean
     report?: boolean | ReportDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reportCwv"]>
 
@@ -3582,6 +3673,13 @@ export namespace Prisma {
     accessibilityScore?: boolean
     bestPracticesScore?: boolean
     lighthouseSeoScore?: boolean
+    desktopLcpMs?: boolean
+    desktopInpMs?: boolean
+    desktopCls?: boolean
+    desktopPerformanceScore?: boolean
+    desktopAccessibilityScore?: boolean
+    desktopBestPracticesScore?: boolean
+    desktopLighthouseSeoScore?: boolean
   }
 
   export type ReportCwvInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3606,6 +3704,13 @@ export namespace Prisma {
       accessibilityScore: number
       bestPracticesScore: number
       lighthouseSeoScore: number
+      desktopLcpMs: Prisma.Decimal | null
+      desktopInpMs: Prisma.Decimal | null
+      desktopCls: Prisma.Decimal | null
+      desktopPerformanceScore: number | null
+      desktopAccessibilityScore: number | null
+      desktopBestPracticesScore: number | null
+      desktopLighthouseSeoScore: number | null
     }, ExtArgs["result"]["reportCwv"]>
     composites: {}
   }
@@ -4009,6 +4114,13 @@ export namespace Prisma {
     readonly accessibilityScore: FieldRef<"ReportCwv", 'Int'>
     readonly bestPracticesScore: FieldRef<"ReportCwv", 'Int'>
     readonly lighthouseSeoScore: FieldRef<"ReportCwv", 'Int'>
+    readonly desktopLcpMs: FieldRef<"ReportCwv", 'Decimal'>
+    readonly desktopInpMs: FieldRef<"ReportCwv", 'Decimal'>
+    readonly desktopCls: FieldRef<"ReportCwv", 'Decimal'>
+    readonly desktopPerformanceScore: FieldRef<"ReportCwv", 'Int'>
+    readonly desktopAccessibilityScore: FieldRef<"ReportCwv", 'Int'>
+    readonly desktopBestPracticesScore: FieldRef<"ReportCwv", 'Int'>
+    readonly desktopLighthouseSeoScore: FieldRef<"ReportCwv", 'Int'>
   }
     
 
@@ -5403,7 +5515,14 @@ export namespace Prisma {
     performanceScore: 'performanceScore',
     accessibilityScore: 'accessibilityScore',
     bestPracticesScore: 'bestPracticesScore',
-    lighthouseSeoScore: 'lighthouseSeoScore'
+    lighthouseSeoScore: 'lighthouseSeoScore',
+    desktopLcpMs: 'desktopLcpMs',
+    desktopInpMs: 'desktopInpMs',
+    desktopCls: 'desktopCls',
+    desktopPerformanceScore: 'desktopPerformanceScore',
+    desktopAccessibilityScore: 'desktopAccessibilityScore',
+    desktopBestPracticesScore: 'desktopBestPracticesScore',
+    desktopLighthouseSeoScore: 'desktopLighthouseSeoScore'
   };
 
   export type ReportCwvScalarFieldEnum = (typeof ReportCwvScalarFieldEnum)[keyof typeof ReportCwvScalarFieldEnum]
@@ -5758,6 +5877,13 @@ export namespace Prisma {
     accessibilityScore?: IntFilter<"ReportCwv"> | number
     bestPracticesScore?: IntFilter<"ReportCwv"> | number
     lighthouseSeoScore?: IntFilter<"ReportCwv"> | number
+    desktopLcpMs?: DecimalNullableFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: DecimalNullableFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: DecimalNullableFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: IntNullableFilter<"ReportCwv"> | number | null
+    desktopAccessibilityScore?: IntNullableFilter<"ReportCwv"> | number | null
+    desktopBestPracticesScore?: IntNullableFilter<"ReportCwv"> | number | null
+    desktopLighthouseSeoScore?: IntNullableFilter<"ReportCwv"> | number | null
     report?: XOR<ReportRelationFilter, ReportWhereInput>
   }
 
@@ -5771,6 +5897,13 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrderInput | SortOrder
+    desktopInpMs?: SortOrderInput | SortOrder
+    desktopCls?: SortOrderInput | SortOrder
+    desktopPerformanceScore?: SortOrderInput | SortOrder
+    desktopAccessibilityScore?: SortOrderInput | SortOrder
+    desktopBestPracticesScore?: SortOrderInput | SortOrder
+    desktopLighthouseSeoScore?: SortOrderInput | SortOrder
     report?: ReportOrderByWithRelationInput
   }
 
@@ -5787,6 +5920,13 @@ export namespace Prisma {
     accessibilityScore?: IntFilter<"ReportCwv"> | number
     bestPracticesScore?: IntFilter<"ReportCwv"> | number
     lighthouseSeoScore?: IntFilter<"ReportCwv"> | number
+    desktopLcpMs?: DecimalNullableFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: DecimalNullableFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: DecimalNullableFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: IntNullableFilter<"ReportCwv"> | number | null
+    desktopAccessibilityScore?: IntNullableFilter<"ReportCwv"> | number | null
+    desktopBestPracticesScore?: IntNullableFilter<"ReportCwv"> | number | null
+    desktopLighthouseSeoScore?: IntNullableFilter<"ReportCwv"> | number | null
     report?: XOR<ReportRelationFilter, ReportWhereInput>
   }, "id" | "reportId">
 
@@ -5800,6 +5940,13 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrderInput | SortOrder
+    desktopInpMs?: SortOrderInput | SortOrder
+    desktopCls?: SortOrderInput | SortOrder
+    desktopPerformanceScore?: SortOrderInput | SortOrder
+    desktopAccessibilityScore?: SortOrderInput | SortOrder
+    desktopBestPracticesScore?: SortOrderInput | SortOrder
+    desktopLighthouseSeoScore?: SortOrderInput | SortOrder
     _count?: ReportCwvCountOrderByAggregateInput
     _avg?: ReportCwvAvgOrderByAggregateInput
     _max?: ReportCwvMaxOrderByAggregateInput
@@ -5820,6 +5967,13 @@ export namespace Prisma {
     accessibilityScore?: IntWithAggregatesFilter<"ReportCwv"> | number
     bestPracticesScore?: IntWithAggregatesFilter<"ReportCwv"> | number
     lighthouseSeoScore?: IntWithAggregatesFilter<"ReportCwv"> | number
+    desktopLcpMs?: DecimalNullableWithAggregatesFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: DecimalNullableWithAggregatesFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: DecimalNullableWithAggregatesFilter<"ReportCwv"> | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: IntNullableWithAggregatesFilter<"ReportCwv"> | number | null
+    desktopAccessibilityScore?: IntNullableWithAggregatesFilter<"ReportCwv"> | number | null
+    desktopBestPracticesScore?: IntNullableWithAggregatesFilter<"ReportCwv"> | number | null
+    desktopLighthouseSeoScore?: IntNullableWithAggregatesFilter<"ReportCwv"> | number | null
   }
 
   export type ShareLinkWhereInput = {
@@ -6124,6 +6278,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopCls?: Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: number | null
+    desktopAccessibilityScore?: number | null
+    desktopBestPracticesScore?: number | null
+    desktopLighthouseSeoScore?: number | null
     report: ReportCreateNestedOneWithoutCwvInput
   }
 
@@ -6137,6 +6298,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopCls?: Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: number | null
+    desktopAccessibilityScore?: number | null
+    desktopBestPracticesScore?: number | null
+    desktopLighthouseSeoScore?: number | null
   }
 
   export type ReportCwvUpdateInput = {
@@ -6148,6 +6316,13 @@ export namespace Prisma {
     accessibilityScore?: IntFieldUpdateOperationsInput | number
     bestPracticesScore?: IntFieldUpdateOperationsInput | number
     lighthouseSeoScore?: IntFieldUpdateOperationsInput | number
+    desktopLcpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopAccessibilityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopBestPracticesScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopLighthouseSeoScore?: NullableIntFieldUpdateOperationsInput | number | null
     report?: ReportUpdateOneRequiredWithoutCwvNestedInput
   }
 
@@ -6161,6 +6336,13 @@ export namespace Prisma {
     accessibilityScore?: IntFieldUpdateOperationsInput | number
     bestPracticesScore?: IntFieldUpdateOperationsInput | number
     lighthouseSeoScore?: IntFieldUpdateOperationsInput | number
+    desktopLcpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopAccessibilityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopBestPracticesScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopLighthouseSeoScore?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReportCwvCreateManyInput = {
@@ -6173,6 +6355,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopCls?: Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: number | null
+    desktopAccessibilityScore?: number | null
+    desktopBestPracticesScore?: number | null
+    desktopLighthouseSeoScore?: number | null
   }
 
   export type ReportCwvUpdateManyMutationInput = {
@@ -6184,6 +6373,13 @@ export namespace Prisma {
     accessibilityScore?: IntFieldUpdateOperationsInput | number
     bestPracticesScore?: IntFieldUpdateOperationsInput | number
     lighthouseSeoScore?: IntFieldUpdateOperationsInput | number
+    desktopLcpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopAccessibilityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopBestPracticesScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopLighthouseSeoScore?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReportCwvUncheckedUpdateManyInput = {
@@ -6196,6 +6392,13 @@ export namespace Prisma {
     accessibilityScore?: IntFieldUpdateOperationsInput | number
     bestPracticesScore?: IntFieldUpdateOperationsInput | number
     lighthouseSeoScore?: IntFieldUpdateOperationsInput | number
+    desktopLcpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopAccessibilityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopBestPracticesScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopLighthouseSeoScore?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ShareLinkCreateInput = {
@@ -6612,6 +6815,33 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type ReportCwvCountOrderByAggregateInput = {
     id?: SortOrder
     reportId?: SortOrder
@@ -6622,6 +6852,13 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrder
+    desktopInpMs?: SortOrder
+    desktopCls?: SortOrder
+    desktopPerformanceScore?: SortOrder
+    desktopAccessibilityScore?: SortOrder
+    desktopBestPracticesScore?: SortOrder
+    desktopLighthouseSeoScore?: SortOrder
   }
 
   export type ReportCwvAvgOrderByAggregateInput = {
@@ -6632,6 +6869,13 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrder
+    desktopInpMs?: SortOrder
+    desktopCls?: SortOrder
+    desktopPerformanceScore?: SortOrder
+    desktopAccessibilityScore?: SortOrder
+    desktopBestPracticesScore?: SortOrder
+    desktopLighthouseSeoScore?: SortOrder
   }
 
   export type ReportCwvMaxOrderByAggregateInput = {
@@ -6644,6 +6888,13 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrder
+    desktopInpMs?: SortOrder
+    desktopCls?: SortOrder
+    desktopPerformanceScore?: SortOrder
+    desktopAccessibilityScore?: SortOrder
+    desktopBestPracticesScore?: SortOrder
+    desktopLighthouseSeoScore?: SortOrder
   }
 
   export type ReportCwvMinOrderByAggregateInput = {
@@ -6656,6 +6907,13 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrder
+    desktopInpMs?: SortOrder
+    desktopCls?: SortOrder
+    desktopPerformanceScore?: SortOrder
+    desktopAccessibilityScore?: SortOrder
+    desktopBestPracticesScore?: SortOrder
+    desktopLighthouseSeoScore?: SortOrder
   }
 
   export type ReportCwvSumOrderByAggregateInput = {
@@ -6666,6 +6924,45 @@ export namespace Prisma {
     accessibilityScore?: SortOrder
     bestPracticesScore?: SortOrder
     lighthouseSeoScore?: SortOrder
+    desktopLcpMs?: SortOrder
+    desktopInpMs?: SortOrder
+    desktopCls?: SortOrder
+    desktopPerformanceScore?: SortOrder
+    desktopAccessibilityScore?: SortOrder
+    desktopBestPracticesScore?: SortOrder
+    desktopLighthouseSeoScore?: SortOrder
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -6677,11 +6974,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ShareLinkCountOrderByAggregateInput = {
@@ -6893,6 +7185,22 @@ export namespace Prisma {
     connect?: ReportWhereUniqueInput
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ReportUpdateOneRequiredWithoutCwvNestedInput = {
     create?: XOR<ReportCreateWithoutCwvInput, ReportUncheckedCreateWithoutCwvInput>
     connectOrCreate?: ReportCreateOrConnectWithoutCwvInput
@@ -7100,6 +7408,71 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -7123,17 +7496,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type ReportKeywordCreateWithoutReportInput = {
@@ -7181,6 +7543,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopCls?: Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: number | null
+    desktopAccessibilityScore?: number | null
+    desktopBestPracticesScore?: number | null
+    desktopLighthouseSeoScore?: number | null
   }
 
   export type ReportCwvUncheckedCreateWithoutReportInput = {
@@ -7192,6 +7561,13 @@ export namespace Prisma {
     accessibilityScore: number
     bestPracticesScore: number
     lighthouseSeoScore: number
+    desktopLcpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: Decimal | DecimalJsLike | number | string | null
+    desktopCls?: Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: number | null
+    desktopAccessibilityScore?: number | null
+    desktopBestPracticesScore?: number | null
+    desktopLighthouseSeoScore?: number | null
   }
 
   export type ReportCwvCreateOrConnectWithoutReportInput = {
@@ -7277,6 +7653,13 @@ export namespace Prisma {
     accessibilityScore?: IntFieldUpdateOperationsInput | number
     bestPracticesScore?: IntFieldUpdateOperationsInput | number
     lighthouseSeoScore?: IntFieldUpdateOperationsInput | number
+    desktopLcpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopAccessibilityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopBestPracticesScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopLighthouseSeoScore?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ReportCwvUncheckedUpdateWithoutReportInput = {
@@ -7288,6 +7671,13 @@ export namespace Prisma {
     accessibilityScore?: IntFieldUpdateOperationsInput | number
     bestPracticesScore?: IntFieldUpdateOperationsInput | number
     lighthouseSeoScore?: IntFieldUpdateOperationsInput | number
+    desktopLcpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopInpMs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopCls?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    desktopPerformanceScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopAccessibilityScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopBestPracticesScore?: NullableIntFieldUpdateOperationsInput | number | null
+    desktopLighthouseSeoScore?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ShareLinkUpsertWithoutReportInput = {

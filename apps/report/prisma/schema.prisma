@@ -51,15 +51,25 @@ model ReportKeyword {
 }
 
 model ReportCwv {
-  id                   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  reportId             String  @unique @map("report_id") @db.Uuid
-  lcpMs                Decimal @map("lcp_ms") @db.Decimal(10, 2)
-  inpMs                Decimal @map("inp_ms") @db.Decimal(10, 2)
-  cls                  Decimal @db.Decimal(5, 4)
-  performanceScore     Int     @map("performance_score")
-  accessibilityScore   Int     @map("accessibility_score")
-  bestPracticesScore   Int     @map("best_practices_score")
-  lighthouseSeoScore   Int     @map("lighthouse_seo_score")
+  id                          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reportId                    String   @unique @map("report_id") @db.Uuid
+  lcpMs                       Decimal  @map("lcp_ms") @db.Decimal(10, 2)
+  inpMs                       Decimal  @map("inp_ms") @db.Decimal(10, 2)
+  cls                         Decimal  @db.Decimal(5, 4)
+  performanceScore            Int      @map("performance_score")
+  accessibilityScore          Int      @map("accessibility_score")
+  bestPracticesScore          Int      @map("best_practices_score")
+  lighthouseSeoScore          Int      @map("lighthouse_seo_score")
+
+  // Desktop form-factor (optional — old rows inserted before F5 have NULL
+  // here; new rows populate both mobile and desktop).
+  desktopLcpMs                Decimal? @map("desktop_lcp_ms") @db.Decimal(10, 2)
+  desktopInpMs                Decimal? @map("desktop_inp_ms") @db.Decimal(10, 2)
+  desktopCls                  Decimal? @map("desktop_cls") @db.Decimal(5, 4)
+  desktopPerformanceScore     Int?     @map("desktop_performance_score")
+  desktopAccessibilityScore   Int?     @map("desktop_accessibility_score")
+  desktopBestPracticesScore   Int?     @map("desktop_best_practices_score")
+  desktopLighthouseSeoScore   Int?     @map("desktop_lighthouse_seo_score")
 
   report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
   @@map("report_cwv")

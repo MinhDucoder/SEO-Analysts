@@ -14,6 +14,7 @@ import { ReportGrpcController } from './controllers/report.grpc.controller';
 import { ReportHttpController } from './controllers/report.http.controller';
 import { AnalyzeDoneListener } from './controllers/analyze-done.listener';
 import { KeywordDoneListener } from './controllers/keyword-done.listener';
+import { CrawlDoneListener } from './controllers/crawl-done.listener';
 import { ReportWorker } from './controllers/report.worker';
 
 @Module({
@@ -47,6 +48,7 @@ import { ReportWorker } from './controllers/report.worker';
     ReportService,
     AnalyzeDoneListener,
     KeywordDoneListener,
+    CrawlDoneListener,
     ReportWorker,
   ],
 })

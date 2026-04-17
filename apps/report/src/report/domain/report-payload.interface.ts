@@ -13,6 +13,7 @@ export interface ReportInputs {
   analyze: AnalyzeResult;
   keywords: KeywordResult;
   cwv: CoreWebVitals;
+  cwvDesktop?: CoreWebVitals;
 }
 
 export interface AggregatedReport {
@@ -26,4 +27,5 @@ export interface AggregatedReport {
   passCount: number;
   analysisSnapshot: AnalyzeResult;
   cwvSnapshot: CoreWebVitals;
+  cwvDesktopSnapshot?: CoreWebVitals;
 }
