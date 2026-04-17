@@ -1,3 +1,8 @@
+/**
+ * @file Public share-link viewer — anyone holding the token can fetch
+ * the shared audit report. Marked `@Public()` so JwtAuthGuard lets it
+ * through. The Report service enforces the token's active status.
+ */
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/public.decorator';

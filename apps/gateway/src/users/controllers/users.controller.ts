@@ -1,3 +1,7 @@
+/**
+ * @file REST endpoints under `/users` — self-service profile updates
+ * and password change for the authenticated user.
+ */
 import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';

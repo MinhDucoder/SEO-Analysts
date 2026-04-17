@@ -1,3 +1,8 @@
+/**
+ * @file JWT access + opaque-refresh token issuance & rotation.
+ * Refresh tokens are stored hashed (SHA-256) in the DB so a leaked
+ * DB dump never exposes usable tokens; rotation invalidates the old row.
+ */
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';

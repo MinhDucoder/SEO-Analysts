@@ -1,3 +1,8 @@
+/**
+ * @file Profile + password use cases for the authenticated user.
+ * Changing password force-revokes every active refresh token — user
+ * must re-login on every device, which is the expected security posture.
+ */
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PasswordService } from '../../auth/services/password.service';

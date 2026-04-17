@@ -1,3 +1,8 @@
+/**
+ * @file Audit use cases — creates pipeline jobs, queries the Audit table,
+ * and proxies report operations to the Report service via gRPC.
+ * Enforces ownership (audit.userId === user.id) on every read/delete.
+ */
 import {
   BadRequestException,
   ForbiddenException,

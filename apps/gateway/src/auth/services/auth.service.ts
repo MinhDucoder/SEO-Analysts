@@ -1,3 +1,9 @@
+/**
+ * @file Core authentication use cases — register, login (local + OAuth),
+ * refresh, logout, email verification, password reset.
+ * Applies per-IP + per-email rate limits via `RateLimiterService` to
+ * slow down brute-force and registration-spam attacks.
+ */
 import {
   ConflictException,
   ForbiddenException,

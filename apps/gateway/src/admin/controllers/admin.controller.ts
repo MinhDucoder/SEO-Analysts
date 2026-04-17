@@ -1,3 +1,7 @@
+/**
+ * @file Admin-only REST endpoints (`/admin`) — user management + rule
+ * weight tuning + platform stats. Double-guarded: JWT + Roles(ADMIN).
+ */
 import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';

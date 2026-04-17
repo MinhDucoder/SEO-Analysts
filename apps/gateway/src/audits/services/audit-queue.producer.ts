@@ -1,3 +1,8 @@
+/**
+ * @file BullMQ producer for `crawl.start` — the entry point that kicks
+ * off the whole audit pipeline. Uses `jobId: crawl-<auditId>` so BullMQ
+ * dedupes rapid retries against the same audit.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';

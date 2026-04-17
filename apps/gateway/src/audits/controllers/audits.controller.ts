@@ -1,3 +1,8 @@
+/**
+ * @file REST endpoints under `/audits` — CRUD + status + export (PDF) +
+ * share-link management + audit-vs-audit comparison.
+ * All routes require a valid JWT (JwtAuthGuard applied at class level).
+ */
 import {
   Body,
   Controller,

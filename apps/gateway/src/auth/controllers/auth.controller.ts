@@ -1,3 +1,9 @@
+/**
+ * @file REST endpoints under `/auth` — register, login, refresh, logout,
+ * email verify, password reset, and Google OAuth start + callback.
+ * Access-token returned in response body; refresh-token lives in an
+ * HTTP-only cookie scoped to `/api/v1/auth`.
+ */
 import {
   Body,
   Controller,

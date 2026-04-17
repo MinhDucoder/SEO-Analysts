@@ -1,3 +1,8 @@
+/**
+ * @file Email-verification + password-reset token lifecycle.
+ * Tokens live in Redis (not the DB) with short TTLs — 24h verify, 1h
+ * reset — so stale tokens are garbage-collected automatically.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { RedisService } from '../../infra/redis/redis.service';

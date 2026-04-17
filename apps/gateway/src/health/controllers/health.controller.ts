@@ -1,3 +1,8 @@
+/**
+ * @file `/health` endpoint — checks DB, Redis, and all 3 downstream
+ * gRPC services in parallel. Always returns 200 with a per-service
+ * boolean so orchestrators can render fine-grained status pages.
+ */
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/public.decorator';

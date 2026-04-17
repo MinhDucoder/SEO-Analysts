@@ -1,3 +1,8 @@
+/**
+ * @file Admin use cases — list/lock users, adjust rule weights (via
+ * AnalyzerGrpcClient), and gather platform-wide stats (total users,
+ * success rate, avg score, top domains over last N days).
+ */
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { ListUsersQuery } from '../dto/list-users.query';
