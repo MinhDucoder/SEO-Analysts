@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AnalyzerService } from './analyzer.service';
 import { AnalyzerController } from './analyzer.controller';
@@ -12,11 +13,16 @@ import { BULLMQ_QUEUES } from '@repo/shared';
 @Module({
   imports: [
     PrismaModule,
-    BullModule.forRoot({
-      connection: {
-        host: process.env.REDIS_HOST ?? 'localhost',
-        port: Number(process.env.REDIS_PORT ?? 6379),
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        connection: {
+          host: config.get('REDIS_HOST', 'localhost'),
+          port: Number(config.get('REDIS_PORT', 6379)),
+          password: config.get('REDIS_PASSWORD') || undefined,
+        },
+      }),
     }),
     BullModule.registerQueue({ name: BULLMQ_QUEUES.ANALYZE_START }),
   ],

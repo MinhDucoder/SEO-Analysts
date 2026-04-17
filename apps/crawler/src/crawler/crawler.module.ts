@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import { BULLMQ_QUEUES } from '@repo/shared';
 import { CacheService, REDIS_CLIENT } from './cache.service';
@@ -16,12 +17,14 @@ import { EventPublisher } from './event-publisher';
 
 const redisFactory = {
   provide: REDIS_CLIENT,
-  useFactory: (): Redis =>
+  useFactory: (config: ConfigService): Redis =>
     new Redis({
-      host: process.env.REDIS_HOST ?? 'localhost',
-      port: Number(process.env.REDIS_PORT ?? 6379),
+      host: config.get('REDIS_HOST', 'localhost'),
+      port: Number(config.get('REDIS_PORT', 6379)),
+      password: config.get('REDIS_PASSWORD') || undefined,
       maxRetriesPerRequest: null,
     }),
+  inject: [ConfigService],
 };
 
 const browserPoolFactory = {
@@ -31,11 +34,16 @@ const browserPoolFactory = {
 
 @Module({
   imports: [
-    BullModule.forRoot({
-      connection: {
-        host: process.env.REDIS_HOST ?? 'localhost',
-        port: Number(process.env.REDIS_PORT ?? 6379),
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        connection: {
+          host: config.get('REDIS_HOST', 'localhost'),
+          port: Number(config.get('REDIS_PORT', 6379)),
+          password: config.get('REDIS_PASSWORD') || undefined,
+        },
+      }),
     }),
     BullModule.registerQueue(
       { name: BULLMQ_QUEUES.CRAWL_START },
