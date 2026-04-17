@@ -1,3 +1,8 @@
+/**
+ * @file gRPC surface of the report service — called by Gateway for all
+ * report-related operations (get, compare, share, PDF, revoke).
+ * Proto: `packages/proto/report/v1/report.proto`.
+ */
 import { Controller, Logger, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { ReportService } from '../services/report.service';

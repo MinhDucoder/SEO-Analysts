@@ -1,3 +1,7 @@
+/**
+ * @file Report-local view of the keyword-analyzer's output payload.
+ */
+
 export interface KeywordResultItem {
   keyword: string;
   frequency: number;

@@ -1,3 +1,8 @@
+/**
+ * @file Prisma wrapper for Report + related tables.
+ * `createFullReport` wraps Report + ReportKeyword + ReportCwv writes
+ * in a single transaction so a partial insert never escapes.
+ */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { CoreWebVitals } from '@repo/shared';

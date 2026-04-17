@@ -1,3 +1,9 @@
+/**
+ * @file Facade that the gRPC controller + report worker call into.
+ * Two entrypoints: `generateDirect` (caller has all payloads) and
+ * `generateFromPipeline` (reads analyze/keyword snapshots from Redis).
+ * Both publish `report.done` + `audit.completed`.
+ */
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CoreWebVitals } from '@repo/shared';
 import { ReportRepository } from '../persistence/report.repository';

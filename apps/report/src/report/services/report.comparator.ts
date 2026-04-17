@@ -1,3 +1,8 @@
+/**
+ * @file Diff two reports of the same URL — used by the Gateway's
+ * "compare audits" endpoint. Reports issuesFixed/issuesNew so the UI
+ * can highlight regressions and wins between two crawls.
+ */
 import { Injectable } from '@nestjs/common';
 import { CheckStatus } from '@repo/shared';
 import { AnalyzeRuleResult } from '../domain/analyze-result.interface';

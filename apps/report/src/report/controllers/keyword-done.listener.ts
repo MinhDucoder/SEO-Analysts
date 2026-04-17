@@ -1,3 +1,8 @@
+/**
+ * @file Redis pub/sub subscriber for `keyword.done`.
+ * Counterpart to AnalyzeDoneListener — second event to arrive triggers
+ * `report.start` (order of analyze vs keyword is not guaranteed).
+ */
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { RedisService } from '../../infra/redis/redis.service';
 import { WaitForBothService } from '../services/wait-for-both.service';

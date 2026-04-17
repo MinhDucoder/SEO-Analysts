@@ -1,3 +1,8 @@
+/**
+ * @file Redis pub/sub subscriber for `analyze.done`.
+ * On each event, records the payload in WaitForBothService — which
+ * bumps the per-audit counter and may enqueue `report.start`.
+ */
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { RedisService } from '../../infra/redis/redis.service';
 import { WaitForBothService } from '../services/wait-for-both.service';

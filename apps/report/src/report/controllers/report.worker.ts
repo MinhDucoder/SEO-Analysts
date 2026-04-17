@@ -1,3 +1,8 @@
+/**
+ * @file BullMQ worker for `report.start` (enqueued by WaitForBothService
+ * after both analyze.done + keyword.done arrive). Publishes `audit.failed`
+ * on failure so the Gateway can update the audit status UI.
+ */
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';

@@ -1,3 +1,9 @@
+/**
+ * @file Combines analyzer score + Lighthouse performance into a single
+ * final score.
+ *     finalScore = analyzer_score × 0.7 + cwv_performance × 0.3
+ * Rules with weight ≥ 7 that FAIL are tagged as "critical issues".
+ */
 import { Injectable } from '@nestjs/common';
 import { CheckStatus, classify } from '@repo/shared';
 import { AggregatedReport, ReportInputs } from '../domain/report-payload.interface';

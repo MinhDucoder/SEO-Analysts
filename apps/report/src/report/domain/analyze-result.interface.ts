@@ -1,3 +1,7 @@
+/**
+ * @file Report-local view of the analyzer service's output payload —
+ * duplicated here so the Report service is not coupled to analyzer internals.
+ */
 import { CheckStatus, IssueCategory } from '@repo/shared';
 
 export interface AnalyzeRuleResult {

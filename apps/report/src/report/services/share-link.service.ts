@@ -1,3 +1,8 @@
+/**
+ * @file Public share-link lifecycle (issue / lookup / revoke).
+ * Tokens are 64-char hex (256 bits) so guessing is computationally
+ * infeasible; revocation flips `isActive` instead of deleting history.
+ */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { PrismaService } from '../../infra/prisma/prisma.service';

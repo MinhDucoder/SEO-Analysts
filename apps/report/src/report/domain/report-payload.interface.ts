@@ -1,3 +1,7 @@
+/**
+ * @file Inputs/outputs of `ReportAggregator` — the shape persisted
+ * as the `Report` row's JSON snapshots (analysisSnapshot, cwvSnapshot).
+ */
 import { CoreWebVitals } from '@repo/shared';
 import { AnalyzeResult } from './analyze-result.interface';
 import { KeywordResult } from './keyword-result.interface';

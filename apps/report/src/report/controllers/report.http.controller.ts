@@ -1,3 +1,7 @@
+/**
+ * @file HTTP surface — only `/audits/:id/export` which streams the
+ * rendered PDF. Gateway 302-redirects to this endpoint for downloads.
+ */
 import { Controller, Get, Param, Query, Res, BadRequestException } from '@nestjs/common';
 import type { Response } from 'express';
 import { ReportService } from '../services/report.service';

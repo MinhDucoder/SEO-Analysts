@@ -1,3 +1,8 @@
+/**
+ * @file Choreography primitive — counts analyze.done + keyword.done for
+ * one audit. Second increment hits 2, triggers `report.start` enqueue.
+ * Counter key TTL guards against stuck pipelines.
+ */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
