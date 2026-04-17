@@ -1,3 +1,13 @@
+> **⚠ STALE (as of 2026-04-17)**: This file describes the pre-refactor monolith (`apps/web` + `apps/api`).
+> The repo is now 5 NestJS microservices. For current-state truth, read:
+> - `apps/CLAUDE.md` — cross-service map + data flow
+> - `apps/<service>/CLAUDE.md` — per-service DDD layout
+> - `.claude/context/index.md` — quick reference
+>
+> This file is retained for historical context only; **do NOT use for planning decisions**.
+
+---
+
 # Architecture Overview
 
 ## Monorepo Structure

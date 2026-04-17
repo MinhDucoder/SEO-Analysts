@@ -1,3 +1,11 @@
+> **⚠ PARTIALLY STALE (as of 2026-04-17)**: Versions/libs still mostly accurate, but arch references `apps/web` / `apps/api` monolith. Current arch = 5 NestJS microservices.
+>
+> For service layout: `apps/CLAUDE.md`. For ports/DBs/packages: `.claude/context/index.md`.
+>
+> This file kept for dependency versions reference. Architecture sections superseded.
+
+---
+
 # Tech Stack Details
 
 ## Runtime & Build

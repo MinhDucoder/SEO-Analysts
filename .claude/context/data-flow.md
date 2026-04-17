@@ -1,3 +1,11 @@
+> **⚠ STALE (as of 2026-04-17)**: This file describes the pre-refactor monolith. Real data flow crosses 5 microservices via gRPC + BullMQ + Redis pub/sub.
+>
+> Current-state truth: `apps/CLAUDE.md` section "Data flow for one audit (happy path)".
+>
+> This file is retained for historical context only; **do NOT use for planning decisions**.
+
+---
+
 # Data Flow
 
 ## 1. Authentication Flow
