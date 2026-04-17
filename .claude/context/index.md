@@ -59,16 +59,28 @@ Prisma clients generated into `apps/<service>/src/infra/prisma/generated/` (comm
 
 ### Key Paths
 
+DDD is **per-feature-module** (nested), not top-level. Pattern: `apps/<service>/src/<feature>/{controllers,services,domain,persistence}/`.
+
 | Path | Description |
 |---|---|
-| `apps/<service>/src/controllers/` | NestJS controllers (HTTP + gRPC handlers) |
-| `apps/<service>/src/services/` | Application services (use cases) |
-| `apps/<service>/src/domain/` | Domain entities, value objects, domain services |
-| `apps/<service>/src/persistence/` | Repository implementations (Prisma) |
-| `apps/<service>/src/infra/` | gRPC clients, BullMQ, Redis, external integrations |
+| `apps/<service>/src/<feature>/controllers/` | NestJS controllers (HTTP + gRPC handlers) |
+| `apps/<service>/src/<feature>/services/` | Application services (use cases) |
+| `apps/<service>/src/<feature>/domain/` | Domain entities, value objects, domain rules |
+| `apps/<service>/src/<feature>/persistence/` | Repository implementations (when feature owns data) |
+| `apps/<service>/src/infra/` | Shared cross-feature infra: `prisma/`, `grpc/`, `redis/`, `websocket/`, `pdf/` |
 | `apps/<service>/prisma/` | Per-service schema + migrations |
 | `packages/proto/<domain>/*.proto` | gRPC contracts (analyzer, crawler, keyword, report, common) |
 | `packages/shared/src/` | Cross-service constants + types |
+
+Concrete per-service feature modules:
+
+| Service | Feature modules | Top-level infra |
+|---|---|---|
+| `gateway` | `audits/`, `auth/`, `admin/`, `health/`, `users/` | `infra/{grpc,redis,websocket,prisma}/` + `common/`, `shared/` |
+| `seo-analyzer` | `analyzer/` (controllers, services, domain/rules/{images,meta,headings,links,performance,technical}) | `infra/prisma/` |
+| `crawler` | `crawler/` (controllers, services, domain, persistence, infra/fetchers) | — |
+| `keyword-analyzer` | `keyword-analyzer/` (stateless) | — |
+| `report` | `report/` (controllers, services, domain, persistence) | `infra/{prisma,redis,pdf/templates}/` |
 
 ### Entry Points (per service)
 

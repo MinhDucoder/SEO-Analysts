@@ -54,25 +54,26 @@ For each task from step 2:
 - Auto-fixes obvious issues
 - Flags gaps and edge cases
 
-## Example: Add new SEO rule — check Open Graph tags
+## Example: Add new SEO rule — hreflang tag validation
 
 ```
-Task: Add og:title, og:description, og:image analyzer
-Service: seo-analyzer (single-service — frontend display pending apps/web)
+Task: Add hreflang tag rule (detect + validate per ISO 639-1 codes)
+Service: seo-analyzer (single-service)
 Impact: single-service (no proto, no cross-service, no shared schema)
+Note: existing rules live in apps/seo-analyzer/src/analyzer/domain/rules/ (images/, meta/, headings/, links/, performance/, technical/)
 
 1. THIET KE:
    /office-hours
-   → Clarify: which OG tags, scoring weight, penalty logic, integration with registry
+   → Clarify: which hreflang codes allowed, scoring weight, penalty for malformed
 
 2. CHIA NHO:
    gsd:quick --discuss
-   → Task 1: Create apps/seo-analyzer/src/domain/analyzers/on-page/og-tags.analyzer.ts + interface
-   → Task 2: Register in apps/seo-analyzer/src/services/rule-registry.service.ts, add weight
+   → Task 1: Create apps/seo-analyzer/src/analyzer/domain/rules/technical/hreflang.rule.ts + spec
+   → Task 2: Register in apps/seo-analyzer/src/analyzer/services/rule-registry.service.ts, add weight
    → Task 3: Add DB entry via Prisma seed (apps/seo-analyzer/prisma/seed.ts)
 
 3. CODE (per task) — load domain skill: seo-rules
-   → Task 1: write og-tags.analyzer.spec.ts → RED → implement → GREEN → commit
+   → Task 1: write hreflang.rule.spec.ts → RED → implement → GREEN → commit
    → Task 2: write registry integration test → RED → update registry → GREEN → commit
    → Task 3: update seed + run `npx prisma db seed` → verify inserted → commit
 

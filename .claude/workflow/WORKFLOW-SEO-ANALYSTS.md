@@ -20,7 +20,20 @@ packages/
   @repo/eslint-config       → shared ESLint configs
 ```
 
-**DDD per service**: `controllers/` + `services/` + `domain/` + `persistence/` + `infra/`
+**DDD per feature-module** (nested inside each service):
+```
+apps/<service>/src/<feature>/
+  ├── controllers/    → HTTP + gRPC handlers
+  ├── services/       → Application use cases
+  ├── domain/         → Entities, value objects, rules
+  └── persistence/    → Repositories (Prisma) — when feature owns data
+apps/<service>/src/infra/   → Shared cross-feature infra (prisma, grpc clients, redis, websocket)
+```
+Concrete examples:
+- `apps/seo-analyzer/src/analyzer/{controllers,services,domain}/`
+- `apps/gateway/src/{audits,auth,admin,health}/{controllers,services,dto}/` + `apps/gateway/src/infra/{grpc,redis,websocket,prisma}/`
+- `apps/crawler/src/crawler/{controllers,services,domain,persistence,infra}/`
+- `apps/report/src/report/{controllers,services,domain,persistence}/` + `apps/report/src/infra/{prisma,redis,pdf}/`
 
 **Inter-service communication**:
 - **gRPC** — synchronous request/response (gateway → other services)

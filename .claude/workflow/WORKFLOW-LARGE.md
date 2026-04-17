@@ -159,10 +159,10 @@ PHASE 3 — CODE:
   gsd:execute-phase 8
   → Wave 1:
      Task 1: Edit packages/proto/analyzer/analyzer.proto; npm run build --filter=@repo/proto
-     Task 2: TDD apps/seo-analyzer/src/controllers/analyze.controller.ts → add @GrpcMethod
+     Task 2: TDD apps/seo-analyzer/src/analyzer/controllers/analyze.controller.ts → add @GrpcMethod
   → Wave 2:
      Task 3: TDD apps/gateway/src/infra/grpc/analyzer.client.ts → call new method
-     Task 4: TDD apps/gateway/src/controllers/audit.controller.ts → add POST /batch
+     Task 4: TDD apps/gateway/src/audits/controllers/audits.controller.ts → add POST /batch
   → Wave 3:
      Task 5: Update test/e2e/smoke.e2e-spec.ts → add batch flow
 

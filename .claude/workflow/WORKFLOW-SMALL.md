@@ -72,7 +72,7 @@ Service: seo-analyzer (single-service, 1 file)
    - Load domain skill: seo-rules
    - Write test: expect(analyzeTitle("a".repeat(61))).toEqual({ score: 70, ... })
    - Run → FAILS (returns score: 0)
-   - Fix: apps/seo-analyzer/src/domain/analyzers/on-page/title.analyzer.ts
+   - Fix: apps/seo-analyzer/src/analyzer/domain/rules/meta/title-tag.rule.ts
    - Run → PASSES: npm run test --filter=seo-analyzer
 
 2. KIEM DINH:
