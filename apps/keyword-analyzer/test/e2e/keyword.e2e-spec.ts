@@ -4,8 +4,8 @@ import { INestMicroservice } from '@nestjs/common';
 import { Transport, ClientProxyFactory, ClientGrpc } from '@nestjs/microservices';
 import { join } from 'path';
 import { firstValueFrom, Observable } from 'rxjs';
-import { KeywordController } from '../src/keyword/keyword.controller';
-import { KeywordAnalyzerService } from '../src/keyword/keyword-analyzer.service';
+import { KeywordController } from '../../src/keyword/controllers/keyword.controller';
+import { KeywordAnalyzerService } from '../../src/keyword/services/keyword-analyzer.service';
 
 interface KeywordGrpcClient {
   analyzeKeywords(data: Record<string, unknown>): Observable<{
@@ -19,8 +19,8 @@ interface KeywordGrpcClient {
 }
 
 const GRPC_URL = '127.0.0.1:55054';
-const PROTO_PATH = join(__dirname, '../../..', 'packages/proto/keyword/v1/keyword.proto');
-const PROTO_DIR = join(__dirname, '../../..', 'packages/proto');
+const PROTO_PATH = join(__dirname, '../../../..', 'packages/proto/keyword/v1/keyword.proto');
+const PROTO_DIR = join(__dirname, '../../../..', 'packages/proto');
 
 describe('KeywordAnalyzer (e2e)', () => {
   let app: INestMicroservice;

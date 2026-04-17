@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { KeywordController } from './keyword.controller';
-import { KeywordAnalyzerService } from './keyword-analyzer.service';
-import { KeywordWorker } from './keyword.worker';
-import { EventPublisher } from './event.publisher';
+import { KeywordController } from './controllers/keyword.controller';
+import { KeywordAnalyzerService } from './services/keyword-analyzer.service';
+import { KeywordWorker } from './controllers/keyword.worker';
+import { EventPublisher } from './services/event.publisher';
 
 @Module({
   controllers: [KeywordController],

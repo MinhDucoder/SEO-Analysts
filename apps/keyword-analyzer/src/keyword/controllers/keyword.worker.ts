@@ -2,9 +2,9 @@ import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { BULLMQ_QUEUES } from '@repo/shared';
-import { KeywordAnalyzerService } from './keyword-analyzer.service';
-import { EventPublisher } from './event.publisher';
-import type { KeywordAnalyzeInput } from './dto/keyword-request.dto';
+import { KeywordAnalyzerService } from '../services/keyword-analyzer.service';
+import { EventPublisher } from '../services/event.publisher';
+import type { KeywordAnalyzeInput } from '../dto/keyword-request.dto';
 
 /**
  * Job payload is produced by the Gateway when it fans out after the

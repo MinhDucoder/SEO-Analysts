@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { detectLanguage } from '../keyword/core/language-detector';
+import { detectLanguage } from '../../src/keyword/domain/language-detector';
 
 describe('detectLanguage', () => {
   it('returns "vi" when text contains Vietnamese diacritics', () => {

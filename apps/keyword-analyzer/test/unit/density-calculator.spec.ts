@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateDensity } from '../keyword/core/density-calculator';
+import { calculateDensity } from '../../src/keyword/domain/density-calculator';
 
 describe('calculateDensity', () => {
   it('computes (frequency / totalWords) * 100', () => {

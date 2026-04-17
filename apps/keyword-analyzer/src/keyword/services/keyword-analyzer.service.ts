@@ -1,16 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { detectLanguage, type LanguageCode } from './core/language-detector';
-import { tokenize, countTotalWords } from './core/tokenizer';
-import { calculateTermFrequency, topNKeywords } from './core/term-frequency';
-import { checkPlacement, extractFirstParagraph } from './core/placement-checker';
-import { calculateDensity } from './core/density-calculator';
-import { getVerdict, isStuffing } from './core/target-verdict';
-import type { KeywordAnalyzeInput } from './dto/keyword-request.dto';
+import { detectLanguage, type LanguageCode } from '../domain/language-detector';
+import { tokenize, countTotalWords } from '../domain/tokenizer';
+import { calculateTermFrequency, topNKeywords } from '../domain/term-frequency';
+import { checkPlacement, extractFirstParagraph } from '../domain/placement-checker';
+import { calculateDensity } from '../domain/density-calculator';
+import { getVerdict, isStuffing } from '../domain/target-verdict';
+import type { KeywordAnalyzeInput } from '../dto/keyword-request.dto';
 import type {
   KeywordAnalyzeOutput,
   KeywordResultDto,
   TargetKeywordAnalysisDto,
-} from './dto/keyword-response.dto';
+} from '../dto/keyword-response.dto';
 
 const TOP_N = 20;
 

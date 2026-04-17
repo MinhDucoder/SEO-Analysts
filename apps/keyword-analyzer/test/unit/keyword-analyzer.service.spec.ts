@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { KeywordAnalyzerService } from '../keyword/keyword-analyzer.service';
+import { KeywordAnalyzerService } from '../../src/keyword/services/keyword-analyzer.service';
 
 describe('KeywordAnalyzerService', () => {
   let service: KeywordAnalyzerService;

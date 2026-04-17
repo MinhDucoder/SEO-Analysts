@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateTermFrequency, topNKeywords } from '../keyword/core/term-frequency';
+import { calculateTermFrequency, topNKeywords } from '../../src/keyword/domain/term-frequency';
 
 describe('calculateTermFrequency', () => {
   it('counts occurrences of each token', () => {

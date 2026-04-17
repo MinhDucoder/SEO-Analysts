@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getVerdict } from '../keyword/core/target-verdict';
+import { getVerdict } from '../../src/keyword/domain/target-verdict';
 
 describe('getVerdict', () => {
   it('returns "low" when density < 1%', () => {

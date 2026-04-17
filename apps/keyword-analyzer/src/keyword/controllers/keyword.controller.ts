@@ -1,6 +1,6 @@
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { KeywordAnalyzerService } from './keyword-analyzer.service';
+import { KeywordAnalyzerService } from '../services/keyword-analyzer.service';
 
 /**
  * Proto request shape (camelCase because main.ts configures

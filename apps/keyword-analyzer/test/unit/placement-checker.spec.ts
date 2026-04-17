@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkPlacement, extractFirstParagraph } from '../keyword/core/placement-checker';
+import { checkPlacement, extractFirstParagraph } from '../../src/keyword/domain/placement-checker';
 
 describe('extractFirstParagraph', () => {
   it('returns the first 100 words of the text', () => {

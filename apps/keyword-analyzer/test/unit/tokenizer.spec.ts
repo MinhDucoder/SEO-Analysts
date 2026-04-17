@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { tokenize } from '../keyword/core/tokenizer';
+import { tokenize } from '../../src/keyword/domain/tokenizer';
 
 describe('tokenize', () => {
   it('lowercases all tokens', () => {
