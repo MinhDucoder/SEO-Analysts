@@ -42,6 +42,11 @@ export enum FormFactor {
   DESKTOP = 'desktop',
 }
 
+export enum AuditMode {
+  SINGLE = 'single',
+  SITE = 'site',
+}
+
 // ─── Shared Interfaces ───
 
 export interface CoreWebVitals {
@@ -110,6 +115,20 @@ export const BULLMQ_QUEUES = {
   ANALYZE_START: 'analyze.start',
   KEYWORD_START: 'keyword.start',
   REPORT_START: 'report.start',
+  SITE_CRAWL_START: 'site-crawl.start',
+  SITE_CRAWL_URL_AUDIT: 'site-crawl.url-audit',
+  SITE_CRAWL_AGGREGATE: 'site-crawl.aggregate',
+} as const;
+
+// Site-wide crawl limits — enforced by sitemap-discovery + site-crawl
+// orchestrator. Values match sitemaps.org protocol (50k URLs, 50MB per
+// sitemap file) plus a self-imposed cap to protect our own infra.
+export const SITE_CRAWL_LIMITS = {
+  MAX_URLS_PER_SITEMAP: 50_000,
+  MAX_SITEMAP_BYTES: 50 * 1024 * 1024,
+  MAX_SITEMAP_INDEX_DEPTH: 2,
+  DEFAULT_MAX_URLS_PER_AUDIT: 500,
+  HARD_CAP_MAX_URLS_PER_AUDIT: 5000,
 } as const;
 
 export const REDIS_KEYS = {
