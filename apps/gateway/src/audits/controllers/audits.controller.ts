@@ -14,14 +14,14 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { AuthenticatedUser } from '../common/interfaces/authenticated-request.interface';
-import { AuditsService } from './audits.service';
-import { CreateAuditDto } from './dto/create-audit.dto';
-import { ListAuditsQuery } from './dto/list-audits.query';
-import { CompareAuditsQuery } from './dto/compare-audits.query';
-import { ReportGrpcClient } from '../grpc/report.client';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { AuthenticatedUser } from '../../common/interfaces/authenticated-request.interface';
+import { AuditsService } from '../services/audits.service';
+import { CreateAuditDto } from '../dto/create-audit.dto';
+import { ListAuditsQuery } from '../dto/list-audits.query';
+import { CompareAuditsQuery } from '../dto/compare-audits.query';
+import { ReportGrpcClient } from '../../infra/grpc/report.client';
 
 @ApiTags('audits')
 @ApiBearerAuth()

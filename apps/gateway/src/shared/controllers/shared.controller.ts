@@ -1,7 +1,7 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
-import { ReportGrpcClient } from '../grpc/report.client';
+import { Public } from '../../common/decorators/public.decorator';
+import { ReportGrpcClient } from '../../infra/grpc/report.client';
 
 @ApiTags('shared')
 @Controller('shared')

@@ -13,11 +13,11 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { AuthModule } from '../../src/auth/auth.module';
-import { RedisModule } from '../../src/redis/redis.module';
+import { RedisModule } from '../../src/infra/redis/redis.module';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaService } from '../../src/prisma/prisma.service';
-import { RedisService } from '../../src/redis/redis.service';
-import { RateLimiterService } from '../../src/redis/rate-limiter.service';
+import { PrismaService } from '../../src/infra/prisma/prisma.service';
+import { RedisService } from '../../src/infra/redis/redis.service';
+import { RateLimiterService } from '../../src/infra/redis/rate-limiter.service';
 import { GoogleStrategy } from '../../src/auth/strategies/google.strategy';
 import { JwtStrategy } from '../../src/auth/strategies/jwt.strategy';
 

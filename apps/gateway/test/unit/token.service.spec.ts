@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { TokenService } from '../../src/auth/token.service';
+import { TokenService } from '../../src/auth/services/token.service';
 import { UserRole } from '@repo/shared';
 
 describe('TokenService', () => {

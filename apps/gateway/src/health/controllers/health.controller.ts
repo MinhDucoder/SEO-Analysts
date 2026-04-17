@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
-import { PrismaService } from '../prisma/prisma.service';
-import { RedisService } from '../redis/redis.service';
-import { CrawlerGrpcClient } from '../grpc/crawler.client';
-import { AnalyzerGrpcClient } from '../grpc/analyzer.client';
-import { ReportGrpcClient } from '../grpc/report.client';
+import { Public } from '../../common/decorators/public.decorator';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+import { RedisService } from '../../infra/redis/redis.service';
+import { CrawlerGrpcClient } from '../../infra/grpc/crawler.client';
+import { AnalyzerGrpcClient } from '../../infra/grpc/analyzer.client';
+import { ReportGrpcClient } from '../../infra/grpc/report.client';
 
 @ApiTags('health')
 @Controller('health')

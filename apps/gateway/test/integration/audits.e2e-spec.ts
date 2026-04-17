@@ -13,15 +13,15 @@ import { INestApplication, ValidationPipe, ExecutionContext, CanActivate } from 
 import request from 'supertest';
 import { ConfigModule } from '@nestjs/config';
 import { AuditsModule } from '../../src/audits/audits.module';
-import { GrpcModule } from '../../src/grpc/grpc.module';
-import { RedisModule } from '../../src/redis/redis.module';
-import { PrismaService } from '../../src/prisma/prisma.service';
-import { RedisService } from '../../src/redis/redis.service';
+import { GrpcModule } from '../../src/infra/grpc/grpc.module';
+import { RedisModule } from '../../src/infra/redis/redis.module';
+import { PrismaService } from '../../src/infra/prisma/prisma.service';
+import { RedisService } from '../../src/infra/redis/redis.service';
 import { JwtAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
-import { ReportGrpcClient } from '../../src/grpc/report.client';
-import { CrawlerGrpcClient } from '../../src/grpc/crawler.client';
-import { AnalyzerGrpcClient } from '../../src/grpc/analyzer.client';
-import { AuditQueueProducer } from '../../src/audits/audit-queue.producer';
+import { ReportGrpcClient } from '../../src/infra/grpc/report.client';
+import { CrawlerGrpcClient } from '../../src/infra/grpc/crawler.client';
+import { AnalyzerGrpcClient } from '../../src/infra/grpc/analyzer.client';
+import { AuditQueueProducer } from '../../src/audits/services/audit-queue.producer';
 import { AuditStatus, UserRole } from '@repo/shared';
 
 vi.mock('../../src/common/utils/url-validator', () => ({

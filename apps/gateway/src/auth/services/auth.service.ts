@@ -5,15 +5,15 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PasswordService } from './password.service';
 import { TokenService, IssuedTokens } from './token.service';
 import { VerificationService } from './verification.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
-import { RateLimiterService } from '../redis/rate-limiter.service';
+import { RegisterDto } from '../dto/register.dto';
+import { LoginDto } from '../dto/login.dto';
+import { RateLimiterService } from '../../infra/redis/rate-limiter.service';
 import { RATE_LIMIT, UserRole } from '@repo/shared';
-import { GoogleProfilePayload } from './strategies/google.strategy';
+import { GoogleProfilePayload } from '../strategies/google.strategy';
 
 export interface RequestContext {
   ip: string;

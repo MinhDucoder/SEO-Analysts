@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { ListUsersQuery } from './dto/list-users.query';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UpdateRulesDto } from './dto/update-rules.dto';
-import { AnalyzerGrpcClient } from '../grpc/analyzer.client';
-import { clampPagination, buildPaginationMeta } from '../common/utils/pagination.util';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+import { ListUsersQuery } from '../dto/list-users.query';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UpdateRulesDto } from '../dto/update-rules.dto';
+import { AnalyzerGrpcClient } from '../../infra/grpc/analyzer.client';
+import { clampPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
 import { AuditStatus } from '@repo/shared';
-import { Prisma } from '../generated/prisma';
+import { Prisma } from '../../infra/prisma/generated';
 
 @Injectable()
 export class AdminService {

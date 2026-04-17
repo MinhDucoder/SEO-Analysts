@@ -5,17 +5,17 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateAuditDto } from './dto/create-audit.dto';
-import { ListAuditsQuery } from './dto/list-audits.query';
-import { validateUrlSafety } from '../common/utils/url-validator';
-import { RateLimiterService } from '../redis/rate-limiter.service';
-import { RedisService } from '../redis/redis.service';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+import { CreateAuditDto } from '../dto/create-audit.dto';
+import { ListAuditsQuery } from '../dto/list-audits.query';
+import { validateUrlSafety } from '../../common/utils/url-validator';
+import { RateLimiterService } from '../../infra/redis/rate-limiter.service';
+import { RedisService } from '../../infra/redis/redis.service';
 import { RATE_LIMIT, AuditStatus, UserRole, REDIS_KEYS } from '@repo/shared';
 import { AuditQueueProducer } from './audit-queue.producer';
-import { ReportGrpcClient } from '../grpc/report.client';
-import { clampPagination, buildPaginationMeta } from '../common/utils/pagination.util';
-import { Prisma } from '../generated/prisma';
+import { ReportGrpcClient } from '../../infra/grpc/report.client';
+import { clampPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
+import { Prisma } from '../../infra/prisma/generated';
 
 @Injectable()
 export class AuditsService {

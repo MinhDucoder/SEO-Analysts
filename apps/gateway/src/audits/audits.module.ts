@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BULLMQ_QUEUES } from '@repo/shared';
-import { AuditsController } from './audits.controller';
-import { AuditsService } from './audits.service';
-import { AuditQueueProducer } from './audit-queue.producer';
-import { PrismaModule } from '../prisma/prisma.module';
+import { AuditsController } from './controllers/audits.controller';
+import { AuditsService } from './services/audits.service';
+import { AuditQueueProducer } from './services/audit-queue.producer';
+import { PrismaModule } from '../infra/prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({

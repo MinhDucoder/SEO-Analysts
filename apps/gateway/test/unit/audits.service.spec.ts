@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { AuditsService } from '../../src/audits/audits.service';
+import { AuditsService } from '../../src/audits/services/audits.service';
 import { AuditStatus, UserRole } from '@repo/shared';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 

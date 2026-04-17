@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes, createHash } from 'crypto';
 import { JWT_CONFIG, UserRole } from '@repo/shared';
-import { PrismaService } from '../prisma/prisma.service';
-import { JwtPayload } from '../common/interfaces/jwt-payload.interface';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+import { JwtPayload } from '../../common/interfaces/jwt-payload.interface';
 
 export interface IssuedTokens {
   accessToken: string;

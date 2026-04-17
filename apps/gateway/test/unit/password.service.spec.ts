@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PasswordService } from '../../src/auth/password.service';
+import { PasswordService } from '../../src/auth/services/password.service';
 
 describe('PasswordService', () => {
   const svc = new PasswordService();

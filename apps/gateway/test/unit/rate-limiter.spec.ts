@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { RateLimiterService } from '../../src/redis/rate-limiter.service';
-import { RedisService } from '../../src/redis/redis.service';
+import { RateLimiterService } from '../../src/infra/redis/rate-limiter.service';
+import { RedisService } from '../../src/infra/redis/redis.service';
 
 class FakeRedis {
   store = new Map<string, Array<{ score: number; member: string }>>();

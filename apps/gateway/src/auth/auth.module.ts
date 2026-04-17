@@ -3,17 +3,17 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JWT_CONFIG } from '@repo/shared';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { TokenService } from './token.service';
-import { PasswordService } from './password.service';
-import { VerificationService } from './verification.service';
+import { AuthController } from './controllers/auth.controller';
+import { AuthService } from './services/auth.service';
+import { TokenService } from './services/token.service';
+import { PasswordService } from './services/password.service';
+import { VerificationService } from './services/verification.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaModule } from '../infra/prisma/prisma.module';
 
 const googleStrategyProvider = {
   provide: GoogleStrategy,

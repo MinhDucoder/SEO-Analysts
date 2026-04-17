@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomBytes } from 'crypto';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../../infra/redis/redis.service';
 
 @Injectable()
 export class VerificationService {
