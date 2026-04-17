@@ -28,6 +28,7 @@
 ## Quy tắc vận hành
 
 1. **Ngôn ngữ**: Trả lời bằng tiếng Việt (trừ từ chuyên môn). Code comments bằng tiếng Anh.
+1a. **Commit messages**: TUYỆT ĐỐI KHÔNG thêm `Co-Authored-By: Claude ...` / `🤖 Generated with Claude Code` / bất kỳ attribution nào cho Claude/Claude Code vào commit hoặc PR body. Commit messages phải giữ sạch như do người viết.
 2. **Context-first**: Đọc `context/` trước khi bắt đầu task phức tạp
 3. **Skill-driven**: Sử dụng `skills/` cho domain-specific patterns
 4. **NestJS-first**: Backend luôn dùng NestJS patterns (modules, decorators, DI, guards, pipes)
