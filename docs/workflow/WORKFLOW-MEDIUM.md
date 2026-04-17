@@ -58,25 +58,48 @@ For each task from step 2:
 
 ```
 Task: Add og:title, og:description, og:image analyzer
+Service: seo-analyzer (single-service — frontend display pending apps/web)
+Impact: single-service (no proto, no cross-service, no shared schema)
 
 1. THIET KE:
    /office-hours
-   → Clarify: which OG tags, scoring weight, penalty logic
+   → Clarify: which OG tags, scoring weight, penalty logic, integration with registry
 
 2. CHIA NHO:
    gsd:quick --discuss
-   → Task 1: Create og-tags.analyzer.ts with interface
-   → Task 2: Register in rule-registry, add weight
-   → Task 3: Add to frontend display
+   → Task 1: Create apps/seo-analyzer/src/domain/analyzers/on-page/og-tags.analyzer.ts + interface
+   → Task 2: Register in apps/seo-analyzer/src/services/rule-registry.service.ts, add weight
+   → Task 3: Add DB entry via Prisma seed (apps/seo-analyzer/prisma/seed.ts)
 
-3. CODE (per task):
-   → Task 1: write og-tags.analyzer.spec.ts → RED → implement → GREEN
-   → Task 2: write registry.spec.ts update → RED → implement → GREEN
-   → Task 3: write component test → RED → implement → GREEN
+3. CODE (per task) — load domain skill: seo-rules
+   → Task 1: write og-tags.analyzer.spec.ts → RED → implement → GREEN → commit
+   → Task 2: write registry integration test → RED → update registry → GREEN → commit
+   → Task 3: update seed + run `npx prisma db seed` → verify inserted → commit
 
 4. KIEM DINH:
    /review → staff-engineer review, auto-fix issues
+   npm run test --filter=seo-analyzer → all pass
+   npm run lint --filter=seo-analyzer → clean
+   (No cross-service gates — impact = single-service)
 ```
+
+## Cross-service variant (when change touches ≥2 services)
+
+Same 4 steps above, PLUS between steps 3 and 4:
+
+```
+3.5 Integration smoke:
+    npm run build --filter=@repo/proto       (regen if proto touched)
+    npm run type-check                        (all workspaces — catch consumer breaks)
+    npm run e2e:smoke                         (happy-path pipeline test)
+```
+
+KIEM DINH step 4 adds the microservices gates for cross-service impact:
+- Proto typecheck (if proto touched or consumer changed)
+- gRPC smoke (e2e:smoke)
+- BullMQ payload compat check (if @repo/shared or queue payload changed)
+
+Fail any gate → back to CODE → fix → re-run ONLY failed gate. Max 2 retries.
 
 ## Failure Handling
 
@@ -98,5 +121,6 @@ If during CODE you discover scope > 7 files or > 2 modules:
 ## Cheat Sheet
 
 ```
-/office-hours -> gsd:quick --discuss -> SP:TDD -> /review -> done
+Single-service:  /office-hours -> gsd:quick --discuss -> SP:TDD -> /review -> commit
+Cross-service:   /office-hours -> gsd:quick --discuss -> SP:TDD -> proto typecheck + e2e:smoke -> /review -> commit
 ```
