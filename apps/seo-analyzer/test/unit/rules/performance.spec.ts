@@ -21,13 +21,13 @@ describe('PageSizeRule', () => {
 });
 
 describe('registerAllRules', () => {
-  it('registers all 20 SEO rules with unique ids', () => {
+  it('registers all 21 SEO rules with unique ids', () => {
     const registry = new RuleRegistry();
     registerAllRules(registry);
     const all = registry.getAll();
-    expect(all).toHaveLength(20);
+    expect(all).toHaveLength(21);
     const ids = new Set(all.map((r) => r.id));
-    expect(ids.size).toBe(20);
+    expect(ids.size).toBe(21);
     // Sanity: each seeded rule name must be registered
     const expected = [
       'title_tag', 'meta_description', 'open_graph', 'twitter_card',
@@ -37,6 +37,7 @@ describe('registerAllRules', () => {
       'canonical_url', 'robots_meta', 'viewport_meta', 'https_check',
       'schema_org', 'http_status', 'url_structure', 'language_tag', 'favicon',
       'page_size',
+      'readability',
     ];
     for (const name of expected) {
       expect(registry.get(name), `missing rule ${name}`).toBeDefined();

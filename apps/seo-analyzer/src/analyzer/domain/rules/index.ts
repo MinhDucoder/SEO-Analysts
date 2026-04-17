@@ -1,7 +1,7 @@
 /**
  * @file Central rule registration — every new rule must be added here.
  * Called once at module init (`AnalyzerService.onModuleInit`) so the
- * registry mirrors the 20 rows seeded in the `seo_rules` table.
+ * registry mirrors the 21 rows seeded in the `seo_rules` table.
  */
 import { RuleRegistry } from '../../services/rule-registry';
 import { TitleTagRule } from './meta/title-tag.rule';
@@ -24,6 +24,7 @@ import { UrlStructureRule } from './technical/url-structure.rule';
 import { LanguageTagRule } from './technical/language-tag.rule';
 import { FaviconRule } from './technical/favicon.rule';
 import { PageSizeRule } from './performance/page-size.rule';
+import { ReadabilityRule } from './content/readability.rule';
 
 /** Register all built-in rules into the given registry. Idempotent. */
 export function registerAllRules(registry: RuleRegistry): void {
@@ -47,4 +48,5 @@ export function registerAllRules(registry: RuleRegistry): void {
   registry.register(new LanguageTagRule());
   registry.register(new FaviconRule());
   registry.register(new PageSizeRule());
+  registry.register(new ReadabilityRule());
 }

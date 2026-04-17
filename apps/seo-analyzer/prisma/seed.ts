@@ -23,6 +23,7 @@ const rules = [
   { name: 'url_structure',      displayName: 'URL Structure',      category: 'technical' as const,   weight: 4,  description: 'URL ngan, co tu khoa, dung dau gach ngang' },
   { name: 'language_tag',       displayName: 'Language Tag',       category: 'technical' as const,   weight: 3,  description: 'html lang duoc khai bao' },
   { name: 'favicon',            displayName: 'Favicon',            category: 'technical' as const,   weight: 2,  description: 'Co favicon.ico hoac link rel=icon' },
+  { name: 'readability',        displayName: 'Readability (Flesch-Kincaid)', category: 'content' as const,   weight: 4,  description: 'Flesch Reading Ease; target 60-70 cho plain English' },
 ];
 
 async function main() {
