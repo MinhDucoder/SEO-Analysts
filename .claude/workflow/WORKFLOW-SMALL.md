@@ -2,6 +2,19 @@
 
 > <= 2 files, no arch change, bug fix / config / typo / small refactor
 
+## Pre-flight impact check (MANDATORY before starting)
+
+```
+Before coding, confirm the change is TRULY single-service + ≤2 files:
+
+☐ Does it touch packages/proto/** ?    → YES: STOP, escalate to LARGE (proto-breaking)
+☐ Does it touch ≥2 apps/* dirs ?       → YES: STOP, escalate to MEDIUM
+☐ Does it touch prisma/schema.prisma ? → YES: STOP, escalate to MEDIUM
+☐ Does it touch @repo/shared ?         → YES: STOP, escalate to MEDIUM
+
+All NO → proceed with SMALL.
+```
+
 ## Phases Active
 
 ```
@@ -53,20 +66,23 @@ If during CODE you discover scope > 2 files or needs arch change:
 
 ```
 Task: Title analyzer returns 0 instead of penalty score when title > 60 chars
+Service: seo-analyzer (single-service, 1 file)
 
 1. CODE:
+   - Load domain skill: seo-rules
    - Write test: expect(analyzeTitle("a".repeat(61))).toEqual({ score: 70, ... })
    - Run → FAILS (returns score: 0)
-   - Fix: src/seo-engine/rules/on-page/title.analyzer.ts line 42
-   - Run → PASSES
+   - Fix: apps/seo-analyzer/src/domain/analyzers/on-page/title.analyzer.ts
+   - Run → PASSES: npm run test --filter=seo-analyzer
 
 2. KIEM DINH:
-   - Run: npm run test → all pass
+   - Run: npm run test --filter=seo-analyzer → all pass
+   - Run: npm run lint --filter=seo-analyzer → clean
    - Done
 ```
 
 ## Cheat Sheet
 
 ```
-SP:TDD (test -> fail -> implement -> pass) -> SP:verify -> done
+impact-check → load domain skill → SP:TDD → SP:verify → commit → done
 ```
