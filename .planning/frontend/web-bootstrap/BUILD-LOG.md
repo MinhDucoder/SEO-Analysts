@@ -23,8 +23,8 @@ date: 2026-04-18
 | Wave | Description | Files | Commit | Status |
 |---|---|---|---|---|
 | 1 (PLAN W1+W2) | Workspace manifest + TS/build/test configs + scaffold | 10 (package.json, tsconfig.json, next.config.mjs, postcss.config.mjs, components.json, eslint.config.js, .gitignore, .env.example, src/types/global.d.ts; root package-lock.json bumped via `npm install` adding 151 deps) | **fc416bd** + fix **be79300** (drop unused deps, add test configs) + **704141c** (turbo globalEnv) | ✅ done |
-| 2 (PLAN W3) | Tailwind config + design tokens + globals + public SVG assets | 5 (tailwind.config.ts, src/styles/tokens.css, src/app/globals.css, public/logo.svg, public/favicon.svg) | (this commit) | ✅ done |
-| 3 (PLAN W4) | Utilities with TDD: `cn.ts` + test, `format.ts` + test, `constants.ts`, ensure types/global.d.ts retained | TBD | — | pending |
+| 2 (PLAN W3) | Tailwind config + design tokens + globals + public SVG assets | 5 (tailwind.config.ts, src/styles/tokens.css, src/app/globals.css, public/logo.svg, public/favicon.svg) | **0ed5ee7** | ✅ done |
+| 3 (PLAN W4) | Utilities with TDD: `cn.ts` + test, `format.ts` + test, `constants.ts` | 5 (src/lib/utils/cn.ts, src/lib/utils/format.ts, src/lib/constants.ts, tests/unit/cn.test.ts, tests/unit/format.test.ts). 19/19 vitest pass. | (this commit) | ✅ done |
 | 4 (PLAN W5) | Lib stubs: `api/types.ts`, `api/client.ts`, `ws/client.ts`, `auth/store.ts`, `queries/keys.ts` | TBD | — | pending |
 | 5 (PLAN W6) | shadcn primitives (11 components) | TBD | — | pending |
 | 6 (PLAN W7) | App shell: `providers.tsx`, `error.tsx`, `layout.tsx` | TBD | — | pending |
