@@ -16,13 +16,14 @@ date: 2026-04-18
 | Wave 1 (manifest only) + Wave 2 (TS/build/test configs) | **MERGED into single commit `fc416bd`** | Pre-commit hook runs `turbo lint + check-types` across the workspace. If `package.json` is added without `tsconfig.json` + `eslint.config.js`, the `@seo/web` package's `check-types` and `lint` scripts cannot resolve and the commit fails. Bundling Wave 1 + 2 lets the hook see a coherent workspace. |
 | `next lint` (planned in PLAN Wave 2) | Switched to `eslint .` | `next lint` errored "Invalid project directory provided" inside the turbo monorepo runner; switched to direct `eslint .` to bypass the wrapper. |
 | Eslint preset `next-js` | Disabled `@next/next/no-html-link-for-pages` | The rule errors when `pages/` and `src/pages/` are absent (App Router). |
+| Wave 2 favicon | `public/favicon.svg` (not `.ico`) | Can't author binary ICO via file-write; Next 14 supports SVG favicons. Browser + RSC link element pick it up. |
 
 ## Wave progress
 
 | Wave | Description | Files | Commit | Status |
 |---|---|---|---|---|
-| 1 (PLAN W1+W2) | Workspace manifest + TS/build/test configs + scaffold | 10 (package.json, tsconfig.json, next.config.mjs, postcss.config.mjs, components.json, eslint.config.js, .gitignore, .env.example, src/types/global.d.ts; root package-lock.json bumped via `npm install` adding 151 deps) | **fc416bd** | ✅ done |
-| 2 (PLAN W3) | Tailwind config + design tokens (`tokens.css`) + globals.css + public assets (favicon, logo.svg) | TBD | — | pending |
+| 1 (PLAN W1+W2) | Workspace manifest + TS/build/test configs + scaffold | 10 (package.json, tsconfig.json, next.config.mjs, postcss.config.mjs, components.json, eslint.config.js, .gitignore, .env.example, src/types/global.d.ts; root package-lock.json bumped via `npm install` adding 151 deps) | **fc416bd** + fix **be79300** (drop unused deps, add test configs) + **704141c** (turbo globalEnv) | ✅ done |
+| 2 (PLAN W3) | Tailwind config + design tokens + globals + public SVG assets | 5 (tailwind.config.ts, src/styles/tokens.css, src/app/globals.css, public/logo.svg, public/favicon.svg) | (this commit) | ✅ done |
 | 3 (PLAN W4) | Utilities with TDD: `cn.ts` + test, `format.ts` + test, `constants.ts`, ensure types/global.d.ts retained | TBD | — | pending |
 | 4 (PLAN W5) | Lib stubs: `api/types.ts`, `api/client.ts`, `ws/client.ts`, `auth/store.ts`, `queries/keys.ts` | TBD | — | pending |
 | 5 (PLAN W6) | shadcn primitives (11 components) | TBD | — | pending |
