@@ -31,7 +31,10 @@ async function describeError(err: unknown): Promise<string> {
     if (status === 401) return "Email hoặc mật khẩu không đúng";
     if (status === 403) {
       const body = await err.response.clone().json().catch(() => null);
-      const msg = typeof body === "object" && body !== null && "message" in body ? String((body as { message: unknown }).message) : "";
+      const msg =
+        typeof body === "object" && body !== null && "message" in body
+          ? String((body as { message: unknown }).message)
+          : "";
       if (msg.toLowerCase().includes("verify")) return "Vui lòng verify email trước khi đăng nhập";
       if (msg.toLowerCase().includes("locked")) return "Tài khoản đã bị khoá";
       return msg || "Không có quyền truy cập";
@@ -39,11 +42,16 @@ async function describeError(err: unknown): Promise<string> {
     if (status === 409) return "Email đã được đăng ký";
     if (status === 429) {
       const retry = err.response.headers.get("Retry-After");
-      return retry ? `Quá nhiều lần thử. Thử lại sau ${retry} giây` : "Quá nhiều lần thử, vui lòng đợi";
+      return retry
+        ? `Quá nhiều lần thử. Thử lại sau ${retry} giây`
+        : "Quá nhiều lần thử, vui lòng đợi";
     }
     if (status === 400) {
       const body = await err.response.clone().json().catch(() => null);
-      const msg = typeof body === "object" && body !== null && "message" in body ? (body as { message: string | string[] }).message : null;
+      const msg =
+        typeof body === "object" && body !== null && "message" in body
+          ? (body as { message: string | string[] }).message
+          : null;
       if (Array.isArray(msg)) return msg.join(", ");
       if (typeof msg === "string") return msg;
       return "Dữ liệu không hợp lệ";
@@ -52,22 +60,36 @@ async function describeError(err: unknown): Promise<string> {
   return "Đã có lỗi xảy ra. Vui lòng thử lại.";
 }
 
-type MutationExtras<TInput, TOutput> = Omit<UseMutationOptions<TOutput, unknown, TInput>, "mutationFn">;
+type MutationExtras<TInput, TOutput> = Omit<
+  UseMutationOptions<TOutput, unknown, TInput>,
+  "mutationFn"
+>;
+
+/**
+ * NOTE on `extras` composition: `...extras` spreads FIRST, then the wrapper's
+ * `onSuccess`/`onError` override — so default behavior (setAuth, default
+ * error toast) is ALWAYS applied. Caller's handlers are invoked inside the
+ * wrapper AFTER the defaults run. This differs from the typical "spread last
+ * wins" pattern and is intentional: we don't want consumers to accidentally
+ * skip store hydration by passing their own onSuccess.
+ */
 
 export function useLogin(extras?: MutationExtras<LoginInput, AuthSession>) {
   const queryClient = useQueryClient();
   return useMutation<AuthSession, unknown, LoginInput>({
     mutationFn: loginFn,
-    onSuccess: (session, ...rest) => {
+    ...extras,
+    onSuccess: (...args) => {
+      const [session] = args;
       useAuthStore.getState().setAuth(session.user, session.accessToken);
       queryClient.setQueryData(queryKeys.auth.me, session.user);
-      extras?.onSuccess?.(session, ...rest);
+      (extras?.onSuccess as ((...a: typeof args) => void) | undefined)?.(...args);
     },
-    onError: async (err, ...rest) => {
+    onError: async (...args) => {
+      const [err] = args;
       toast.error(await describeError(err));
-      extras?.onError?.(err, ...rest);
+      (extras?.onError as ((...a: typeof args) => void) | undefined)?.(...args);
     },
-    ...extras,
   });
 }
 
@@ -75,16 +97,18 @@ export function useRegister(extras?: MutationExtras<RegisterInput, AuthSession>)
   const queryClient = useQueryClient();
   return useMutation<AuthSession, unknown, RegisterInput>({
     mutationFn: registerFn,
-    onSuccess: (session, ...rest) => {
+    ...extras,
+    onSuccess: (...args) => {
+      const [session] = args;
       useAuthStore.getState().setAuth(session.user, session.accessToken);
       queryClient.setQueryData(queryKeys.auth.me, session.user);
-      extras?.onSuccess?.(session, ...rest);
+      (extras?.onSuccess as ((...a: typeof args) => void) | undefined)?.(...args);
     },
-    onError: async (err, ...rest) => {
+    onError: async (...args) => {
+      const [err] = args;
       toast.error(await describeError(err));
-      extras?.onError?.(err, ...rest);
+      (extras?.onError as ((...a: typeof args) => void) | undefined)?.(...args);
     },
-    ...extras,
   });
 }
 
@@ -93,11 +117,12 @@ export function useVerifyEmail(
 ) {
   return useMutation<{ message: string }, unknown, VerifyEmailInput>({
     mutationFn: verifyEmailFn,
-    onError: async (err, ...rest) => {
-      toast.error(await describeError(err));
-      extras?.onError?.(err, ...rest);
-    },
     ...extras,
+    onError: async (...args) => {
+      const [err] = args;
+      toast.error(await describeError(err));
+      (extras?.onError as ((...a: typeof args) => void) | undefined)?.(...args);
+    },
   });
 }
 
@@ -106,11 +131,9 @@ export function useForgotPassword(
 ) {
   return useMutation<{ message: string }, unknown, ForgotPasswordInput>({
     mutationFn: forgotPasswordFn,
-    onError: async (err, ...rest) => {
-      toast.error(await describeError(err));
-      extras?.onError?.(err, ...rest);
-    },
     ...extras,
+    // No default onError: forgot-password must NEVER leak whether the account
+    // exists, so caller handles both success and error identically.
   });
 }
 
@@ -119,10 +142,11 @@ export function useResetPassword(
 ) {
   return useMutation<{ message: string }, unknown, ResetPasswordRequest>({
     mutationFn: resetPasswordFn,
-    onError: async (err, ...rest) => {
-      toast.error(await describeError(err));
-      extras?.onError?.(err, ...rest);
-    },
     ...extras,
+    onError: async (...args) => {
+      const [err] = args;
+      toast.error(await describeError(err));
+      (extras?.onError as ((...a: typeof args) => void) | undefined)?.(...args);
+    },
   });
 }
