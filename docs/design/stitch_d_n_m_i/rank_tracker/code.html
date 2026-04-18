@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rank Tracker | Analytica Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#004ced",
+              "surface-bright": "#f8f9ff",
+              "surface-dim": "#cddbf2",
+              "secondary-fixed-dim": "#bfc6dc",
+              "on-secondary-container": "#5c6477",
+              "on-tertiary-fixed-variant": "#005236",
+              "inverse-surface": "#243143",
+              "inverse-primary": "#b7c4ff",
+              "tertiary-fixed": "#6ffbbe",
+              "on-primary-container": "#dfe3ff",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#0038b6",
+              "primary-container": "#0052ff",
+              "surface-container-highest": "#d6e3fb",
+              "on-tertiary-fixed": "#002113",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#dbe2f9",
+              "tertiary-fixed-dim": "#4edea3",
+              "primary-fixed": "#dde1ff",
+              "on-tertiary": "#ffffff",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#b7c4ff",
+              "outline": "#737688",
+              "outline-variant": "#c3c5d9",
+              "background": "#f8f9ff",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed": "#141b2c",
+              "surface-variant": "#d6e3fb",
+              "surface-container-high": "#dce9ff",
+              "inverse-on-surface": "#eaf1ff",
+              "surface": "#f8f9ff",
+              "on-surface-variant": "#434656",
+              "secondary": "#565e71",
+              "on-primary-fixed": "#001452",
+              "on-tertiary-container": "#72fec0",
+              "surface-container-low": "#eff4ff",
+              "on-surface": "#0f1c2d",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "tertiary-container": "#007550",
+              "surface-container": "#e6eeff",
+              "on-secondary-fixed-variant": "#3f4759",
+              "tertiary": "#005a3c",
+              "error": "#ba1a1a",
+              "secondary-container": "#dbe2f9",
+              "primary": "#003ec7",
+              "on-background": "#0f1c2d"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9ff;
+            color: #0f1c2d;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-6 bg-slate-900 w-64 rounded-r-2xl shadow-xl z-50">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-bold text-white tracking-tight">Analytica Pro</h1>
+<p class="text-xs text-slate-400 font-medium">SEO Intelligence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-sm font-medium">Website Audit</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="text-sm font-medium">Keyword Research</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">link</span>
+<span class="text-sm font-medium">Backlink Checker</span>
+</a>
+<!-- Active Tab: Rank Tracker -->
+<a class="flex items-center gap-3 bg-blue-600 text-white rounded-xl px-4 py-3 mx-2 my-1 shadow-lg shadow-blue-500/20 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-sm font-medium">Rank Tracker</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">On-page SEO</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Competitors</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="text-sm font-medium">Academy</span>
+</a>
+</nav>
+<div class="mt-auto px-2">
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 transition-all duration-200 hover:bg-slate-800 rounded-xl" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-64 min-h-screen pb-20">
+<!-- TopAppBar (Shared Component) -->
+<header class="sticky top-0 z-40 flex justify-between items-center w-full px-8 py-4 bg-white/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-8">
+<h2 class="text-2xl font-extrabold tracking-tight text-slate-900">Rank Tracker</h2>
+<div class="hidden md:flex items-center bg-slate-50 rounded-full px-4 py-2 w-96">
+<span class="material-symbols-outlined text-slate-400 text-xl mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder-slate-400" placeholder="Search keywords or URLs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+<div class="text-right">
+<p class="text-sm font-bold text-slate-900 leading-tight">Alex Rivera</p>
+<p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Pro Plan</p>
+</div>
+<span class="material-symbols-outlined text-3xl text-primary">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="px-8 mt-8 space-y-8">
+<!-- Bento Grid Header: Visibility Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Main Score Card -->
+<div class="md:col-span-2 bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<div>
+<span class="text-xs font-bold text-primary uppercase tracking-widest mb-2 block">Project Visibility</span>
+<h3 class="text-6xl font-extrabold text-on-surface tracking-tighter">74.2<span class="text-primary text-3xl">%</span></h3>
+<p class="text-tertiary font-semibold flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                            +3.4% vs last week
+                        </p>
+</div>
+<div class="mt-8 flex gap-4">
+<div class="flex-1 bg-surface-container-low p-4 rounded-2xl">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-1">Estimated Traffic</p>
+<p class="text-xl font-bold">12.8k</p>
+</div>
+<div class="flex-1 bg-surface-container-low p-4 rounded-2xl">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-1">Avg. Position</p>
+<p class="text-xl font-bold">14.2</p>
+</div>
+</div>
+</div>
+<!-- Distribution Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm flex flex-col border border-outline-variant/10">
+<h4 class="text-sm font-bold text-on-surface-variant mb-6">Ranking Distribution</h4>
+<div class="space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between text-xs font-bold">
+<span>Top 3</span>
+<span class="text-primary">124</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 25%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs font-bold">
+<span>Top 10</span>
+<span class="text-primary">458</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs font-bold">
+<span>Top 100</span>
+<span class="text-primary">1,240</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 90%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Snapshot Info -->
+<div class="bg-inverse-surface p-8 rounded-[2rem] shadow-xl text-white flex flex-col justify-between">
+<div>
+<h4 class="text-sm font-medium text-slate-400 mb-1">Keywords Tracked</h4>
+<p class="text-3xl font-bold">2,500 <span class="text-slate-500 text-lg">/ 5k</span></p>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-700">
+<p class="text-xs text-slate-400 mb-3">Last updated: 14 mins ago</p>
+<button class="w-full py-3 bg-primary rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                            Refresh Data
+                        </button>
+</div>
+</div>
+</div>
+<!-- Winners & Losers Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Top Winners -->
+<section class="bg-surface-container-lowest rounded-[2rem] p-8 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">keyboard_double_arrow_up</span>
+                            Top Winners
+                        </h3>
+<button class="text-xs font-bold text-primary hover:underline">View all</button>
+</div>
+<div class="space-y-2">
+<!-- Winner Row 1 -->
+<div class="flex items-center justify-between p-4 bg-surface rounded-2xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">seo tools for agencies</p>
+<p class="text-[10px] text-on-surface-variant">analytica.pro/tools</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">2 <span class="text-[10px] text-tertiary">↑ 14</span></p>
+<p class="text-[10px] font-medium text-on-secondary-container">Difficulty: 64</p>
+</div>
+</div>
+<!-- Winner Row 2 -->
+<div class="flex items-center justify-between p-4 bg-surface rounded-2xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">rank tracking software</p>
+<p class="text-[10px] text-on-surface-variant">analytica.pro/rank-tracker</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">5 <span class="text-[10px] text-tertiary">↑ 8</span></p>
+<p class="text-[10px] font-medium text-on-secondary-container">Difficulty: 72</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Top Losers -->
+<section class="bg-surface-container-lowest rounded-[2rem] p-8 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-error">keyboard_double_arrow_down</span>
+                            Top Losers
+                        </h3>
+<button class="text-xs font-bold text-primary hover:underline">View all</button>
+</div>
+<div class="space-y-2">
+<!-- Loser Row 1 -->
+<div class="flex items-center justify-between p-4 bg-surface rounded-2xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">trending_down</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">backlink analysis 2024</p>
+<p class="text-[10px] text-on-surface-variant">analytica.pro/blog/backlinks</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">18 <span class="text-[10px] text-error">↓ 12</span></p>
+<p class="text-[10px] font-medium text-on-secondary-container">Difficulty: 45</p>
+</div>
+</div>
+<!-- Loser Row 2 -->
+<div class="flex items-center justify-between p-4 bg-surface rounded-2xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">trending_down</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">free keyword auditor</p>
+<p class="text-[10px] text-on-surface-variant">analytica.pro/free-audit</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">42 <span class="text-[10px] text-error">↓ 26</span></p>
+<p class="text-[10px] font-medium text-on-secondary-container">Difficulty: 38</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- All Tracked Keywords Table -->
+<section class="bg-surface-container-lowest rounded-[2rem] shadow-sm overflow-hidden">
+<div class="p-8 flex justify-between items-end border-b border-surface-container">
+<div>
+<h3 class="text-2xl font-bold tracking-tight">All Tracked Keywords</h3>
+<p class="text-sm text-on-surface-variant mt-1">Detailed overview of your search engine performance across all clusters.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            Filters
+                        </button>
+<button class="px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">download</span>
+                            Export CSV
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Keyword</th>
+<th class="px-4 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-center">Position</th>
+<th class="px-4 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-center">Change</th>
+<th class="px-4 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-center">Volume</th>
+<th class="px-4 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-center">Difficulty</th>
+<th class="px-4 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">7-Day Trend</th>
+<th class="px-8 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Table Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">enterprise seo strategy</span>
+<span class="text-[11px] text-on-surface-variant">analytica.pro/enterprise</span>
+</div>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="text-sm font-bold">1</span>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="inline-flex items-center text-xs font-bold text-tertiary">
+<span class="material-symbols-outlined text-xs mr-0.5">arrow_upward</span>
+                                        2
+                                    </span>
+</td>
+<td class="px-4 py-5 text-center text-sm font-medium">4,200</td>
+<td class="px-4 py-5 text-center">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">78 (Hard)</span>
+</td>
+<td class="px-4 py-5">
+<div class="w-24 h-8 relative">
+<!-- Mini Sparkline Placeholder -->
+<svg class="w-full h-full stroke-tertiary fill-tertiary/5 stroke-2" viewbox="0 0 100 30">
+<path d="M0,25 Q15,20 30,22 T60,5 T100,2" fill="none"></path>
+<path class="opacity-10" d="M0,25 Q15,20 30,22 T60,5 T100,2 V30 H0 Z" stroke="none"></path>
+</svg>
+</div>
+</td>
+<td class="px-8 py-5 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">ai content audit tool</span>
+<span class="text-[11px] text-on-surface-variant">analytica.pro/ai-audit</span>
+</div>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="text-sm font-bold">4</span>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="inline-flex items-center text-xs font-bold text-error">
+<span class="material-symbols-outlined text-xs mr-0.5">arrow_downward</span>
+                                        1
+                                    </span>
+</td>
+<td class="px-4 py-5 text-center text-sm font-medium">1,850</td>
+<td class="px-4 py-5 text-center">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">52 (Mid)</span>
+</td>
+<td class="px-4 py-5">
+<div class="w-24 h-8 relative">
+<svg class="w-full h-full stroke-error fill-error/5 stroke-2" viewbox="0 0 100 30">
+<path d="M0,5 Q20,2 40,15 T70,18 T100,22" fill="none"></path>
+</svg>
+</div>
+</td>
+<td class="px-8 py-5 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">seo automated reporting</span>
+<span class="text-[11px] text-on-surface-variant">analytica.pro/reporting</span>
+</div>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="text-sm font-bold">12</span>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="inline-flex items-center text-xs font-bold text-tertiary">
+<span class="material-symbols-outlined text-xs mr-0.5">arrow_upward</span>
+                                        5
+                                    </span>
+</td>
+<td class="px-4 py-5 text-center text-sm font-medium">850</td>
+<td class="px-4 py-5 text-center">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">34 (Easy)</span>
+</td>
+<td class="px-4 py-5">
+<div class="w-24 h-8 relative">
+<svg class="w-full h-full stroke-tertiary fill-tertiary/5 stroke-2" viewbox="0 0 100 30">
+<path d="M0,28 L20,25 L40,26 L60,15 L80,18 L100,10" fill="none"></path>
+</svg>
+</div>
+</td>
+<td class="px-8 py-5 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">keyword gap analyzer</span>
+<span class="text-[11px] text-on-surface-variant">analytica.pro/keyword-gap</span>
+</div>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="text-sm font-bold">28</span>
+</td>
+<td class="px-4 py-5 text-center">
+<span class="inline-flex items-center text-xs font-bold text-slate-400">
+<span class="material-symbols-outlined text-xs mr-0.5">remove</span>
+                                        0
+                                    </span>
+</td>
+<td class="px-4 py-5 text-center text-sm font-medium">12,400</td>
+<td class="px-4 py-5 text-center">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">89 (Very Hard)</span>
+</td>
+<td class="px-4 py-5">
+<div class="w-24 h-8 relative">
+<svg class="w-full h-full stroke-primary fill-primary/5 stroke-2" viewbox="0 0 100 30">
+<path d="M0,15 L20,15 L40,14 L60,16 L80,15 L100,15" fill="none"></path>
+</svg>
+</div>
+</td>
+<td class="px-8 py-5 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low/30 border-t border-surface-container flex justify-between items-center">
+<p class="text-xs text-on-surface-variant font-medium">Showing 1-10 of 2,500 keywords</p>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-outline-variant shadow-sm hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-xs shadow-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-outline-variant text-xs font-bold hover:bg-slate-50">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-outline-variant text-xs font-bold hover:bg-slate-50">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-outline-variant shadow-sm hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- FAB for adding keywords -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

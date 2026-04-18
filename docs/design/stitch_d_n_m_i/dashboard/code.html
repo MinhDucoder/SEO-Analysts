@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analytica Pro - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-tint": "#004ced",
+                        "surface-bright": "#f8f9ff",
+                        "surface-dim": "#cddbf2",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-secondary-container": "#5c6477",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-surface": "#243143",
+                        "inverse-primary": "#b7c4ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-container": "#dfe3ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "primary-container": "#0052ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#dbe2f9",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#dde1ff",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "outline": "#737688",
+                        "outline-variant": "#c3c5d9",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#141b2c",
+                        "surface-variant": "#d6e3fb",
+                        "surface-container-high": "#dce9ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface": "#f8f9ff",
+                        "on-surface-variant": "#434656",
+                        "secondary": "#565e71",
+                        "on-primary-fixed": "#001452",
+                        "on-tertiary-container": "#72fec0",
+                        "surface-container-low": "#eff4ff",
+                        "on-surface": "#0f1c2d",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#007550",
+                        "surface-container": "#e6eeff",
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "tertiary": "#005a3c",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#dbe2f9",
+                        "primary": "#003ec7",
+                        "on-background": "#0f1c2d"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; color: #0f1c2d; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-6 bg-slate-900 w-64 rounded-r-2xl z-50 shadow-xl overflow-hidden">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-bold text-white tracking-tight">Analytica Pro</h1>
+<p class="text-slate-400 text-xs font-medium uppercase tracking-wider mt-1">SEO Intelligence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 bg-blue-600 text-white rounded-xl px-4 py-3 mx-2 my-1 shadow-lg shadow-blue-500/20 scale-95 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-medium text-sm">Website Audit</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="key">key</span>
+<span class="font-medium text-sm">Keyword Research</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+<span class="font-medium text-sm">Backlink Checker</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="font-medium text-sm">Rank Tracker</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-medium text-sm">On-page SEO</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-medium text-sm">Competitors</span>
+</a>
+<div class="pt-8 px-6 pb-2">
+<p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Support</p>
+</div>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-medium text-sm">Academy</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<div class="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold leading-none">Alex Rivera</p>
+<p class="text-slate-500 text-[10px] mt-1">Pro Plan</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-8 min-h-screen">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center mb-10">
+<div>
+<h2 class="text-3xl font-extrabold text-on-surface tracking-tight">Overview Dashboard</h2>
+<p class="text-on-surface-variant text-sm mt-1">Welcome back. Your SEO health is improving.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<input class="bg-surface-container-low border-none rounded-full px-6 py-2.5 w-64 text-sm focus:ring-2 focus:ring-primary/40 placeholder:text-on-surface-variant/50" placeholder="Search insights..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-2.5 text-on-surface-variant/60 text-xl" data-icon="search">search</span>
+</div>
+<button class="h-11 w-11 flex items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Bento Grid Stats -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Health Score Hero -->
+<div class="col-span-12 lg:col-span-4 bg-white rounded-2xl shadow-sm p-8 flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-10 -left-10 w-40 h-40 bg-tertiary/5 rounded-full blur-3xl"></div>
+<h3 class="text-on-surface-variant font-bold text-xs uppercase tracking-widest mb-6">Website Health Score</h3>
+<div class="relative flex items-center justify-center">
+<svg class="w-48 h-48 -rotate-90">
+<circle class="text-surface-container" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary transition-all duration-1000" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="99.5" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-6xl font-extrabold text-on-surface tracking-tighter">82</span>
+<span class="text-on-surface-variant/60 font-bold text-sm">/ 100</span>
+</div>
+</div>
+<div class="mt-8 flex items-center gap-2 bg-tertiary/10 text-tertiary px-4 py-2 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>4.2% from last month</span>
+</div>
+</div>
+<!-- Metric Cards -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-2 gap-6">
+<!-- Organic Traffic -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2.5 bg-primary/10 rounded-xl text-primary">
+<span class="material-symbols-outlined" data-icon="traffic">traffic</span>
+</div>
+<div class="text-tertiary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="north">north</span>
+                            12.5%
+                        </div>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Organic Traffic</p>
+<h4 class="text-3xl font-extrabold text-on-surface mt-1">42,804</h4>
+<div class="mt-4 h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+</div>
+<!-- Keywords Ranked -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2.5 bg-secondary-container rounded-xl text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="token">token</span>
+</div>
+<div class="text-on-surface-variant text-xs font-bold">+104 today</div>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Keywords Ranked</p>
+<h4 class="text-3xl font-extrabold text-on-surface mt-1">2,415</h4>
+<div class="mt-4 flex gap-1">
+<div class="h-4 w-1.5 bg-primary/20 rounded-full"></div>
+<div class="h-6 w-1.5 bg-primary/40 rounded-full"></div>
+<div class="h-4 w-1.5 bg-primary/60 rounded-full"></div>
+<div class="h-8 w-1.5 bg-primary rounded-full"></div>
+<div class="h-5 w-1.5 bg-primary/30 rounded-full"></div>
+</div>
+</div>
+<!-- Backlinks -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2.5 bg-tertiary/10 rounded-xl text-tertiary">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Backlinks</p>
+<h4 class="text-3xl font-extrabold text-on-surface mt-1">128.5k</h4>
+<p class="text-on-surface-variant/60 text-xs mt-2 font-medium">Domain wide count</p>
+</div>
+<!-- Domain Authority -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2.5 bg-amber-500/10 rounded-xl text-amber-600">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<div class="px-2 py-1 bg-amber-500/10 text-amber-600 text-[10px] font-bold rounded-md">VERY STRONG</div>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Domain Authority</p>
+<h4 class="text-3xl font-extrabold text-on-surface mt-1">74</h4>
+<p class="text-on-surface-variant/60 text-xs mt-2 font-medium">Top 5% of niche</p>
+</div>
+</div>
+</div>
+<!-- Middle Section: Chart and Issues -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Organic Sessions Chart -->
+<div class="col-span-12 lg:col-span-8 bg-white rounded-2xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="text-xl font-bold text-on-surface">Organic Sessions</h3>
+<p class="text-on-surface-variant text-sm">Last 30 days performance</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 text-xs font-bold bg-surface-container-low text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors">7D</button>
+<button class="px-4 py-2 text-xs font-bold bg-primary text-white rounded-xl shadow-lg shadow-primary/20">30D</button>
+<button class="px-4 py-2 text-xs font-bold bg-surface-container-low text-on-surface-variant rounded-xl hover:bg-surface-container transition-colors">90D</button>
+</div>
+</div>
+<div class="relative h-64 w-full">
+<!-- Visual representation of a chart using absolute positioning and spans for line segments -->
+<div class="absolute inset-0 flex items-end justify-between px-2">
+<!-- Bar background representation -->
+<div class="w-full h-full flex items-end justify-between">
+<div class="w-full flex justify-between absolute bottom-0 left-0 h-px bg-surface-container"></div>
+<div class="w-full flex justify-between absolute bottom-1/4 left-0 h-px bg-surface-container/50"></div>
+<div class="w-full flex justify-between absolute bottom-2/4 left-0 h-px bg-surface-container/50"></div>
+<div class="w-full flex justify-between absolute bottom-3/4 left-0 h-px bg-surface-container/50"></div>
+</div>
+<!-- Smooth line simulation -->
+<svg class="w-full h-full text-primary" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0 35 Q 10 32, 20 28 T 40 20 T 60 15 T 80 18 T 100 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+<path d="M0 35 Q 10 32, 20 28 T 40 20 T 60 15 T 80 18 T 100 10 V 40 H 0 Z" fill="url(#gradient)" opacity="0.1"></path>
+<defs>
+<lineargradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="currentColor"></stop>
+<stop offset="100%" stop-color="white" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+<div class="flex justify-between mt-6 px-2 text-[10px] font-bold text-on-surface-variant/50 uppercase tracking-widest">
+<span>Oct 01</span>
+<span>Oct 07</span>
+<span>Oct 14</span>
+<span>Oct 21</span>
+<span>Oct 28</span>
+</div>
+</div>
+<!-- Priority Issues -->
+<div class="col-span-12 lg:col-span-4 bg-white rounded-2xl p-8 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-xl font-bold text-on-surface">Priority Issues</h3>
+<span class="px-2 py-0.5 bg-error-container text-error text-[10px] font-extrabold rounded-md">12 TOTAL</span>
+</div>
+<div class="space-y-4">
+<!-- Critical Issue -->
+<div class="p-4 bg-error-container/20 rounded-2xl border border-error/5 flex gap-4">
+<div class="p-2 bg-error text-white rounded-lg h-fit">
+<span class="material-symbols-outlined text-xl" data-icon="error">error</span>
+</div>
+<div>
+<p class="text-on-surface font-bold text-sm">404 Errors Detected</p>
+<p class="text-on-surface-variant text-xs mt-0.5">24 pages are unreachable.</p>
+<button class="mt-3 text-xs font-bold text-error flex items-center gap-1 group">
+                                View Report <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Medium Issue -->
+<div class="p-4 bg-amber-50 rounded-2xl border border-amber-200/20 flex gap-4">
+<div class="p-2 bg-amber-500 text-white rounded-lg h-fit">
+<span class="material-symbols-outlined text-xl" data-icon="bolt">bolt</span>
+</div>
+<div>
+<p class="text-on-surface font-bold text-sm">LCP exceeds 2.5s</p>
+<p class="text-on-surface-variant text-xs mt-0.5">Largest Contentful Paint is slow.</p>
+<button class="mt-3 text-xs font-bold text-amber-600 flex items-center gap-1 group">
+                                Optimize Speed <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Medium Issue -->
+<div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex gap-4">
+<div class="p-2 bg-slate-600 text-white rounded-lg h-fit">
+<span class="material-symbols-outlined text-xl" data-icon="description">description</span>
+</div>
+<div>
+<p class="text-on-surface font-bold text-sm">Missing Alt Text</p>
+<p class="text-on-surface-variant text-xs mt-0.5">85 images missing descriptions.</p>
+<button class="mt-3 text-xs font-bold text-on-surface-variant flex items-center gap-1 group">
+                                Edit Assets <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Keywords Table -->
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+<div class="p-8 flex justify-between items-center border-b border-surface-container-low">
+<div>
+<h3 class="text-xl font-bold text-on-surface">Top Ranking Keywords</h3>
+<p class="text-on-surface-variant text-sm mt-1">Keywords driving the most organic value</p>
+</div>
+<button class="px-6 py-2.5 bg-surface-container-low text-on-surface font-bold text-sm rounded-xl hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-xl" data-icon="file_download">file_download</span>
+                    Export CSV
+                </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-8 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest">Keyword</th>
+<th class="px-8 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest">Position</th>
+<th class="px-8 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest">Change</th>
+<th class="px-8 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest">Volume</th>
+<th class="px-8 py-4 text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">seo analytics software</span>
+<span class="text-[10px] text-on-surface-variant/60">analytica.pro/features/software</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<span class="h-6 w-6 rounded-md bg-tertiary/10 text-tertiary text-xs font-bold flex items-center justify-center">2</span>
+<span class="text-xs font-medium text-on-surface-variant">Page 1</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-1 text-tertiary text-xs font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="expand_less">expand_less</span>
+                                    4
+                                </div>
+</td>
+<td class="px-8 py-5 text-sm font-medium text-on-surface">12,400</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">backlink checker tool</span>
+<span class="text-[10px] text-on-surface-variant/60">analytica.pro/backlinks</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<span class="h-6 w-6 rounded-md bg-tertiary/10 text-tertiary text-xs font-bold flex items-center justify-center">5</span>
+<span class="text-xs font-medium text-on-surface-variant">Page 1</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-1 text-tertiary text-xs font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="expand_less">expand_less</span>
+                                    1
+                                </div>
+</td>
+<td class="px-8 py-5 text-sm font-medium text-on-surface">8,900</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">keyword research api</span>
+<span class="text-[10px] text-on-surface-variant/60">analytica.pro/api/docs</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<span class="h-6 w-6 rounded-md bg-surface-container text-on-surface-variant text-xs font-bold flex items-center justify-center">14</span>
+<span class="text-xs font-medium text-on-surface-variant">Page 2</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-1 text-error text-xs font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+                                    2
+                                </div>
+</td>
+<td class="px-8 py-5 text-sm font-medium text-on-surface">5,200</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">enterprise seo dashboard</span>
+<span class="text-[10px] text-on-surface-variant/60">analytica.pro/solutions/enterprise</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<span class="h-6 w-6 rounded-md bg-tertiary/10 text-tertiary text-xs font-bold flex items-center justify-center">8</span>
+<span class="text-xs font-medium text-on-surface-variant">Page 1</span>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-1 text-on-surface-variant/40 text-xs font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="horizontal_rule">horizontal_rule</span>
+                                    0
+                                </div>
+</td>
+<td class="px-8 py-5 text-sm font-medium text-on-surface">3,100</td>
+<td class="px-8 py-5 text-right">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-low/30 text-center">
+<button class="text-sm font-bold text-primary hover:underline">View All 2,415 Keywords</button>
+</div>
+</div>
+</main>
+<!-- Contextual FAB -->
+<button class="fixed bottom-8 right-8 h-14 w-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-2xl" data-icon="add">add</span>
+</button>
+</body></html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analytica Pro | Technical SEO Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#4edea3",
+              "secondary-fixed-dim": "#bfc6dc",
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-high": "#dce9ff",
+              "on-primary-fixed": "#001452",
+              "on-primary-fixed-variant": "#0038b6",
+              "inverse-primary": "#b7c4ff",
+              "error": "#ba1a1a",
+              "primary-fixed": "#dde1ff",
+              "on-primary-container": "#dfe3ff",
+              "primary-fixed-dim": "#b7c4ff",
+              "surface": "#f8f9ff",
+              "secondary": "#565e71",
+              "tertiary": "#005a3c",
+              "on-surface-variant": "#434656",
+              "on-error": "#ffffff",
+              "tertiary-container": "#007550",
+              "surface-bright": "#f8f9ff",
+              "outline-variant": "#c3c5d9",
+              "tertiary-fixed": "#6ffbbe",
+              "on-tertiary-fixed": "#002113",
+              "on-tertiary-container": "#72fec0",
+              "surface-container": "#e6eeff",
+              "on-tertiary-fixed-variant": "#005236",
+              "on-surface": "#0f1c2d",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#dbe2f9",
+              "secondary-container": "#dbe2f9",
+              "on-secondary-container": "#5c6477",
+              "primary": "#003ec7",
+              "surface-variant": "#d6e3fb",
+              "surface-tint": "#004ced",
+              "background": "#f8f9ff",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#3f4759",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#eaf1ff",
+              "surface-container-low": "#eff4ff",
+              "surface-container-highest": "#d6e3fb",
+              "inverse-surface": "#243143",
+              "surface-dim": "#cddbf2",
+              "outline": "#737688",
+              "on-secondary-fixed": "#141b2c",
+              "on-background": "#0f1c2d",
+              "primary-container": "#0052ff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#243143] flex flex-col py-8 shadow-2xl">
+<div class="px-8 mb-10">
+<span class="text-white font-manrope font-black text-2xl tracking-tighter">Analytica Pro</span>
+<p class="text-[#c3c5d9] text-xs font-medium mt-1">SEO Curator</p>
+</div>
+<nav class="flex-grow">
+<ul class="space-y-1">
+<li>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-inter text-sm font-medium">Overview</span>
+</a>
+</li>
+<li>
+<a class="bg-[#004ced] text-white rounded-l-full ml-4 pl-4 py-3 border-l-4 border-[#0052FF] flex items-center gap-3 transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-inter text-sm font-medium">Technical SEO</span>
+</a>
+</li>
+<li>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-inter text-sm font-medium">On-page SEO</span>
+</a>
+</li>
+<li>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="speed">speed</span>
+<span class="font-inter text-sm font-medium">Performance</span>
+</a>
+</li>
+<li>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+<span class="font-inter text-sm font-medium">Backlinks</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-gradient-to-br from-[#003ec7] to-[#0052ff] text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Audit
+            </button>
+</div>
+<div class="mt-8 border-t border-[#434656]/30 pt-6">
+<ul class="space-y-1">
+<li>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-inter text-sm font-medium">Help Center</span>
+</a>
+</li>
+<li>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-inter text-sm font-medium">Log Out</span>
+</a>
+</li>
+</ul>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Top Bar -->
+<header class="w-full sticky top-0 z-30 bg-[#f8f9ff] h-16 flex items-center justify-between px-8 shadow-sm">
+<div class="flex items-center gap-4">
+<h1 class="font-manrope font-bold text-lg tracking-tight text-[#0f1c2d]">Technical SEO Detailed Report</h1>
+<span class="px-3 py-1 bg-surface-container rounded-full text-xs font-bold text-primary tracking-wider">PROJECT: ANALYTICA_V2</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low px-3 py-1.5 rounded-full">
+<span class="text-sm font-bold text-on-surface">Admin User</span>
+<span class="material-symbols-outlined text-2xl text-on-surface-variant" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- Hero Section: Bento Summary -->
+<section class="grid grid-cols-12 gap-6">
+<!-- Health Score Card -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container-lowest p-8 rounded-xl shadow-sm flex items-center justify-between overflow-hidden relative group">
+<div class="relative z-10">
+<h2 class="text-on-surface-variant text-sm font-bold uppercase tracking-widest mb-1">Overall Health</h2>
+<div class="flex items-baseline gap-2">
+<span class="text-6xl font-extrabold font-manrope text-on-surface">82</span>
+<span class="text-xl font-bold text-on-surface-variant">/100</span>
+</div>
+<p class="text-tertiary font-bold mt-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                            +4% from last week
+                        </p>
+</div>
+<!-- Score Ring -->
+<div class="relative flex items-center justify-center">
+<svg class="w-32 h-32 transform -rotate-90">
+<circle class="text-tertiary-container/20" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="65.6" stroke-width="8"></circle>
+</svg>
+<span class="absolute material-symbols-outlined text-tertiary text-3xl" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="absolute inset-0 bg-gradient-to-br from-tertiary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<!-- Critical Issues Card -->
+<div class="col-span-12 lg:col-span-3 bg-error-container p-8 rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<h2 class="text-on-error-container text-sm font-bold uppercase tracking-widest mb-1">Critical Issues</h2>
+<div class="text-5xl font-extrabold font-manrope text-on-error-container">4</div>
+</div>
+<div class="flex items-center gap-2 text-on-error-container/80 text-sm font-bold">
+<span class="material-symbols-outlined" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+                        Action Required Immediately
+                    </div>
+</div>
+<!-- Secondary Stats Grid -->
+<div class="col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Pages Crawled</span>
+<div class="text-2xl font-bold text-on-surface">12,402</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Index Rate</span>
+<div class="text-2xl font-bold text-on-surface">94.2%</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Avg Load Time</span>
+<div class="text-2xl font-bold text-on-surface">1.2s</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Sitemap Status</span>
+<div class="text-lg font-bold text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="error">error</span>
+                            Errors Found
+                        </div>
+</div>
+</div>
+</section>
+<!-- Main Content: Layout with Table and Fix Panel -->
+<section class="grid grid-cols-12 gap-8 items-start">
+<!-- Table Section -->
+<div class="col-span-12 xl:col-span-8 bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="px-8 py-6 border-b border-surface-container flex items-center justify-between">
+<h3 class="text-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="list_alt">list_alt</span>
+                            Identified Technical Issues
+                        </h3>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container text-on-surface-variant rounded-full text-xs font-bold flex items-center gap-1 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                                Filter
+                            </button>
+<button class="px-4 py-2 bg-surface-container text-on-surface-variant rounded-full text-xs font-bold flex items-center gap-1 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                                Export CSV
+                            </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">
+<th class="px-8 py-4">Priority</th>
+<th class="px-4 py-4">Technical Issue</th>
+<th class="px-4 py-4">Impact</th>
+<th class="px-4 py-4 text-center">Occurrences</th>
+<th class="px-8 py-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<!-- Active Row -->
+<tr class="bg-surface-container-low group hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-6">
+<span class="px-2 py-1 bg-error/10 text-error rounded-full text-[10px] font-black uppercase">Critical</span>
+</td>
+<td class="px-4 py-6">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Broken Internal Links</span>
+<span class="text-xs text-on-surface-variant">Crawl depth inhibited by 404 responses.</span>
+</div>
+</td>
+<td class="px-4 py-6">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm text-error" data-icon="stat_3" style="font-variation-settings: 'FILL' 1;">stat_3</span>
+<span class="text-xs font-medium">High</span>
+</div>
+</td>
+<td class="px-4 py-6 text-center">
+<span class="text-sm font-bold text-on-surface">12</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold shadow-md shadow-primary/20 hover:scale-95 transition-transform">
+                                            View Fix
+                                        </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-6">
+<span class="px-2 py-1 bg-error/10 text-error rounded-full text-[10px] font-black uppercase">Critical</span>
+</td>
+<td class="px-4 py-6">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Noindex Tags on Important Pages</span>
+<span class="text-xs text-on-surface-variant">Key conversion pages excluded from index.</span>
+</div>
+</td>
+<td class="px-4 py-6">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm text-error" data-icon="stat_3" style="font-variation-settings: 'FILL' 1;">stat_3</span>
+<span class="text-xs font-medium">High</span>
+</div>
+</td>
+<td class="px-4 py-6 text-center">
+<span class="text-sm font-bold text-on-surface">4</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="px-4 py-2 bg-surface-container text-on-primary-fixed-variant rounded-xl text-xs font-bold hover:bg-surface-container-high transition-colors">
+                                            View Fix
+                                        </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-6">
+<span class="px-2 py-1 bg-error/10 text-error rounded-full text-[10px] font-black uppercase">Critical</span>
+</td>
+<td class="px-4 py-6">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Sitemap Errors</span>
+<span class="text-xs text-on-surface-variant">Schema validation failed for sitemap.xml</span>
+</div>
+</td>
+<td class="px-4 py-6">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="stat_2" style="font-variation-settings: 'FILL' 1;">stat_2</span>
+<span class="text-xs font-medium">Med</span>
+</div>
+</td>
+<td class="px-4 py-6 text-center">
+<span class="text-sm font-bold text-on-surface">2</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="px-4 py-2 bg-surface-container text-on-primary-fixed-variant rounded-xl text-xs font-bold hover:bg-surface-container-high transition-colors">
+                                            View Fix
+                                        </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-6">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[10px] font-black uppercase">Warning</span>
+</td>
+<td class="px-4 py-6">
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Duplicate Meta Descriptions</span>
+<span class="text-xs text-on-surface-variant">142 pages sharing identical meta text.</span>
+</div>
+</td>
+<td class="px-4 py-6">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="stat_1" style="font-variation-settings: 'FILL' 1;">stat_1</span>
+<span class="text-xs font-medium">Low</span>
+</div>
+</td>
+<td class="px-4 py-6 text-center">
+<span class="text-sm font-bold text-on-surface">142</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="px-4 py-2 bg-surface-container text-on-primary-fixed-variant rounded-xl text-xs font-bold hover:bg-surface-container-high transition-colors">
+                                            View Fix
+                                        </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Detailed Fix Panel -->
+<div class="col-span-12 xl:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-2xl border border-primary/10 relative overflow-hidden backdrop-blur-xl bg-opacity-90">
+<!-- Decorative Background Element -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="relative z-10 space-y-6">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-black uppercase tracking-tighter text-primary bg-primary/10 px-3 py-1 rounded-full">Selected Issue</span>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+</button>
+</div>
+<div class="space-y-2">
+<h4 class="text-2xl font-extrabold font-manrope text-on-surface">12 Broken Internal Links</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Broken links create a poor user experience and stop search engine crawlers from discovering your deeper content structure.</p>
+</div>
+<div class="p-5 bg-surface-container-low rounded-xl border-l-4 border-primary">
+<h5 class="text-xs font-bold text-primary uppercase tracking-widest mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="build">build</span>
+                                    Resolution Steps
+                                </h5>
+<p class="text-sm text-on-surface font-medium leading-relaxed">Update or remove links pointing to 404 pages. Ensure all internal navigation redirects use 301 status codes if the destination has permanently moved.</p>
+</div>
+<div class="space-y-4">
+<h5 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Recommended Reference</h5>
+<a class="group flex items-center justify-between p-4 bg-surface-container rounded-xl hover:bg-surface-container-high transition-all" href="#">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary" data-icon="menu_book">menu_book</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-on-surface">Managing Internal Links</span>
+<span class="text-[10px] text-on-surface-variant uppercase font-medium">Internal Documentation</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="pt-4 flex gap-3">
+<button class="flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/30 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                                    Mark as Resolved
+                                </button>
+<button class="px-4 bg-surface-container text-on-surface-variant py-3 rounded-xl hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Contextual Tip -->
+<div class="bg-tertiary-container/10 p-6 rounded-xl border border-tertiary/10">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="tips_and_updates" style="font-variation-settings: 'FILL' 1;">tips_and_updates</span>
+<div class="space-y-1">
+<h5 class="text-sm font-bold text-tertiary">Pro Curator Tip</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">Fixing these 12 links could potentially increase your <span class="font-bold text-on-surface">Crawl Efficiency by 18%</span> based on current site depth.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Background Decorative Gradients (Editorial Style) -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+<div class="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-5%] left-[20%] w-[30%] h-[30%] bg-tertiary/5 blur-[100px] rounded-full"></div>
+</div>
+</body></html>

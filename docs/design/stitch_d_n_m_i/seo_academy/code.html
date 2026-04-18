@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#004ced",
+              "surface-bright": "#f8f9ff",
+              "surface-dim": "#cddbf2",
+              "secondary-fixed-dim": "#bfc6dc",
+              "on-secondary-container": "#5c6477",
+              "on-tertiary-fixed-variant": "#005236",
+              "inverse-surface": "#243143",
+              "inverse-primary": "#b7c4ff",
+              "tertiary-fixed": "#6ffbbe",
+              "on-primary-container": "#dfe3ff",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#0038b6",
+              "primary-container": "#0052ff",
+              "surface-container-highest": "#d6e3fb",
+              "on-tertiary-fixed": "#002113",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#dbe2f9",
+              "tertiary-fixed-dim": "#4edea3",
+              "primary-fixed": "#dde1ff",
+              "on-tertiary": "#ffffff",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#b7c4ff",
+              "outline": "#737688",
+              "outline-variant": "#c3c5d9",
+              "background": "#f8f9ff",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed": "#141b2c",
+              "surface-variant": "#d6e3fb",
+              "surface-container-high": "#dce9ff",
+              "inverse-on-surface": "#eaf1ff",
+              "surface": "#f8f9ff",
+              "on-surface-variant": "#434656",
+              "secondary": "#565e71",
+              "on-primary-fixed": "#001452",
+              "on-tertiary-container": "#72fec0",
+              "surface-container-low": "#eff4ff",
+              "on-surface": "#0f1c2d",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "tertiary-container": "#007550",
+              "surface-container": "#e6eeff",
+              "on-secondary-fixed-variant": "#3f4759",
+              "tertiary": "#005a3c",
+              "error": "#ba1a1a",
+              "secondary-container": "#dbe2f9",
+              "primary": "#003ec7",
+              "on-background": "#0f1c2d"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-6 bg-slate-900 dark:bg-slate-950 h-screen w-64 rounded-r-2xl shadow-xl z-50">
+<div class="px-6 mb-8">
+<h1 class="text-xl font-bold text-white font-headline">Analytica Pro</h1>
+<p class="text-xs text-slate-400 uppercase tracking-widest mt-1">SEO Intelligence</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="text-sm font-medium">Website Audit</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="text-sm font-medium">Keyword Research</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">link</span>
+<span class="text-sm font-medium">Backlink Checker</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-sm font-medium">Rank Tracker</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">On-page SEO</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Competitors</span>
+</a>
+<!-- ACTIVE TAB: Academy -->
+<a class="flex items-center gap-3 bg-blue-600 text-white rounded-xl px-4 py-3 mx-2 my-1 shadow-lg shadow-blue-500/20 active:scale-95 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="text-sm font-medium">Academy</span>
+</a>
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mx-2 my-1 hover:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</aside>
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar (Authority Source: JSON) -->
+<header class="sticky top-0 z-40 flex justify-between items-center w-full px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-8 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/40 transition-all" placeholder="Search lessons, guides, or keywords..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/30">
+<div class="text-right">
+<p class="text-sm font-semibold text-on-surface leading-none">Alex Rivera</p>
+<p class="text-xs text-on-surface-variant">Expert Level</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-primary">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Hero Featured Section -->
+<section class="relative rounded-[2rem] overflow-hidden mb-12 shadow-2xl group">
+<div class="absolute inset-0">
+<img alt="The Future of SEO" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="futuristic holographic data visualization of neural networks and abstract geometric search icons in deep blue and neon cyan colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDgd5DmL0LIT633dFbqRrwhcDtyRWZLOKmCN8ccpIFU7l1xbZZDKwUu1eyXgZEW3pQDIOW0xnRBkFdmgJ42gh70QmNxVEu88Q-IAP01cDsrLlaUnRL_908sMX_AcjvUul2uQyR17i-xHoWVPZDBkUHRkD_nq8zUrp0uSYYJ00kXqxAttvC-di7HAaQfEUbTFGXpD0VE47IXzI0oY32Jbu5wuG8FRfMs80yqLhalP67lWiByKEjy_6eF6_JvNyyhqsHPL45mIsmUDw"/>
+<div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
+</div>
+<div class="relative z-10 p-12 lg:p-16 max-w-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 backdrop-blur-md text-primary-fixed border border-primary/30 mb-6">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-xs font-bold tracking-widest uppercase">Featured Masterclass</span>
+</div>
+<h2 class="text-5xl lg:text-6xl font-headline font-extrabold text-white leading-tight mb-6">
+                        The Future of SEO in the Age of AI Search
+                    </h2>
+<p class="text-lg text-slate-300 font-body mb-8 leading-relaxed">
+                        Master the shift from keywords to concepts. Learn how LLMs are reshaping search intent and how to optimize for the generative experience.
+                    </p>
+<div class="flex items-center gap-6">
+<button class="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all flex items-center gap-2">
+                            Start Learning <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<div class="flex items-center gap-3 text-white/80">
+<span class="material-symbols-outlined">schedule</span>
+<span class="text-sm font-medium">45 min read</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Learning Progress & Categories -->
+<div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-8">
+<div>
+<h3 class="text-3xl font-headline font-bold text-on-surface mb-2">Curriculum Explorer</h3>
+<p class="text-on-surface-variant">Advance your SEO skills with professional-grade intelligence.</p>
+</div>
+<div class="flex gap-2 p-1 bg-surface-container rounded-2xl overflow-x-auto">
+<button class="px-6 py-2 bg-surface-container-lowest text-primary font-semibold rounded-xl shadow-sm">All Topics</button>
+<button class="px-6 py-2 text-on-surface-variant hover:text-primary transition-colors font-medium">Technical SEO</button>
+<button class="px-6 py-2 text-on-surface-variant hover:text-primary transition-colors font-medium">Content Strategy</button>
+<button class="px-6 py-2 text-on-surface-variant hover:text-primary transition-colors font-medium">Link Building</button>
+</div>
+</div>
+<!-- Bento Grid of Articles -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1: Technical SEO -->
+<div class="group bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Core Web Vitals" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="highly detailed dark data center with rows of glowing server racks and blue laser lines representing high-speed data flow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFPtBObr8JP5Ijh_RTc3v8u0gaqKeaopzj8nDxtBngv0gHswH6RBJMsTEFQi7OGsPytQA-kMvgLJdOjQdIIgS_OBB10T_xNPJsoCX0wYo-O5l1XKOwl0bbHufe8XHnqJyL25ackzamRp2jsj5G9__k2rlQbM6GaGSZJL_lvWkv1Rwtvb2EQql6F-twBDU-YHpFEC3btqATNkvBRf520riMcTQJurSZu7oxawv4Jnsqd4b4SZFg7i4MF5FS_E8JEkqs40zWHuJST9s"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-900">Expert</span>
+<span class="px-3 py-1 bg-primary text-white rounded-full text-[10px] font-bold uppercase tracking-wider">Technical</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">timer</span> 12 min
+                            </span>
+<span class="text-xs font-bold text-tertiary">75% Complete</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Advanced Core Web Vitals Optimization</h4>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Go beyond the basics of LCP and CLS to master real-world performance metrics.</p>
+<div class="mt-auto">
+<div class="w-full h-1.5 bg-surface-container rounded-full mb-4">
+<div class="h-full bg-tertiary rounded-full" style="width: 75%"></div>
+</div>
+<button class="w-full py-3 bg-surface-container-low hover:bg-primary hover:text-white text-on-surface font-semibold rounded-xl transition-all">Resume Lesson</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Link Building -->
+<div class="group bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Link Building" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="abstract architectural connection points of sleek silver metal nodes linked by luminous glass fibers against a soft white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuzt8nP2MHt7VBe8LsEOZXNsQkLXgmW31d3aXnGSucxxM1aRKSTuqWePhW60Ia2NQf9xoH4DBM8Qz56KO2VgdPJ1LQWgnx4virSwRSXQ91cHupQu8QqQbC5HXuW26Ec5SFJHMYvY8_4iYY6f0LHSY2C57ANC2C7JhTJIv9n9-7vb8ztNExPBr1r080BHqL6jdGfT6aiOKjLF-aUZuF8Y9va8z1-lRF7o76Y5HNz1gmACIDKogdFs3whwg6Z6ntRAW1LfWZr5Ni37Q"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-900">Mastery</span>
+<span class="px-3 py-1 bg-secondary text-white rounded-full text-[10px] font-bold uppercase tracking-wider">Link Building</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">timer</span> 18 min
+                            </span>
+<span class="text-xs font-bold text-primary">0% Started</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Digital PR &amp; High-Authority Backlinks</h4>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">The blueprint for earning links from Tier-1 publications through data-driven storytelling.</p>
+<div class="mt-auto">
+<div class="w-full h-1.5 bg-surface-container rounded-full mb-4">
+<div class="h-full bg-primary rounded-full" style="width: 0%"></div>
+</div>
+<button class="w-full py-3 bg-primary text-white font-semibold rounded-xl shadow-lg shadow-primary/10 transition-all">Start Lesson</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Content Strategy -->
+<div class="group bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Content Strategy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="minimalist workspace with an open notebook, elegant fountain pen, and a high-end tablet showing content calendar wireframes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDYUNe4_SU7GjrcEQArj1dfpcJvQBgXe_vEeWpELRFsvL7U_IX_Ja9fSAsmuzdjqYww5oo16CP24WLsgDVJvea_cJxsbnoGtUSuK0lZX-_Z6POuU7rdjbyZlbmG8rKXBxVsr6eZgCOyrhu3Rg1ILmPGGpVsy5OAk_PHHTlHqU8z52CdXwYOR7rcRUY8wKT9_oGbifu9hftMvrL9Pb81wM5mRdXmlMZqlFqdOJA0Y-1OA0Bh7Ee3-_9uBjEmxOplgQGd6WdRp5leqk"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-900">Core</span>
+<span class="px-3 py-1 bg-tertiary text-white rounded-full text-[10px] font-bold uppercase tracking-wider">Strategy</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">timer</span> 8 min
+                            </span>
+<span class="text-xs font-bold text-tertiary">100% Completed</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Semantic Content Clusters 101</h4>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">How to organize your content library to dominate topical authority in your niche.</p>
+<div class="mt-auto">
+<div class="w-full h-1.5 bg-surface-container rounded-full mb-4">
+<div class="h-full bg-tertiary rounded-full" style="width: 100%"></div>
+</div>
+<button class="w-full py-3 bg-surface-container flex items-center justify-center gap-2 text-tertiary font-semibold rounded-xl transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span> Review Lesson
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 4: Local SEO -->
+<div class="group bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Local SEO" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="top-down map of a modern city at night with neon glowing location pins and interconnected transit lines in vibrant purple and blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEgA9Uttyfm1b6uKQGDh47mj38p2yTCb5WK_NtiURR68l-Wf9KBid11-gOSQJcPImfjH8PaWm3ngEKuL13_0wCABT0WfYa-TqbN8QwXGRXozRGBB4JQU7j1fQj0thIjHeHz5VnaVaQ-wFq9hym5agaaTgaN0CGsGpqyCPhm2DMLydN8UlxKkN6eDm9vpEfGDp1uvpSWn_WTt7DDBj-QQT4yEQb46QYmYdYIV5hikIm5E4BPjtspJgyOk3cc8iLLb_I1G9Q-2U7IFk"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-900">Core</span>
+<span class="px-3 py-1 bg-error-container text-error rounded-full text-[10px] font-bold uppercase tracking-wider">Local</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">timer</span> 15 min
+                            </span>
+<span class="text-xs font-bold text-primary">20% Started</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Dominating the Local Map Pack</h4>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Optimizing Google Business Profile and local citations for multi-location enterprises.</p>
+<div class="mt-auto">
+<div class="w-full h-1.5 bg-surface-container rounded-full mb-4">
+<div class="h-full bg-primary rounded-full" style="width: 20%"></div>
+</div>
+<button class="w-full py-3 bg-surface-container-low hover:bg-primary hover:text-white text-on-surface font-semibold rounded-xl transition-all">Resume Lesson</button>
+</div>
+</div>
+</div>
+<!-- Card 5: AI & Automation -->
+<div class="group bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="AI SEO" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="sleek white robotic hand reaching out towards a glowing blue digital data stream in a high-tech minimalist environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb5L7h8GlIHUJiBzUoahd3W-fLs1Tm4EhP0SN7W607EZ3Aza4_J0Or3au-Ac6GuAezFen5JuUax0Be4YkJGuXpIRDAP19OHJqEzNGggBxAngWFlMoEFCI1Tfak1kyn_zaGZcngIws-gowoz5FnM4NBTDxZ9Jp2mN4z00wyDQmehhWiobZt_V0pxxepI-YKkV8bJb4iKJNaGyri0X6waWrpzierrSotuFiMk8XEtBM4v6h-APFOQg6eDMR3RS_XOivoeGrGJB8g1cc"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-900">Mastery</span>
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-[10px] font-bold uppercase tracking-wider">Automation</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">timer</span> 25 min
+                            </span>
+<span class="text-xs font-bold text-primary">0% Started</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Python for SEO Automations</h4>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Automate keyword mapping, meta tag generation, and competitor tracking with custom scripts.</p>
+<div class="mt-auto">
+<div class="w-full h-1.5 bg-surface-container rounded-full mb-4">
+<div class="h-full bg-primary rounded-full" style="width: 0%"></div>
+</div>
+<button class="w-full py-3 bg-primary text-white font-semibold rounded-xl shadow-lg shadow-primary/10 transition-all">Start Lesson</button>
+</div>
+</div>
+</div>
+<!-- Card 6: Analytics -->
+<div class="group bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Analytics" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="vibrant 3D bar charts and line graphs emerging from a glass surface with soft depth of field and warm ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaTM05rw3XnLx9vuiEjbdeBp7UHlRmqJzn_au5sMienZ7QdtxHaMYuDenZhFrT4BsH2t2e0KKS3LALVJDh_b4YRF1V0uQleC_q3CBlkT0FIyOTDqRjs5-Mwm6RXdgKfFU9JxjAllEvMNo3PS29iUiDsLOxFEVRK_4PSV6ZAiVnNJnGu2e3skkqP0268FDW7FyY-Mb86gSDZ_zH837LpXuzPsjkjMPSjwUKvHyMQIcpb8v6626DCL9SPM_EzL1KT8UCwn55tjTD6g0"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-900">Expert</span>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface rounded-full text-[10px] font-bold uppercase tracking-wider">Analytics</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">timer</span> 10 min
+                            </span>
+<span class="text-xs font-bold text-primary">5% Started</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Advanced GA4 for SEO Performance</h4>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-2">Configure custom explorations to track user journeys and conversion attribution from organic search.</p>
+<div class="mt-auto">
+<div class="w-full h-1.5 bg-surface-container rounded-full mb-4">
+<div class="h-full bg-primary rounded-full" style="width: 5%"></div>
+</div>
+<button class="w-full py-3 bg-surface-container-low hover:bg-primary hover:text-white text-on-surface font-semibold rounded-xl transition-all">Resume Lesson</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<section class="mt-20 p-12 bg-inverse-surface rounded-[2.5rem] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] -mr-48 -mt-48"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="max-w-xl text-center md:text-left">
+<h3 class="text-4xl font-headline font-extrabold text-white mb-4">Ready for Certification?</h3>
+<p class="text-slate-400 text-lg mb-0">Complete the Master SEO track and earn your Analytica Pro Industry Certification. Verified by industry leaders.</p>
+</div>
+<div class="shrink-0">
+<button class="px-10 py-5 bg-white text-slate-900 font-bold rounded-2xl hover:bg-primary-fixed transition-all shadow-xl">
+                            Unlock Exam Access
+                        </button>
+</div>
+</div>
+</section>
+</div>
+<!-- Mobile Bottom Nav (Authority Source: Protocol) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-lg border-t border-slate-100 flex justify-around items-center py-3 px-6 z-50">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="text-[10px] font-medium">Academy</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[10px] font-medium">Search</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</nav>
+</main>
+</body></html>

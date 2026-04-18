@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Curator AI - SEO Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "primary-fixed": "#dde1ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-dim": "#cddbf2",
+                        "outline-variant": "#c3c5d9",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#005a3c",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d6e3fb",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-tertiary-fixed": "#002113",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#dbe2f9",
+                        "on-secondary-container": "#5c6477",
+                        "error": "#ba1a1a",
+                        "primary-container": "#0052ff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "inverse-surface": "#243143",
+                        "secondary": "#565e71",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#72fec0",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-fixed": "#001452",
+                        "on-background": "#0f1c2d",
+                        "on-surface-variant": "#434656",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-surface": "#0f1c2d",
+                        "surface-tint": "#004ced",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#007550",
+                        "surface-bright": "#f8f9ff",
+                        "outline": "#737688",
+                        "surface-container": "#e6eeff",
+                        "surface": "#f8f9ff",
+                        "primary": "#003ec7",
+                        "on-secondary-fixed": "#141b2c",
+                        "inverse-primary": "#b7c4ff",
+                        "on-primary-container": "#dfe3ff",
+                        "secondary-fixed": "#dbe2f9"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-8 h-16 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl z-50 shadow-sm shadow-blue-900/5">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black tracking-tighter bg-gradient-to-br from-blue-700 to-indigo-500 bg-clip-text text-transparent">Curator AI</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors font-['Manrope'] font-semibold text-sm tracking-tight" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors font-['Manrope'] font-semibold text-sm tracking-tight" href="#">AI Content</a>
+<a class="text-blue-700 dark:text-blue-400 border-b-2 border-blue-600 pb-1 font-['Manrope'] font-semibold text-sm tracking-tight" href="#">Academy</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors font-['Manrope'] font-semibold text-sm tracking-tight" href="#">Forecaster</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-1.5">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 font-label" placeholder="Search lessons..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-blue-50/50 rounded-lg transition-all" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-blue-50/50 rounded-lg transition-all" data-icon="settings">settings</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full object-cover border-2 border-primary-container" data-alt="close-up portrait of a professional man in a blue shirt with soft studio lighting and clean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClAo-PgoiTGRFfJDmiOjBR-aRCb4au_bw7KKGWR96XbC0I0EXYHED30HJapiQNyytWT-MG68SClwi0W-QXNNtezaq0Bt253SEm-IUI2PPwGaezC5II0_tu96JMs5rzpFJMcsqP6HW_xXfmnrIR0xzs7a0zHj-v6O5ZowgN4i-lPIhqVyPE8LsRndp3XvaeGcsNGAABsGUf2QgOkmO4YjCmxzn2cU2PC91mzg5Ow2GfuPAOaDpGn25KDH1bvD84iRpokXaiF9_sJvY"/>
+</div>
+</header>
+<!-- Sidebar (Large Screens Only) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-slate-900 dark:bg-black z-40 transition-transform duration-300 pt-20">
+<div class="px-4 mb-8">
+<div class="flex items-center gap-3 px-4 py-2">
+<div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<p class="text-white font-bold text-sm tracking-tight">Precision</p>
+<p class="text-slate-400 text-[10px] uppercase tracking-widest">SEO Editorial</p>
+</div>
+</div>
+</div>
+<nav class="flex-1">
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Overview
+            </a>
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span> AI Editor
+            </a>
+<a class="flex items-center gap-3 bg-blue-600/10 text-blue-400 border-l-4 border-blue-500 py-3 px-6 font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span> Learning
+            </a>
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span> Revenue
+            </a>
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> Reports
+            </a>
+</nav>
+<div class="p-6">
+<div class="bg-gradient-to-br from-blue-700 to-indigo-600 rounded-2xl p-4 shadow-lg shadow-blue-900/40">
+<p class="text-white font-bold text-sm mb-1">Upgrade to Pro</p>
+<p class="text-blue-100 text-xs mb-3">Unlock advanced SEO playbooks.</p>
+<button class="w-full bg-white text-blue-700 text-xs font-bold py-2 rounded-xl active:scale-95 transition-all">Get Access</button>
+</div>
+</div>
+<footer class="mb-4">
+<a class="flex items-center gap-3 text-slate-400 py-2 px-6 hover:text-slate-200 text-sm" href="#">
+<span class="material-symbols-outlined text-base" data-icon="help">help</span> Help
+            </a>
+<a class="flex items-center gap-3 text-slate-400 py-2 px-6 hover:text-slate-200 text-sm" href="#">
+<span class="material-symbols-outlined text-base" data-icon="logout">logout</span> Logout
+            </a>
+</footer>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 pt-24 pb-12 px-6 md:px-12">
+<!-- Hero Section -->
+<section class="relative overflow-hidden rounded-[2rem] bg-inverse-surface p-8 md:p-16 mb-12 flex flex-col md:flex-row items-center gap-12">
+<div class="absolute inset-0 opacity-10">
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary blur-[120px]"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-tertiary blur-[100px]"></div>
+</div>
+<div class="relative z-10 flex-1">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-fixed border border-primary/30 text-xs font-bold tracking-widest uppercase mb-6">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span> Professional Academy
+                </div>
+<h1 class="font-headline text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tighter mb-6">
+                    Master Search <br/><span class="text-primary-fixed">Dominance</span>
+</h1>
+<p class="text-slate-300 text-lg md:text-xl max-w-xl mb-8 font-body font-light leading-relaxed">
+                    The only SEO learning hub that combines data-driven strategy with generative AI workflows for the modern web.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-2xl shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
+                        Resume Learning
+                    </button>
+<button class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl backdrop-blur-md border border-white/10 transition-all">
+                        Browse Curriculum
+                    </button>
+</div>
+</div>
+<div class="relative z-10 w-full md:w-1/3 aspect-square glass-panel rounded-[2.5rem] p-8 flex flex-col justify-between shadow-2xl border border-white/10">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 rounded-2xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container px-3 py-1 rounded-full">Level 4</span>
+</div>
+<div>
+<p class="text-on-surface text-sm font-semibold mb-2">Academy Ranking</p>
+<p class="text-4xl font-black font-headline text-on-surface tracking-tighter">Top 2%</p>
+<p class="text-on-surface-variant text-xs mt-1">Globally among SEO Strategists</p>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs font-bold text-on-surface">
+<span>XP Progress</span>
+<span>8,420 / 10k</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[84%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Learning Path Section -->
+<section class="mb-16">
+<div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-8">
+<div>
+<h2 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight mb-2">Your Learning Path</h2>
+<p class="text-on-surface-variant text-sm font-medium">Continue where you left off in your personalized roadmap.</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="col-span-1 md:col-span-2 p-1 bg-gradient-to-br from-primary/10 to-tertiary/10 rounded-2xl">
+<div class="bg-surface-container-lowest h-full rounded-2xl p-6 flex items-center gap-6">
+<div class="relative w-20 h-20 shrink-0">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="40" cy="40" fill="transparent" r="36" stroke="currentColor" stroke-dasharray="226.19" stroke-dashoffset="79.17" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-black text-on-surface font-headline">65%</div>
+</div>
+<div class="flex-1">
+<p class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Current Active Module</p>
+<h3 class="font-headline font-bold text-xl text-on-surface mb-2 leading-tight">Semantic Keyword Clustering</h3>
+<button class="flex items-center gap-2 text-primary text-sm font-bold group">
+                                Resume Lesson <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-4">Time Invested</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-black font-headline text-on-surface">24.5</span>
+<span class="text-on-surface-variant text-sm">Hours</span>
+</div>
+<div class="mt-4 flex gap-1">
+<div class="h-8 flex-1 bg-surface-container rounded-sm"></div>
+<div class="h-10 flex-1 bg-surface-container rounded-sm"></div>
+<div class="h-6 flex-1 bg-surface-container rounded-sm"></div>
+<div class="h-12 flex-1 bg-primary rounded-sm"></div>
+<div class="h-4 flex-1 bg-surface-container rounded-sm"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10 flex flex-col justify-between">
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-4">Achievements</p>
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center border-2 border-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-fixed text-lg" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-on-primary-fixed text-lg" data-icon="rocket_launch" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center border-2 border-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-on-secondary-fixed text-lg" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center border-2 border-surface-container-lowest text-on-surface-variant text-[10px] font-bold">
+                            +12
+                        </div>
+</div>
+<p class="text-xs font-semibold text-on-surface-variant mt-4">8 badges earned this month</p>
+</div>
+</div>
+</section>
+<!-- Course Cards Grid -->
+<section>
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Core Curriculum</h2>
+<div class="flex gap-4">
+<span class="text-sm font-semibold text-on-surface-variant bg-surface-container-high px-4 py-2 rounded-xl">All Levels</span>
+<span class="text-sm font-semibold text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-xl cursor-pointer">Advanced Only</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all border border-outline-variant/10">
+<div class="h-48 relative overflow-hidden">
+<img alt="Data Analytics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="vibrant abstract digital data visualization with colorful bar charts and line graphs on a sleek interface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPUSTU_6hTPOQxodAITsf4AM7BsJCzYZhy66JTRVAQ6eNg36g_wVNhO3EKdxKyMakeErdG3xdzbbM_OiCdPtB6P40wglkh_R2a1X3X7toI41nJyfaf8eXJo790iQgDOJnDSne2_vub14wMRYR1dj3dkNFTgLHBDRKbuO817ST0fOXRZoGkEo9ai9sufSWI4dKOnwtiuTqXWtXjHJ8WztCPMuHQzuFuXVmQglXC5-9g7M41DFe9eeU0pXjZD3TRjRFvMsz1trydybY"/>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Mastery</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="timer">timer</span>
+<span class="text-[10px] font-bold text-on-surface">12h 45m</span>
+</div>
+</div>
+<div class="p-8">
+<h3 class="font-headline font-bold text-2xl text-on-surface mb-3 group-hover:text-primary transition-colors">Keyword Strategy Mastery</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">Learn to dominate niche markets by understanding intent-based search clustering and long-tail optimization.</p>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<img alt="Instructor" class="w-8 h-8 rounded-full border border-primary/20" data-alt="professional headshot of a senior SEO expert with glasses smiling confidently" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPk6hqFbs2HVfc8B4xU9o101evmZG0c97uJxexXXOQk6BNpFxYbDGUcEymmATZcej5-19k8JlSKzc1dXY4p0hubjPLSev49rCbcAQquzaQkVgQdanPmHKUIytnQ7Tuq1dcmg_8ecUvk1hPuKI5-BL8pSMGX2waRuPeDfJIZKDc8IscPDWRt36EKT2oFHAwzHlsgwd5-1EDY2qpY_eHkJ3OGad7v48VDT4MLxJcWlCAgYe8XSx5oz_ornD_ft-L6Yn5eckmCVH9pNw"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Alex Riverton</p>
+<p class="text-[10px] text-on-surface-variant">Director of Growth</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Lessons</p>
+<p class="text-xs font-black text-on-surface">24 Units</p>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant/10">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold text-primary">Progress</span>
+<span class="text-xs font-black text-on-surface">85%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[85%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all border border-outline-variant/10">
+<div class="h-48 relative overflow-hidden">
+<img alt="Technical SEO" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="close-up of server room wiring with glowing blue led lights and futuristic high-tech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBclj6uKWOzskqoG_8y00GZP6djAAgkdki3LQ6iotjhcRthm_Y3fnqtaESrrOPWdT0f_VGYokVvdO2nWkbBGIAVuUWr_EbrPdfUNyweP3DfvX8o-EP7HY1vYRFY-TlEfKL_h23JHHV5qu5V64dCNoMzgvaaNxg_2X2thuQC375ud3CoSEhlzWpc-MJOcOxAZlXzdUp1tEIo2PY-UJQ0fxC3x9Zo91vDUNM8rLPSc8KW5gEvJxcqxilyMvFChdYYvwkPOnrpEaQ2rhM"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Core</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="timer">timer</span>
+<span class="text-[10px] font-bold text-on-surface">18h 20m</span>
+</div>
+</div>
+<div class="p-8">
+<h3 class="font-headline font-bold text-2xl text-on-surface mb-3 group-hover:text-primary transition-colors">Technical SEO Fundamentals</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">Master Core Web Vitals, schema markup, and site architecture for high-performance crawling and indexing.</p>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<img alt="Instructor" class="w-8 h-8 rounded-full border border-primary/20" data-alt="modern professional woman headshot with a friendly smile in a bright creative studio environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfbJI2aD362AnGpyX5Qs7uqdPFe9NP1J3d-GTBAlLTSBc85WLCC5bE38GnFcJTXWTbG0_Qnc9U2ZNEckulTb1TLlph7XaBtMFxkbTztqMNCoMBuwFFIvD-AVYAaSK5HpCHzIpnVr8reymnMN3btRkErHIWb1S4HUTrUIhSj6dze93TWfCNU8UI8d_omvp4CPVPIRgn5kJ-VFRjsjUnYOh_BhS1Rgql5DKcIZywku1pWkFVeLpcgl-yTU-119rp-7OMZclGzQbX5q4"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Sarah Chen</p>
+<p class="text-[10px] text-on-surface-variant">Technical Lead</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Lessons</p>
+<p class="text-xs font-black text-on-surface">32 Units</p>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant/10">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold text-primary">Progress</span>
+<span class="text-xs font-black text-on-surface">12%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[12%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all border border-outline-variant/10">
+<div class="h-48 relative overflow-hidden">
+<img alt="Backlink Strategy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="stylized architectural connection points of a modern glass building showing structural links and networking metaphors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwE1smFXOf4Iec5O3QeEoCgQqlNW5IpAAe_zaq90s9rf2WFMFvKvf6qyYsV54uvkK7sacpnqcGT4pLXQxL4x0KvGdiNG7rrXQ0bMfCyNH1wwycnzmFV3C-u0U4tGYScTkkqr4WtEuAgCpPNUcz4hSuoVhy21UKWurImo3DQ8PwTizSsRvc_vrh74zeNgCXzllw9jPXxbVTb9clzw4o_runXJw2qxjYs_MnXit3N_7uflZVI74axavF_l0LTQIpibQVmdnTJkTAAPg"/>
+<div class="absolute top-4 left-4">
+<span class="bg-on-tertiary-fixed-variant text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Expert</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="timer">timer</span>
+<span class="text-[10px] font-bold text-on-surface">9h 30m</span>
+</div>
+</div>
+<div class="p-8">
+<h3 class="font-headline font-bold text-2xl text-on-surface mb-3 group-hover:text-primary transition-colors">Advanced Backlink Building</h3>
+<p class="text-on-surface-variant text-sm mb-6 line-clamp-2">Scale high-authority link acquisition through digital PR, broken link building, and skyscraper techniques.</p>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<img alt="Instructor" class="w-8 h-8 rounded-full border border-primary/20" data-alt="man with beard in a black turtleneck looking thoughtfully towards the camera against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvFX_29Y6ucg7ixCAvddBPGyvhJDVjQf2YMqBttHYBdUkI9fQnuMs8uIelBJYY_4ClYD4fC82Fu5PHKz1tK-NSM6b3miPOz4249yZNJ2QJiirK02HVbadSmD7ycebdfQZa6GHmu4APv0Yubsjp_c8Wz1yWiflAXhKUZWblWe928lgQXjWh_MA-Cuq-wlUF2OsVSNpYuXWZAyzqDIa87-pm6sKiAUTfQOg0LxAPcqmBY_NTxa1uFvBAmbe3M-Mg-f4BD_aszCr2HQs"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Marcus Thorne</p>
+<p class="text-[10px] text-on-surface-variant">PR Strategist</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Lessons</p>
+<p class="text-xs font-black text-on-surface">18 Units</p>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant/10">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold text-primary">Progress</span>
+<span class="text-xs font-black text-on-surface">0%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[0%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Community Callout -->
+<section class="mt-20 p-12 bg-surface-container rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20"></div>
+<div class="flex-1">
+<h2 class="font-headline text-3xl font-extrabold text-on-surface mb-4">Join our expert community</h2>
+<p class="text-on-surface-variant text-base mb-8 max-w-lg">Get weekly SEO teardowns, algorithm updates, and AI prompts delivered straight to your dashboard.</p>
+<div class="flex gap-2">
+<input class="bg-white border-none rounded-xl px-6 py-4 w-full max-w-xs focus:ring-2 focus:ring-primary shadow-sm font-label text-sm" placeholder="your@email.com" type="email"/>
+<button class="bg-on-surface text-white px-8 py-4 rounded-xl font-bold hover:bg-on-surface-variant active:scale-95 transition-all">Subscribe</button>
+</div>
+</div>
+<div class="relative w-48 h-48 md:w-64 md:h-64 flex-shrink-0">
+<div class="absolute inset-0 bg-primary/10 rounded-full animate-pulse"></div>
+<div class="absolute inset-4 bg-primary/20 rounded-full"></div>
+<div class="absolute inset-8 bg-surface-container-lowest rounded-full flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-6xl text-primary" data-icon="groups">groups</span>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for Academy Support (Contextual) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center active:scale-90 transition-all z-50">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+</body></html>

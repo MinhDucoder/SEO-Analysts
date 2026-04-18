@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>On-Page SEO Report | Analytica Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#4edea3",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed": "#001452",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "inverse-primary": "#b7c4ff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary-container": "#dfe3ff",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "surface": "#f8f9ff",
+                        "secondary": "#565e71",
+                        "tertiary": "#005a3c",
+                        "on-surface-variant": "#434656",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#007550",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#c3c5d9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-container": "#72fec0",
+                        "surface-container": "#e6eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#0f1c2d",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dbe2f9",
+                        "secondary-container": "#dbe2f9",
+                        "on-secondary-container": "#5c6477",
+                        "primary": "#003ec7",
+                        "surface-variant": "#d6e3fb",
+                        "surface-tint": "#004ced",
+                        "background": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "inverse-surface": "#243143",
+                        "surface-dim": "#cddbf2",
+                        "outline": "#737688",
+                        "on-secondary-fixed": "#141b2c",
+                        "on-background": "#0f1c2d",
+                        "primary-container": "#0052ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#243143] shadow-2xl flex flex-col py-8">
+<div class="px-8 mb-10">
+<h1 class="text-white font-headline font-black text-2xl tracking-tighter" style="">Analytica Pro</h1>
+<p class="text-[#c3c5d9] text-xs font-medium uppercase tracking-widest mt-1" style="">SEO Curator</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center text-[#c3c5d9] hover:text-white px-8 py-3 transition-all hover:bg-[#434656]/20 group" href="#" style="">
+<span class="material-symbols-outlined mr-3" style="">dashboard</span>
+<span class="font-medium text-sm" style="">Overview</span>
+</a>
+<a class="flex items-center text-[#c3c5d9] hover:text-white px-8 py-3 transition-all hover:bg-[#434656]/20" href="#" style="">
+<span class="material-symbols-outlined mr-3" style="">settings_suggest</span>
+<span class="font-medium text-sm" style="">Technical SEO</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center bg-[#004ced] text-white rounded-l-full ml-4 pl-4 py-3 border-l-4 border-[#0052ff] shadow-lg shadow-blue-900/20" href="#" style="">
+<span class="material-symbols-outlined mr-3" style="">description</span>
+<span class="font-medium text-sm" style="">On-page SEO</span>
+</a>
+<a class="flex items-center text-[#c3c5d9] hover:text-white px-8 py-3 transition-all hover:bg-[#434656]/20" href="#" style="">
+<span class="material-symbols-outlined mr-3" style="">speed</span>
+<span class="font-medium text-sm" style="">Performance</span>
+</a>
+<a class="flex items-center text-[#c3c5d9] hover:text-white px-8 py-3 transition-all hover:bg-[#434656]/20" href="#" style="">
+<span class="material-symbols-outlined mr-3" style="">link</span>
+<span class="font-medium text-sm" style="">Backlinks</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-xl shadow-blue-900/40 hover:scale-[1.02] transition-transform" style="">
+                New Audit
+            </button>
+<div class="mt-8 space-y-1">
+<a class="flex items-center text-[#c3c5d9] hover:text-white px-2 py-2 transition-all" href="#" style="">
+<span class="material-symbols-outlined text-lg mr-3" style="">help_outline</span>
+<span class="text-xs" style="">Help Center</span>
+</a>
+<a class="flex items-center text-[#c3c5d9] hover:text-white px-2 py-2 transition-all" href="#" style="">
+<span class="material-symbols-outlined text-lg mr-3" style="">logout</span>
+<span class="text-xs" style="">Log Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen p-8 lg:p-12">
+<!-- Hero Section: Editorial Score -->
+<header class="mb-12 relative">
+<div class="flex flex-col md:flex-row justify-between items-end gap-6">
+<div class="space-y-2">
+<span class="text-primary font-bold tracking-widest text-xs uppercase" style="">Detailed Report</span>
+<h2 class="text-5xl font-headline font-extrabold text-on-surface tracking-tight" style="">On-Page SEO Analysis</h2>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm flex flex-col items-center justify-center min-w-[160px] border border-white">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-tighter mb-1" style="">Health Score</span>
+<div class="text-4xl font-headline font-extrabold text-primary" style="">78<span class="text-lg text-outline" style="">/100</span></div>
+</div>
+<div class="bg-error-container p-6 rounded-3xl shadow-sm flex flex-col items-center justify-center min-w-[160px] border border-error/10">
+<span class="text-xs font-bold text-on-error-container uppercase tracking-tighter mb-1" style="">Alerts Found</span>
+<div class="text-4xl font-headline font-extrabold text-error" style="">12 <span class="text-lg opacity-60" style="">Warnings</span></div>
+</div>
+</div>
+</div>
+</header>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Specific Page Deep Dive -->
+<section class="col-span-12 lg:col-span-8 space-y-8">
+<div class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm border border-white">
+<div class="flex justify-between items-start mb-10">
+<div>
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-lg" style="">link</span>
+<span class="text-sm font-semibold" style="">analytica.pro/solutions/seo-auditor</span>
+</div>
+<h3 class="text-2xl font-headline font-bold" style="">SEO Audit Tool Landing Page</h3>
+</div>
+<div class="bg-tertiary/10 text-tertiary px-4 py-2 rounded-full flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs font-bold" style="">Content Score: 92%</span>
+</div>
+</div>
+<!-- Heading Hierarchy Visualization -->
+<div class="mb-10">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-6" style="">Heading Hierarchy</h4>
+<div class="space-y-3 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant/30">
+<div class="flex items-center gap-4 group">
+<div class="w-4 h-4 rounded-full bg-primary ring-4 ring-primary/10 z-10"></div>
+<div class="bg-surface-container-low px-4 py-3 rounded-2xl flex-1 border-l-4 border-primary">
+<span class="text-[10px] font-black text-primary uppercase block mb-0.5" style="">H1 Headline</span>
+<p class="text-sm font-semibold" style="">Master Your Search Presence with Analytica Pro</p>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-8">
+<div class="w-3 h-3 rounded-full bg-secondary ring-4 ring-secondary/10 z-10"></div>
+<div class="bg-surface-container-low px-4 py-2 rounded-xl flex-1">
+<span class="text-[10px] font-black text-secondary uppercase block mb-0.5" style="">H2 Subtitle</span>
+<p class="text-sm font-medium" style="">Real-time Keyword Monitoring</p>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-8">
+<div class="w-3 h-3 rounded-full bg-secondary ring-4 ring-secondary/10 z-10"></div>
+<div class="bg-surface-container-low px-4 py-2 rounded-xl flex-1">
+<span class="text-[10px] font-black text-secondary uppercase block mb-0.5" style="">H2 Subtitle</span>
+<p class="text-sm font-medium" style="">Competitor Insight Engine</p>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-16">
+<div class="w-2 h-2 rounded-full bg-outline z-10"></div>
+<div class="bg-surface-container px-4 py-1.5 rounded-lg flex-1">
+<span class="text-[10px] font-black text-outline uppercase block mb-0.5" style="">H3 Topic</span>
+<p class="text-xs text-on-surface-variant" style="">Data Filtering API</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Issues List -->
+<div class="space-y-4">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2" style="">Critical Issues</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start gap-4 p-5 rounded-2xl bg-error/5 border border-error/5 group hover:bg-error/10 transition-colors">
+<div class="bg-error/10 p-2 rounded-xl text-error">
+<span class="material-symbols-outlined" style="">image_not_supported</span>
+</div>
+<div>
+<p class="font-bold text-sm" style="">Missing Alt Text (45 images)</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed" style="">Search engines cannot interpret visual content without descriptive labels.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-5 rounded-2xl bg-surface-container-low border border-transparent hover:border-outline-variant transition-colors">
+<div class="bg-secondary-container p-2 rounded-xl text-on-secondary-container">
+<span class="material-symbols-outlined" style="">contract</span>
+</div>
+<div>
+<p class="font-bold text-sm" style="">Low Keyword Density</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed" style="">The target phrase "SEO Auditor" appears less than 0.4% in the body copy.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-5 rounded-2xl bg-surface-container-low border border-transparent hover:border-outline-variant transition-colors">
+<div class="bg-secondary-container p-2 rounded-xl text-on-secondary-container">
+<span class="material-symbols-outlined" style="">straighten</span>
+</div>
+<div>
+<p class="font-bold text-sm" style="">Meta Description too long</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed" style="">184 characters detected. Truncation will occur in SERP displays after 160.</p>
+</div>
+</div>
+<div class="flex items-center justify-center p-5 rounded-2xl border-2 border-dashed border-outline-variant/30 text-on-surface-variant/60 cursor-pointer hover:bg-surface-container transition-all">
+<span class="text-sm font-medium" style="">+ Add Custom Check</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Inventory Table -->
+<div class="bg-surface-container-low rounded-3xl overflow-hidden shadow-sm">
+<div class="px-8 py-6 flex justify-between items-center">
+<h3 class="font-headline font-bold text-lg" style="">Pages with Optimization Needs</h3>
+<button class="text-primary text-xs font-bold flex items-center gap-1 hover:underline" style="">
+                            View All <span class="material-symbols-outlined text-sm" style="">chevron_right</span>
+</button>
+</div>
+<div class="w-full">
+<div class="grid grid-cols-12 px-8 py-3 bg-surface-container text-[10px] font-black text-on-surface-variant uppercase tracking-widest">
+<div class="col-span-6" style="">Page URL</div>
+<div class="col-span-3 text-center" style="">Issues</div>
+<div class="col-span-3 text-right" style="">Score</div>
+</div>
+<div class="divide-y divide-outline-variant/10">
+<div class="grid grid-cols-12 px-8 py-4 items-center hover:bg-surface-container-highest transition-colors">
+<div class="col-span-6 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" style="">language</span>
+</div>
+<span class="text-sm font-medium text-on-surface" style="">/blog/top-seo-trends-2024</span>
+</div>
+<div class="col-span-3 text-center">
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full text-[10px] font-bold" style="">5 ALERTS</span>
+</div>
+<div class="col-span-3 text-right">
+<span class="text-sm font-bold text-on-surface-variant" style="">64/100</span>
+</div>
+</div>
+<div class="grid grid-cols-12 px-8 py-4 items-center hover:bg-surface-container-highest transition-colors">
+<div class="col-span-6 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" style="">language</span>
+</div>
+<span class="text-sm font-medium text-on-surface" style="">/pricing-plans</span>
+</div>
+<div class="col-span-3 text-center">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold" style="">2 ALERTS</span>
+</div>
+<div class="col-span-3 text-right">
+<span class="text-sm font-bold text-on-surface-variant" style="">88/100</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Context Cards -->
+<aside class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Fix Guidance Card -->
+<div class="bg-gradient-to-br from-on-surface to-inverse-surface rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden group">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-white/10 p-2 rounded-xl backdrop-blur-md">
+<span class="material-symbols-outlined text-white" style="">auto_fix_high</span>
+</div>
+<h4 class="font-headline font-bold text-lg leading-tight" style="">How to optimize this page</h4>
+</div>
+<div class="space-y-6 mb-8">
+<div class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border border-white/20" style="">1</div>
+<p class="text-sm text-on-primary-container leading-relaxed" style="">Update alt tags for the 45 flagged images in the media library using your primary keyword.</p>
+</div>
+<div class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border border-white/20" style="">2</div>
+<p class="text-sm text-on-primary-container leading-relaxed" style="">Trim the meta description in your CMS to under 155 characters for better mobile visibility.</p>
+</div>
+<div class="flex gap-4">
+<div class="w-6 h-6 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border border-white/20" style="">3</div>
+<p class="text-sm text-on-primary-container leading-relaxed" style="">Integrate "SEO Auditor" naturally into the first 100 words of your body content.</p>
+</div>
+</div>
+<a class="block w-full text-center bg-white/10 hover:bg-white/20 border border-white/20 py-3 rounded-xl transition-all font-bold text-xs uppercase tracking-widest" href="#" style="">
+                            Refer to Content Quality Guide
+                        </a>
+</div>
+</div>
+<!-- Strategy Insight Card -->
+<div class="bg-surface-container-high rounded-3xl p-8 border border-white shadow-sm">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4" style="">Market Benchmark</h4>
+<div class="flex items-end gap-3 mb-6">
+<div class="text-3xl font-headline font-black text-on-surface" style="">Top 3%</div>
+<div class="text-xs font-medium text-on-surface-variant mb-1" style="">of competitors have better on-page hygiene.</div>
+</div>
+<div class="relative h-32 w-full mt-4 flex items-end gap-1">
+<div class="flex-1 bg-white rounded-t-lg h-[40%]"></div>
+<div class="flex-1 bg-white rounded-t-lg h-[60%]"></div>
+<div class="flex-1 bg-white rounded-t-lg h-[80%]"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[45%] relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded" style="">You</div>
+</div>
+<div class="flex-1 bg-white rounded-t-lg h-[90%]"></div>
+<div class="flex-1 bg-white rounded-t-lg h-[70%]"></div>
+<div class="flex-1 bg-white rounded-t-lg h-[85%]"></div>
+</div>
+</div>
+<!-- Floating CTA / Help -->
+<div class="bg-tertiary-container/10 p-6 rounded-3xl border border-tertiary-container/20 flex items-center gap-4">
+<div class="bg-tertiary-container text-on-tertiary-container p-3 rounded-2xl">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">psychology</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-tertiary-fixed-variant" style="">Expert Review</p>
+<p class="text-sm text-tertiary font-semibold cursor-pointer hover:underline" style="">Request Manual Audit →</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Top AppBar (Responsive View Only) -->
+<div class="md:hidden sticky top-0 z-50 bg-[#f8f9ff] shadow-sm flex items-center justify-between px-6 h-16 w-full">
+<span class="text-[#0f1c2d] font-extrabold text-xl font-headline tracking-tight" style="">Analytica Pro</span>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#434656]" style="">notifications</span>
+<span class="material-symbols-outlined text-[#434656]" style="">menu</span>
+</div>
+</div>
+<!-- Bottom NavBar (Mobile View) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-2xl flex justify-around items-center h-20 px-4 z-50">
+<button class="flex flex-col items-center gap-1 text-[#434656]" style="">
+<span class="material-symbols-outlined" style="">dashboard</span>
+<span class="text-[10px] font-bold" style="">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#0052ff]" style="">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">description</span>
+<span class="text-[10px] font-bold" style="">Reports</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#434656]" style="">
+<span class="material-symbols-outlined" style="">analytics</span>
+<span class="text-[10px] font-bold" style="">SEO</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#434656]" style="">
+<span class="material-symbols-outlined" style="">settings</span>
+<span class="text-[10px] font-bold" style="">Settings</span>
+</button>
+</div>
+</body></html>

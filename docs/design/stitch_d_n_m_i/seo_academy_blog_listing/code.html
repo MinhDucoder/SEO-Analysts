@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academy - Analytica Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-bright": "#f8f9ff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f8f9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#434656",
+                        "on-primary-container": "#dfe3ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "primary": "#003ec7",
+                        "inverse-surface": "#243143",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "secondary-container": "#dbe2f9",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#0f1c2d",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b7c4ff",
+                        "on-background": "#0f1c2d",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary": "#005a3c",
+                        "primary-fixed": "#dde1ff",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "on-tertiary-container": "#72fec0",
+                        "on-error-container": "#93000a",
+                        "secondary": "#565e71",
+                        "surface-tint": "#004ced",
+                        "outline-variant": "#c3c5d9",
+                        "tertiary-container": "#007550",
+                        "outline": "#737688",
+                        "surface-container": "#e6eeff",
+                        "on-secondary-container": "#5c6477",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "secondary-fixed": "#dbe2f9",
+                        "on-primary-fixed": "#001452",
+                        "surface-variant": "#d6e3fb",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "primary-container": "#0052ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#141b2c",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-dim": "#cddbf2"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; color: #0f1c2d; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); }
+        .primary-gradient { background: linear-gradient(135deg, #003ec7 0%, #0052ff 100%); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Sidebar Navigation (Shared Component: SideNavBar) -->
+<aside class="bg-slate-900 dark:bg-slate-950 h-screen w-64 fixed left-0 top-0 overflow-y-auto flex flex-col py-6 shadow-2xl z-50">
+<div class="px-6 mb-10">
+<h1 class="text-2xl font-black text-white tracking-tighter">Analytica Pro</h1>
+<p class="text-xs text-slate-400 font-['Manrope'] font-semibold tracking-tight">Precision Editorial</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Website Audit</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="key">key</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Keyword Research</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Backlink Checker</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Rank Tracker</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">On-page SEO</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Competitors</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white bg-blue-600/10 border-l-4 border-blue-600 transition-all translate-x-1 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Academy</span>
+</a>
+</nav>
+<div class="px-4 mt-auto space-y-1">
+<div class="p-4 bg-slate-800/40 rounded-xl mb-4">
+<p class="text-xs text-slate-400 mb-2">Ready for growth?</p>
+<button class="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-500 transition-all">Upgrade to Pro</button>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Top Navigation (Shared Component: TopNavBar) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex items-center justify-between px-8 shadow-sm">
+<div class="flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-slate-500 font-medium text-sm hover:text-slate-900 transition-all" href="#">Overview</a>
+<a class="text-blue-700 font-bold text-sm border-b-2 border-blue-600 pb-1" href="#">Reports</a>
+<a class="text-slate-500 font-medium text-sm hover:text-slate-900 transition-all" href="#">History</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search lessons..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white shadow-sm">
+<img alt="User Profile Avatar" data-alt="close up professional headshot of a smiling man in a business casual attire with natural office lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2XFBcFau416Z6LZYigpsHL6UBwv628iRn9t8bwYSlUq9gbsWZY_MwaL1JjXeJk_TWMiY0lnA3Jhi2-0nr7LLMilaE7hHxIOeYnwSVaKoC-Y7JX4Fje_lBfofuYxCq-mygbJnpxq_mAFmi7CcLSfqZtTtY7JP5HZx2shHoEz361z1WIv4dF4xmg9xO82SDtJjLRv7VYNntSrZInF_LJmSXk3sKEKkBikdy8Kb5XK4MWidH0smuW2GF97TWbP373v7YYLUxuWf4XMo"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-24 pb-12 px-8 min-h-screen">
+<!-- Hero Section: Featured Article -->
+<section class="mb-12">
+<div class="relative w-full h-[500px] rounded-[2rem] overflow-hidden group shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract technological digital landscape with glowing connections and neural networks representing artificial intelligence in a dark blue futuristic environment" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA65J4kukXMbAwmEWRcFByqO58IWfgtQhDFUJ2r5ckYJw_vYAvUN3YE90YHr7sBI5EAi1yc0dRouXsFLCX93NcaS1lY7S9yRpzo_s79kd6sP5aIftyYxNxkVpzGAuaB7t1FdOhPQTNnjo1Cl_c-aDHrC8cHbcr-0QPxhR6Y_QRykvGq9BGKBL9Az_1u6WevTtPsObiNTuIiir7WEuO9QVSSVOfw59PaKWzYnlw5Li8OGA9X64NYcSgKhjcH4ssiJAkptgWPLNuPxbs')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-12 w-full md:w-2/3">
+<span class="inline-block px-4 py-1 bg-primary text-white text-xs font-bold rounded-full mb-6 tracking-widest uppercase">Expert Insights</span>
+<h2 class="text-4xl md:text-5xl font-black text-white leading-tight mb-6">The Future of SEO in the Age of AI Search</h2>
+<p class="text-slate-200 text-lg font-body mb-8 line-clamp-2">Explore how generative AI is reshaping the search landscape and learn the critical strategies needed to maintain visibility in a post-keyword world.</p>
+<div class="flex items-center gap-6">
+<button class="primary-gradient text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
+                            Start Reading
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<div class="flex items-center gap-3 text-white/80">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="text-sm font-medium">18m 20s read</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Filters & Categories -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+<div class="flex flex-wrap gap-2 p-1.5 bg-surface-container-low rounded-2xl w-fit">
+<button class="px-6 py-2.5 bg-surface-container-lowest text-primary font-bold rounded-xl shadow-sm">All</button>
+<button class="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-medium transition-colors">Technical SEO</button>
+<button class="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-medium transition-colors">Content Strategy</button>
+<button class="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-medium transition-colors">Link Building</button>
+<button class="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-medium transition-colors">Case Studies</button>
+</div>
+<div class="flex items-center gap-4">
+<p class="text-sm text-slate-500">Showing 12 of 48 articles</p>
+<button class="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border-none shadow-sm text-sm font-medium text-slate-700">
+<span class="material-symbols-outlined text-sm">tune</span>
+                    Filter
+                </button>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest rounded-[2rem] overflow-hidden flex flex-col group transition-all hover:shadow-2xl hover:-translate-y-1">
+<div class="h-56 overflow-hidden relative">
+<img alt="Blog cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="abstract 3D rendered geometric shapes in deep blue and iridescent purple tones with soft studio lighting and shallow depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzk5owWN111fj91TpwDjKgH_UOlg7GkfApHP6dPhjqAd_Z1P1QMYWUh5OSObmGzlqxLBlw8q_ZgJ-_rBm8ILTWh25heac1U17m-lF1N9HiSq3jqr31bJgf8P-MNTMvEw35zd5HsM-6h8k49B_nk6sRW8QVR9CuFJEjXJzzTtFkdRmdNprkh5lRRlJxIeCRm8755LiDS5FwdCxaBL2HSDTQ98nrEtVad_GVZprYUhY6w9h1Kr9pakDyJIcFeAYkTEnqy0PucTOBlZ4"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase text-primary">Mastery</span>
+<span class="bg-slate-900/60 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="schedule">schedule</span>
+                            12m 45s
+                        </span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Advanced Schema Markup for 2024</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6 leading-relaxed line-clamp-2">Master the latest JSON-LD implementations to capture rich snippets and boost your CTR by up to 35%.</p>
+<div class="mt-auto">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Author" class="w-8 h-8 rounded-full" data-alt="headshot of a young male expert with glasses and a friendly expression in a modern creative studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Nq-rfYk2DV1f9w01OTfPXmJ3PpNPMwng-60N6I5Ed2V-nPc33EzHbY0YP9JucNSwkEaaCicQPphRUqDWvvZUqm9wqWIg2l0MjrrHI3gnF6dAqpB2DEUSpzkiRUrpknTCL41unCY8ERiC2TSP36ffjc1Uz58ZqwYgvzAQddrJwoeUwrYYmeVH-mfx02ky5S1b60yLHons8uTggNH20ADe3rNu18Ob7VGcjqAM6oh96-ZtQj_PJF9-Vg5pHx_XNE3y1dVWqs26fZQ"/>
+<span class="text-sm font-semibold text-slate-700">Julian Pierce</span>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-400 mb-1">
+<span>PROGRESS</span>
+<span>65%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<button class="p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest rounded-[2rem] overflow-hidden flex flex-col group transition-all hover:shadow-2xl hover:-translate-y-1">
+<div class="h-56 overflow-hidden relative">
+<img alt="Blog cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="minimalist close up of high tech circuit board with glowing cyan data streams and sleek metallic components" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx4djO9DJLC15mB0wWEbH6fFho6RAOn-VJ7uHDll_jaJAJ2cSAnoaWEU8eWE2Bnt2oLO4zxURuNbCqcom80nywYMN7kRIMRvzGkxPLjVSfZeDUxkT1TQUcfFgXEWbkJuuLGuWgpaGr20bOEGL0NYVOyF_tQyGUfUkgjQrZjgMdOlFBNMM5Acg1VO7nXvr_VfrMmpuzETs704_qIFc6v_jMQ3FO51s-dhJSC2dQMS3wup4zMcwN4ql0CFfR5N6E1Y5t4ZKi4z_nl0M"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase text-tertiary">Core</span>
+<span class="bg-slate-900/60 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="schedule">schedule</span>
+                            8m 15s
+                        </span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Core Web Vitals: The Interaction to Next Paint (INP) Guide</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6 leading-relaxed line-clamp-2">How to optimize your site for the new performance metric replacing First Input Delay in March 2024.</p>
+<div class="mt-auto">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Author" class="w-8 h-8 rounded-full" data-alt="professional portrait of a confident woman in corporate attire with soft natural lighting and blurred urban background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu0VqvrAvWGjIOT8pLLAjNm-9bk4xDwM4CJhWFTlv-Bo0LPxGC12Vr6hsJUQd9TDzfRr0skl5hfvr6QEVe_Z5yqK5xpa6ecHAgHbbbRDjIRnZ1k-MBIGnkU0OmBxVfUxVNnvdQr64QZyNaXhxqofnwL5OuJksSEhdTjd1w4G5JtH3ACZ2mgJCDpteG4jgVwj4k0aikFAG0AVru81CLnquT9NlizVlHlO0vzwa4QXGwevn5A5X5EQUyWenhN7-0bbX5d-BhfR98lvE"/>
+<span class="text-sm font-semibold text-slate-700">Elena Vance</span>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-400 mb-1">
+<span>PROGRESS</span>
+<span>0%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<button class="px-5 py-2 bg-primary text-white rounded-xl text-xs font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+                                Read Now
+                            </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-surface-container-lowest rounded-[2rem] overflow-hidden flex flex-col group transition-all hover:shadow-2xl hover:-translate-y-1">
+<div class="h-56 overflow-hidden relative">
+<img alt="Blog cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="abstract representation of global data connectivity with glowing blue lines and dots across a dark sphere representing the earth at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFcW6LLdDiVFco4JKuR943TdZ7o2L6VTWi_YjVMyoPedCTRhtpdhc4RaA0f8k0QCxYuHSTpvlKlOVQRrtnFJEYzKeCTgjZsM-mgnx_OkBetv4Rki5FU9h5cExUwPkMZCa698FD7Z9dLSc4jUk4vhX_CdL6_eT4HOicLOsukvsrBrNFgfM1UByWbKUVJhmB52n5ljARKWs0zTuxioDrPciQW0zw4y94ZM4GqsA3YiEIJ_ThI6u4cV_NGJSTuuoEnhBRLol3xYfB3sg"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase text-error">Expert</span>
+<span class="bg-slate-900/60 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="schedule">schedule</span>
+                            24m 10s
+                        </span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-on-surface mb-3 group-hover:text-primary transition-colors">Programmatic SEO: Building 10,000 Landing Pages</h3>
+<p class="text-on-surface-variant text-sm font-body mb-6 leading-relaxed line-clamp-2">Learn the architecture and data management strategies behind successful high-scale programmatic deployments.</p>
+<div class="mt-auto">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Author" class="w-8 h-8 rounded-full" data-alt="sharp professional headshot of a middle-aged male executive in a bright minimalist office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi-4F54uRha9eksx9TZzjc_AOyKBBqYSdh0q70hPLpvKThM4Qrem_dGfnHVJwqpUrOQaQ0XZQ3xRdVVb_g0qUbw19j-MPJUkiaNAjJZiMxCBA0vad3J9KkILEALoc-dgOMqjnODs0Weh1dt_LJWw_9opSUcDFGmmNsJ6aYai4Q7AC7M1O2qVu0O2lVZOY-G5UKNPDACKEpk7pz1FmIeUzbL9c7OB8sJNNXneYCBu-cqBRs2vbhTfLjrlP_tmgxi-t5qOZEcIJqJ9A"/>
+<span class="text-sm font-semibold text-slate-700">Marcus Thorne</span>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1">
+<div class="flex justify-between text-[10px] font-bold text-slate-400 mb-1">
+<span>PROGRESS</span>
+<span>100%</span>
+</div>
+<div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<button class="p-2 bg-tertiary/10 text-tertiary rounded-xl hover:bg-tertiary hover:text-white transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Newsletter Section -->
+<section class="mt-20">
+<div class="primary-gradient p-12 md:p-16 rounded-[2.5rem] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12">
+<!-- Abstract decorative shapes -->
+<div class="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute -left-20 -bottom-20 w-60 h-60 bg-white/5 rounded-full blur-2xl"></div>
+<div class="relative z-10 max-w-xl text-center md:text-left">
+<h2 class="text-3xl md:text-4xl font-black text-white mb-4">Join our expert community</h2>
+<p class="text-blue-100 text-lg">Get the latest SEO strategies, algorithm updates, and case studies delivered directly to your inbox every Tuesday.</p>
+</div>
+<div class="relative z-10 w-full md:w-auto flex flex-col sm:flex-row gap-4">
+<input class="bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:ring-2 focus:ring-white/50 rounded-2xl px-6 py-4 w-full sm:w-80 backdrop-blur-md" placeholder="Your work email" type="email"/>
+<button class="bg-white text-primary px-8 py-4 rounded-2xl font-black shadow-xl hover:bg-blue-50 transition-all">Subscribe Now</button>
+</div>
+</div>
+<div class="mt-8 flex flex-col md:flex-row items-center justify-between px-4">
+<p class="text-sm text-slate-400">© 2024 Analytica Pro Academy. All rights reserved.</p>
+<div class="flex gap-8 mt-4 md:mt-0">
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Cookie Settings</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Contextual) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 primary-gradient text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</body></html>

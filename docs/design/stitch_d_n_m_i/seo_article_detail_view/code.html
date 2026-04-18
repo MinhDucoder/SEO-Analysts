@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Semantic Keyword Clustering | Analytica Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-bright": "#f8f9ff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f8f9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#434656",
+                        "on-primary-container": "#dfe3ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "primary": "#003ec7",
+                        "inverse-surface": "#243143",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "secondary-container": "#dbe2f9",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#0f1c2d",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b7c4ff",
+                        "on-background": "#0f1c2d",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary": "#005a3c",
+                        "primary-fixed": "#dde1ff",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "on-tertiary-container": "#72fec0",
+                        "on-error-container": "#93000a",
+                        "secondary": "#565e71",
+                        "surface-tint": "#004ced",
+                        "outline-variant": "#c3c5d9",
+                        "tertiary-container": "#007550",
+                        "outline": "#737688",
+                        "surface-container": "#e6eeff",
+                        "on-secondary-container": "#5c6477",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "secondary-fixed": "#dbe2f9",
+                        "on-primary-fixed": "#001452",
+                        "surface-variant": "#d6e3fb",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "primary-container": "#0052ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#141b2c",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-dim": "#cddbf2"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; }
+        h1, h2, h3, .brand-font { font-family: 'Manrope', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-slate-900 dark:bg-slate-950 flex flex-col py-6 shadow-2xl z-50">
+<div class="px-6 mb-8">
+<h1 class="text-2xl font-black text-white tracking-tighter">Analytica Pro</h1>
+<p class="text-xs text-slate-400 font-semibold tracking-tight">Precision Editorial</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white bg-blue-600/10 border-l-4 border-blue-600 transition-all translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Website Audit</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="key">key</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Keyword Research</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Backlink Checker</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Rank Tracker</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">On-page SEO</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Manrope'] font-semibold tracking-tight text-sm">Competitors</span>
+</a>
+</nav>
+<div class="px-4 mt-auto space-y-4">
+<div class="bg-blue-600 rounded-xl p-4 text-white">
+<p class="text-xs font-bold uppercase tracking-wider mb-1 opacity-80">Pro Plan</p>
+<p class="text-sm font-semibold mb-3">Upgrade to Pro</p>
+<button class="w-full py-2 bg-white text-blue-600 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors">Upgrade Now</button>
+</div>
+<div class="pt-4 border-t border-slate-800 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white transition-colors text-sm font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white transition-colors text-sm font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span> Support
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen bg-surface">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 z-40 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 shadow-sm">
+<div class="flex items-center gap-8">
+<nav class="flex items-center gap-6">
+<a class="text-slate-500 hover:text-slate-900 transition-all font-['Inter'] text-sm font-medium" href="#">Overview</a>
+<a class="text-blue-700 font-bold border-b-2 border-blue-600 pb-1 font-['Inter'] text-sm" href="#">Reports</a>
+<a class="text-slate-500 hover:text-slate-900 transition-all font-['Inter'] text-sm font-medium" href="#">History</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-lg">search</span>
+<input class="bg-slate-50 border-none rounded-full pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search report..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-lg transition-all"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-lg transition-all"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden ml-2">
+<img class="h-full w-full object-cover" data-alt="professional male corporate portrait with warm lighting and blurred office interior background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4m-kyEEHCBV0bj6TRJ1Yit10sTfGeXfPXXoJCBkz5oVIWO_HPNrpNJUwW_36aTQxujC86OHSJMZzJUr7suWJviFvxapgK6W24QknHPY5CHbOnk_uXSHstuC_-XF6bki9prEKNJd_BrwKSD4f8d7XIsm4CykacWQVteZzAFp4UUtL9ca-90caLVwSa0PqQFO41PglgwqqJZRUm196xjeT-QvMoHEestgtZK4_Rolh6RNgnsxvWqXKyVJ8aJOeSB-Gt-or1xEMR5Bo"/>
+</div>
+</div>
+</header>
+<!-- Article Content Shell -->
+<div class="pt-24 pb-20 px-12 max-w-[1400px] mx-auto grid grid-cols-12 gap-12">
+<!-- Left Column: Reading Experience -->
+<div class="col-span-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-xs font-medium text-on-surface-variant mb-6 uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Academy</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">SEO Guides</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-on-surface">Semantic Clustering</span>
+</nav>
+<!-- Headline Section -->
+<div class="mb-10">
+<h1 class="text-5xl font-extrabold text-on-surface leading-[1.1] mb-4 tracking-tight">
+                        Semantic Keyword Clustering: <br/>
+<span class="text-primary-container">A Guide to Modern SEO</span>
+</h1>
+<p class="text-xl text-on-surface-variant font-medium max-w-2xl leading-relaxed">
+                        Master the shift from individual keyword targeting to comprehensive topic authority using advanced data grouping.
+                    </p>
+</div>
+<!-- Author Info -->
+<div class="flex items-center gap-4 mb-10 pb-10 border-b border-outline-variant/20">
+<div class="h-14 w-14 rounded-full bg-surface-container-high overflow-hidden border-2 border-white shadow-sm">
+<img class="h-full w-full object-cover" data-alt="close-up of a smiling male executive in a blue linen shirt with bright outdoor morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyrhyBXLYVGVyxQI0G10ELqq-0y5ZB5TslocC0MRrxCBzmzGyNK3Cq7p11MTt4WraHVyp5yjiey7uJ6uRS0A4IMxhW2921M8uicC_bDWPGqp78Ez2n9l5SfddR2U-RNutrRwJFqfR9fn74Tnp_NFmGj2Y7QxgxThBGUqO7aP1J-Yo61o-ax1ZIjvWCcgnKv_O2DOKZmloSOpyQOAFZ3DSnQTHf9ukyBv2daUjA-kwCmLwXNQcHtLxyzpE558Wjebc9Aa_3ibl1CjI"/>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Alex Riverton</h4>
+<p class="text-sm text-on-surface-variant">Director of Growth • 8 min read • Updated Oct 24, 2023</p>
+</div>
+<div class="ml-auto flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface text-sm font-semibold rounded-full transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span> Share
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface text-sm font-semibold rounded-full transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="bookmark">bookmark</span> Save
+                        </button>
+</div>
+</div>
+<!-- Featured Image -->
+<div class="rounded-3xl overflow-hidden mb-12 shadow-2xl">
+<img class="w-full h-[480px] object-cover" data-alt="clean futuristic interface showing complex blue data visualizations on a dark polished screen with soft reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7IoRacX_mreDzDFeHBsLShyYI6bbwTRsaO1Bw95abKkzwbdZdL_-41pAaDM3LPfrbY_f1ACW7_Ai4ybgPHvaiIeuJxLArJY4bFpmuzHKkldUXtxDVWf8pErLIZiqpGgmdMIjEwxrSEDHjTz9MakxfolnGTT0mAdjF3_AgOIAFuh8p4E_iMxsVUlx07pDCpT37Y2N9ToW0j8RLx71MAI9pUXCpJwnK2hLgUfd6KKXqHKtN_ctdZRsPTCJMHdo0UjO1Lv0oH0T-n5M"/>
+</div>
+<!-- Article Body -->
+<article class="prose prose-slate max-w-none prose-headings:font-headline prose-p:font-body text-on-surface leading-loose">
+<h2 class="text-3xl font-bold mb-6 mt-12 tracking-tight">The Death of Single-Keyword Targeting</h2>
+<p class="text-lg text-on-surface-variant mb-6">
+                        In the early days of SEO, ranking was a matter of repetition. You found a high-volume keyword, sprinkled it across your page, and waited for the crawler to reward your diligence. Today, search engines have evolved. Algorithms like BERT and MUM aren't looking for matches; they are looking for <strong>intent</strong>.
+                    </p>
+<p class="text-lg text-on-surface-variant mb-6">
+                        Keyword clustering is the process of grouping keywords into "themes" based on user intent. This allows you to build topical authority that is much harder for competitors to replicate.
+                    </p>
+<!-- Pull Quote -->
+<div class="my-12 py-10 px-12 bg-surface-container-low border-l-8 border-primary rounded-r-3xl relative overflow-hidden">
+<span class="absolute -top-4 -left-2 text-[120px] font-black text-primary/10 select-none">“</span>
+<blockquote class="text-2xl font-headline font-extrabold italic text-primary leading-snug relative z-10">
+                            The future of search isn't finding more information—it's finding information you can actually act upon... semantic clustering is the roadmap to that clarity.
+                        </blockquote>
+<div class="mt-4 font-bold text-on-surface">— Alex Riverton</div>
+</div>
+<h3 class="text-2xl font-bold mb-4 mt-8">Three Pillars of Semantic Grouping</h3>
+<ul class="space-y-4 mb-8">
+<li class="flex items-start gap-4">
+<span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center mt-1 shrink-0"><span class="material-symbols-outlined text-sm">check</span></span>
+<span class="text-on-surface-variant"><strong class="text-on-surface">Intent Alignment:</strong> Differentiating between "how-to" informational searches and "best of" transactional searches.</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center mt-1 shrink-0"><span class="material-symbols-outlined text-sm">check</span></span>
+<span class="text-on-surface-variant"><strong class="text-on-surface">LSI Mapping:</strong> Incorporating Latent Semantic Indexing terms that naturally occur within high-quality content.</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center mt-1 shrink-0"><span class="material-symbols-outlined text-sm">check</span></span>
+<span class="text-on-surface-variant"><strong class="text-on-surface">Internal Link Architecture:</strong> Creating a "Pillar and Spoke" model that shares link equity across a cluster.</span>
+</li>
+</ul>
+<h2 class="text-3xl font-bold mb-6 mt-12 tracking-tight">How to Audit Your Existing Content</h2>
+<p class="text-lg text-on-surface-variant mb-6">
+                        Most websites are sitting on a goldmine of unoptimized semantic data. By auditing your current rankings, you can identify pages that are "almost" ranking for high-intent clusters and push them over the finish line.
+                    </p>
+</article>
+</div>
+<!-- Right Sidebar -->
+<aside class="col-span-4 space-y-8">
+<!-- SEO Health Score Widget -->
+<div class="glass-card rounded-3xl p-8 shadow-sm border-2 border-white/50">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline font-bold text-lg mb-1">Topic Health</h3>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider font-bold">Semantic Authority</p>
+</div>
+<span class="p-2 bg-tertiary/10 text-tertiary rounded-xl material-symbols-outlined" data-icon="auto_graph">auto_graph</span>
+</div>
+<div class="flex items-center justify-center py-6 relative">
+<svg class="w-40 h-40 transform -rotate-90">
+<circle class="text-surface-container-high" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-tertiary transition-all duration-1000" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="44" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-headline font-black text-on-surface">92</span>
+<span class="text-xs font-bold text-tertiary">OPTIMIZED</span>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/20 flex gap-4 text-center">
+<div class="flex-1">
+<p class="text-2xl font-black text-on-surface">14</p>
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Clusters</p>
+</div>
+<div class="w-px h-10 bg-outline-variant/30"></div>
+<div class="flex-1">
+<p class="text-2xl font-black text-on-surface">8.4k</p>
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Volume</p>
+</div>
+</div>
+</div>
+<!-- Audit Checklist -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
+<h3 class="font-headline font-bold text-lg mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="fact_check">fact_check</span>
+                        Audit Checklist
+                    </h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="h-6 w-6 rounded-md bg-tertiary/20 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm font-black" data-weight="fill">check</span>
+</span>
+<p class="text-sm font-semibold text-on-surface">Identify Seed Keywords</p>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="h-6 w-6 rounded-md bg-tertiary/20 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm font-black" data-weight="fill">check</span>
+</span>
+<p class="text-sm font-semibold text-on-surface">Scrape SERP Commonalities</p>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="h-6 w-6 rounded-md border-2 border-outline-variant/50 shrink-0"></div>
+<p class="text-sm font-semibold text-on-surface">Map Intent Modifiers</p>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl group hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="h-6 w-6 rounded-md border-2 border-outline-variant/50 shrink-0"></div>
+<p class="text-sm font-semibold text-on-surface">Generate Content Gaps</p>
+</div>
+</div>
+<button class="w-full mt-6 py-3 bg-primary-container text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">Generate Full Report</button>
+</div>
+<!-- Keyword Clusters Progress -->
+<div class="bg-inverse-surface rounded-3xl p-8 text-white shadow-xl">
+<h3 class="font-headline font-bold text-lg mb-6">Active Clusters</h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider mb-2 opacity-70">
+<span>Core SEO Semantic</span>
+<span>88%</span>
+</div>
+<div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim w-[88%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider mb-2 opacity-70">
+<span>User Intent Mapping</span>
+<span>45%</span>
+</div>
+<div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed-dim w-[45%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider mb-2 opacity-70">
+<span>LSI Distribution</span>
+<span>12%</span>
+</div>
+<div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-error w-[12%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Suggestion Image Preview -->
+<div class="rounded-3xl overflow-hidden relative group">
+<img class="w-full h-48 object-cover brightness-50 group-hover:brightness-75 transition-all duration-500" data-alt="high-angle shot of a minimalist wooden workspace with a large tablet displaying clean analytics and graphs next to a coffee cup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV2wkUx572HBqj0pZR4mdZFRIwVnJFcV6W6W21MnnnmPLDJWvy0Y2iQn2OhMMCAE9I5mi7SeTcxvN8pNGNVCCH1PNib-sVtLNROS9u3ZGVqFIkKCtqohX4Y-0wjNfEVx7ntjNVaOkhTTol5R0olN9zITlN3eIie9E3PYP-YR6QYN1ZyrntHF2vYIGpbfxYueXhg5Kn5zkA6bFD9rYcnKf-UwYRa4Sf1TybFeJIlMXrl8kTIJR6F15BO_LGmUSANQmXbrVEwbyHlA0"/>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<span class="text-[10px] font-black uppercase text-white/70 tracking-tighter mb-1">AI Suggestion</span>
+<h4 class="text-white font-headline font-bold text-lg leading-tight">Optimizing User Flow for Content Pillars</h4>
+<button class="mt-4 flex items-center gap-2 text-primary-fixed font-bold text-sm">
+                            Explore Suggestion <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Contextual FAB (Shared Component Strategy) -->
+<button class="fixed bottom-8 right-8 h-14 w-14 bg-primary-container text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl" data-icon="edit">edit</span>
+</button>
+</body></html>

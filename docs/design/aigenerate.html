@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Content Generator | Curator AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "primary-fixed": "#dde1ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-dim": "#cddbf2",
+                        "outline-variant": "#c3c5d9",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#005a3c",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d6e3fb",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-tertiary-fixed": "#002113",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#dbe2f9",
+                        "on-secondary-container": "#5c6477",
+                        "error": "#ba1a1a",
+                        "primary-container": "#0052ff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "inverse-surface": "#243143",
+                        "secondary": "#565e71",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#72fec0",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-fixed": "#001452",
+                        "on-background": "#0f1c2d",
+                        "on-surface-variant": "#434656",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-surface": "#0f1c2d",
+                        "surface-tint": "#004ced",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#007550",
+                        "surface-bright": "#f8f9ff",
+                        "outline": "#737688",
+                        "surface-container": "#e6eeff",
+                        "surface": "#f8f9ff",
+                        "primary": "#003ec7",
+                        "on-secondary-fixed": "#141b2c",
+                        "inverse-primary": "#b7c4ff",
+                        "on-primary-container": "#dfe3ff",
+                        "secondary-fixed": "#dbe2f9"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full flex justify-between items-center px-8 h-16 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl z-50 shadow-sm shadow-blue-900/5">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black tracking-tighter bg-gradient-to-br from-blue-700 to-indigo-500 bg-clip-text text-transparent">Curator AI</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="font-['Manrope'] font-semibold text-sm tracking-tight text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Dashboard</a>
+<a class="font-['Manrope'] font-semibold text-sm tracking-tight text-blue-700 dark:text-blue-400 border-b-2 border-blue-600 pb-1" href="#">AI Content</a>
+<a class="font-['Manrope'] font-semibold text-sm tracking-tight text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Academy</a>
+<a class="font-['Manrope'] font-semibold text-sm tracking-tight text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Forecaster</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined text-slate-600" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined text-slate-600" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="User Profile" data-alt="professional headshot of a creative director in a minimalist studio setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfYTgvopb6VwKvXileaA_6sYDJ5bfZh8pQCeZKVal_UEk1xMtb3l3dZThqdMmxntYldCH9_C2trf7Z3Rh5-P5C-z07faXxuyoez6Gh9YnBMxOZzwQtkabSJZ-m-tHsu8JZB5MQjDptpQWw3Co1LXt5u4VDEMH66kZW6srcBzSpGQUwgQ8BCLKp-V0wFB2ir7tPwQhtgw6KZaflZtEyVKFEFXV80VjJocaLKriuGwMIqJwhJy5kpI5ujp3FpHwIPutoYui9QxUoOVU"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-slate-900 dark:bg-black font-['Inter'] text-sm font-medium z-40 transition-transform duration-300">
+<div class="py-6 flex flex-col h-full">
+<div class="space-y-1">
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Overview
+                </a>
+<a class="flex items-center gap-3 bg-blue-600/10 text-blue-400 border-l-4 border-blue-500 py-3 px-6 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span> AI Editor
+                </a>
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span> Learning
+                </a>
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span> Revenue
+                </a>
+<a class="flex items-center gap-3 text-slate-400 py-3 px-6 hover:text-slate-200 hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> Reports
+                </a>
+</div>
+<div class="mt-auto px-6 space-y-4">
+<div class="bg-blue-600/10 rounded-xl p-4 border border-blue-500/20">
+<p class="text-blue-400 font-bold mb-1">Upgrade to Pro</p>
+<p class="text-slate-500 text-xs mb-3">Unlock advanced SEO metrics &amp; long-form AI.</p>
+<button class="w-full py-2 bg-primary text-white rounded-lg text-xs font-bold hover:bg-primary-container transition-colors">Get Started</button>
+</div>
+<div class="pt-4 border-t border-slate-800 space-y-1">
+<a class="flex items-center gap-3 text-slate-400 py-2 hover:text-slate-200 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span> Help
+                    </a>
+<a class="flex items-center gap-3 text-slate-400 py-2 hover:text-slate-200 transition-all" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span> Logout
+                    </a>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="lg:ml-64 pt-16 h-screen flex flex-col md:flex-row gap-0 overflow-hidden">
+<!-- Left Side: AI Content Editor -->
+<section class="flex-1 h-full overflow-y-auto bg-surface p-6 md:p-10 border-r border-transparent">
+<div class="max-w-4xl mx-auto space-y-8">
+<!-- Header Meta -->
+<div class="flex flex-col gap-2">
+<nav class="flex text-[10px] uppercase tracking-widest font-bold text-secondary gap-2">
+<span>Projects</span> <span>/</span> <span>Marketing Strategy 2024</span>
+</nav>
+<input class="bg-transparent border-none text-4xl md:text-5xl font-extrabold font-headline text-on-surface focus:ring-0 px-0 placeholder:text-surface-dim tracking-tight" placeholder="Untitled Content..." type="text" value="The Future of Decentralized SEO Curators"/>
+</div>
+<!-- Rich Text Toolbar -->
+<div class="sticky top-0 glass-panel p-2 rounded-2xl shadow-sm border border-outline-variant/10 flex items-center gap-1 z-10">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined" data-icon="format_bold">format_bold</span></button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined" data-icon="format_italic">format_italic</span></button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined" data-icon="format_h1">format_h1</span></button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined" data-icon="format_list_bulleted">format_list_bulleted</span></button>
+<div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="auto_fix_high">auto_fix_high</span>
+                        AI Re-write
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-tertiary-container text-on-tertiary-container rounded-xl text-sm font-bold active:scale-95 transition-transform ml-auto">
+<span class="material-symbols-outlined text-sm" data-icon="bolt">bolt</span>
+                        Optimize
+                    </button>
+</div>
+<!-- Editor Surface -->
+<div class="bg-surface-container-lowest min-h-[614px] rounded-3xl p-8 md:p-12 shadow-2xl shadow-blue-900/5 leading-relaxed text-lg font-body text-on-surface-variant">
+<p class="mb-6">In the evolving landscape of digital marketing, the transition from centralized search algorithms to decentralized SEO curators represents a paradigm shift. Curators are no longer just publishers; they are the architects of trust in an era of AI-generated noise.</p>
+<h3 class="text-2xl font-bold font-headline text-on-surface mt-10 mb-4">Why Trust Matters Now</h3>
+<p class="mb-6">As generative AI floods the internet with content, search engines are pivoting toward "Experience, Expertise, Authoritativeness, and Trustworthiness" (E-E-A-T). For curator-driven platforms, this means emphasizing the human-in-the-loop validation of every claim made.</p>
+<div class="my-10 p-6 bg-surface-container rounded-2xl border-l-4 border-primary italic">
+                        "The future of search isn't finding more information—it's finding information you can actually act upon without fear of hallucination."
+                    </div>
+<p>Building a robust SEO strategy in 2024 requires a blend of high-density data analysis and editorial finesse. We must look beyond keyword stuffing and focus on semantic relevance and user intent mapping...</p>
+<div class="mt-8 flex items-center gap-2 animate-pulse text-primary font-medium text-sm">
+<span class="w-2 h-2 bg-primary rounded-full"></span>
+                        AI is thinking about the next paragraph...
+                    </div>
+</div>
+</div>
+</section>
+<!-- Right Side: Real-time SEO Panel -->
+<section class="w-full md:w-96 h-full glass-panel border-l border-outline-variant/10 overflow-y-auto p-6 space-y-8">
+<!-- Score Meter -->
+<div class="flex flex-col items-center text-center space-y-4">
+<h4 class="text-xs uppercase tracking-widest font-bold text-secondary">SEO Health Score</h4>
+<div class="relative flex items-center justify-center">
+<svg class="w-40 h-40 transform -rotate-90">
+<circle class="text-surface-container-high" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-tertiary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-4xl font-black font-headline text-on-surface">82</span>
+<span class="text-[10px] font-bold text-tertiary">OPTIMIZED</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant font-medium">Great! Your content is highly relevant to "Decentralized SEO".</p>
+</div>
+<!-- Checklist -->
+<div class="space-y-4">
+<h4 class="text-xs uppercase tracking-widest font-bold text-secondary px-2">Audit Checklist</h4>
+<div class="space-y-2">
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-outline-variant/5">
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<p class="text-sm font-bold text-on-surface">Focus Keyword in Title</p>
+<p class="text-[10px] text-on-surface-variant">Primary keyword detected in H1</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-outline-variant/5">
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<p class="text-sm font-bold text-on-surface">Content Length</p>
+<p class="text-[10px] text-on-surface-variant">450 / 800 words written</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-outline-variant/5">
+<span class="material-symbols-outlined text-error" data-icon="error">error</span>
+<div>
+<p class="text-sm font-bold text-on-surface">Internal Links Missing</p>
+<p class="text-[10px] text-error font-medium">Add 2-3 links to related posts</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Keyword Density -->
+<div class="space-y-4">
+<h4 class="text-xs uppercase tracking-widest font-bold text-secondary px-2">Keyword Clusters</h4>
+<div class="space-y-3">
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-on-surface px-1">
+<span>SEO Curator</span>
+<span>2.4%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[70%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-on-surface px-1">
+<span>Decentralized</span>
+<span>1.8%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[45%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] font-bold text-on-surface px-1">
+<span>Data Analysis</span>
+<span>0.5%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[15%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Image Suggestion (Bento/Editorial) -->
+<div class="pt-4">
+<h4 class="text-xs uppercase tracking-widest font-bold text-secondary px-2 mb-3">Hero Suggestion</h4>
+<div class="rounded-2xl overflow-hidden aspect-video relative group">
+<img alt="Decentralized Network Visual" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="abstract digital connection network representing decentralization with blue glowing nodes and neon lines on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCewQ5fTU7QdffjrBu5PIp646otsXw4M0YR_j0W1fIeWdVa9TmveS1FUnV3D3yIUeqNvus3CDa3IA4wx8c8XLcFss16fMrzX5VOzzZvGWmyOegxof-1wK9ZIpIT_ReOfCnCx_-jVb0hDhdcwwLOUMS09MgDnm9uHF0lsom3pwsbjZg_n8RbK7zPdqGU_L2i8Ol4pZSeER9IHUxYPS1s1r3ERJeGy8JYaCOIgwMHfEvU0PLyno1aS_7q-CAqpLsex_toxErXQlOSW08"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+<button class="w-full bg-white/20 backdrop-blur-md text-white text-[10px] font-bold py-2 rounded-lg border border-white/20 hover:bg-white/30">Insert into Content</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for quick AI help (contextual suppression handled by exclusion logic) -->
+<!-- Not rendered per task instructions for "AI Editor" detail page context -->
+</body></html>

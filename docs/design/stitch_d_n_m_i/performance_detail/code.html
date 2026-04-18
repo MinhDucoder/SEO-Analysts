@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Performance Metrics - Analytica Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#4edea3",
+                        "secondary-fixed-dim": "#bfc6dc",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed": "#001452",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "inverse-primary": "#b7c4ff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary-container": "#dfe3ff",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "surface": "#f8f9ff",
+                        "secondary": "#565e71",
+                        "tertiary": "#005a3c",
+                        "on-surface-variant": "#434656",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#007550",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#c3c5d9",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-container": "#72fec0",
+                        "surface-container": "#e6eeff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#0f1c2d",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dbe2f9",
+                        "secondary-container": "#dbe2f9",
+                        "on-secondary-container": "#5c6477",
+                        "primary": "#003ec7",
+                        "surface-variant": "#d6e3fb",
+                        "surface-tint": "#004ced",
+                        "background": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#3f4759",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d6e3fb",
+                        "inverse-surface": "#243143",
+                        "surface-dim": "#cddbf2",
+                        "outline": "#737688",
+                        "on-secondary-fixed": "#141b2c",
+                        "on-background": "#0f1c2d",
+                        "primary-container": "#0052ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .editorial-shadow {
+            box-shadow: 0 24px 40px -10px rgba(15, 28, 45, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#243143] flex flex-col py-8 shadow-2xl">
+<div class="px-8 mb-10">
+<h1 class="text-white font-headline font-black text-2xl tracking-tighter">Analytica Pro</h1>
+<p class="text-[#c3c5d9] text-xs font-medium mt-1">SEO Curator</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Overview</span>
+</a>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-medium text-sm">Technical SEO</span>
+</a>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-medium text-sm">On-page SEO</span>
+</a>
+<a class="bg-[#004ced] text-white rounded-l-full ml-4 pl-4 py-3 border-l-4 border-[#0052FF] flex items-center gap-3 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="speed">speed</span>
+<span class="font-medium text-sm">Performance</span>
+</a>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all hover:bg-[#434656]/20" href="#">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+<span class="font-medium text-sm">Backlinks</span>
+</a>
+</nav>
+<div class="px-4 mb-6">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-3 px-4 rounded-xl font-headline font-bold text-sm shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Audit
+            </button>
+</div>
+<div class="mt-auto border-t border-[#434656]/30 pt-4">
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-medium text-sm">Help Center</span>
+</a>
+<a class="text-[#c3c5d9] hover:text-white px-8 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-medium text-sm">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="w-full sticky top-0 z-50 bg-[#f8f9ff] h-16 px-6 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-8">
+<h2 class="font-headline font-bold text-lg tracking-tight text-[#0f1c2d]">Performance Metrics</h2>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-[#434656] font-medium hover:text-[#0f1c2d] transition-colors" href="#">Dashboard</a>
+<a class="text-[#434656] font-medium hover:text-[#0f1c2d] transition-colors" href="#">Projects</a>
+<a class="text-[#0052FF] font-bold border-b-2 border-[#0052FF] pb-1" href="#">Reports</a>
+<a class="text-[#434656] font-medium hover:text-[#0f1c2d] transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#e6eeff]/50 transition-colors rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="portrait of a professional male digital marketing manager in a clean studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCelz6vcsxGjHH9ARe7P3uYecwxQxzs4V70C9QR_SYSPr1s231ViybBYsYXVIad5z3UaPoTTfsKT6Y9fkIqOS3R7q6hP5oT9IZhaFn7638ggDSw8Kc2UtSaZgLFy6u0ZDN3VpFySm_h2W3ccB_rSH-0Pf_4PGupRPvCHHpErS0j-IbEAZZQrv4WTBY_jNbWFM5P5kaEXBpm_xqkpx9jfxyTR54zwfv1x9JsS_vW_JSXQobwXFHnsICootkrDmDEK_koWWNbIwwhzPg"/>
+</div>
+</div>
+</header>
+<!-- Content Shell -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Hero Section: Bento Core Web Vitals -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Primary Score Card -->
+<div class="md:col-span-2 bg-gradient-to-br from-tertiary to-tertiary-container text-white p-8 rounded-xl relative overflow-hidden flex flex-col justify-between editorial-shadow">
+<div class="relative z-10">
+<span class="text-tertiary-fixed font-headline font-bold text-xs tracking-widest uppercase">Global Assessment</span>
+<h3 class="text-4xl font-headline font-extrabold mt-2 leading-tight">Core Web Vitals Score (Good)</h3>
+</div>
+<div class="mt-12 flex items-baseline gap-2 relative z-10">
+<span class="text-7xl font-headline font-black">94</span>
+<span class="text-xl font-medium opacity-80">/100</span>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+</div>
+<!-- LCP Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-on-surface-variant font-label font-semibold text-xs uppercase tracking-wider">LCP</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Largest Contentful Paint</p>
+</div>
+<div class="mt-4">
+<span class="text-4xl font-headline font-bold text-on-surface">2.1s</span>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4">
+<div class="bg-tertiary h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+</div>
+<!-- FID/CLS Small Grid -->
+<div class="flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-5 rounded-xl editorial-shadow flex-1 flex flex-col justify-center">
+<span class="text-on-surface-variant font-label font-semibold text-[10px] uppercase tracking-wider">FID</span>
+<span class="text-2xl font-headline font-bold text-on-surface">14ms</span>
+<p class="text-[10px] text-tertiary font-bold mt-1">Excellent</p>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl editorial-shadow flex-1 flex flex-col justify-center">
+<span class="text-on-surface-variant font-label font-semibold text-[10px] uppercase tracking-wider">CLS</span>
+<span class="text-2xl font-headline font-bold text-on-surface">0.02</span>
+<p class="text-[10px] text-tertiary font-bold mt-1">Stable</p>
+</div>
+</div>
+</section>
+<!-- Main Content: Performance Timeline -->
+<section class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow">
+<div class="flex items-center justify-between mb-10">
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Performance Over 30 Days</h3>
+<p class="text-on-surface-variant text-sm mt-1">Historical score tracking across all mobile devices.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container px-4 py-2 rounded-lg text-xs font-bold text-on-surface-variant">Mobile</button>
+<button class="bg-white px-4 py-2 rounded-lg text-xs font-bold text-on-surface border border-outline-variant/30">Desktop</button>
+</div>
+</div>
+<!-- SVG Sparkline Representation -->
+<div class="w-full h-64 relative">
+<svg class="w-full h-full preserve-3d" viewbox="0 0 1000 200">
+<defs>
+<lineargradient id="lineGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="5%" stop-color="#005a3c" stop-opacity="0.2"></stop>
+<stop offset="95%" stop-color="#005a3c" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 Q50,140 100,160 T200,130 T300,140 T400,110 T500,120 T600,90 T700,80 T800,100 T900,70 T1000,75" fill="none" stroke="#005a3c" stroke-width="3"></path>
+<path d="M0,150 Q50,140 100,160 T200,130 T300,140 T400,110 T500,120 T600,90 T700,80 T800,100 T900,70 T1000,75 L1000,200 L0,200 Z" fill="url(#lineGradient)"></path>
+<!-- Grid Lines -->
+<line stroke="#c3c5d9" stroke-dasharray="4" stroke-opacity="0.2" x1="0" x2="1000" y1="50" y2="50"></line>
+<line stroke="#c3c5d9" stroke-dasharray="4" stroke-opacity="0.2" x1="0" x2="1000" y1="100" y2="100"></line>
+<line stroke="#c3c5d9" stroke-dasharray="4" stroke-opacity="0.2" x1="0" x2="1000" y1="150" y2="150"></line>
+</svg>
+<div class="flex justify-between mt-6 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+<span>30 Days Ago</span>
+<span>15 Days Ago</span>
+<span>Today</span>
+</div>
+</div>
+</section>
+<!-- Bottom Layout: Issue Breakdown & Fix Recommendation -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Issue Breakdown -->
+<div class="lg:col-span-2 space-y-6">
+<h3 class="text-xl font-headline font-bold text-on-surface">Detected Opportunities</h3>
+<!-- Asymmetric Issue List -->
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-error-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="image">image</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface">Large Image Assets (8)</h4>
+<p class="text-sm text-on-surface-variant">Potential savings: 450 KB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-error-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="javascript">javascript</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface">Unused JavaScript (1.2MB)</h4>
+<p class="text-sm text-on-surface-variant">Reduces main-thread execution time</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between group hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-error-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="css">css</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface">Render-blocking CSS</h4>
+<p class="text-sm text-on-surface-variant">Inlines critical styles to improve FCP</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Fix Card (Recommendation) -->
+<div class="bg-surface-container-highest p-8 rounded-xl editorial-shadow relative flex flex-col">
+<div class="mb-8">
+<span class="bg-primary-container/10 text-primary font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">Expert Tip</span>
+<h3 class="text-2xl font-headline font-extrabold text-on-surface mt-4 leading-tight">Optimization Recommendation</h3>
+</div>
+<p class="text-on-surface-variant leading-relaxed mb-8">
+                        Implement Lazy Loading and Compress Images to significantly reduce initial payload size and improve mobile LCP.
+                    </p>
+<div class="mt-auto space-y-4">
+<a class="flex items-center justify-between group py-3 border-t border-outline-variant/20" href="#">
+<span class="text-sm font-bold text-on-surface">Performance Optimization Best Practices</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="north_east">north_east</span>
+</a>
+<button class="w-full bg-on-surface text-surface py-4 rounded-xl font-headline font-bold hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="auto_fix_high">auto_fix_high</span>
+                            Automate Fixes
+                        </button>
+</div>
+<!-- Subtle data visualization in background of fix card -->
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[180px]" data-icon="bolt">bolt</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
