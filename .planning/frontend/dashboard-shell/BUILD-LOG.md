@@ -77,9 +77,32 @@ RTL smoke + Playwright e2e deferred to Phase 5 harness debt-pay
 
 ## End-of-phase totals
 
-- Total commits Phase 4: 9 wave commits + 1 BUILD-LOG commit (this).
+- Total commits Phase 4: 9 wave commits + 1 BUILD-LOG commit.
 - Tests: 83 (pre-slug-3) → **151 vitest** (+68 new cases).
 - Gates green after each wave: tsc 0, vitest 100%.
 - Bundle `/dashboard`: 232 kB First Load (shared 87.5 kB unchanged).
 
-Ready for Phase 5.
+Phases 0-5 closed. See [REVIEW.md](./REVIEW.md) for gate matrix.
+
+## Harness debt paid (fe-test-harness skill, debt-pay mode)
+
+Post-Phase-5 the `fe-test-harness` skill ran in `debt-pay mode` to cover
+page-level + e2e items deferred from Wave 9:
+
+| Item | Files | Tests |
+|---|---|---|
+| MSW default `GET /audits` handler + `sampleAudits` + `sampleAuditsEmpty` fixtures | `tests/msw/handlers.ts` (modify) | reusable by slug 4 |
+| Dashboard page RTL smoke (3 cases: empty, populated, 500+retry) | `tests/unit/dashboard/dashboard-page.test.tsx` | +3 |
+| Playwright dashboard e2e (login mock → /dashboard render + sidebar link assertions) | `tests/e2e/dashboard.spec.ts` | +2 |
+| E2E helper `stubDashboardRoutes(page)` (auth + audits mocks) | `tests/e2e/helpers/dashboard.ts` | — |
+
+Totals after debt paid: **154 vitest** (+3) + **11 Playwright** (+2). tsc
+0, eslint 0, all green.
+
+Harness reusable by next slugs:
+- Slug 4 `audits-list-create`: extend `auditsHandlers` or `server.use(...)`
+  for filter/search permutations + 201/POST handlers.
+- Slug 5 `audits-detail-realtime`: add `/audits/:id`, `/audits/:id/status`
+  handlers + WebSocket fixture support.
+- Slug 7 `admin-panel`: add `/admin/users`, `/admin/rules`, `/admin/stats`
+  handlers + AdminGuard-exercising e2e.

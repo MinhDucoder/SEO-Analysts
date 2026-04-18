@@ -1,5 +1,11 @@
 import { http, HttpResponse } from "msw";
-import type { AuthSession, AuthenticatedUser } from "@/lib/api/types";
+import { AuditStatus } from "@repo/shared";
+import type {
+  AuditListItem,
+  AuthSession,
+  AuthenticatedUser,
+  Paginated,
+} from "@/lib/api/types";
 
 /**
  * Default MSW handlers for gateway `/auth/*` endpoints. Tests can override
@@ -55,4 +61,80 @@ export const authHandlers = [
   ),
 ];
 
-export const handlers = [...authHandlers];
+/**
+ * Fixture audits for dashboard + list endpoints. Slug 3 uses `recent 5`
+ * for the populated dashboard case; slug 4 will extend with filter
+ * permutations. Tests override via `server.use(http.get(…))` for empty /
+ * error cases.
+ */
+export function makeAudit(
+  overrides: Partial<AuditListItem> & { id: string },
+): AuditListItem {
+  return {
+    url: "https://example.com",
+    domain: "example.com",
+    status: AuditStatus.COMPLETED,
+    seoScore: 75,
+    targetKeyword: null,
+    crawlerType: "cheerio",
+    crawlDurationMs: 1500,
+    createdAt: new Date("2026-04-15T10:00:00Z").toISOString(),
+    completedAt: new Date("2026-04-15T10:05:00Z").toISOString(),
+    ...overrides,
+  };
+}
+
+export const sampleAudits: AuditListItem[] = [
+  makeAudit({
+    id: "aud-1",
+    url: "https://example.com/alpha",
+    seoScore: 82,
+    createdAt: new Date("2026-04-18T09:00:00Z").toISOString(),
+  }),
+  makeAudit({
+    id: "aud-2",
+    url: "https://example.com/beta",
+    seoScore: 71,
+    createdAt: new Date("2026-04-17T14:00:00Z").toISOString(),
+  }),
+  makeAudit({
+    id: "aud-3",
+    url: "https://example.com/gamma",
+    seoScore: 88,
+    createdAt: new Date("2026-04-16T08:00:00Z").toISOString(),
+  }),
+  makeAudit({
+    id: "aud-4",
+    url: "https://example.com/delta",
+    seoScore: 55,
+    createdAt: new Date("2026-04-15T11:00:00Z").toISOString(),
+  }),
+  makeAudit({
+    id: "aud-5",
+    url: "https://example.com/epsilon",
+    seoScore: 64,
+    createdAt: new Date("2026-04-14T13:00:00Z").toISOString(),
+  }),
+];
+
+export const sampleAuditsEmpty: Paginated<AuditListItem> = {
+  data: [],
+  total: 0,
+  page: 1,
+  limit: 30,
+};
+
+export const sampleAuditsResponse: Paginated<AuditListItem> = {
+  data: sampleAudits,
+  total: sampleAudits.length,
+  page: 1,
+  limit: 30,
+};
+
+export const auditsHandlers = [
+  http.get(`${API}/audits`, () =>
+    HttpResponse.json(sampleAuditsResponse, { status: 200 }),
+  ),
+];
+
+export const handlers = [...authHandlers, ...auditsHandlers];
