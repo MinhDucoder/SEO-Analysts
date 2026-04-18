@@ -50,3 +50,11 @@ apps/*/src/infra/prisma/generated/
 *.pdf
 *.docx
 .gstack/
+
+# Personal tooling / notes — not for repo
+.claude/skills/knowledge-architect/
+.claude/workflow/claude-design.md
+learning/
+
+# Stitch mockup archive (extracted folder is committed; zip is 4.8MB duplicate)
+docs/design/stitch_d_n_m_i.zip
