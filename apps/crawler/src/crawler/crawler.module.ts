@@ -21,6 +21,7 @@ import { SiteCrawlCounter } from './services/site-crawl-counter.service';
 import { PageAuditResultStore } from './services/page-audit-result-store.service';
 import { SiteCrawlStartWorker } from './controllers/site-crawl-start.worker';
 import { UrlAuditWorker } from './controllers/url-audit.worker';
+import { SiteCrawlAggregateWorker } from './controllers/site-crawl-aggregate.worker';
 import { GrpcClientFactory } from './infra/grpc/grpc-client.factory';
 import { AnalyzerGrpcClient } from './infra/grpc/analyzer-grpc-client';
 
@@ -93,6 +94,7 @@ const browserPoolFactory = {
     AnalyzerGrpcClient,
     SiteCrawlStartWorker,
     UrlAuditWorker,
+    SiteCrawlAggregateWorker,
   ],
   exports: [CrawlerOrchestrator],
 })

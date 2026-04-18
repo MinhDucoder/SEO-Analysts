@@ -50,6 +50,18 @@ export class EventPublisher {
     await this.redis.publish('page-audit.done', JSON.stringify({ auditId, result }));
   }
 
+  /**
+   * Final fan-in signal for F1 site-wide audits. Emitted once by
+   * `SiteCrawlAggregateWorker` after all URL sub-audits have been
+   * reduced to a site-level summary (avg/median/worstPages). The
+   * Gateway persists the summary onto the root Audit row and marks
+   * the audit COMPLETED.
+   */
+  async publishSiteCrawlDone(auditId: string, summary: unknown): Promise<void> {
+    await this.redis.publish('site-crawl.done', JSON.stringify({ auditId, summary }));
+    this.logger.log(`published site-crawl.done audit=${auditId}`);
+  }
+
   async publishProgress(
     auditId: string,
     progress: number,
