@@ -5,8 +5,8 @@ tier: large
 impact: scaffold-only
 phases:
   "0": done
-  "1": pending
-  "2": pending
+  "1": done
+  "2": done
   "3": pending
   "4": pending
   "5": pending
@@ -16,9 +16,9 @@ phases:
 
 | Phase | Artifact | Status | Commit |
 |---|---|---|---|
-| 0 | DESIGN-INPUT.md | done | (this run) |
-| 1 | ONBOARD.md | pending | — |
-| 2 | MAPPING.md | pending | — |
+| 0 | DESIGN-INPUT.md | done | aca09ac |
+| 1 | ONBOARD.md | done | e2f05ce |
+| 2 | MAPPING.md | done | (this commit) |
 | 3 | PLAN.md | pending | — |
 | 4 | BUILD-LOG.md | pending | — |
 | 5 | REVIEW.md | pending | — |
