@@ -1,6 +1,8 @@
 # 3-Framework Workflow
 
-> **→ For SEO-Analysts: read [WORKFLOW-SEO-ANALYSTS.md](WORKFLOW-SEO-ANALYSTS.md) first (microservices workflow + domain skill map + proto-breaking protocol).**
+> **Routing:**
+> - Backend / microservices work → [WORKFLOW-SEO-ANALYSTS.md](WORKFLOW-SEO-ANALYSTS.md) (proto-breaking protocol, gRPC gates).
+> - Frontend work (`apps/web/**`) → [WORKFLOW-FRONTEND.md](WORKFLOW-FRONTEND.md) (`/prepare-design` → `/claude-design`).
 > This file is the framework-agnostic reference.
 >
 > Superpowers + GSD + GStack — unified development workflow
@@ -31,11 +33,15 @@ THIET KE ──> CHIA NHO ──> CODE ──> KIEM DINH ──> SHIP
 ## Size Routing
 
 ```
-SMALL:  SP:TDD -> SP:verify -> done
-MEDIUM: /office-hours -> gsd:quick -> SP:TDD -> /review -> done
-LARGE:  /office-hours + /plan-eng-review -> gsd:discuss + gsd:plan
-        -> SP:TDD + gsd:execute -> /review + /cso + /qa -> /ship -> done
+SMALL:    SP:TDD -> SP:verify -> done
+MEDIUM:   /office-hours -> gsd:quick -> SP:TDD -> /review -> done
+LARGE:    /office-hours + /plan-eng-review -> gsd:discuss + gsd:plan
+          -> SP:TDD + gsd:execute -> /review + /cso + /qa -> /ship -> done
+FRONTEND: [optional /prepare-design] -> /claude-design -> SP:TDD (per file)
+          -> /review + /design-review [+ /qa for Large] -> done
 ```
+
+**FRONTEND branch is selected when primary change target is `apps/web/**` or `packages/ui/**`.** See [WORKFLOW-FRONTEND.md](WORKFLOW-FRONTEND.md) for the tier × design-artifact matrix.
 
 ## Phase Ownership Notes
 
@@ -63,20 +69,20 @@ If scope grows beyond current tier mid-CODE → STOP → re-classify → restart
 
 ```mermaid
 flowchart TD
-    A[Task In] --> B{Classify Size}
-    B -->|Small| C[SP:TDD]
+    A[Task In] --> B{Classify}
+    B -->|Small BE| C[SP:TDD]
     C --> D[SP:verify]
     D -->|pass| E1[Done]
     D -->|fail, retry ≤2| C
 
-    B -->|Medium| F[/office-hours]
+    B -->|Medium BE| F[/office-hours]
     F --> G[gsd:quick --discuss]
     G --> H[SP:TDD]
     H --> I[/review]
     I -->|pass| E2[Done]
     I -->|fail, retry ≤2| H
 
-    B -->|Large| J[/office-hours + /plan-eng-review]
+    B -->|Large BE| J[/office-hours + /plan-eng-review]
     J --> K[gsd:discuss + gsd:plan]
     K --> L[SP:TDD + gsd:execute waves]
     L --> M[/review + /cso + /qa]
@@ -84,9 +90,19 @@ flowchart TD
     M -->|fail, retry ≤2| L
     N --> E3[Done]
 
+    B -->|Frontend| FE0{design source exists?}
+    FE0 -->|no| FEP[/prepare-design]
+    FEP --> FE0
+    FE0 -->|yes| FE1[/claude-design Phase 0-3]
+    FE1 --> FE2[SP:TDD per file]
+    FE2 --> FE3[/review + /design-review]
+    FE3 -->|pass| E4[Done]
+    FE3 -->|fail, retry ≤2| FE2
+
     C -.->|scope grows| SES[Size Escalation: STOP → re-classify → restart]
     H -.->|scope grows| SES
     L -.->|scope grows| SES
+    FE2 -.->|scope grows| SES
 ```
 
 ## Detailed Guides
@@ -94,3 +110,5 @@ flowchart TD
 - [WORKFLOW-SMALL.md](WORKFLOW-SMALL.md) — Bug fix, config, typo
 - [WORKFLOW-MEDIUM.md](WORKFLOW-MEDIUM.md) — Single module feature
 - [WORKFLOW-LARGE.md](WORKFLOW-LARGE.md) — Multi-module, architecture change
+- [WORKFLOW-FRONTEND.md](WORKFLOW-FRONTEND.md) — Frontend lane (`apps/web/`), `/prepare-design` → `/claude-design` pipeline
+- [WORKFLOW-SEO-ANALYSTS.md](WORKFLOW-SEO-ANALYSTS.md) — Microservices domain workflow + proto-breaking protocol
