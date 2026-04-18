@@ -17,6 +17,7 @@ const rules = [
   { name: 'schema_org',         displayName: 'Schema.org',         category: 'technical' as const,   weight: 6,  description: 'Co JSON-LD structured data' },
   { name: 'internal_links',     displayName: 'Internal Links',     category: 'links' as const,       weight: 5,  description: 'Du internal link (>=3) va khong gay' },
   { name: 'external_links',     displayName: 'External Links',     category: 'links' as const,       weight: 3,  description: 'External link co rel phu hop' },
+  { name: 'broken_links',       displayName: 'Broken Links',       category: 'links' as const,       weight: 7,  description: 'HTTP status cua tung link (HEAD/GET) — internal broken FAIL, external broken WARN' },
   { name: 'image_optimization', displayName: 'Image Optimization', category: 'images' as const,      weight: 5,  description: 'Anh dung WebP/AVIF, < 200KB' },
   { name: 'page_size',          displayName: 'Page Size',          category: 'performance' as const, weight: 4,  description: 'Tong dung luong < 2MB' },
   { name: 'http_status',        displayName: 'HTTP Status',        category: 'technical' as const,   weight: 8,  description: 'Trang tra ve 200' },

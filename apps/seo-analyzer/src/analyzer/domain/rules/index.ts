@@ -14,6 +14,7 @@ import { ImageAltRule } from './images/image-alt.rule';
 import { ImageOptimizationRule } from './images/image-optimization.rule';
 import { InternalLinksRule } from './links/internal-links.rule';
 import { ExternalLinksRule } from './links/external-links.rule';
+import { BrokenLinksRule } from './links/broken-links.rule';
 import { CanonicalUrlRule } from './technical/canonical-url.rule';
 import { RobotsMetaRule } from './technical/robots-meta.rule';
 import { ViewportMetaRule } from './technical/viewport-meta.rule';
@@ -38,6 +39,7 @@ export function registerAllRules(registry: RuleRegistry): void {
   registry.register(new ImageOptimizationRule());
   registry.register(new InternalLinksRule());
   registry.register(new ExternalLinksRule());
+  registry.register(new BrokenLinksRule());
   registry.register(new CanonicalUrlRule());
   registry.register(new RobotsMetaRule());
   registry.register(new ViewportMetaRule());
