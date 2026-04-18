@@ -15,6 +15,7 @@ import { CrawlerController } from './controllers/crawler.controller';
 import { CrawlerWorker } from './controllers/crawler.worker';
 import { EventPublisher } from './services/event-publisher';
 import { PoliteFetcher } from './infra/fetchers/polite-fetcher';
+import { LinkChecker } from './infra/fetchers/link-checker';
 import { SitemapDiscovery } from './infra/sitemap/sitemap-discovery';
 import { UndiciSitemapHttpClient } from './infra/sitemap/undici-sitemap-http-client';
 import { SiteCrawlCounter } from './services/site-crawl-counter.service';
@@ -81,6 +82,10 @@ const browserPoolFactory = {
     {
       provide: PoliteFetcher,
       useFactory: () => new PoliteFetcher(globalThis.fetch.bind(globalThis) as typeof fetch),
+    },
+    {
+      provide: LinkChecker,
+      useFactory: () => new LinkChecker(globalThis.fetch.bind(globalThis) as typeof fetch),
     },
     {
       provide: SitemapDiscovery,

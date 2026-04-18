@@ -4,15 +4,17 @@
  * Lighthouse (best-effort) → PageData extract → cache → return.
  */
 import { Injectable, Logger } from '@nestjs/common';
-import { CoreWebVitals } from '@repo/shared';
+import { CoreWebVitals, LinkCheckResult } from '@repo/shared';
 import { CacheService } from '../persistence/cache.service';
 import { CheerioFetcher } from '../infra/fetchers/cheerio-fetcher';
 import { LighthouseRunner } from './lighthouse-runner';
+import { LinkChecker } from '../infra/fetchers/link-checker';
 import { PageDataExtractor } from './page-data-extractor';
 import { PlaywrightFetcher } from '../infra/fetchers/playwright-fetcher';
 import { UrlValidator } from '../domain/url-validator';
 import { CrawlOptions, CrawlResult } from '../domain/crawl-result.interface';
 import { FetchResult } from '../domain/fetcher.interface';
+import { PageData } from '../domain/page-data.interface';
 
 const ZERO_CWV: CoreWebVitals = {
   lcpMs: 0,
@@ -40,6 +42,7 @@ export class CrawlerOrchestrator {
     private readonly playwright: PlaywrightFetcher,
     private readonly lighthouse: LighthouseRunner,
     private readonly extractor: PageDataExtractor,
+    private readonly linkChecker: LinkChecker,
   ) {}
 
   /**
@@ -98,7 +101,13 @@ export class CrawlerOrchestrator {
     // 4. Extract PageData
     const pageData = this.extractor.extract(url, fetched);
 
-    // 5. Build result and cache
+    // 5. F4 broken-link check (opt-in — expensive for N links)
+    let linkChecks: LinkCheckResult[] | undefined;
+    if (options.includeLinkChecks) {
+      linkChecks = await this.runLinkChecks(pageData);
+    }
+
+    // 6. Build result and cache
     const result: CrawlResult = {
       pageData,
       cwvMetrics: cwvMobile,
@@ -112,9 +121,36 @@ export class CrawlerOrchestrator {
         lighthouseDurationMsDesktop: lhDurationMsDesktop,
         lighthouseCachedDesktop: lhCachedDesktop,
       },
+      ...(linkChecks ? { linkChecks } : {}),
     };
 
     await this.cache.setCrawl(url, result);
     return result;
+  }
+
+  /**
+   * Run broken-link checks and write the resolved status back onto
+   * every matching `LinkInfo.statusCode` so existing rules (e.g.
+   * ExternalLinksRule) can score on real HTTP status without a proto
+   * change. Failure is non-fatal: we log and return undefined so the
+   * rest of the crawl pipeline keeps working.
+   */
+  private async runLinkChecks(pageData: PageData): Promise<LinkCheckResult[] | undefined> {
+    const links = [...pageData.internalLinks, ...pageData.externalLinks];
+    const hrefs = links.map((l) => l.href);
+    if (hrefs.length === 0) return [];
+
+    try {
+      const results = await this.linkChecker.checkAll(hrefs);
+      const byHref = new Map(results.map((r) => [r.href, r]));
+      for (const link of links) {
+        const r = byHref.get(link.href);
+        if (r) link.statusCode = r.status;
+      }
+      return results;
+    } catch (err) {
+      this.logger.warn(`link checks failed for ${pageData.url}: ${(err as Error).message}`);
+      return undefined;
+    }
   }
 }

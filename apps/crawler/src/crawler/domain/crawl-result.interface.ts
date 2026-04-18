@@ -5,7 +5,7 @@
  * mobile-first indexing); `cwvMetricsDesktop` is the optional
  * desktop run used for side-by-side reporting.
  */
-import { CoreWebVitals } from '@repo/shared';
+import { CoreWebVitals, LinkCheckResult } from '@repo/shared';
 import { PageData } from './page-data.interface';
 
 export interface CrawlMetadata {
@@ -23,11 +23,13 @@ export interface CrawlResult {
   cwvMetrics: CoreWebVitals;
   cwvMetricsDesktop?: CoreWebVitals;
   metadata: CrawlMetadata;
+  linkChecks?: LinkCheckResult[];
 }
 
 export interface CrawlOptions {
   forcePlaywright?: boolean;
   includeLighthouse?: boolean;
+  includeLinkChecks?: boolean;
   userAgent?: string;
   timeoutMs?: number;
 }

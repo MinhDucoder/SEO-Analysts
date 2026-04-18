@@ -41,11 +41,19 @@ describe('CrawlerOrchestrator', () => {
       title: 'Test Page',
       h1Tags: ['Hi'],
       h2Tags: [], h3Tags: [], h4Tags: [], h5Tags: [], h6Tags: [],
-      images: [], internalLinks: [], externalLinks: [],
+      images: [],
+      internalLinks: [{ href: 'https://example.com/about', anchorText: 'about', isInternal: true, rel: null, statusCode: 0 }],
+      externalLinks: [{ href: 'https://other.com/', anchorText: 'other', isInternal: false, rel: null, statusCode: 0 }],
       schemaJsonLd: [], openGraph: {}, twitterCard: {},
       isHttps: true, redirectChain: [], contentEncoding: 'gzip', cacheControl: 'public',
       textContent: 'text', rawHtml: fetched.html,
     })),
+  };
+  const linkChecker = {
+    checkAll: vi.fn().mockResolvedValue([
+      { href: 'https://example.com/about', status: 200, redirectChain: [], isBroken: false },
+      { href: 'https://other.com/', status: 404, redirectChain: [], isBroken: true, reason: 'HTTP_4XX' },
+    ]),
   };
 
   let orchestrator: CrawlerOrchestrator;
@@ -55,6 +63,10 @@ describe('CrawlerOrchestrator', () => {
     cache.getCrawl.mockResolvedValue(null);
     cheerio.fetch.mockResolvedValue(baseFetch);
     playwright.fetch.mockResolvedValue({ ...baseFetch, fetcherType: 'playwright' });
+    linkChecker.checkAll.mockResolvedValue([
+      { href: 'https://example.com/about', status: 200, redirectChain: [], isBroken: false },
+      { href: 'https://other.com/', status: 404, redirectChain: [], isBroken: true, reason: 'HTTP_4XX' },
+    ]);
     orchestrator = new CrawlerOrchestrator(
       validator as any,
       cache as any,
@@ -62,6 +74,7 @@ describe('CrawlerOrchestrator', () => {
       playwright as any,
       lighthouse as any,
       extractor as any,
+      linkChecker as any,
     );
   });
 
@@ -137,5 +150,39 @@ describe('CrawlerOrchestrator', () => {
     const result = await orchestrator.crawl('https://example.com/');
     expect(result.metadata.lighthouseDurationMs).toBe(4321);
     expect(result.metadata.lighthouseDurationMsDesktop).toBe(3210);
+  });
+
+  describe('F4 broken-link checks', () => {
+    it('does NOT call linkChecker by default (opt-in to protect crawl budget)', async () => {
+      await orchestrator.crawl('https://example.com/');
+      expect(linkChecker.checkAll).not.toHaveBeenCalled();
+    });
+
+    it('calls linkChecker.checkAll with every internal + external href when includeLinkChecks=true', async () => {
+      await orchestrator.crawl('https://example.com/', { includeLinkChecks: true });
+      expect(linkChecker.checkAll).toHaveBeenCalledWith([
+        'https://example.com/about',
+        'https://other.com/',
+      ]);
+    });
+
+    it('writes LinkCheckResult.status back onto the matching LinkInfo entries', async () => {
+      const result = await orchestrator.crawl('https://example.com/', { includeLinkChecks: true });
+      expect(result.pageData.internalLinks[0]?.statusCode).toBe(200);
+      expect(result.pageData.externalLinks[0]?.statusCode).toBe(404);
+    });
+
+    it('attaches the full linkChecks array on the CrawlResult', async () => {
+      const result = await orchestrator.crawl('https://example.com/', { includeLinkChecks: true });
+      expect(result.linkChecks).toHaveLength(2);
+      expect(result.linkChecks?.[1]).toMatchObject({ isBroken: true, reason: 'HTTP_4XX' });
+    });
+
+    it('swallows linkChecker errors so a broken-link scan never fails the crawl', async () => {
+      linkChecker.checkAll.mockRejectedValueOnce(new Error('bulk failure'));
+      const result = await orchestrator.crawl('https://example.com/', { includeLinkChecks: true });
+      expect(result.pageData).toBeDefined();
+      expect(result.linkChecks).toBeUndefined();
+    });
   });
 });
