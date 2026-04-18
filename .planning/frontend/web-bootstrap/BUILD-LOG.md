@@ -24,8 +24,8 @@ date: 2026-04-18
 |---|---|---|---|---|
 | 1 (PLAN W1+W2) | Workspace manifest + TS/build/test configs + scaffold | 10 (package.json, tsconfig.json, next.config.mjs, postcss.config.mjs, components.json, eslint.config.js, .gitignore, .env.example, src/types/global.d.ts; root package-lock.json bumped via `npm install` adding 151 deps) | **fc416bd** + fix **be79300** (drop unused deps, add test configs) + **704141c** (turbo globalEnv) | ✅ done |
 | 2 (PLAN W3) | Tailwind config + design tokens + globals + public SVG assets | 5 (tailwind.config.ts, src/styles/tokens.css, src/app/globals.css, public/logo.svg, public/favicon.svg) | **0ed5ee7** | ✅ done |
-| 3 (PLAN W4) | Utilities with TDD: `cn.ts` + test, `format.ts` + test, `constants.ts` | 5 (src/lib/utils/cn.ts, src/lib/utils/format.ts, src/lib/constants.ts, tests/unit/cn.test.ts, tests/unit/format.test.ts). 19/19 vitest pass. | (this commit) | ✅ done |
-| 4 (PLAN W5) | Lib stubs: `api/types.ts`, `api/client.ts`, `ws/client.ts`, `auth/store.ts`, `queries/keys.ts` | TBD | — | pending |
+| 3 (PLAN W4) | Utilities with TDD: `cn.ts` + test, `format.ts` + test, `constants.ts` | 5 (src/lib/utils/cn.ts, src/lib/utils/format.ts, src/lib/constants.ts, tests/unit/cn.test.ts, tests/unit/format.test.ts). 19/19 vitest pass. | **3dedac6** | ✅ done |
+| 4 (PLAN W5) | Lib stubs: api/types, api/client, ws/client, auth/store, queries/keys | 5 (src/lib/api/types.ts re-exports @repo/shared + AuthenticatedUser/AuthSession/Paginated/ApiErrorBody; src/lib/auth/store.ts Zustand {user, accessToken, setAuth, clearAuth, isAuthenticated, isAdmin}; src/lib/api/client.ts ky instance with beforeRequest Bearer + afterResponse 401→tryRefresh STUB; src/lib/ws/client.ts getSocket() singleton with 10× reconnect + __resetSocketForTests; src/lib/queries/keys.ts empty factory template) | (this commit) | ✅ done |
 | 5 (PLAN W6) | shadcn primitives (11 components) | TBD | — | pending |
 | 6 (PLAN W7) | App shell: `providers.tsx`, `error.tsx`, `layout.tsx` | TBD | — | pending |
 | 7 (PLAN W8) | Placeholder page `app/page.tsx` | TBD | — | pending |
