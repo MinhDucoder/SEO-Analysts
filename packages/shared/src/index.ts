@@ -90,6 +90,22 @@ export interface AuditProgressEvent {
   message?: string;
 }
 
+// F4 — Broken link audit result (one entry per <a href> checked)
+export type LinkCheckReason =
+  | 'HTTP_4XX'
+  | 'HTTP_5XX'
+  | 'NETWORK'
+  | 'TIMEOUT'
+  | 'TOO_MANY_REDIRECTS';
+
+export interface LinkCheckResult {
+  href: string;
+  status: number;
+  redirectChain: string[];
+  isBroken: boolean;
+  reason?: LinkCheckReason;
+}
+
 // ─── Constants ───
 
 export const RATE_LIMIT = {
