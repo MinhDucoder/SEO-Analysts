@@ -3,7 +3,7 @@
 **Date**: 2026-04-18
 **Author**: Claude (via `superpowers:brainstorming`)
 **Status**: Draft — awaiting user review
-**Scope**: Approach C (slash-command lightweight) × Scope A (DO_AN `apps/web/` Next.js dashboard on top of existing SEO microservices)
+**Scope**: Approach C (slash-command lightweight) × Scope A (DO_AN `apps/web/` Next.js dashboard on top of existing SEO microservices) × Design precondition via 2-step split (`/prepare-design` → `/claude-design`)
 
 ---
 
@@ -28,6 +28,7 @@ The artifact `.claude/workflow/claude-design.md` (added 2026-04-18) captures the
 4. Bind Phase 4 (Build) to `superpowers:test-driven-development` so file-by-file generation has RED → GREEN → REFACTOR discipline and atomic commits, not free-form codegen.
 5. Bind Phase 5 (Review) to the existing GStack gates (`/review`, `/design-review`, `/qa`) plus monorepo-specific checks (type-check, proto typecheck, e2e:smoke), with conditional skip logic so small tasks don't pay for unnecessary gates.
 6. Keep all artifacts under `.planning/frontend/<slug>/` so work is resumable across sessions and auditable from git history.
+7. **Enforce design-first discipline** via a separate `/prepare-design` command that generates `docs/design/<slug>/{PRD.md,DESIGN.md,mockups/}` before build — so `/claude-design` can read a finalized design source instead of running interactive Q&A during build. Required artifacts scale by tier (§ 2.5).
 
 ## Non-Goals
 
@@ -43,14 +44,15 @@ The artifact `.claude/workflow/claude-design.md` (added 2026-04-18) captures the
 
 | File | Action | Rationale |
 |---|---|---|
-| `.claude/commands/claude-design.md` | **CREATE** | Slash command entry point. Runs 5 phases, each with explicit HALT-for-approval between phases. |
-| `.claude/workflow/WORKFLOW-FRONTEND.md` | **CREATE** | FE-specific guide: size × impact matrix, per-phase responsibilities, gate list, escalation rules. |
+| `.claude/commands/prepare-design.md` | **CREATE** | Upstream slash command. Generates `docs/design/<slug>/{PRD.md,DESIGN.md,mockups/}` by orchestrating existing skills (`/office-hours`, `/design-consultation`, `/design-shotgun`). Runs only when design artifacts are missing. |
+| `.claude/commands/claude-design.md` | **CREATE** | Build-phase slash command. Runs 5 phases (Onboard → Map → Plan → Build → Review). Phase 0 validates design precondition; HALTs and points to `/prepare-design` if missing. |
+| `.claude/workflow/WORKFLOW-FRONTEND.md` | **CREATE** | FE-specific guide: tier × design-artifact matrix, per-phase responsibilities, gate list, escalation rules, `/prepare-design` ↔ `/claude-design` handoff. |
 | `.claude/workflow/WORKFLOW.md` | **UPDATE** | Add FE lane row to the framework table and a routing branch to the Mermaid decision tree. Cross-link to `WORKFLOW-FRONTEND.md`. |
 | `docs/workflow/WORKFLOW.md` | **UPDATE** | Mirror the `.claude/` update (human-readable copy pattern established on 2026-04-17). |
 | `docs/workflow/WORKFLOW-FRONTEND.md` | **CREATE** | Mirror of `.claude/workflow/WORKFLOW-FRONTEND.md`. |
 | `.claude/workflow/claude-design.md` | **KEEP (untouched)** | Remains as philosophy / teaching doc. The new command references it for newcomers. |
 
-Total: 3 creates, 2 updates, 0 deletes.
+Total: 4 creates, 2 updates, 0 deletes.
 
 ### § 2. Size × Impact matrix for FE
 
@@ -69,9 +71,47 @@ FE inherits the same tier thresholds as backend plus an FE-specific impact axis:
 - Phase 2 touches authentication or multi-tenant boundary → any tier becomes Large.
 - Mid-execution scope growth mirrors the backend rule: STOP → re-classify → restart from first skipped phase → keep code already written.
 
+### § 2.5. Design artifacts required per tier
+
+`/claude-design` validates design precondition in Phase 0. Requirements scale with tier:
+
+| Tier | Required artifacts under `docs/design/<slug>/` | Rationale |
+|---|---|---|
+| **Small FE** | None (can skip `/prepare-design` entirely) | Tweaks don't justify design overhead |
+| **Medium FE** | `PRD.md` **OR** `DESIGN.md` (at least one) | 1 page / component group needs scope clarity OR technical direction |
+| **Large FE** | `PRD.md` **AND** `DESIGN.md` **AND** `mockups/` (all three) | Multi-page features with proto/auth impact need full upfront design to prevent rework |
+
+**If user starts `/claude-design` with lower tier artifacts than required, Phase 0 HALTs** and emits the exact `/prepare-design` sub-commands to fill the gap:
+
+```
+Missing for Large FE: docs/design/audit-history/mockups/
+→ Run: /prepare-design audit-history --mockups-only
+```
+
+Authoring artifacts by hand is valid — `/prepare-design` is a helper, not a requirement. Any source (handwritten, Figma export, ChatGPT output) that lands at the right path satisfies the precondition.
+
 ### § 3. Phase responsibilities
 
 Each phase produces one artifact under `.planning/frontend/<slug>/`. Each artifact is committed atomically before moving to the next phase. The slug is derived from the user's feature description (kebab-case).
+
+#### Phase 0 — Design Source Validation (read-only, no Q&A)
+
+- **Executor:** Main agent (fast, local filesystem check).
+- **Reads:** `docs/design/<slug>/{PRD.md,DESIGN.md,mockups/}` — whichever exist.
+- **Behavior:**
+  1. Read `$ARGUMENTS` (user's feature description) + slug.
+  2. Tentatively classify tier from description keywords (see § 2 triggers).
+  3. Compare artifacts present vs tier requirements (§ 2.5).
+  4. If requirements met → produce `DESIGN-INPUT.md` (summary + links to source files) and proceed to Phase 1.
+  5. If requirements NOT met → HALT, emit exact remediation command(s) pointing at `/prepare-design`, write current state to `STATE.md`.
+- **Produces:** `DESIGN-INPUT.md` with:
+  - Feature name + slug + tier classification
+  - List of design artifacts consumed (path + last modified + line count)
+  - Extracted requirements (user stories, acceptance criteria from PRD)
+  - Extracted technical constraints (architecture choices, component decisions from DESIGN)
+  - Visual references (links to mockups, not embedded)
+- **Gate:** Main agent shows `DESIGN-INPUT.md` summary, user confirms tier classification before Phase 1.
+- **Key property:** Phase 0 NEVER asks user about the feature itself — all feature Q&A belongs in `/prepare-design`. Phase 0 only confirms tier if ambiguous.
 
 #### Phase 1 — Onboard (subagent, read-only)
 
@@ -93,8 +133,8 @@ Each phase produces one artifact under `.planning/frontend/<slug>/`. Each artifa
 
 #### Phase 2 — Feature Mapping
 
-- **Executor:** Main agent (has `ONBOARD.md` loaded).
-- **Input:** User's feature description + `ONBOARD.md`.
+- **Executor:** Main agent (has `DESIGN-INPUT.md` + `ONBOARD.md` loaded).
+- **Input:** `DESIGN-INPUT.md` (design source of truth) + `ONBOARD.md` (codebase reality).
 - **Produces:** `MAPPING.md` with:
   - Pages to create / modify (file path in `apps/web/app/**`)
   - Components to create / reuse (from `packages/ui` or `apps/web/components/**`)
@@ -155,16 +195,28 @@ Gates 4, 5, 7, 8, 9 are **conditional**. Skip logic is evaluated from `MAPPING.m
 ### § 4. Artifact layout
 
 ```
-.planning/frontend/<feature-slug>/
-├── STATE.md        # Phase tracker (which phases complete), written on init + updated after each phase
-├── ONBOARD.md      # Phase 1 output
-├── MAPPING.md      # Phase 2 output
-├── PLAN.md         # Phase 3 output
-├── BUILD-LOG.md    # Phase 4 running log (appended during build)
-└── REVIEW.md       # Phase 5 output
+docs/design/<feature-slug>/            # ← authored by /prepare-design (upstream)
+├── PRD.md              # Product requirements — user stories + acceptance criteria
+├── DESIGN.md           # Technical design — architecture, component structure, data flow
+├── mockups/            # Visual references — Figma export / Excalidraw / screenshot
+│   ├── desktop.png
+│   ├── mobile.png
+│   └── states.png      # loading / empty / error states
+└── user-flows.md       # (optional) navigation + interaction flows
+
+.planning/frontend/<feature-slug>/     # ← authored by /claude-design (downstream)
+├── STATE.md            # Phase tracker (which phases complete), written on init + updated after each phase
+├── DESIGN-INPUT.md     # Phase 0 output (digest of docs/design/<slug>/)
+├── ONBOARD.md          # Phase 1 output
+├── MAPPING.md          # Phase 2 output
+├── PLAN.md             # Phase 3 output
+├── BUILD-LOG.md        # Phase 4 running log (appended during build)
+└── REVIEW.md           # Phase 5 output
 ```
 
 `STATE.md` is the resume anchor — if the user re-invokes `/claude-design <slug>`, the command reads `STATE.md` to skip completed phases and resume at the first incomplete one.
+
+**Separation principle:** `docs/design/` is human-authored / brainstorm-assisted and committed long-term. `.planning/frontend/` is machine-generated per run, can be archived after feature ships. Design sources can live in the repo forever; build plans live with their milestone.
 
 Each file has YAML frontmatter:
 
@@ -189,15 +241,39 @@ This matches the existing `feat(gateway): F2 ...` convention in `git log`.
 
 ### § 5. Slash command contract
 
-`.claude/commands/claude-design.md` is a prompt that:
+Two commands ship as part of this workflow. They compose: `/prepare-design` writes design source, `/claude-design` reads it and builds code.
 
-1. Accepts free-text feature description as `$ARGUMENTS`.
-2. Derives `<slug>` (kebab-case, max 6 words).
-3. Creates `.planning/frontend/<slug>/` and an initial `STATE.md` tracking which phases are complete.
-4. Runs Phase 1 via `Agent:Explore` subagent with a prompt that lists the exact directories from § 3.
-5. After each phase, HALTs and says: "Phase `<n>` complete. Artifact: `<path>`. Reply `next` to continue, or comment to iterate."
-6. On restart (user re-invokes `/claude-design <slug>`), reads `STATE.md` to resume at the last incomplete phase.
-7. On Size Escalation mid-phase, writes an escalation note to `STATE.md` and asks user to confirm new tier before re-running the affected phase.
+#### 5.1 `.claude/commands/prepare-design.md`
+
+- **Purpose:** Generate `docs/design/<slug>/{PRD.md,DESIGN.md,mockups/}` from an idea.
+- **Invocation:** `/prepare-design <feature-description>` or `/prepare-design <slug> [--prd-only|--design-only|--mockups-only]`.
+- **Behavior:**
+  1. Accepts free-text feature description OR slug + flag.
+  2. Derives `<slug>` if not provided (kebab-case, max 6 words).
+  3. Creates `docs/design/<slug>/` if missing.
+  4. Orchestrates existing skills:
+     - **PRD** → invoke `/office-hours` skill for 6 forcing questions → write answers as `PRD.md`
+     - **DESIGN** → invoke `/design-consultation` skill → write `DESIGN.md`
+     - **mockups** → invoke `/design-shotgun` skill for 3 variants → user picks → save to `mockups/`
+  5. Respects `--*-only` flags to run just one segment (useful for filling gaps when `/claude-design` reports missing pieces).
+  6. After each segment, HALTs for user review of the written artifact before moving on.
+  7. Commits each artifact atomically: `docs(design): <slug>/<artifact> — <summary>`.
+- **Interactive Q&A:** YES — this is where design decisions happen. User answers questions from the orchestrated skills.
+- **Relationship to `/claude-design`:** Strictly upstream. `/claude-design` NEVER calls `/prepare-design` automatically; it only points at it in Phase 0 error messages.
+
+#### 5.2 `.claude/commands/claude-design.md`
+
+- **Purpose:** Build FE code from a finalized design source.
+- **Invocation:** `/claude-design <slug>` (slug must match a `docs/design/<slug>/` directory if tier ≥ Medium).
+- **Behavior:**
+  1. Accepts slug as `$ARGUMENTS`. If user passes free-text description instead, derive slug and match against `docs/design/*/`.
+  2. Creates `.planning/frontend/<slug>/` and an initial `STATE.md` tracking which phases are complete.
+  3. Runs Phase 0 (design validation) — if missing artifacts for inferred tier, HALT with exact `/prepare-design` command to run.
+  4. Runs Phase 1 via `Agent:Explore` subagent with a prompt that lists the exact directories from § 3.
+  5. After each phase, HALTs and says: "Phase `<n>` complete. Artifact: `<path>`. Reply `next` to continue, or comment to iterate."
+  6. On restart (user re-invokes `/claude-design <slug>`), reads `STATE.md` to resume at the last incomplete phase.
+  7. On Size Escalation mid-phase, writes an escalation note to `STATE.md` and asks user to confirm new tier before re-running the affected phase. If escalation raises tier above what `docs/design/<slug>/` satisfies, emit remediation `/prepare-design` command.
+- **Interactive Q&A:** NO feature Q&A — design source is authoritative. Only tier confirmation (Phase 0) and "continue to next phase" checkpoints (Phases 1-5).
 
 ### § 6. WORKFLOW.md integration
 
@@ -219,12 +295,25 @@ Existing SMALL / MEDIUM / LARGE lanes remain the default for all backend work (i
 
 ### § 7. Interaction with existing skills
 
+**Upstream (`/prepare-design` orchestrates):**
+
+- **`/office-hours` (GStack)** — called by `/prepare-design` for PRD generation. 6 forcing questions, produces `docs/design/<slug>/PRD.md`.
+- **`/design-consultation` (GStack)** — called by `/prepare-design` for technical design. Produces `docs/design/<slug>/DESIGN.md`.
+- **`/design-shotgun` (GStack)** — called by `/prepare-design --mockups-only`. Generates 3 variants, user picks, saves to `docs/design/<slug>/mockups/`.
+
+**Downstream (`/claude-design` uses):**
+
 - **`superpowers:test-driven-development`** — invoked inside Phase 4 for each file. No changes to the skill itself.
 - **`superpowers:writing-plans`** — NOT invoked by `/claude-design`. Phase 3 produces a lighter FE-specific plan format. (Rationale: `writing-plans` targets multi-module plans; FE file-by-file plan is simpler and repo-specific.)
 - **`gsd:execute`** — invoked in Phase 4 only for Large tier to parallelize waves. Medium/Small stay sequential.
-- **`gsd:discuss` / `gsd:plan`** — NOT invoked by default. For Large tier with architecture implications, user may run them **before** `/claude-design` and feed the resulting decisions into Phase 2 as constraints. Documented in `WORKFLOW-FRONTEND.md` as a manual recommendation, not an automated call.
+- **`gsd:discuss` / `gsd:plan`** — NOT invoked (neither automatically nor recommended). Rationale: when design precondition is satisfied (`docs/design/<slug>/` populated), interactive architecture Q&A is redundant. The design is the source of truth; asking the user again is wasted effort. User can still run them manually for edge cases but the workflow does not nudge toward them.
 - **`/review`, `/design-review`, `/qa`, `/cso`** — invoked by Phase 5 per the conditional table in § 3.
 - **`simplify`** — available for user to run post-Phase-5 on the FE diff. Not automated by the command.
+
+**Explicitly excluded (to avoid Q&A duplication):**
+
+- `superpowers:brainstorming` — overlaps with `/office-hours` + `/design-consultation` already orchestrated by `/prepare-design`. Picking brainstorming would mean 2 Q&A loops for the same design.
+- `gsd:explore` — same overlap reason.
 
 ### § 8. Escalation and failure handling
 
@@ -239,30 +328,40 @@ None blocking — resolved during brainstorm:
 
 - ✅ FE location: `apps/web/` (decided by Claude per user delegation).
 - ✅ Approach: C (slash command, not skill).
-- ✅ Artifact location: `.planning/frontend/<slug>/`.
+- ✅ Artifact location: `.planning/frontend/<slug>/` (build), `docs/design/<slug>/` (design).
 - ✅ TDD binding: mandatory in Phase 4, via `superpowers:test-driven-development`.
+- ✅ Design precondition: 2-step split — `/prepare-design` generates design source, `/claude-design` consumes it. Tier-scaled requirements (§ 2.5).
+- ✅ `gsd:discuss` / `gsd:plan` auto-call: NO (redundant with design-first principle).
+- ✅ Tier thresholds: kept as-is (§ 2) — Small ≤ 2 files, Medium 1 page / 3-5 components, Large multi-page / proto-break / auth.
+- ✅ Phase 1 scan scope: kept as-is (§ 3 Phase 1) — `apps/web`, `packages/{ui,proto,shared}`, `apps/gateway/**/{controllers,gateways}`, monorepo config.
+- ✅ Phase 5 gates: kept as-is (§ 3 Phase 5) — 9 gates with conditional skip logic.
 
 Deferred to future work (out of scope for this spec):
 
-- Promoting the slash command to `.claude/skills/frontend-onboard/` once usage proves value.
+- Promoting the slash commands to `.claude/skills/frontend-{onboard,prepare}/` once usage proves value.
 - Auto-trigger via SessionStart hook when `apps/web/**` is the first edited path.
 - Cypress / Playwright visual regression baseline — GStack `/qa` covers functional; visual diff is a separate initiative.
+- Handling design-source drift (user edits `docs/design/<slug>/` mid-build) — currently requires manual re-run of Phase 2 Mapping; automation deferred.
 
 ## Success Criteria
 
-1. `/claude-design "<feature>"` produces all 5 artifacts under `.planning/frontend/<slug>/` with the frontmatter and sections described in § 3.
-2. Phase 1 onboarding produces a non-empty "Available gateway HTTP endpoints" and "Available proto RPCs" section — proving the onboard actually read cross-stack context.
-3. `WORKFLOW.md` size detection table contains the FE row; Mermaid tree contains the FE branch.
-4. `WORKFLOW-FRONTEND.md` exists in both `.claude/workflow/` and `docs/workflow/` and documents all 5 phases plus the size × impact matrix.
-5. Running the command on a trial feature ("build empty dashboard shell") gets to Phase 5 with green gates 1–3 and a committed trail of atomic commits, one per file.
-6. No `apps/web/` scaffolding is created by this workflow spec itself (that's M7 content).
+1. `/prepare-design "<feature>"` produces `docs/design/<slug>/{PRD.md,DESIGN.md,mockups/}` via orchestrated skills, with atomic commits per artifact.
+2. `/claude-design "<slug>"` with complete design source produces all 6 artifacts under `.planning/frontend/<slug>/` (STATE, DESIGN-INPUT, ONBOARD, MAPPING, PLAN, BUILD-LOG, REVIEW) with the frontmatter and sections described in § 3.
+3. `/claude-design "<slug>"` with MISSING design source HALTs at Phase 0 and emits the correct `/prepare-design` command to remediate — does NOT silently ask feature Q&A.
+4. Phase 1 onboarding produces a non-empty "Available gateway HTTP endpoints" and "Available proto RPCs" section — proving the onboard actually read cross-stack context.
+5. `WORKFLOW.md` size detection table contains the FE row; Mermaid tree contains the FE branch with both `/prepare-design` (optional) and `/claude-design` (required) nodes.
+6. `WORKFLOW-FRONTEND.md` exists in both `.claude/workflow/` and `docs/workflow/` and documents all phases, the tier × design-artifact matrix (§ 2.5), and the `/prepare-design` ↔ `/claude-design` handoff.
+7. Running `/claude-design` on a trial Medium feature (with pre-authored `docs/design/<trial>/PRD.md`) gets to Phase 5 with green gates 1–3 and a committed trail of atomic commits, one per file — with zero feature-Q&A during Phases 1-5.
+8. No `apps/web/` scaffolding is created by this workflow spec itself (that's M7 content).
 
 ## Implementation Order (previewing plan)
 
 To be detailed in the implementation plan via `superpowers:writing-plans`. High-level order:
 
 1. Write `.claude/workflow/WORKFLOW-FRONTEND.md` + mirror in `docs/workflow/`.
-2. Update `.claude/workflow/WORKFLOW.md` + mirror in `docs/workflow/`.
-3. Write `.claude/commands/claude-design.md`.
-4. Trial run on a tiny feature (e.g., "add about page") — verify artifacts + commit trail.
-5. Tune prompts based on trial output.
+2. Update `.claude/workflow/WORKFLOW.md` + mirror in `docs/workflow/` (add FE lane + both commands to Mermaid).
+3. Write `.claude/commands/prepare-design.md` (upstream command).
+4. Write `.claude/commands/claude-design.md` (downstream command with Phase 0 validation).
+5. Trial run on a tiny Medium feature with hand-authored `PRD.md` — verify Phase 0 accepts design, Phases 1-5 run without feature Q&A, commit trail atomic.
+6. Trial run on the same feature but WITHOUT design — verify Phase 0 HALTs and emits correct `/prepare-design` command.
+7. Tune prompts based on both trial outputs.
