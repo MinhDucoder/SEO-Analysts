@@ -1,6 +1,12 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "CI",
+    "NODE_ENV",
+    "PLAYWRIGHT_BASE_URL",
+    "NEXT_PUBLIC_*"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
