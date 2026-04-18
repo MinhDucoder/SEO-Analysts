@@ -11,20 +11,40 @@ import { useAuthStore } from "@/lib/auth/store";
  * - `beforeRequest` attaches `Authorization: Bearer <accessToken>` from the
  *   auth store when available.
  * - `afterResponse` handles 401 by attempting ONE silent refresh via
- *   `/auth/refresh`. Slug 1 ships this as a stub — refresh currently returns
- *   null (no network call), and the interceptor just clears auth on 401.
- *   Slug 2 (auth-flow) replaces `tryRefresh()` with the real impl.
+ *   `/auth/refresh`. On success the original request is replayed with the
+ *   new bearer; on failure the store is cleared.
  */
 
 const REFRESH_PATH = "auth/refresh";
 
-async function tryRefresh(): Promise<string | null> {
-  // STUB — real impl in slug 2:
-  //   const res = await ky.post(`${API_URL}/${REFRESH_PATH}`, {
-  //     credentials: "include",
-  //   }).json<{ accessToken: string }>();
-  //   return res.accessToken;
-  return null;
+// Single-flight refresh: if multiple 401s land concurrently, they await the
+// same promise instead of hitting /auth/refresh in parallel.
+let refreshInFlight: Promise<string | null> | null = null;
+
+export async function tryRefresh(): Promise<string | null> {
+  if (refreshInFlight) return refreshInFlight;
+
+  refreshInFlight = (async () => {
+    try {
+      const response = await fetch(`${API_URL}/${REFRESH_PATH}`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) return null;
+      const body = (await response.json()) as { accessToken?: string };
+      return body.accessToken ?? null;
+    } catch {
+      return null;
+    } finally {
+      // Clear after a microtask so awaiters can read the same resolved value.
+      queueMicrotask(() => {
+        refreshInFlight = null;
+      });
+    }
+  })();
+
+  return refreshInFlight;
 }
 
 export const api: KyInstance = ky.create({
