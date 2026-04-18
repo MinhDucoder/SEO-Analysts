@@ -18,7 +18,11 @@ import { PoliteFetcher } from './infra/fetchers/polite-fetcher';
 import { SitemapDiscovery } from './infra/sitemap/sitemap-discovery';
 import { UndiciSitemapHttpClient } from './infra/sitemap/undici-sitemap-http-client';
 import { SiteCrawlCounter } from './services/site-crawl-counter.service';
+import { PageAuditResultStore } from './services/page-audit-result-store.service';
 import { SiteCrawlStartWorker } from './controllers/site-crawl-start.worker';
+import { UrlAuditWorker } from './controllers/url-audit.worker';
+import { GrpcClientFactory } from './infra/grpc/grpc-client.factory';
+import { AnalyzerGrpcClient } from './infra/grpc/analyzer-grpc-client';
 
 const redisFactory = {
   provide: REDIS_CLIENT,
@@ -84,7 +88,11 @@ const browserPoolFactory = {
     },
     UndiciSitemapHttpClient,
     SiteCrawlCounter,
+    PageAuditResultStore,
+    GrpcClientFactory,
+    AnalyzerGrpcClient,
     SiteCrawlStartWorker,
+    UrlAuditWorker,
   ],
   exports: [CrawlerOrchestrator],
 })

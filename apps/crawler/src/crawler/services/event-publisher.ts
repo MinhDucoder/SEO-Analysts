@@ -41,6 +41,15 @@ export class EventPublisher {
     this.logger.warn(`published crawl.failed audit=${auditId} err=${error.message}`);
   }
 
+  /**
+   * Fan out one page-level audit result so the Gateway can persist
+   * the PageAudit row. Emitted by `UrlAuditWorker` for every URL in
+   * the F1 site-wide pipeline (one event per URL, success or failure).
+   */
+  async publishPageAuditDone(auditId: string, result: unknown): Promise<void> {
+    await this.redis.publish('page-audit.done', JSON.stringify({ auditId, result }));
+  }
+
   async publishProgress(
     auditId: string,
     progress: number,
