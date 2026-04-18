@@ -7,6 +7,7 @@ import { GrpcModule } from './infra/grpc/grpc.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AuditsModule } from './audits/audits.module';
+import { ScheduledAuditsModule } from './scheduled-audits/scheduled-audits.module';
 import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { WebsocketModule } from './infra/websocket/websocket.module';
@@ -24,6 +25,7 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     AuthModule,
     UsersModule,
     AuditsModule,
+    ScheduledAuditsModule,
     SharedModule,
     AdminModule,
     WebsocketModule,
