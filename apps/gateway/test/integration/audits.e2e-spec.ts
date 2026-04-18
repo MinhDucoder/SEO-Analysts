@@ -104,7 +104,10 @@ describe('Audits E2E', () => {
         generatePdf: vi.fn().mockResolvedValue({ pdfUrl: 'https://x/p.pdf' }),
         isHealthy: vi.fn(),
       })
-      .overrideProvider(AuditQueueProducer).useValue({ enqueueCrawlStart: vi.fn() })
+      .overrideProvider(AuditQueueProducer).useValue({
+        enqueueCrawlStart: vi.fn(),
+        enqueueSiteCrawlStart: vi.fn(),
+      })
       .overrideGuard(JwtAuthGuard).useClass(FakeJwtGuard)
       .compile();
 
@@ -148,6 +151,49 @@ describe('Audits E2E', () => {
     await request(app.getHttpServer())
       .post('/api/v1/audits')
       .send({ url: 'not a url' })
+      .expect(400);
+  });
+
+  it('POST /audits with mode=site creates a site-mode audit + routes to site-crawl.start', async () => {
+    const producer = app.get(AuditQueueProducer) as unknown as {
+      enqueueCrawlStart: ReturnType<typeof vi.fn>;
+      enqueueSiteCrawlStart: ReturnType<typeof vi.fn>;
+    };
+    const crawlStartCallsBefore = producer.enqueueCrawlStart.mock.calls.length;
+
+    const res = await request(app.getHttpServer())
+      .post('/api/v1/audits')
+      .send({ url: 'https://example.com', mode: 'site', maxUrls: 250, targetKeyword: 'seo' })
+      .expect(202);
+
+    expect(res.body.auditId).toBeDefined();
+    expect(res.body.status).toBe(AuditStatus.PENDING);
+    expect(res.body.mode).toBe('site');
+
+    const created = audits.find((a) => a.id === res.body.auditId);
+    expect(created?.mode).toBe('site');
+    expect(producer.enqueueSiteCrawlStart).toHaveBeenCalledWith({
+      auditId: res.body.auditId,
+      rootUrl: 'https://example.com/',
+      maxUrls: 250,
+      targetKeyword: 'seo',
+    });
+    // site-mode must NOT add a new crawl.start call on top of whatever single-mode
+    // tests earlier in this suite may have produced.
+    expect(producer.enqueueCrawlStart.mock.calls.length).toBe(crawlStartCallsBefore);
+  });
+
+  it('POST /audits rejects maxUrls > 5000 via validation pipe', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/audits')
+      .send({ url: 'https://example.com', mode: 'site', maxUrls: 10_000 })
+      .expect(400);
+  });
+
+  it('POST /audits rejects unknown mode values via validation pipe', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/audits')
+      .send({ url: 'https://example.com', mode: 'bulk' })
       .expect(400);
   });
 
