@@ -4,24 +4,25 @@ created: 2026-04-18
 tier: large
 impact: auth-wiring
 phases:
-  "0": pending
-  "1": pending
-  "2": pending
-  "3": pending
-  "4": pending
-  "5": pending
+  "0": done
+  "1": done
+  "2": done
+  "3": done
+  "4": done
+  "5": done
+status: complete
 ---
 
-# State: auth-flow
+# State: auth-flow — ✅ COMPLETE
 
 | Phase | Artifact | Status | Commit |
 |---|---|---|---|
-| 0 | DESIGN-INPUT.md | pending | — |
-| 1 | ONBOARD.md | pending | — |
-| 2 | MAPPING.md | pending | — |
-| 3 | PLAN.md | pending | — |
-| 4 | BUILD-LOG.md | pending | — |
-| 5 | REVIEW.md | pending | — |
+| 0 | DESIGN-INPUT.md | done | e6efdd1 |
+| 1 | ONBOARD.md | done | 73d7f37 |
+| 2 | MAPPING.md | done | cb516a2 |
+| 3 | PLAN.md | done | 005acf2 |
+| 4 | BUILD-LOG.md | done (8 waves green + 2 bugfixes) | this commit |
+| 5 | REVIEW.md | done — gates 1/2/3/6 PASS; 4/5 N/A; 7-9 deferred; 10 FLAG for follow-up `/cso` | this commit |
 
 ## Notes
 
