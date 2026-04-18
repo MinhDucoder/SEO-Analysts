@@ -66,3 +66,26 @@ export interface ApiErrorBody {
   message: string | string[];
   error?: string;
 }
+
+/**
+ * Audit list item returned by `GET /audits`. Gateway field name is
+ * `seoScore` (not `score`) — verified against
+ * apps/gateway/src/audits/controllers/audits.controller.ts:48.
+ *
+ * Dates arrive as ISO strings (JSON). Consumers use `formatRelativeDate`
+ * or dayjs() to render. Nullable fields reflect partial-audit states:
+ * - `seoScore` null while status is pre-REPORTING.
+ * - `completedAt` null while status !== COMPLETED/FAILED.
+ */
+export interface AuditListItem {
+  id: string;
+  url: string;
+  domain: string;
+  status: import("@repo/shared").AuditStatus;
+  seoScore: number | null;
+  targetKeyword: string | null;
+  crawlerType: string | null;
+  crawlDurationMs: number | null;
+  createdAt: string;
+  completedAt: string | null;
+}

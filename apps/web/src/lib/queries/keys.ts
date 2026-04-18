@@ -15,6 +15,14 @@ export const queryKeys = {
   auth: {
     me: ["auth", "me"] as const,
   },
+  audits: {
+    all: () => ["audits"] as const,
+    list: (filters: Record<string, unknown>) => ["audits", "list", filters] as const,
+    recent: (opts: { limit?: number; dateFrom?: string }) =>
+      ["audits", "recent", opts] as const,
+    detail: (id: string) => ["audits", "detail", id] as const,
+    status: (id: string) => ["audits", "status", id] as const,
+  },
 } as const;
 
 export type QueryKeys = typeof queryKeys;
