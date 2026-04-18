@@ -6,8 +6,8 @@ impact: layout-shell
 phases:
   "0": done
   "1": done
-  "2": in-progress
-  "3": pending
+  "2": done
+  "3": in-progress
   "4": pending
   "5": pending
 ---
