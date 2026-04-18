@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { PROTO_ROOT } from '@repo/proto';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -12,7 +13,7 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       package: ['analyzer.v1'],
-      protoPath: [join(__dirname, '../../..', 'packages/proto/analyzer/v1/analyzer.proto')],
+      protoPath: [join(PROTO_ROOT, 'analyzer/v1/analyzer.proto')],
       url: `0.0.0.0:${process.env.GRPC_PORT || 50053}`,
       loader: {
         keepCase: false,
@@ -20,7 +21,7 @@ async function bootstrap() {
         enums: String,
         defaults: true,
         oneofs: true,
-        includeDirs: [join(__dirname, '../../..', 'packages/proto')],
+        includeDirs: [PROTO_ROOT],
       },
     },
   });

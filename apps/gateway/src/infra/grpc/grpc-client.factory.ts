@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { credentials, loadPackageDefinition, ServiceClientConstructor, GrpcObject } from '@grpc/grpc-js';
 import { loadSync } from '@grpc/proto-loader';
 import { join } from 'path';
+import { PROTO_ROOT } from '@repo/proto';
 
 interface ClientOptions {
   protoPath: string;
@@ -13,7 +14,7 @@ interface ClientOptions {
 @Injectable()
 export class GrpcClientFactory {
   private readonly logger = new Logger(GrpcClientFactory.name);
-  private readonly protoRoot = join(__dirname, '../../../..', 'packages/proto');
+  private readonly protoRoot = PROTO_ROOT;
 
   create<T = unknown>(opts: ClientOptions): T {
     const fullPath = join(this.protoRoot, opts.protoPath);

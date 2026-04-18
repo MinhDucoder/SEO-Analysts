@@ -1,19 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { PROTO_ROOT } from '@repo/proto';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
-  const protoRoot = join(__dirname, '../../..', 'packages/proto');
-
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
       package: ['report.v1'],
-      protoPath: [join(protoRoot, 'report/v1/report.proto')],
+      protoPath: [join(PROTO_ROOT, 'report/v1/report.proto')],
       url: `0.0.0.0:${process.env.GRPC_PORT || 50055}`,
       loader: {
         keepCase: false,
@@ -22,10 +21,10 @@ async function bootstrap() {
         defaults: true,
         oneofs: true,
         includeDirs: [
-          protoRoot,
-          join(protoRoot, 'analyzer/v1'),
-          join(protoRoot, 'keyword/v1'),
-          join(protoRoot, 'common/v1'),
+          PROTO_ROOT,
+          join(PROTO_ROOT, 'analyzer/v1'),
+          join(PROTO_ROOT, 'keyword/v1'),
+          join(PROTO_ROOT, 'common/v1'),
         ],
       },
     },

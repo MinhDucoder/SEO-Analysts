@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 
-const PROTO_ROOT = path.join(__dirname, '..');
+export const PROTO_ROOT = path.join(__dirname, '..');
 
 const LOADER_OPTIONS: protoLoader.Options = {
   keepCase: false,
