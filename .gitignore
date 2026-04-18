@@ -39,8 +39,8 @@ yarn-error.log*
 *.pem
 Thumbs.db
 
-# Prisma
-apps/api/src/generated
+# Prisma (generated clients are platform-specific — regenerated via postinstall)
+apps/*/src/infra/prisma/generated/
 .worktrees/
 
 # Build artifacts
@@ -49,3 +49,4 @@ apps/api/src/generated
 # Local artifacts (personal docs, not for repo)
 *.pdf
 *.docx
+.gstack/
