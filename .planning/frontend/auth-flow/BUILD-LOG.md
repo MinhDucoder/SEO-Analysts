@@ -49,3 +49,24 @@ date: 2026-04-18
 - `src/lib/queries/keys.ts` — populate `auth.me`
 - `src/lib/constants.ts` — `ROUTES.oauthSuccess` → `/auth/oauth-success`
 - `src/app/providers.tsx` — add `<AuthBootstrap />` inside QueryClientProvider
+
+## Harness debt paid (follow-up to slug)
+
+Commit `3862458` shipped harness-first (MSW + Playwright + RTL + login page + mutations regression) covering bug `0cb8acd` and 1/6 page. Remaining Gate 3b DoD items per [fe-test-harness checklist](../../../.claude/skills/fe-test-harness/checklist.md) completed here:
+
+| Item | Commit | Status |
+|---|---|---|
+| MSW + Playwright + RTL wire | **3862458** | ✅ |
+| Regression test for bug 0cb8acd (mutation composition) | **3862458** | ✅ |
+| Login RTL smoke | **3862458** | ✅ |
+| Auth pages e2e structure | **3862458** | ✅ |
+| Regression test for bug d38fc4f (OAuth Suspense/force-dynamic) | this commit | ✅ |
+| Register RTL (5 cases: render, agreed, mismatch, 201, 409) | this commit | ✅ |
+| Forgot-password RTL (4 cases: render, validation, 200, 500) | this commit | ✅ |
+| Reset-password RTL (5 cases: render, short, mismatch, 200, 400) | this commit | ✅ |
+| Verify-email RTL (2 cases: auto-verify 200, 400) | this commit | ✅ |
+| AuthGuard + AdminGuard tests (5 cases) | this commit | ✅ |
+
+Test totals after debt paid: **76 vitest + 9 Playwright = 85 tests**, all green. tsc 0, eslint 0.
+
+Harness reusable by next slug (dashboard-shell, audits, admin) via `server.use(...)` override or appending to default handlers in [tests/msw/handlers.ts](../../../apps/web/tests/msw/handlers.ts).
