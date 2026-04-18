@@ -11,12 +11,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma/prisma.service';
-import { CreateAuditDto } from '../dto/create-audit.dto';
+import { CreateAuditDto, AuditModeDto } from '../dto/create-audit.dto';
 import { ListAuditsQuery } from '../dto/list-audits.query';
 import { validateUrlSafety } from '../../common/utils/url-validator';
 import { RateLimiterService } from '../../infra/redis/rate-limiter.service';
 import { RedisService } from '../../infra/redis/redis.service';
-import { RATE_LIMIT, AuditStatus, UserRole, REDIS_KEYS } from '@repo/shared';
+import {
+  RATE_LIMIT,
+  AuditStatus,
+  AuditMode,
+  UserRole,
+  REDIS_KEYS,
+  SITE_CRAWL_LIMITS,
+} from '@repo/shared';
 import { AuditQueueProducer } from './audit-queue.producer';
 import { ReportGrpcClient } from '../../infra/grpc/report.client';
 import { clampPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
@@ -35,6 +42,15 @@ export class AuditsService {
   ) {}
 
   async createAudit(userId: string, dto: CreateAuditDto) {
+    const mode = dto.mode === AuditModeDto.SITE ? AuditMode.SITE : AuditMode.SINGLE;
+    if (mode === AuditMode.SITE && dto.maxUrls !== undefined) {
+      if (dto.maxUrls > SITE_CRAWL_LIMITS.HARD_CAP_MAX_URLS_PER_AUDIT) {
+        throw new BadRequestException(
+          `maxUrls vuot qua gioi han ${SITE_CRAWL_LIMITS.HARD_CAP_MAX_URLS_PER_AUDIT}`,
+        );
+      }
+    }
+
     const rl = await this.rateLimiter.consume(
       this.rateLimiter.auditBucket(userId),
       RATE_LIMIT.AUDIT_PER_HOUR,
@@ -53,20 +69,31 @@ export class AuditsService {
         userId,
         url: safe.href,
         domain: safe.domain,
+        mode,
         targetKeyword: dto.targetKeyword ?? null,
         status: AuditStatus.PENDING,
       },
     });
 
-    await this.producer.enqueueCrawlStart({
-      auditId: audit.id,
-      url: safe.href,
-      options: { targetKeyword: dto.targetKeyword },
-    });
+    if (mode === AuditMode.SITE) {
+      await this.producer.enqueueSiteCrawlStart({
+        auditId: audit.id,
+        rootUrl: safe.href,
+        maxUrls: dto.maxUrls,
+        targetKeyword: dto.targetKeyword,
+      });
+    } else {
+      await this.producer.enqueueCrawlStart({
+        auditId: audit.id,
+        url: safe.href,
+        options: { targetKeyword: dto.targetKeyword },
+      });
+    }
 
     return {
       auditId: audit.id,
       status: audit.status,
+      mode: audit.mode,
       message: 'Audit da bat dau xu ly',
     };
   }

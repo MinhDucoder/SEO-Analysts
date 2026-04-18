@@ -27,7 +27,10 @@ describe('AuditsService', () => {
       get: vi.fn().mockResolvedValue(null),
     },
   };
-  const producer = { enqueueCrawlStart: vi.fn() };
+  const producer = {
+    enqueueCrawlStart: vi.fn(),
+    enqueueSiteCrawlStart: vi.fn(),
+  };
   const reportClient = { getReport: vi.fn().mockRejectedValue(new Error('down')) };
 
   beforeEach(() => {
@@ -88,5 +91,65 @@ describe('AuditsService', () => {
   it('deleteAudit 404 when missing', async () => {
     prisma.audit.findUnique.mockResolvedValueOnce(null);
     await expect(svc.deleteAudit('u1', UserRole.USER, 'a1')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  describe('site-mode routing', () => {
+    it('creates Audit with mode=site and enqueues site-crawl.start when mode=site', async () => {
+      prisma.audit.create.mockResolvedValueOnce({
+        id: 'a2', status: AuditStatus.PENDING, userId: 'u1', url: 'https://example.com/',
+      });
+
+      await svc.createAudit('u1', { url: 'https://example.com', mode: 'site' });
+
+      const createArgs = prisma.audit.create.mock.calls[0][0];
+      expect(createArgs.data.mode).toBe('site');
+      expect(producer.enqueueSiteCrawlStart).toHaveBeenCalledWith({
+        auditId: 'a2',
+        rootUrl: 'https://example.com/',
+        maxUrls: undefined,
+        targetKeyword: undefined,
+      });
+      expect(producer.enqueueCrawlStart).not.toHaveBeenCalled();
+    });
+
+    it('forwards maxUrls + targetKeyword to the site-crawl producer', async () => {
+      prisma.audit.create.mockResolvedValueOnce({
+        id: 'a3', status: AuditStatus.PENDING, userId: 'u1', url: 'https://example.com/',
+      });
+
+      await svc.createAudit('u1', {
+        url: 'https://example.com',
+        mode: 'site',
+        maxUrls: 250,
+        targetKeyword: 'best widgets',
+      });
+
+      expect(producer.enqueueSiteCrawlStart).toHaveBeenCalledWith({
+        auditId: 'a3',
+        rootUrl: 'https://example.com/',
+        maxUrls: 250,
+        targetKeyword: 'best widgets',
+      });
+    });
+
+    it('defaults to mode=single when mode is absent (existing behaviour)', async () => {
+      prisma.audit.create.mockResolvedValueOnce({
+        id: 'a4', status: AuditStatus.PENDING, userId: 'u1', url: 'https://example.com/',
+      });
+
+      await svc.createAudit('u1', { url: 'https://example.com' });
+
+      const createArgs = prisma.audit.create.mock.calls[0][0];
+      expect(createArgs.data.mode).toBe('single');
+      expect(producer.enqueueCrawlStart).toHaveBeenCalled();
+      expect(producer.enqueueSiteCrawlStart).not.toHaveBeenCalled();
+    });
+
+    it('rejects maxUrls that exceed the hard cap', async () => {
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', mode: 'site', maxUrls: 10_000 }),
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.audit.create).not.toHaveBeenCalled();
+    });
   });
 });

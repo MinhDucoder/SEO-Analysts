@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, IsUrl, Max, MaxLength, Min } from 'class-validator';
+
+export enum AuditModeDto {
+  SINGLE = 'single',
+  SITE = 'site',
+}
 
 export class CreateAuditDto {
   @ApiProperty({ example: 'https://google.com', description: 'URL can phan tich SEO' })
@@ -12,4 +17,25 @@ export class CreateAuditDto {
   @IsString()
   @MaxLength(255)
   targetKeyword?: string;
+
+  @ApiPropertyOptional({
+    enum: AuditModeDto,
+    example: AuditModeDto.SINGLE,
+    description: 'single = 1 URL, site = crawl toan bo domain tu sitemap.xml',
+  })
+  @IsOptional()
+  @IsEnum(AuditModeDto)
+  mode?: AuditModeDto;
+
+  @ApiPropertyOptional({
+    example: 500,
+    description: 'Gioi han URL cho site-mode (mac dinh 500, max 5000)',
+    minimum: 1,
+    maximum: 5000,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(5000)
+  maxUrls?: number;
 }

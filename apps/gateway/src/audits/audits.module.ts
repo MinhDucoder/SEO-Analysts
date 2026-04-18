@@ -26,7 +26,10 @@ import { AuthModule } from '../auth/auth.module';
         };
       },
     }),
-    BullModule.registerQueue({ name: BULLMQ_QUEUES.CRAWL_START }),
+    BullModule.registerQueue(
+      { name: BULLMQ_QUEUES.CRAWL_START },
+      { name: BULLMQ_QUEUES.SITE_CRAWL_START },
+    ),
   ],
   controllers: [AuditsController],
   providers: [AuditsService, AuditQueueProducer],
