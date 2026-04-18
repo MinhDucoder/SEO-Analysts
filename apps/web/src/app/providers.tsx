@@ -3,6 +3,7 @@
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthBootstrap } from "@/components/auth/auth-bootstrap";
 
 /**
  * Client-side providers wrapper. Rendered inside the root server layout.
@@ -11,9 +12,10 @@ import { Toaster } from "@/components/ui/sonner";
  *   hammering the gateway on tab switches (per
  *   docs/design/30-frontend-architecture.md §9).
  * - Toaster renders via `sonner` (top-right desktop, top-center mobile).
- *
- * Future slugs (e.g. slug 2 auth-flow) may layer additional providers here —
- * theme provider, auth hydration, next-intl, etc.
+ * - <AuthBootstrap /> runs `tryRefresh()` once on mount so authenticated
+ *   pages hydrate from a valid refresh_token cookie without flashing
+ *   guest UI. Rendered INSIDE QueryClientProvider because its hook
+ *   manipulates the query cache.
  */
 
 function makeQueryClient(): QueryClient {
@@ -46,6 +48,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <AuthBootstrap />
       {children}
       <Toaster />
     </QueryClientProvider>
