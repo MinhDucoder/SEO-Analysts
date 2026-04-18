@@ -20,7 +20,7 @@ INSERT INTO users (id, email, password_hash, full_name, role, is_verified, creat
 VALUES (
   'a0000000-0000-0000-0000-000000000001',
   'admin@test.seo.local',
-  '$2b$10$rQ8K8z7X6X6X6X6X6X6X6eVvVvVvVvVvVvVvVvVvVvVvVvVvVvVv',
+  '$2b$12$YWXrjD4gwyvPqQkZ8fJ9aO3.1gwwFQtUeAw/iMsZdPPOv.xswUh3i',
   'Admin User',
   'admin',
   true,
@@ -32,19 +32,19 @@ VALUES (
 INSERT INTO users (id, email, password_hash, full_name, role, is_verified, created_at, updated_at)
 VALUES
   ('u0000000-0000-0000-0000-000000000001', 'duc@test.seo.local',
-   '$2b$10$rQ8K8z7X6X6X6X6X6X6X6eVvVvVvVvVvVvVvVvVvVvVvVvVvVvVv',
+   '$2b$12$YWXrjD4gwyvPqQkZ8fJ9aO3.1gwwFQtUeAw/iMsZdPPOv.xswUh3i',
    'Nguyen Minh Duc', 'user', true, NOW() - INTERVAL '25 days', NOW()),
   ('u0000000-0000-0000-0000-000000000002', 'linh@test.seo.local',
-   '$2b$10$rQ8K8z7X6X6X6X6X6X6X6eVvVvVvVvVvVvVvVvVvVvVvVvVvVvVv',
+   '$2b$12$YWXrjD4gwyvPqQkZ8fJ9aO3.1gwwFQtUeAw/iMsZdPPOv.xswUh3i',
    'Tran Thuy Linh', 'user', true, NOW() - INTERVAL '20 days', NOW()),
   ('u0000000-0000-0000-0000-000000000003', 'nam@test.seo.local',
-   '$2b$10$rQ8K8z7X6X6X6X6X6X6X6eVvVvVvVvVvVvVvVvVvVvVvVvVvVvVv',
+   '$2b$12$YWXrjD4gwyvPqQkZ8fJ9aO3.1gwwFQtUeAw/iMsZdPPOv.xswUh3i',
    'Le Van Nam', 'user', true, NOW() - INTERVAL '15 days', NOW()),
   ('u0000000-0000-0000-0000-000000000004', 'unverified@test.seo.local',
-   '$2b$10$rQ8K8z7X6X6X6X6X6X6X6eVvVvVvVvVvVvVvVvVvVvVvVvVvVvVv',
+   '$2b$12$YWXrjD4gwyvPqQkZ8fJ9aO3.1gwwFQtUeAw/iMsZdPPOv.xswUh3i',
    'Unverified User', 'user', false, NOW() - INTERVAL '5 days', NOW()),
   ('u0000000-0000-0000-0000-000000000005', 'locked@test.seo.local',
-   '$2b$10$rQ8K8z7X6X6X6X6X6X6X6eVvVvVvVvVvVvVvVvVvVvVvVvVvVvVv',
+   '$2b$12$YWXrjD4gwyvPqQkZ8fJ9aO3.1gwwFQtUeAw/iMsZdPPOv.xswUh3i',
    'Locked User', 'user', true, NOW() - INTERVAL '10 days', NOW())
 ON CONFLICT (email) DO NOTHING;
 
