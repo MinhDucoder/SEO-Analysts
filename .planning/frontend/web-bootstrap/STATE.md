@@ -8,7 +8,7 @@ phases:
   "1": done
   "2": done
   "3": done
-  "4": "in-progress (wave 1/8 done)"
+  "4": done
   "5": pending
 ---
 
@@ -20,8 +20,8 @@ phases:
 | 1 | ONBOARD.md | done | e2f05ce |
 | 2 | MAPPING.md | done | c84bfbb |
 | 3 | PLAN.md | done | b452991 |
-| 4 | BUILD-LOG.md | in-progress (wave 1/8 done = fc416bd) | (this commit initial) |
-| 5 | REVIEW.md | pending | — |
+| 4 | BUILD-LOG.md | done (waves 1-8 green) | final at this commit |
+| 5 | REVIEW.md | pending — quality gates pending (lint/tsc/test passing inline; `/review` + `/design-review` not yet invoked) | — |
 
 ## Notes
 
