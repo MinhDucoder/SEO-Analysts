@@ -47,6 +47,12 @@ export enum AuditMode {
   SITE = 'site',
 }
 
+export enum AlertType {
+  SCORE_DROP = 'score_drop',
+  NEW_ISSUES = 'new_issues',
+  SITE_DOWN = 'site_down',
+}
+
 // ─── Shared Interfaces ───
 
 export interface CoreWebVitals {
@@ -134,6 +140,15 @@ export const BULLMQ_QUEUES = {
   SITE_CRAWL_START: 'site-crawl.start',
   SITE_CRAWL_URL_AUDIT: 'site-crawl.url-audit',
   SITE_CRAWL_AGGREGATE: 'site-crawl.aggregate',
+  SCHEDULED_AUDIT_TICK: 'scheduled-audit.tick',
+  ALERT_SEND: 'alert.send',
+} as const;
+
+// F2 — Scheduled audit thresholds (consumed by the regression detector
+// in the gateway). Anything worse than these triggers an AuditAlert.
+export const SCHEDULED_AUDIT_LIMITS = {
+  SCORE_DROP_THRESHOLD: 10,
+  MIN_CRON_INTERVAL_MINUTES: 15,
 } as const;
 
 // Site-wide crawl limits — enforced by sitemap-discovery + site-crawl

@@ -4,8 +4,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/infra/prisma/generated"
+  provider      = "prisma-client-js"
+  output        = "../src/infra/prisma/generated"
+  binaryTargets = ["native"]
 }
 
 enum UserRole {
@@ -27,6 +28,12 @@ enum AuditMode {
   site
 }
 
+enum AlertType {
+  score_drop
+  new_issues
+  site_down
+}
+
 model User {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email         String   @unique @db.VarChar(255)
@@ -40,8 +47,9 @@ model User {
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  refreshTokens RefreshToken[]
-  audits        Audit[]
+  refreshTokens   RefreshToken[]
+  audits          Audit[]
+  scheduledAudits ScheduledAudit[]
 
   @@map("users")
 }
@@ -82,8 +90,9 @@ model Audit {
   createdAt             DateTime    @default(now()) @map("created_at") @db.Timestamptz
   updatedAt             DateTime    @updatedAt @map("updated_at") @db.Timestamptz
 
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   pageAudits PageAudit[]
+  alerts     AuditAlert[]
 
   @@index([userId, createdAt(sort: Desc)], name: "idx_audits_user_created")
   @@index([domain], name: "idx_audits_domain")
@@ -106,4 +115,51 @@ model PageAudit {
   @@index([auditId], name: "idx_page_audits_audit")
   @@index([score], name: "idx_page_audits_score")
   @@map("page_audits")
+}
+
+/// F2 — one row per recurring audit schedule owned by a user.
+/// Cron string is validated at the API layer; BullMQ's Job Scheduler
+/// (upsertJobScheduler) is the source of truth for next-fire times.
+model ScheduledAudit {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  url           String    @db.Text
+  cron          String    @db.VarChar(255)
+  mode          AuditMode @default(single)
+  maxUrls       Int?      @map("max_urls")
+  targetKeyword String?   @map("target_keyword") @db.VarChar(255)
+  lastRunAt     DateTime? @map("last_run_at") @db.Timestamptz
+  lastScore     Int?      @map("last_score")
+  isActive      Boolean   @default(true) @map("is_active")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  alerts AuditAlert[]
+
+  @@index([userId], name: "idx_scheduled_audits_user")
+  @@index([isActive], name: "idx_scheduled_audits_active")
+  @@map("scheduled_audits")
+}
+
+/// F2 — emitted by the regression detector when a scheduled audit
+/// reports a worse score than the previous run, or when a site goes
+/// down. `scheduleId` is nullable so one-off audits can also emit.
+model AuditAlert {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  auditId    String    @map("audit_id") @db.Uuid
+  scheduleId String?   @map("schedule_id") @db.Uuid
+  type       AlertType
+  deltaScore Int?      @map("delta_score")
+  message    String    @db.Text
+  sentAt     DateTime? @map("sent_at") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  audit    Audit           @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  schedule ScheduledAudit? @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
+
+  @@index([auditId], name: "idx_audit_alerts_audit")
+  @@index([scheduleId], name: "idx_audit_alerts_schedule")
+  @@index([createdAt], name: "idx_audit_alerts_created")
+  @@map("audit_alerts")
 }
