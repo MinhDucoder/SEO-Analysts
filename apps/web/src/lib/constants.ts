@@ -16,7 +16,7 @@ export const ROUTES = {
   forgotPassword: "/forgot-password",
   resetPassword: (token: string) => `/reset-password/${token}`,
   verifyEmail: (token: string) => `/verify-email/${token}`,
-  oauthSuccess: "/oauth-success",
+  oauthSuccess: "/auth/oauth-success",
 
   // App (slugs 3-7)
   dashboard: "/dashboard",
