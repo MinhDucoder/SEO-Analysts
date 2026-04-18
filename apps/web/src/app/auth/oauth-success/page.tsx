@@ -11,13 +11,17 @@ import { useAuthStore } from "@/lib/auth/store";
 import { ROUTES } from "@/lib/constants";
 import { queryKeys } from "@/lib/queries/keys";
 
+// Force dynamic rendering — `useSearchParams()` requires the request context
+// and cannot be captured during build-time static generation.
+export const dynamic = "force-dynamic";
+
 /**
  * Google OAuth callback target. Gateway redirects here with `?token=<jwt>`
  * per apps/gateway/src/auth/controllers/auth.controller.ts:148-149.
  * Hydrate the store by stashing the token and fetching /auth/me, then send
  * the user to /dashboard. Any failure falls back to /login with a toast.
  */
-export default function OAuthSuccessPage() {
+function OAuthSuccessInner() {
   const router = useRouter();
   const params = useSearchParams();
   const queryClient = useQueryClient();
@@ -56,5 +60,22 @@ export default function OAuthSuccessPage() {
         <Skeleton className="h-4 w-56" />
       </div>
     </AuthFormShell>
+  );
+}
+
+export default function OAuthSuccessPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <AuthFormShell title="Đang xác thực..." description="Vui lòng chờ trong giây lát.">
+          <div className="flex flex-col items-center gap-2 py-4">
+            <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-4 w-56" />
+          </div>
+        </AuthFormShell>
+      }
+    >
+      <OAuthSuccessInner />
+    </React.Suspense>
   );
 }
