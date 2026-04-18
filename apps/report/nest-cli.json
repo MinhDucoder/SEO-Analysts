@@ -5,8 +5,8 @@
   "compilerOptions": {
     "deleteOutDir": false,
     "assets": [
-      { "include": "generated/**/*", "watchAssets": true },
-      { "include": "pdf/templates/**/*", "watchAssets": true }
+      { "include": "infra/prisma/generated/**/*", "watchAssets": true },
+      { "include": "infra/pdf/templates/**/*", "watchAssets": true }
     ]
   }
 }
