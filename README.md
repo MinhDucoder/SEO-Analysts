@@ -18,7 +18,7 @@
 [![BullMQ](https://img.shields.io/badge/BullMQ-5.25-DC382D)](https://docs.bullmq.io/)
 [![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 
-[Features](#-features) · [Architecture](#-architecture) · [Quick Start](#-quick-start) · [Usage](#-usage) · [Docs](./docs/design/) · [PRD](./docs/PRD.md)
+[Features](#-features) · [Architecture](#-architecture) · [Quick Start](#-quick-start) · [Usage](#-usage) · **[User Guide](./docs/USER-GUIDE.md)** · [Docs](./docs/design/) · [PRD](./docs/PRD.md)
 
 ---
 
@@ -461,6 +461,7 @@ cd apps/crawler && npx vitest --watch           # Watch mode
 
 | Doc | Mục đích | Audience |
 |---|---|---|
+| [USER-GUIDE.md](./docs/USER-GUIDE.md) | **User guide** — cách tối ưu SEO + dùng 4 mode audit + fix từng rule + monitoring strategy | End user, SEO freelancer, SME owner |
 | [PRD.md](./docs/PRD.md) | Product Requirements (v1.1) — 22 rule detail, data model, API surface | Product owner, dev onboard |
 | [docs/design/00-system-overview.md](./docs/design/00-system-overview.md) | Big picture: 5 service, công nghệ, data flow 1 audit | Dev, giảng viên chấm |
 | [docs/design/01-05](./docs/design/) | Chi tiết từng service | Dev |
