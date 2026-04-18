@@ -1,8 +1,15 @@
-# PRD - SEO Analyst Platform v1.0
+# PRD - SEO Analyst Platform v1.1
 
 > Product Requirement Document
 > Chuyển đổi từ: SEO_Report_v2.docx (Đồ án tốt nghiệp - ĐH GTVT)
-> Ngày tạo: 2026-04-09
+> Ngày tạo: 2026-04-09 · **Cập nhật lớn 2026-04-18 (Tier 1 Upgrade)**
+
+## Changelog
+
+| Version | Date | Notes |
+|---|---|---|
+| v1.0 | 2026-04-09 | MVP từ doc gốc: 1 URL audit, 20 rule, 1 Lighthouse run (mobile) |
+| **v1.1** | **2026-04-18** | **Tier 1 Upgrade** — thêm F1 site-wide crawl, F2 scheduled audits, F3 readability rule, F4 broken-link audit, F5 dual mobile+desktop Lighthouse. Số rule 20 → **22**. Thêm 3 bảng mới (`PageAudit`, `ScheduledAudit`, `AuditAlert`), 5 queue mới, 7 REST endpoint mới. Xem Section **5b** và Section **19**. |
 
 ---
 
@@ -22,7 +29,10 @@ Nghịch lý: **người cần SEO nhất lại khó tiếp cận công cụ SEO
 Nền tảng phân tích SEO website tự động:
 - **Miễn phí** cho mức cá nhân
 - **Giao diện đơn giản**, tập trung vào SEO on-page cốt lõi
-- **20 rule SEO** với scoring và gợi ý cải thiện cụ thể
+- **22 rule SEO** với scoring và gợi ý cải thiện cụ thể (v1.1: +readability +broken_links)
+- **Hai chế độ audit**: 1 URL (single) hoặc toàn domain (site-wide qua sitemap — v1.1 F1)
+- **Lịch cron định kỳ** với regression alert tự động (v1.1 F2)
+- **Dual Lighthouse** mobile + desktop song song (v1.1 F5)
 - **Realtime progress** qua WebSocket
 - **Xuất PDF** để chia sẻ
 - Chi phí vận hành **< 40 USD/tháng**
@@ -34,22 +44,28 @@ Nền tảng phân tích SEO website tự động:
 3. **Speed**: Phân tích xong trong < 10 giây (Cheerio) hoặc < 30 giây (Playwright)
 4. **Transparency**: Score tính theo trọng số rõ ràng, user biết tại sao điểm thấp
 
-### 1.4. Phạm vi MVP (v1.0)
+### 1.4. Phạm vi MVP
 
-**Trong phạm vi:**
-- Phân tích SEO on-page (20 rule)
-- Core Web Vitals (LCP, FID/INP, CLS) via Lighthouse
-- Keyword density analysis
-- Lịch sử audit & so sánh
-- Xuất PDF
+**v1.0 (đã release 2026-04-17):**
+- Phân tích SEO on-page (20 rule, mobile Lighthouse)
+- Core Web Vitals (LCP, INP, CLS) via Lighthouse
+- Keyword density analysis (VI/EN)
+- 1-URL audit on-demand, lịch sử audit, so sánh, xuất PDF
 - Admin panel
 
-**NGOÀI phạm vi:**
+**v1.1 bổ sung (2026-04-18 — Tier 1):**
+- **F1 Site-wide crawl**: audit toàn domain qua robots.txt → sitemap.xml, max 5000 URL
+- **F2 Scheduled audits**: lịch cron định kỳ + regression alert (score drop ≥10 hoặc site down)
+- **F3 Readability rule**: Flesch-Kincaid cho tiếng Anh (skip VN vì monosyllabic)
+- **F4 Broken-link audit**: HEAD/GET fallback, redirect chain, internal broken = FAIL
+- **F5 Dual Lighthouse**: mobile + desktop song song
+
+**NGOÀI phạm vi (Tier 2+):**
 - Backlink / Off-page SEO
-- Keyword research đối thủ
-- Deep crawl (multi-page)
+- Keyword research đối thủ, rank tracking
 - AI/ML content suggestions
-- Multi-language NLP (chỉ hỗ trợ English + Vietnamese cơ bản)
+- Multi-tenant / white-label
+- Alert delivery transport (email/webhook/Slack) — MVP chỉ ghi `AuditAlert` row, hiển thị trong UI
 
 ---
 
@@ -422,9 +438,11 @@ Chạy Lighthouse programmatically (lighthouse npm package)
 
 ---
 
-### Feature 5: SEO Rule Engine (20 Rules)
+### Feature 5: SEO Rule Engine (22 Rules — post-Tier 1)
 
-**Mô tả**: Bộ 20 rule phân tích SEO on-page, mỗi rule trả về pass/warn/fail + score + message + suggestion.
+**Mô tả**: Bộ 22 rule phân tích SEO on-page, mỗi rule trả về pass/warn/fail + score + message + suggestion.
+
+> **v1.1 note:** Tăng từ 20 → 22 rule. Bổ sung `readability` (F3, category=content) và `broken_links` (F4, category=links). Category `content` là category mới thêm Tier 1.
 
 **Rule Interface**:
 ```typescript
@@ -440,7 +458,7 @@ interface RuleResult {
 }
 ```
 
-**20 Rules chi tiết**:
+**22 Rules chi tiết**:
 
 | # | Rule Name | Category | Check Logic | Pass | Warn | Fail | Weight | Suggestion khi fail |
 |---|-----------|----------|-------------|------|------|------|--------|-------------------|
@@ -464,11 +482,154 @@ interface RuleResult {
 | 18 | url_structure | technical | URL short, readable, contains keyword | Short + keyword | Long but readable | Query params, unreadable | 4 | "Tối ưu URL: ngắn gọn, chứa từ khóa, dùng dấu gạch ngang" |
 | 19 | language_tag | technical | `<html lang="...">` declared | Present | - | Missing | 3 | "Thêm thuộc tính lang vào thẻ html (e.g., lang='vi')" |
 | 20 | favicon | technical | favicon.ico or `<link rel="icon">` present | Present | - | Missing | 2 | "Thêm favicon cho website" |
+| 21 | readability (F3) | content | Flesch Reading Ease cho tiếng Anh (skip vi) | FRE ≥ 60 | 30 ≤ FRE < 60 | FRE < 30 | 4 | "Viết câu ngắn hơn, dùng từ ít âm tiết. Target FRE 60-70 (Plain English)" |
+| 22 | broken_links (F4) | links | Dùng `LinkInfo.statusCode` do LinkChecker populate | All 2xx/3xx or no checks | External 4xx/5xx only | Any internal 4xx/5xx | 7 | "Fix internal broken links (hại crawl budget). Replace or remove external broken links" |
 
 **Business Rules**:
 - BR-17: Admin có thể thay đổi weight của từng rule
 - BR-18: Nếu targetKeyword không được cung cấp, rule H1 check chỉ kiểm tra sự tồn tại
 - BR-19: Rule results được lưu riêng từng row trong audit_results (dễ query, filter)
+- BR-17b (v1.1): `broken_links` rule skip PASS khi `includeLinkChecks=false` (mọi `statusCode=0`)
+- BR-17c (v1.1): `readability` rule skip PASS khi `html[lang]=vi` hoặc text < 30 từ
+
+---
+
+## 5b. Tier 1 Upgrade Features (v1.1)
+
+5 feature mới thêm vào platform trong Tier 1 (2026-04-18). Mỗi feature có user-facing capability + kiến trúc impl tóm tắt; chi tiết xem [docs/design/](design/) và [docs/TIER1-ARCHITECTURE.md](TIER1-ARCHITECTURE.md).
+
+### Feature 18: Site-wide Crawl (F1) — CORE FEATURE
+
+**User Story:** *As a user, I want to audit my entire website (not just 1 URL) so that I can see which pages are dragging my domain SEO score down.*
+
+**Preconditions:** User đã đăng nhập, domain có `sitemap.xml` hoặc `robots.txt` trỏ tới sitemap.
+
+**Main Flow:**
+1. User click "Audit toàn site" → chọn mode=site, maxUrls (default 500, max 5000).
+2. `POST /audits { url: "https://example.com", mode: "site", maxUrls: 500 }`
+3. Backend tạo Audit row mode=site, enqueue BullMQ `site-crawl.start`.
+4. `SiteCrawlStartWorker` discover URL qua chain: robots.txt → sitemap index → sub-sitemaps.
+   - Tuân thủ chuẩn [sitemaps.org](https://sitemaps.org): max 50k URL/sitemap file, 50MB, recursion depth ≤ 2.
+   - Cap tại `maxUrls` hoặc `HARD_CAP_MAX_URLS_PER_AUDIT=5000`.
+5. Fan-out N job `site-crawl.url-audit` (1 job/URL).
+6. Mỗi `UrlAuditWorker`: crawl (skip Lighthouse) → gRPC `AnalyzePage` → publish `page-audit.done` → `SiteCrawlCounter.markDone`.
+7. Khi counter complete → enqueue `site-crawl.aggregate` → compute avg, median, top-10 worst pages → publish `site-crawl.done`.
+8. Gateway `SiteCrawlSubscriber` nhận event → finalize Audit (status=COMPLETED, seoScore=avgScore) + emit WebSocket `audit:completed` với summary.
+
+**Edge Cases:**
+- Sitemap >50k URL → truncate tại 5000, flag `truncated=true` trong metadata
+- Sitemap index depth > 2 → skip deeper, log warning
+- robots.txt chặn crawl → fail gracefully với error "Site blocks crawlers"
+- Một URL riêng lẻ fail → record score=0, audit vẫn complete (graceful degradation)
+
+**Business Rules:**
+- BR-36: `maxUrls` cap tại 5000 (`HARD_CAP_MAX_URLS_PER_AUDIT`)
+- BR-37: Per-URL audit skip Lighthouse (quá đắt cho N URL)
+- BR-38: Per-URL analyze qua gRPC sync (không qua BullMQ để tránh flood queue)
+
+---
+
+### Feature 19: Scheduled Audits + Regression Alert (F2) — CORE FEATURE
+
+**User Story:** *As an SEO freelancer, I want to schedule weekly audits of my client's websites so that I get alerted when their SEO score drops.*
+
+**Preconditions:** User đã đăng nhập.
+
+**Main Flow (tạo lịch):**
+1. User click "Tạo lịch audit" → chọn URL, cron (ví dụ "0 9 * * MON" = 9h sáng thứ Hai), mode, maxUrls.
+2. `POST /scheduled-audits { url, cron, mode, maxUrls? }`
+3. Backend insert `ScheduledAudit` row + `upsertJobScheduler` vào BullMQ với key `sched:<userId>:<scheduleId>`.
+
+**Main Flow (khi cron fire):**
+1. BullMQ Job Scheduler fire → enqueue `scheduled-audit.tick`.
+2. `ScheduledAuditTickWorker`: tạo Audit row mới cho user + Redis map `audit:<newAuditId>:schedule → <scheduleId>` (TTL 24h).
+3. Enqueue `crawl.start` hoặc `site-crawl.start` tùy mode → chạy pipeline bình thường.
+4. Khi audit xong, publish `report.done` / `site-crawl.done`.
+5. `RegressionDetectorService` listen 2 channel → đọc Redis map → so sánh `newScore` với `ScheduledAudit.lastScore`:
+   - Nếu `newScore === 0` → ghi `AuditAlert` type=`site_down`
+   - Nếu `lastScore - newScore ≥ 10` (SCORE_DROP_THRESHOLD) → ghi `AuditAlert` type=`score_drop`, deltaScore
+   - Update `ScheduledAudit.lastScore = newScore`.
+
+**Lifecycle:**
+- Pause: `PATCH /scheduled-audits/:id/pause` → `removeJobScheduler` + `isActive=false`
+- Resume: `PATCH /scheduled-audits/:id/resume` → `upsertJobScheduler` + `isActive=true`
+- Delete: `DELETE /scheduled-audits/:id` → cascade row + scheduler
+- Boot reconcile: `ScheduledAuditsService.onModuleInit` re-register toàn bộ lịch `isActive=true` (tránh mất state khi Redis restart)
+
+**Edge Cases:**
+- Cron sai format → validation error 400 (class-validator regex check 5-field)
+- User xoá account → CASCADE xoá ScheduledAudit + AuditAlert rows
+- Scheduler fire nhưng DB row mất (drift) → `TickWorker` skip gracefully
+- 2 cron fire gần nhau (ví dụ mỗi phút) → BullMQ Job Scheduler dedupe; MVP yêu cầu `MIN_CRON_INTERVAL_MINUTES=15`
+
+**Business Rules:**
+- BR-39: Cron tối thiểu 15 phút/lần (chống abuse)
+- BR-40: SCORE_DROP_THRESHOLD = 10 điểm (có thể config tương lai)
+- BR-41: AuditAlert.sentAt nullable — MVP chưa gửi email/webhook, UI hiển thị alert list
+- BR-42: Pause schedule KHÔNG xoá AuditAlert history
+
+---
+
+### Feature 20: Readability Rule (F3)
+
+**User Story:** *As a content writer, I want to see Flesch-Kincaid score so that I know if my content is easy to read for my audience.*
+
+**Main Flow:**
+- Analyzer chạy trên `PageData.textContent` + `PageData.language` (auto-detect từ `<html lang>`).
+- Nếu `lang=en` và text ≥ 30 words: tính Flesch Reading Ease + Flesch-Kincaid Grade
+- Nếu `lang=vi` hoặc text < 30 words: skip PASS với `metadata.applicable=false`
+- Scoring: FRE ≥ 60 → PASS (Plain English), 30-59 → WARN, <30 → FAIL
+
+**Tại sao skip VN?** Flesch formula được thiết kế cho English phonology. Tiếng Việt monosyllabic (mỗi tiếng = 1 âm tiết), công thức Flesch không áp dụng trực tiếp. Thay thế cho VN có thể tính avg-words-per-sentence, nhưng scope MVP skip.
+
+---
+
+### Feature 21: Broken-link Audit (F4, opt-in)
+
+**User Story:** *As a site owner, I want to detect broken links on my pages so that I can fix them before Google crawl budget is wasted.*
+
+**Main Flow:**
+1. User request: `POST /audits { url, includeLinkChecks: true }`
+2. Crawler sau khi extract PageData, collect tất cả `<a href>` (internal + external)
+3. `LinkChecker.checkAll(hrefs)`:
+   - HEAD-first với GET fallback khi server trả 405/501
+   - Follow redirect manual (max 5 hop), record redirect chain
+   - Timeout 5s/request, concurrency 10 global + 2 per-host (tránh DDoS domain đối tác)
+   - Trả `LinkCheckResult[]` với `reason: HTTP_4XX | HTTP_5XX | NETWORK | TIMEOUT | TOO_MANY_REDIRECTS`
+4. Orchestrator ghi `statusCode` ngược vào `LinkInfo` (reuse existing field, không cần proto change)
+5. Analyzer rule `broken_links` đọc `LinkInfo.statusCode` → FAIL nếu internal broken, WARN nếu external broken
+
+**Edge Cases:**
+- URL 429 rate-limited → retry 1 lần với backoff 2s
+- Redirect loop (A→B→A) → detect qua visited set, mark TOO_MANY_REDIRECTS
+- Cloudflare chặn HEAD → fallback GET tự động
+
+**Business Rules:**
+- BR-43: Opt-in only (`includeLinkChecks: true` trong request body) — mặc định tắt vì thêm N HTTP request
+- BR-44: Per-host concurrency cap 2 → không bị xem là DDoS
+- BR-45: Internal broken = FAIL (hại crawl budget); external broken = WARN (chỉ UX)
+
+---
+
+### Feature 22: Dual Mobile + Desktop Lighthouse (F5)
+
+**User Story:** *As a site owner, I want to see both mobile and desktop Core Web Vitals so that I can compare performance across form factors.*
+
+**Main Flow:**
+- `CrawlerOrchestrator.crawl` chạy `LighthouseRunner.runBoth(url)` thay vì 1 run
+- Mobile: Slow 4G (1.6Mbps/150ms RTT) + 4× CPU throttle + viewport 412×823 (preset default)
+- Desktop: Cable (10Mbps) + no CPU throttle + viewport 1350×940 (preset=desktop)
+- 2 run mặc định chạy **tuần tự** (protect low-RAM 1GB Railway instances)
+- Env flag `LIGHTHOUSE_PARALLEL=true` → Promise.all cả 2 (cần ≥2GB RAM)
+- Kết quả lưu vào 10 cột mới trên `audits` table: `mobileScore/mobileLcpMs/mobileFcpMs/mobileClsScore/mobileInpMs` + `desktopScore/desktopLcpMs/desktopFcpMs/desktopClsScore/desktopInpMs`
+
+**Edge Cases:**
+- 1 form factor fail (vd desktop crash) → store partial, mobile vẫn có
+- OOM → sequential mode default đã prevent
+
+**Business Rules:**
+- BR-46: Mobile score = primary SEO score (Google mobile-first indexing từ 2021)
+- BR-47: Desktop cột nullable — backward compat với audit v1.0 chỉ có mobile
 
 ---
 
@@ -827,6 +988,14 @@ interface RuleResult {
 | FR-27 | Quên mật khẩu (reset password via email) | Medium | Feature 16 |
 | FR-28 | Lọc audit theo score/status/date | Medium | Feature 8 |
 | FR-29 | Tìm kiếm audit theo URL | Medium | Feature 8 |
+| FR-30 (v1.1) | Audit site-wide từ sitemap.xml với `mode=site` + `maxUrls` (max 5000) | High | Feature 18 |
+| FR-31 (v1.1) | Lưu per-URL results (`PageAudit` rows) cho site audit | High | Feature 18 |
+| FR-32 (v1.1) | Tạo/list/pause/resume/xoá lịch cron audit định kỳ | Medium | Feature 19 |
+| FR-33 (v1.1) | Phát hiện regression (score drop ≥10 hoặc score=0) → ghi `AuditAlert` row | Medium | Feature 19 |
+| FR-34 (v1.1) | Readability rule (Flesch-Kincaid) cho tiếng Anh | Medium | Feature 20 |
+| FR-35 (v1.1) | Broken-link audit opt-in (`includeLinkChecks=true`) với HEAD/GET fallback, redirect chain | Medium | Feature 21 |
+| FR-36 (v1.1) | Dual mobile + desktop Lighthouse cho mỗi single-mode audit | High | Feature 22 |
+| FR-37 (v1.1) | WebSocket `audit:completed` payload có thêm `summary` cho site-mode | High | Feature 18 |
 
 ---
 
@@ -961,10 +1130,87 @@ interface RuleResult {
 | id | UUID | PK | |
 | name | VARCHAR(100) | UNIQUE, NOT NULL | e.g. 'title_tag' |
 | display_name | VARCHAR(100) | NOT NULL | e.g. 'Title Tag' |
-| category | VARCHAR(50) | NOT NULL | |
+| category | VARCHAR(50) | NOT NULL | v1.1: thêm category 'content' |
 | weight | INTEGER | NOT NULL, CHECK(1-10) | Admin-configurable |
 | is_enabled | BOOLEAN | DEFAULT true | |
 | updated_at | TIMESTAMPTZ | DEFAULT NOW() | |
+
+**Seed v1.1:** 22 rows (thêm `readability`, `broken_links`).
+
+### 8.8 Entity: audits — bổ sung v1.1 columns
+
+Các cột mới thêm vào bảng `audits` trong Tier 1:
+
+| Column | Type | Notes |
+|---|---|---|
+| mode | ENUM('single','site') | Default 'single'. Site mode → fan-out site-wide audit |
+| discovered_urls_count | INTEGER NULLABLE | Tổng URL discover được (site mode) |
+| audited_urls_count | INTEGER NULLABLE | URL audit thành công (site mode) |
+| mobile_score | INTEGER NULLABLE | F5 Lighthouse mobile score 0-100 |
+| mobile_lcp_ms | INTEGER NULLABLE | F5 |
+| mobile_fcp_ms | INTEGER NULLABLE | F5 |
+| mobile_cls_score | DOUBLE PRECISION NULLABLE | F5 |
+| mobile_inp_ms | INTEGER NULLABLE | F5 |
+| desktop_score | INTEGER NULLABLE | F5 Lighthouse desktop score 0-100 |
+| desktop_lcp_ms | INTEGER NULLABLE | F5 |
+| desktop_fcp_ms | INTEGER NULLABLE | F5 |
+| desktop_cls_score | DOUBLE PRECISION NULLABLE | F5 |
+| desktop_inp_ms | INTEGER NULLABLE | F5 |
+
+### 8.9 Entity: page_audits (v1.1 — F1)
+
+One row per URL crawled trong site-mode audit. Single-mode → table rỗng.
+
+| Column | Type | Constraints | Notes |
+|---|---|---|---|
+| id | UUID | PK | |
+| audit_id | UUID | FK audits.id CASCADE | |
+| url | TEXT | NOT NULL | |
+| score | INTEGER | NOT NULL | 0-100 |
+| issues | JSONB | NOT NULL DEFAULT '[]' | Array snapshot từ analyzer |
+| fetched_at | TIMESTAMPTZ | DEFAULT NOW() | |
+
+**Indexes:** `idx_page_audits_audit(audit_id)`, `idx_page_audits_score(score)` (filter worst 10).
+
+### 8.10 Entity: scheduled_audits (v1.1 — F2)
+
+Lịch cron định kỳ do user sở hữu.
+
+| Column | Type | Constraints | Notes |
+|---|---|---|---|
+| id | UUID | PK | |
+| user_id | UUID | FK users.id CASCADE | |
+| url | TEXT | NOT NULL | |
+| cron | VARCHAR(255) | NOT NULL | 5-field: "minute hour dom month dow" |
+| mode | ENUM AuditMode | DEFAULT 'single' | |
+| max_urls | INTEGER NULLABLE | Site-mode cap | |
+| target_keyword | VARCHAR(255) NULLABLE | | |
+| last_run_at | TIMESTAMPTZ NULLABLE | Set bởi TickWorker | |
+| last_score | INTEGER NULLABLE | Set bởi RegressionDetector | |
+| is_active | BOOLEAN | DEFAULT true | false = paused, remove scheduler |
+| created_at | TIMESTAMPTZ | DEFAULT NOW() | |
+| updated_at | TIMESTAMPTZ | | |
+
+**Indexes:** `idx_scheduled_audits_user(user_id)`, `idx_scheduled_audits_active(is_active)`.
+
+### 8.11 Entity: audit_alerts (v1.1 — F2)
+
+Alert do `RegressionDetectorService` ghi.
+
+| Column | Type | Constraints | Notes |
+|---|---|---|---|
+| id | UUID | PK | |
+| audit_id | UUID | FK audits.id CASCADE | |
+| schedule_id | UUID NULLABLE | FK scheduled_audits.id SET NULL | Null cho one-off audits |
+| type | ENUM AlertType | NOT NULL | score_drop \| new_issues \| site_down |
+| delta_score | INTEGER NULLABLE | Dùng cho score_drop | |
+| message | TEXT | NOT NULL | |
+| sent_at | TIMESTAMPTZ NULLABLE | Null = chưa gửi email/webhook | |
+| created_at | TIMESTAMPTZ | DEFAULT NOW() | |
+
+**Indexes:** `idx_audit_alerts_audit`, `idx_audit_alerts_schedule`, `idx_audit_alerts_created`.
+
+**Migration:** [apps/gateway/prisma/migrations/20260418140000_add_scheduled_audits/migration.sql](../apps/gateway/prisma/migrations/20260418140000_add_scheduled_audits/migration.sql)
 
 ---
 
@@ -990,15 +1236,36 @@ interface RuleResult {
 
 | Method | Endpoint | Auth | Description | Request/Query | Response |
 |--------|----------|------|-------------|--------------|----------|
-| POST | /api/v1/audits | JWT | Create audit | `{url, targetKeyword?}` | 202: `{auditId, status}` |
+| POST | /api/v1/audits | JWT | Create audit | `{url, mode?:'single'\|'site', targetKeyword?, maxUrls?, includeLinkChecks?}` | 202: `{auditId, status, mode}` |
 | GET | /api/v1/audits | JWT | List user's audits | `?page&limit&sort&order&search&scoreMin&scoreMax&status&dateFrom&dateTo` | 200: `{data[], total, page, limit}` |
-| GET | /api/v1/audits/:id | JWT | Get audit detail | - | 200: `{audit, results[], keywords[]}` |
+| GET | /api/v1/audits/:id | JWT | Get audit detail | - | 200: `{audit, results[], keywords[], pageAudits?[], siteSummary?}` |
 | GET | /api/v1/audits/:id/status | JWT | Get audit progress | - | 200: `{status, progress, stage}` |
 | DELETE | /api/v1/audits/:id | JWT | Delete audit | - | 204 |
 | GET | /api/v1/audits/:id/export | JWT | Export PDF | `?format=pdf` | 200: application/pdf |
 | GET | /api/v1/audits/compare | JWT | Compare 2 audits | `?audit1&audit2` | 200: `{delta, improvements[], regressions[]}` |
 | POST | /api/v1/audits/:id/share | JWT | Create share link | - | 201: `{shareToken, shareUrl}` |
 | DELETE | /api/v1/audits/:id/share | JWT | Revoke share link | - | 204 |
+
+**v1.1 Body mới:**
+- `mode` (enum `single`\|`site`, default `single`) — F1
+- `maxUrls` (1-5000, chỉ dùng `mode=site`) — F1
+- `includeLinkChecks` (boolean, default false) — F4
+
+### 9.2b Scheduled Audits (v1.1 — F2)
+
+| Method | Endpoint | Auth | Description | Request/Query | Response |
+|--------|----------|------|-------------|--------------|----------|
+| POST | /api/v1/scheduled-audits | JWT | Tạo lịch cron | `{url, cron, mode?, maxUrls?, targetKeyword?}` | 201: `{id, ..., isActive: true}` |
+| GET | /api/v1/scheduled-audits | JWT | List lịch của user | - | 200: `[{id, url, cron, lastRunAt, lastScore, isActive, ...}]` |
+| GET | /api/v1/scheduled-audits/:id | JWT | Detail lịch | - | 200: `{schedule}` |
+| PATCH | /api/v1/scheduled-audits/:id/pause | JWT | Pause (removeJobScheduler) | - | 200: `{..., isActive: false}` |
+| PATCH | /api/v1/scheduled-audits/:id/resume | JWT | Resume (upsertJobScheduler) | - | 200: `{..., isActive: true}` |
+| DELETE | /api/v1/scheduled-audits/:id | JWT | Xoá lịch | - | 204 |
+
+**Validation:**
+- `cron`: regex 5-field `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`, ví dụ `"0 9 * * MON"` (thứ Hai 9h sáng)
+- `maxUrls`: 1-5000
+- `targetKeyword`: max 255 chars
 
 ### 9.3 Shared (Public)
 
@@ -1027,9 +1294,16 @@ interface RuleResult {
 
 | Event | Direction | Payload | Description |
 |-------|-----------|---------|-------------|
-| `audit.progress` | Server→Client | `{auditId, progress, stage}` | Progress update |
-| `audit.completed` | Server→Client | `{auditId, progress:100, score, summary}` | Audit done |
-| `audit.failed` | Server→Client | `{auditId, error}` | Audit failed |
+| `audit:progress` | Server→Client | `{auditId, progress: 0-100, stage, message?}` | Progress update. Stage bao gồm `crawling`, `analyze`, `report`, và v1.1 F1 stages: `site-crawl-discovery`, `site-crawl-fanout`, `site-crawl-audit`, `site-crawl-done` |
+| `audit:completed` (single) | Server→Client | `{auditId, finalScore}` | Single-mode audit done |
+| `audit:completed` (site, v1.1) | Server→Client | `{auditId, finalScore, summary: { rootUrl, totalUrls, auditedUrls, failedUrls, avgScore, medianScore, worstPages: [{ url, score, issueCount, error? }] }}` | Site-mode audit done — payload thêm `summary` do `SiteCrawlSubscriber` emit |
+| `audit:failed` | Server→Client | `{auditId, error}` | Audit failed |
+
+**Client-side events (Server nhận):**
+| Event | Payload | Mô tả |
+|---|---|---|
+| `audit:subscribe` | `{ auditId }` | Join room `audit:<id>` để nhận progress |
+| `audit:unsubscribe` | `{ auditId }` | Leave room |
 
 ### 9.7 Error Response Format (RFC 7807)
 ```json
@@ -1102,4 +1376,35 @@ interface RuleResult {
 
 ---
 
-*PRD Version: 1.0 | Generated: 2026-04-09 | Source: SEO_Report_v2.docx*
+---
+
+## 19. Tier 1 Upgrade Delivery Log (v1.1)
+
+Tham chiếu triển khai Tier 1 trong repo:
+
+| Feature | Commits (git log) | Tests added | Key files |
+|---|---|---|---|
+| F1 Site-wide crawl | `4140792` (PageAuditResultStore) · `7a384a2` (UrlAuditWorker) · `8f8a5fc` (SiteCrawlAggregateWorker) · `acd806a` (gateway subscribers) · `2b5e005` (POST /audits routing) · `76ac1b1` (e2e) | +50 | [apps/crawler/src/crawler/controllers/site-crawl-start.worker.ts](../apps/crawler/src/crawler/controllers/site-crawl-start.worker.ts), [apps/gateway/src/audits/services/site-crawl-subscriber.service.ts](../apps/gateway/src/audits/services/site-crawl-subscriber.service.ts) |
+| F2 Scheduled audits | `0368db5` (migration) · `96ed8f0` (service + worker + detector) | +28 | [apps/gateway/src/scheduled-audits/](../apps/gateway/src/scheduled-audits/) |
+| F3 Readability | `9834858` (pre-Tier-1 lineage) | +11 | [apps/seo-analyzer/src/analyzer/domain/rules/content/readability.rule.ts](../apps/seo-analyzer/src/analyzer/domain/rules/content/readability.rule.ts) |
+| F4 Broken links | `ac56422` (LinkChecker + shared) · `aa91614` (orchestrator integration) · `c332852` (analyzer rule) | +18 | [apps/crawler/src/crawler/infra/fetchers/link-checker.ts](../apps/crawler/src/crawler/infra/fetchers/link-checker.ts), [apps/seo-analyzer/src/analyzer/domain/rules/links/broken-links.rule.ts](../apps/seo-analyzer/src/analyzer/domain/rules/links/broken-links.rule.ts) |
+| F5 Dual Lighthouse | `6605b66` · `658feda` · `87529d3` · `ce79b44` (pre-Tier-1 lineage) | +15 | [apps/crawler/src/crawler/services/lighthouse-runner.ts](../apps/crawler/src/crawler/services/lighthouse-runner.ts) |
+
+**Monorepo gates sau Tier 1:**
+
+| Gate | Result |
+|---|---|
+| `turbo run check-types` | 8/8 services pass |
+| `turbo run test` | 448 tests (+127 từ v1.0 baseline) |
+| `turbo run build` | 7/7 services build |
+| `turbo run lint` | 0 errors (warnings only) |
+
+**Planning docs cho Tier 1:**
+- [docs/TIER1-BRAINSTORM.md](TIER1-BRAINSTORM.md) — research + 20+ nguồn uy tín
+- [docs/TIER1-ARCHITECTURE.md](TIER1-ARCHITECTURE.md) — architecture lock-in, queue topology, DB schema
+- [docs/TIER1-SUBPHASE1-PLAN.md](TIER1-SUBPHASE1-PLAN.md) — sub-phase 1 plan (F3 + F5)
+- [docs/TIER1-SESSION-CONTEXT.md](TIER1-SESSION-CONTEXT.md) — resume point tracking
+
+---
+
+*PRD Version: 1.1 | Generated: 2026-04-09 | Tier 1 update: 2026-04-18 | Source: SEO_Report_v2.docx + Tier 1 architecture lock-in*
