@@ -7,7 +7,7 @@ phases:
   "0": done
   "1": done
   "2": done
-  "3": pending
+  "3": done
   "4": pending
   "5": pending
 ---
@@ -18,8 +18,8 @@ phases:
 |---|---|---|---|
 | 0 | DESIGN-INPUT.md | done | aca09ac |
 | 1 | ONBOARD.md | done | e2f05ce |
-| 2 | MAPPING.md | done | (this commit) |
-| 3 | PLAN.md | pending | — |
+| 2 | MAPPING.md | done | c84bfbb |
+| 3 | PLAN.md | done | (this commit) |
 | 4 | BUILD-LOG.md | pending | — |
 | 5 | REVIEW.md | pending | — |
 
