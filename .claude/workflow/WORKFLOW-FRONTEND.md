@@ -83,6 +83,7 @@ Upstream `/prepare-design` is optional — you can hand-author design files in `
 | 1 | Type check | `npm run type-check` (all workspaces) | Always |
 | 2 | Lint | `npm run lint --filter=web` | Always |
 | 3 | Unit tests | `npm run test --filter=web` | Always |
+| 3b | **FE test harness** (MSW + Playwright + RTL wired?) | Invoke skill [`fe-test-harness`](../skills/fe-test-harness/SKILL.md) if BUILD-LOG marks tests deferred, OR `apps/web/tests/msw/` missing, OR slug introduces auth-aware page without regression test. Produces 1 atomic harness commit. | Any FE slug where Gate 3 surfaces "tests deferred" / "needs MSW" / "needs router mocks" in BUILD-LOG Deviations |
 | 4 | Proto typecheck | `npm run build --filter=@repo/proto && npm run type-check` | Only if `packages/proto` touched OR `@repo/proto` consumer touched |
 | 5 | gRPC + HTTP smoke | `npm run e2e:smoke` | Only if gateway controller / service touched |
 | 6 | Staff-eng code review | `/review` (GStack) | Medium + Large |
@@ -134,12 +135,14 @@ If Phase 5 fails:   fix failing file(s), re-run only the failed gate, max 2 retr
 - **Missing backend** → Phase 2 HALT with pointer to backend workflow.
 - **Proto break detected** → auto-upgrade tier to Large + `proto-breaking`, force gates 4+5+6 in Phase 5.
 - **Gate failure** → return to Phase 4, fix only offending files, re-run only failed gate. Max 2 retries. Third failure → STOP, write blocker to REVIEW.md, ask user.
+- **Tests deferred in BUILD-LOG** → Gate 3b triggers skill [`fe-test-harness`](../skills/fe-test-harness/SKILL.md) AFTER Phase 5 closes (1 harness-first commit, reusable for next slug). Do NOT defer harness into the next slug's scaffolding — must be its own debt-paying commit.
 - **Mid-build scope growth** → STOP → re-classify → re-run Phase 2 with augmented description → proceed. Committed files kept.
 
 ## Interaction with other skills
 
 **Upstream (called by `/prepare-design`):** `/office-hours`, `/design-consultation`, `/design-shotgun`.
 **Downstream (called by `/claude-design`):** `Agent:Explore`, `superpowers:test-driven-development`, `gsd:execute` (Large only), `/review`, `/design-review`, `/qa`, `/cso`.
+**Post-phase (debt-paying):** [`fe-test-harness`](../skills/fe-test-harness/SKILL.md) — invoked after Phase 5 when BUILD-LOG shows tests deferred OR MSW harness missing. Ships as separate atomic commit, not inside the slug's scaffolding waves. See [SKILL.md](../skills/fe-test-harness/SKILL.md) for 8-step workflow.
 **NOT called** (to avoid duplicate Q&A): `gsd:discuss`, `gsd:plan`, `superpowers:brainstorming`, `gsd:explore`. User can still run them manually for edge cases.
 
 ## See also
