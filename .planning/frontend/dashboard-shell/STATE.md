@@ -7,9 +7,9 @@ phases:
   "0": done
   "1": done
   "2": done
-  "3": in-progress
-  "4": pending
-  "5": pending
+  "3": done
+  "4": done
+  "5": in-progress
 ---
 
 # State
