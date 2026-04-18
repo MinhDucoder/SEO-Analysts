@@ -9,10 +9,11 @@ phases:
   "2": done
   "3": done
   "4": done
-  "5": pending
+  "5": done
+status: complete
 ---
 
-# State: web-bootstrap
+# State: web-bootstrap — ✅ COMPLETE
 
 | Phase | Artifact | Status | Commit |
 |---|---|---|---|
@@ -20,8 +21,8 @@ phases:
 | 1 | ONBOARD.md | done | e2f05ce |
 | 2 | MAPPING.md | done | c84bfbb |
 | 3 | PLAN.md | done | b452991 |
-| 4 | BUILD-LOG.md | done (waves 1-8 green) | final at this commit |
-| 5 | REVIEW.md | pending — quality gates pending (lint/tsc/test passing inline; `/review` + `/design-review` not yet invoked) | — |
+| 4 | BUILD-LOG.md | done (waves 1-8 green) | c87f8d1 |
+| 5 | REVIEW.md | done — gates 1/2/3/6 PASS, 4/5 N/A, 7-10 deferred or skip per PLAN | this commit |
 
 ## Notes
 
