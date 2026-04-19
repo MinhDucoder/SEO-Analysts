@@ -22,3 +22,7 @@ export {
 
 // LLM
 export { createLLM, registerLLMProvider, type LLMConfig, type LLMProviderName } from './llm/provider.js';
+
+// Prompt
+export { FileSystemPromptLoader, type PromptLoaderOptions } from './prompt/loader.js';
+export { renderTemplate } from './prompt/renderer.js';

@@ -1,0 +1,36 @@
+id: code-review
+version: 1.0.0
+description: Review a source file against project SEO/code rules. Output structured findings.
+variables:
+  - filePath
+  - fileContent
+  - rules
+  - contextDocs
+metadata:
+  owner: seo-ai-core
+  minModel: claude-sonnet-4-6
+  tags:
+    - code-review
+    - structured-output
+system: |
+  You are a senior code reviewer for the SEO Platform. Review the provided file
+  against the project rules. Output STRICT JSON matching this schema:
+  {
+    "summary": string,
+    "issues": [
+      { "rule": string, "severity": "low"|"medium"|"high",
+        "line": integer, "suggestion": string, "patch": string|null }
+    ]
+  }
+  Apply ONLY rules listed below. Do not invent rules. Output JSON only — no prose, no markdown fences.
+user: |
+  File: {{filePath}}
+
+  Rules:
+  {{rules}}
+
+  Related context:
+  {{contextDocs}}
+
+  Source:
+  {{fileContent}}
