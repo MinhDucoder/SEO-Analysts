@@ -19,3 +19,6 @@ export {
 } from './errors/index.js';
 
 // Factories + classes appended in T4-T9.
+
+// LLM
+export { createLLM, registerLLMProvider, type LLMConfig, type LLMProviderName } from './llm/provider.js';
