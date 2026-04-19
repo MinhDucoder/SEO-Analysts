@@ -27,10 +27,10 @@ user: |
   File: {{filePath}}
 
   Rules:
-  {{rules}}
+  {{{rules}}}
 
   Related context:
-  {{contextDocs}}
+  {{{contextDocs}}}
 
   Source:
-  {{fileContent}}
+  {{{fileContent}}}

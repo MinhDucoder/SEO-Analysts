@@ -74,4 +74,37 @@ describe('FileSystemPromptLoader', () => {
     expect(warn).not.toHaveBeenCalled();
     warn.mockRestore();
   });
+
+  it('render() rejects vars from prototype (non-own-property) as missing', async () => {
+    class VarBag {
+      get name() { return 'proto-value'; }
+    }
+    const proto = new VarBag();
+    await expect(loader.render('sample', proto as unknown as Record<string, unknown>, { version: '1.0.0' })).rejects.toThrow(PromptError);
+  });
+
+  it('list() warns when a prompt subdir is malformed', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    // Create a malformed prompt file temporarily
+    const malformedDir = path.join(FIXTURES, 'malformed');
+    const malformedFile = path.join(malformedDir, 'v1.0.0.prompt.yaml');
+    const { mkdir, writeFile, rm } = await import('node:fs/promises');
+    await mkdir(malformedDir, { recursive: true });
+    await writeFile(malformedFile, 'id: WRONG_ID\nversion: 1.0.0\nvariables: []\nmetadata: {owner: test}\nuser: "x"\n');
+
+    try {
+      const fresh = new FileSystemPromptLoader({ baseDir: FIXTURES, cache: false });
+      const list = await fresh.list();
+      // sample should still be present
+      expect(list.find((e) => e.id === 'sample')).toBeDefined();
+      // malformed must NOT be present
+      expect(list.find((e) => e.id === 'malformed')).toBeUndefined();
+      // warning must be emitted
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('malformed'));
+    } finally {
+      await rm(malformedDir, { recursive: true, force: true });
+      warn.mockRestore();
+    }
+  });
 });

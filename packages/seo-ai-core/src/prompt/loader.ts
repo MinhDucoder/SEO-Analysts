@@ -54,7 +54,7 @@ export class FileSystemPromptLoader implements IPromptLoader {
   ): Promise<RenderedPrompt> {
     const tpl = await this.load(id, opts.version);
 
-    const missing = tpl.variables.filter((v) => !(v in vars));
+    const missing = tpl.variables.filter((v) => !Object.prototype.hasOwnProperty.call(vars, v));
     if (missing.length) {
       throw new PromptError(
         `Missing variables for ${tpl.id}@${tpl.version}: ${missing.join(', ')}`,
@@ -84,8 +84,10 @@ export class FileSystemPromptLoader implements IPromptLoader {
       try {
         const latest = await this.load(id);
         out.push({ id: latest.id, version: latest.version, metadata: latest.metadata });
-      } catch {
-        // skip malformed prompts in list()
+      } catch (err) {
+        console.warn(
+          `[seo-ai-core] list(): skipping prompt "${id}": ${(err as Error).message}`,
+        );
       }
     }
     return out;
@@ -97,10 +99,20 @@ export class FileSystemPromptLoader implements IPromptLoader {
       throw new PromptError(`Prompt id not found: ${id} (looked in ${dir})`);
     });
 
-    const versions = files
+    const candidates = files
       .filter((f) => f.startsWith('v') && f.endsWith('.prompt.yaml'))
-      .map((f) => f.slice(1, -'.prompt.yaml'.length))
-      .filter((v) => semver.valid(v) !== null)
+      .map((f) => f.slice(1, -'.prompt.yaml'.length));
+
+    const versions = candidates
+      .filter((v) => {
+        if (semver.valid(v) === null) {
+          console.warn(
+            `[seo-ai-core] resolveVersion("${id}"): skipping unparseable version "${v}" — must be strict semver (e.g. 1.0.0).`,
+          );
+          return false;
+        }
+        return true;
+      })
       .sort(semver.rcompare);
 
     if (versions.length === 0) {
