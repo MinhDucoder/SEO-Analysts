@@ -9,6 +9,7 @@ export interface ChainCallbacks {
 export interface ChainContext {
   /** Correlation id for tracing across multiple calls. */
   traceId?: string;
+  /** AbortSignal forwarded to every LLM call within this chain invocation. */
   signal?: AbortSignal;
   logger?: Logger;
   callbacks?: ChainCallbacks;

@@ -31,7 +31,11 @@ export interface LLMResponse {
   usage: TokenUsage;
   model: string;
   finishReason: FinishReason;
-  /** Provider raw payload. Internal use only — NOT exported via index.ts. */
+  /**
+   * Provider raw payload. Available for adapter debugging but NOT a stable API —
+   * shape varies per provider and may be removed in a future major version.
+   * Consumers should rely on `content`, `usage`, `finishReason` instead.
+   */
   raw?: unknown;
 }
 
