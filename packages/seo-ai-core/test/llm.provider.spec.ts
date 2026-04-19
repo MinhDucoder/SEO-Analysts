@@ -10,10 +10,16 @@ describe('createLLM', () => {
     expect(llm.model).toBe('claude-sonnet-4-6');
   });
 
-  it('throws LLMError on unknown provider', () => {
+  it('throws LLMError on unknown provider with a helpful message', () => {
     expect(() =>
       createLLM({ provider: 'gemini' as unknown as 'openai', model: 'x' }),
     ).toThrow(LLMError);
+    expect(() =>
+      createLLM({ provider: 'gemini' as unknown as 'openai', model: 'x' }),
+    ).toThrow(/gemini/);
+    expect(() =>
+      createLLM({ provider: 'gemini' as unknown as 'openai', model: 'x' }),
+    ).toThrow(/anthropic/);
   });
 
   it('registerLLMProvider adds a custom provider', () => {

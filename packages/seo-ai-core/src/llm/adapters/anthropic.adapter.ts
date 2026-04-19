@@ -1,6 +1,6 @@
 import { ChatAnthropic } from '@langchain/anthropic';
 import type { AIMessage } from '@langchain/core/messages';
-import type { ILLMProvider, LLMRequest, LLMResponse, LLMChunk } from '../types.js';
+import type { ILLMProvider, LLMRequest, LLMResponse, LLMChunk, TokenUsage } from '../types.js';
 import type { LLMConfig } from '../provider.js';
 import { LLMError } from '../../errors/index.js';
 import { toLangChainMessages, toLLMResponse } from './_mappers.js';
@@ -11,14 +11,15 @@ export class AnthropicAdapter implements ILLMProvider {
   private readonly client: ChatAnthropic;
 
   constructor(cfg: LLMConfig) {
-    if (!cfg.apiKey && !process.env['ANTHROPIC_API_KEY']) {
+    const resolvedKey = cfg.apiKey || process.env['ANTHROPIC_API_KEY'];
+    if (!resolvedKey) {
       throw new LLMError(
         'AnthropicAdapter: missing apiKey (pass cfg.apiKey or set ANTHROPIC_API_KEY env)',
       );
     }
     this.model = cfg.model;
     this.client = new ChatAnthropic({
-      apiKey: cfg.apiKey ?? process.env['ANTHROPIC_API_KEY'],
+      apiKey: resolvedKey,
       model: cfg.model,
       temperature: cfg.defaultTemperature ?? 0.2,
       maxTokens: cfg.defaultMaxTokens ?? 4096,
@@ -47,7 +48,17 @@ export class AnthropicAdapter implements ILLMProvider {
       });
       for await (const chunk of stream) {
         const delta = typeof chunk.content === 'string' ? chunk.content : '';
-        if (delta) yield { delta };
+        const meta = chunk.usage_metadata;
+        const usage: TokenUsage | undefined = meta
+          ? {
+              prompt: meta.input_tokens ?? 0,
+              completion: meta.output_tokens ?? 0,
+              total: meta.total_tokens ?? (meta.input_tokens ?? 0) + (meta.output_tokens ?? 0),
+            }
+          : undefined;
+        if (delta || usage) {
+          yield usage ? { delta, usage } : { delta };
+        }
       }
     } catch (err) {
       throw new LLMError(`Anthropic stream failed: ${(err as Error).message}`, { cause: err });

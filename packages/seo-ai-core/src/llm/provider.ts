@@ -17,6 +17,12 @@ export interface LLMConfig {
 
 type AdapterCtor = new (cfg: LLMConfig) => ILLMProvider;
 
+/**
+ * Module-level mutable registry of provider name → adapter constructor.
+ * Mutated by `registerLLMProvider` (intended for tests and plugins).
+ * Not thread-safe across Node worker_threads, but Vitest uses per-file fork
+ * isolation so tests don't collide.
+ */
 const REGISTRY = new Map<string, AdapterCtor>([
   ['anthropic', AnthropicAdapter],
 ]);

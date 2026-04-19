@@ -23,19 +23,17 @@ export function toLangChainMessages(messages: Message[]): BaseMessage[] {
   });
 }
 
-interface AnthropicUsageMetadata {
-  input_tokens?: number;
-  output_tokens?: number;
-  total_tokens?: number;
-}
-
 export function toLLMResponse(ai: AIMessage, model: string): LLMResponse {
-  const usage = (ai.usage_metadata ?? {}) as AnthropicUsageMetadata;
+  const usage = ai.usage_metadata;
   const tokenUsage: TokenUsage = {
-    prompt: usage.input_tokens ?? 0,
-    completion: usage.output_tokens ?? 0,
-    total: usage.total_tokens ?? (usage.input_tokens ?? 0) + (usage.output_tokens ?? 0),
+    prompt: usage?.input_tokens ?? 0,
+    completion: usage?.output_tokens ?? 0,
+    total: usage?.total_tokens ?? (usage?.input_tokens ?? 0) + (usage?.output_tokens ?? 0),
   };
+  // For array content (multi-block responses), keep only text blocks.
+  // Image, tool-use, and other non-text blocks are intentionally omitted —
+  // this adapter targets text-only workflows. When finishReason === 'tool_call',
+  // callers should handle tool-use blocks via the `raw` AIMessage payload.
   const content = typeof ai.content === 'string'
     ? ai.content
     : ai.content.map((c) => (typeof c === 'string' ? c : 'text' in c ? c.text : '')).join('');
