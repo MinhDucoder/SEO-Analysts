@@ -33,3 +33,6 @@ export { MemoryRetriever, type MemoryDoc } from './retrievers/memory.retriever.j
 // Guardrails
 export { parseStructured } from './guardrails/output-parser.js';
 export { applyPolicy, type ApplyPolicyOutput } from './guardrails/policy.js';
+
+// Chains
+export { createBaseChain, type BaseChainConfig } from './chains/base.chain.js';
