@@ -1,2 +1,21 @@
-// Public barrel — populated incrementally as modules land in W2/W3.
-export {};
+// Public type surface — locked for MVP per spec § 3.
+
+export type {
+  ILLMProvider, LLMRequest, LLMResponse, Message, TokenUsage, LLMChunk, FinishReason, Role,
+} from './llm/types.js';
+export type {
+  IPromptLoader, PromptTemplate, RenderedPrompt, PromptListEntry, PromptMetadata, PromptExample,
+} from './prompt/types.js';
+export type { IChain, ChainContext, ChainCallbacks } from './chains/types.js';
+export type { IRetriever, RetrievedDoc, RetrieverSearchOptions } from './retrievers/types.js';
+export type { Policy, PolicyResult, OutputParseResult } from './guardrails/types.js';
+export type { Logger, LogContext, PinoLike } from './observability/logger.js';
+
+export { noopLogger, createPinoLogger } from './observability/logger.js';
+
+export {
+  AiCoreError, LLMError, PromptError, ChainError, GuardrailError, RetrieverError,
+  type AiCoreErrorOptions,
+} from './errors/index.js';
+
+// Factories + classes appended in T4-T9.
