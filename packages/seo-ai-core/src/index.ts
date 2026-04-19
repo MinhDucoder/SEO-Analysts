@@ -29,3 +29,7 @@ export { renderTemplate } from './prompt/renderer.js';
 
 // Retrievers
 export { MemoryRetriever, type MemoryDoc } from './retrievers/memory.retriever.js';
+
+// Guardrails
+export { parseStructured } from './guardrails/output-parser.js';
+export { applyPolicy, type ApplyPolicyOutput } from './guardrails/policy.js';
