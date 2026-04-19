@@ -1,0 +1,11 @@
+id: rag-test
+version: 1.0.0
+variables: [query, context]
+metadata:
+  owner: test
+system: "Answer using ONLY the provided context. Output JSON: {\"answer\": string}"
+user: |
+  Question: {{query}}
+
+  Context:
+  {{{context}}}
