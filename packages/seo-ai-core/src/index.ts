@@ -26,3 +26,6 @@ export { createLLM, registerLLMProvider, type LLMConfig, type LLMProviderName } 
 // Prompt
 export { FileSystemPromptLoader, type PromptLoaderOptions } from './prompt/loader.js';
 export { renderTemplate } from './prompt/renderer.js';
+
+// Retrievers
+export { MemoryRetriever, type MemoryDoc } from './retrievers/memory.retriever.js';
