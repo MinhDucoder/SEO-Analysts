@@ -40,3 +40,11 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   (currently picked up at vitest runtime via esbuild only).
 - Per-call temperature override in Anthropic adapter (LangChain
   `ChatAnthropicCallOptions` doesn't expose this; constructor-only).
+- Turbo `no-undeclared-env-vars` warnings for `ANTHROPIC_API_KEY` in
+  `anthropic.adapter.ts` and the integration spec. Known; informational
+  only (build/test still pass). Resolve by adding `ANTHROPIC_API_KEY` to
+  `turbo.json`'s global env list in a future tidy-up commit.
+- Test coverage gap on `opts`-forwarding for the 4 error subclasses
+  other than `GuardrailError`. Base class correctness is proven, but
+  `raw` + `cause` propagation is only explicitly asserted on
+  `GuardrailError`. Add parameterised test in Phase 2 test-debt pass.
