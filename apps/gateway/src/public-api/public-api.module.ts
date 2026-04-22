@@ -18,12 +18,29 @@ import { RedisModule } from '../infra/redis/redis.module';
 import { GrpcModule } from '../infra/grpc/grpc.module';
 import { ApiKeyService } from './services/api-key.service';
 import { ApiKeyGuard } from './guards/api-key.guard';
+import { ContentExtractorService } from './services/content-extractor.service';
+import { PublicApiRateLimitService } from './services/public-api-rate-limit.service';
+import { PublicCheckService } from './services/public-check.service';
 import { ApiKeysController } from './controllers/api-keys.controller';
+import { PublicCheckController } from './controllers/public-check.controller';
+import { PublicRulesController } from './controllers/public-rules.controller';
+import { PublicHealthController } from './controllers/public-health.controller';
 
 @Module({
   imports: [PrismaModule, RedisModule, GrpcModule],
-  providers: [ApiKeyService, ApiKeyGuard],
-  controllers: [ApiKeysController],
+  providers: [
+    ApiKeyService,
+    ApiKeyGuard,
+    ContentExtractorService,
+    PublicApiRateLimitService,
+    PublicCheckService,
+  ],
+  controllers: [
+    ApiKeysController,
+    PublicCheckController,
+    PublicRulesController,
+    PublicHealthController,
+  ],
   exports: [ApiKeyService, ApiKeyGuard],
 })
 export class PublicApiModule {}
