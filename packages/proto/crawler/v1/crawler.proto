@@ -5,6 +5,7 @@ import "common/v1/common.proto";
 
 service CrawlerService {
   rpc CrawlUrl(CrawlRequest) returns (CrawlResponse);
+  rpc LiteFetch(LiteFetchRequest) returns (LiteFetchResult);
   rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
 }
 
@@ -74,4 +75,28 @@ message HealthCheckResponse {
   bool healthy = 1;
   string version = 2;
   int64 uptime_seconds = 3;
+}
+
+// ===========================================================================
+// Public API (lightweight URL fetch for /public/check) — additive
+// Cheerio-only path, no Playwright, no Lighthouse. Used by gateway when
+// PublicCheckRequest.input.type = "url".
+// ===========================================================================
+
+message LiteFetchRequest {
+  string request_id = 1;
+  string url = 2;
+  int32 timeout_ms = 3;            // default 10000 applied by server
+  string user_agent = 4;            // optional override
+  bool follow_redirects = 5;        // default true
+}
+
+message LiteFetchResult {
+  string final_url = 1;
+  int32 status_code = 2;
+  string html = 3;
+  int32 size_bytes = 4;
+  int32 fetch_time_ms = 5;
+  repeated string redirect_chain = 6;
+  bool from_cache = 7;
 }
