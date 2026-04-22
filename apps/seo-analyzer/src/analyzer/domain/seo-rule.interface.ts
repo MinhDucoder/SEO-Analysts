@@ -14,8 +14,17 @@ export interface RuleCheckOutput {
   metadata: Record<string, unknown>;
 }
 
+/**
+ * Data requirements a rule needs. Used by RuleRunner to skip rules that
+ * cannot run in a lighter mode (e.g. content-only mode skips rules that
+ * require live HTTP metadata or Lighthouse performance data).
+ * Rules with no `requires` are "pure HTML" and run in every mode.
+ */
+export type RuleRequirement = 'http_metadata' | 'performance';
+
 export interface ISeoRule {
   readonly id: string; // unique rule name, e.g. "title_tag"
   readonly category: IssueCategory;
+  readonly requires?: RuleRequirement[];
   check(pageData: PageData, targetKeyword?: string): RuleCheckOutput;
 }

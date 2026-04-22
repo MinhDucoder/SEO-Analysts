@@ -2,12 +2,13 @@
  * @file Rule: HTTP status 200 (or acceptable 3xx).
  */
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
+import { ISeoRule, RuleCheckOutput, RuleRequirement } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';
 
 export class HttpStatusRule implements ISeoRule {
   readonly id = 'http_status';
   readonly category = IssueCategory.TECHNICAL;
+  readonly requires: RuleRequirement[] = ['http_metadata'];
 
   check(pageData: PageData): RuleCheckOutput {
     const status = pageData.statusCode;

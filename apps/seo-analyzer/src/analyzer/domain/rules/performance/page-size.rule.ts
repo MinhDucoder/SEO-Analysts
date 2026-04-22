@@ -2,7 +2,7 @@
  * @file Rule: page weight below performance budget.
  */
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
+import { ISeoRule, RuleCheckOutput, RuleRequirement } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';
 
 const MB = 1024 * 1024;
@@ -10,6 +10,7 @@ const MB = 1024 * 1024;
 export class PageSizeRule implements ISeoRule {
   readonly id = 'page_size';
   readonly category = IssueCategory.PERFORMANCE;
+  readonly requires: RuleRequirement[] = ['performance'];
 
   check(pageData: PageData): RuleCheckOutput {
     const bytes = pageData.htmlSizeBytes;

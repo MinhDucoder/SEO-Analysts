@@ -2,7 +2,7 @@
  * @file Rule: modern formats (webp/avif) + reasonable file sizes.
  */
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
+import { ISeoRule, RuleCheckOutput, RuleRequirement } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';
 
 const MODERN_FORMATS = new Set(['webp', 'avif']);
@@ -11,6 +11,7 @@ const MAX_BYTES = 200 * 1024;
 export class ImageOptimizationRule implements ISeoRule {
   readonly id = 'image_optimization';
   readonly category = IssueCategory.IMAGES;
+  readonly requires: RuleRequirement[] = ['http_metadata'];
 
   check(pageData: PageData): RuleCheckOutput {
     const total = pageData.images.length;

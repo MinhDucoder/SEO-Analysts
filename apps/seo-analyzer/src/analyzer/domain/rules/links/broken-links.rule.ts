@@ -11,7 +11,7 @@
  * applicable" (link-checks were disabled upstream) and PASS silently.
  */
 import { CheckStatus, IssueCategory } from '@repo/shared';
-import { ISeoRule, RuleCheckOutput } from '../../seo-rule.interface';
+import { ISeoRule, RuleCheckOutput, RuleRequirement } from '../../seo-rule.interface';
 import { PageData } from '../../page-data.interface';
 
 const MAX_BROKEN_HREFS = 20;
@@ -19,6 +19,7 @@ const MAX_BROKEN_HREFS = 20;
 export class BrokenLinksRule implements ISeoRule {
   readonly id = 'broken_links';
   readonly category = IssueCategory.LINKS;
+  readonly requires: RuleRequirement[] = ['http_metadata'];
 
   check(pageData: PageData): RuleCheckOutput {
     const all = [...pageData.internalLinks, ...pageData.externalLinks];
