@@ -34,6 +34,11 @@ enum AlertType {
   site_down
 }
 
+enum ApiKeyEnvironment {
+  live
+  test
+}
+
 model User {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email         String   @unique @db.VarChar(255)
@@ -50,6 +55,7 @@ model User {
   refreshTokens   RefreshToken[]
   audits          Audit[]
   scheduledAudits ScheduledAudit[]
+  apiKeys         ApiKey[]
 
   @@map("users")
 }
@@ -162,4 +168,53 @@ model AuditAlert {
   @@index([scheduleId], name: "idx_audit_alerts_schedule")
   @@index([createdAt], name: "idx_audit_alerts_created")
   @@map("audit_alerts")
+}
+
+/// Public API key owned by a user. Plaintext is returned ONCE at creation
+/// and never stored; only sha256(plaintext) is kept in `hashedKey`.
+/// Consumers call /api/v1/public/* with `Authorization: Bearer sk_live_...`.
+model ApiKey {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String            @map("user_id") @db.Uuid
+  name        String            @db.VarChar(100)
+  prefix      String            @db.VarChar(20)
+  hashedKey   String            @unique @map("hashed_key") @db.VarChar(64)
+  environment ApiKeyEnvironment @default(live)
+  lastUsedAt  DateTime?         @map("last_used_at") @db.Timestamptz
+  lastUsedIp  String?           @map("last_used_ip") @db.Inet
+  revokedAt   DateTime?         @map("revoked_at") @db.Timestamptz
+  expiresAt   DateTime?         @map("expires_at") @db.Timestamptz
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usageDaily UsageDaily[]
+
+  @@index([hashedKey], name: "idx_api_keys_hashed_key")
+  @@index([userId, revokedAt], name: "idx_api_keys_user_active")
+  @@map("api_keys")
+}
+
+/// Rolled up nightly from Redis counters. Powers /settings/usage page +
+/// admin abuse detection. Today's counts live in Redis until rollup.
+model UsageDaily {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  apiKeyId     String   @map("api_key_id") @db.Uuid
+  date         DateTime @db.Date
+  requests     Int      @default(0)
+  llmCalls     Int      @default(0) @map("llm_calls")
+  llmTokensIn  Int      @default(0) @map("llm_tokens_in")
+  llmTokensOut Int      @default(0) @map("llm_tokens_out")
+  bytesIn      Int      @default(0) @map("bytes_in")
+  bytesOut    Int      @default(0) @map("bytes_out")
+  errors       Int      @default(0)
+  cacheHits    Int      @default(0) @map("cache_hits")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  apiKey ApiKey @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@unique([apiKeyId, date], name: "usage_daily_key_date_uniq")
+  @@index([date], name: "idx_usage_daily_date")
+  @@map("usage_daily")
 }
