@@ -7,6 +7,8 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { AnalyzerService } from '../services/analyzer.service';
+import { RuleRegistry } from '../services/rule-registry';
+import { RuleMetadataService } from '../services/rule-metadata.service';
 import { PageData } from '../domain/page-data.interface';
 
 interface ProtoRuleResult {
@@ -23,7 +25,11 @@ interface ProtoRuleResult {
 
 @Controller()
 export class AnalyzerController {
-  constructor(private readonly analyzer: AnalyzerService) {}
+  constructor(
+    private readonly analyzer: AnalyzerService,
+    private readonly registry: RuleRegistry,
+    private readonly ruleMetadata: RuleMetadataService,
+  ) {}
 
   @GrpcMethod('SeoAnalyzerService', 'AnalyzePage')
   async analyzePage(req: { auditId: string; pageData: any; targetKeyword?: string }) {
@@ -96,15 +102,26 @@ export class AnalyzerController {
     category: string;
     weight: number;
     isEnabled: boolean;
-  }) => ({
-    id: row.id,
-    name: row.name,
-    display_name: row.displayName,
-    description: row.description,
-    category: row.category,
-    weight: row.weight,
-    is_enabled: row.isEnabled,
-  });
+  }) => {
+    const meta = this.ruleMetadata.get(row.name);
+    const impl = this.registry.get(row.name);
+    const availableIn =
+      impl?.requires && impl.requires.length > 0 ? 'full' : 'content_only';
+    return {
+      id: row.id,
+      name: row.name,
+      display_name: row.displayName,
+      description: row.description,
+      category: row.category,
+      weight: row.weight,
+      is_enabled: row.isEnabled,
+      // Public-API metadata (extends proto SeoRule fields 10-13)
+      severity: meta.severity,
+      audiences: meta.audiences,
+      doc_ref: meta.docRef ?? '',
+      available_in: availableIn,
+    };
+  };
 
   private mapPageData(raw: any): PageData {
     return {

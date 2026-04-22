@@ -4,6 +4,7 @@ import { AnalyzerService } from '../../src/analyzer/services/analyzer.service';
 import { RuleRegistry } from '../../src/analyzer/services/rule-registry';
 import { RuleRunner } from '../../src/analyzer/services/rule-runner';
 import { ScoreCalculator } from '../../src/analyzer/services/score-calculator';
+import { RuleMetadataService } from '../../src/analyzer/services/rule-metadata.service';
 import { makePageData } from '../fixtures/page-data.fixture';
 import { Classification, IssueCategory } from '@repo/shared';
 
@@ -54,7 +55,8 @@ describe('AnalyzePage E2E', () => {
     const service = new AnalyzerService(prismaMock, registry, runner, calc);
     // Manually call onModuleInit to register all 20 rules
     service.onModuleInit();
-    controller = new AnalyzerController(service);
+    const ruleMetadata = new RuleMetadataService();
+    controller = new AnalyzerController(service, registry, ruleMetadata);
   });
 
   it('analyzes a healthy page and returns excellent classification', async () => {
