@@ -13,6 +13,8 @@ import { UrlValidator } from './domain/url-validator';
 import { CrawlerOrchestrator } from './services/crawler.orchestrator';
 import { CrawlerController } from './controllers/crawler.controller';
 import { CrawlerWorker } from './controllers/crawler.worker';
+import { LiteFetchController } from './controllers/lite-fetch.controller';
+import { LiteFetchService } from './services/lite-fetch.service';
 import { EventPublisher } from './services/event-publisher';
 import { PoliteFetcher } from './infra/fetchers/polite-fetcher';
 import { LinkChecker } from './infra/fetchers/link-checker';
@@ -65,7 +67,7 @@ const browserPoolFactory = {
       { name: BULLMQ_QUEUES.SITE_CRAWL_AGGREGATE },
     ),
   ],
-  controllers: [CrawlerController],
+  controllers: [CrawlerController, LiteFetchController],
   providers: [
     redisFactory,
     browserPoolFactory,
@@ -78,6 +80,7 @@ const browserPoolFactory = {
     CrawlerOrchestrator,
     EventPublisher,
     CrawlerWorker,
+    LiteFetchService,
     // F1 site-wide crawl
     {
       provide: PoliteFetcher,
