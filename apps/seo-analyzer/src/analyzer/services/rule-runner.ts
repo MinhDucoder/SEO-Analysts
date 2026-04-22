@@ -7,7 +7,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CheckStatus, IssueCategory } from '@repo/shared';
 import { RuleRegistry } from './rule-registry';
 import { PageData } from '../domain/page-data.interface';
-import { RuleCheckOutput } from '../domain/seo-rule.interface';
+import {
+  ISeoRule,
+  RuleCheckOutput,
+  RuleRequirement,
+} from '../domain/seo-rule.interface';
 
 export interface DbRule {
   id: string;
@@ -21,6 +25,15 @@ export interface RunnerResult extends RuleCheckOutput {
   ruleName: string;
   category: IssueCategory;
   weight: number;
+}
+
+export type RunMode = 'content_only' | 'full';
+
+/** Result shape for content-only runs (no DB weights; weight defaults to 0). */
+export interface ContentRunnerResult extends RuleCheckOutput {
+  ruleId: string;
+  ruleName: string;
+  category: IssueCategory;
 }
 
 @Injectable()
@@ -67,5 +80,59 @@ export class RuleRunner {
       }
     }
     return out;
+  }
+
+  /**
+   * Run registry rules directly for content-only analysis (no DB-driven
+   * selection). Rules whose `requires` isn't satisfied by `mode` are
+   * skipped. Used by the public API's AnalyzeContent RPC.
+   *
+   * Rules with no `requires` are "pure HTML" and always run.
+   * content_only mode skips rules requiring http_metadata or performance.
+   * full mode runs everything (equivalent to `runAll` over all registered rules).
+   */
+  runContent(
+    pageData: PageData,
+    targetKeyword?: string,
+    mode: RunMode = 'content_only',
+  ): ContentRunnerResult[] {
+    const out: ContentRunnerResult[] = [];
+    for (const rule of this.registry.getAll()) {
+      if (!this.isApplicable(rule, mode)) continue;
+      try {
+        const result = rule.check(pageData, targetKeyword);
+        out.push({
+          ruleId: rule.id,
+          ruleName: rule.id,
+          category: rule.category,
+          ...result,
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        this.logger.error(`Rule "${rule.id}" threw: ${msg}`);
+        out.push({
+          ruleId: rule.id,
+          ruleName: rule.id,
+          category: rule.category,
+          status: CheckStatus.FAIL,
+          score: 0,
+          message: `Rule execution error: ${msg}`,
+          suggestion: null,
+          metadata: { error: msg },
+        });
+      }
+    }
+    return out;
+  }
+
+  private isApplicable(rule: ISeoRule, mode: RunMode): boolean {
+    if (mode === 'full') return true;
+    if (!rule.requires || rule.requires.length === 0) return true;
+    // content_only satisfies neither http_metadata nor performance
+    return rule.requires.every((req) => this.isRequirementSatisfied(req, mode));
+  }
+
+  private isRequirementSatisfied(_req: RuleRequirement, mode: RunMode): boolean {
+    return mode === 'full';
   }
 }

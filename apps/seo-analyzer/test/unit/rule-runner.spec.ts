@@ -66,4 +66,60 @@ describe('RuleRunner', () => {
     expect(results[0].score).toBe(0);
     expect(results[0].message).toMatch(/boom/);
   });
+
+  describe('runContent (mode-filtered, registry-driven)', () => {
+    const pure = (id: string, category: IssueCategory): ISeoRule => ({
+      id,
+      category,
+      check: () => ({ status: CheckStatus.PASS, score: 100, message: id, suggestion: null, metadata: {} }),
+    });
+    const http = (id: string, category: IssueCategory): ISeoRule => ({
+      id,
+      category,
+      requires: ['http_metadata'],
+      check: () => ({ status: CheckStatus.PASS, score: 100, message: id, suggestion: null, metadata: {} }),
+    });
+    const perf = (id: string, category: IssueCategory): ISeoRule => ({
+      id,
+      category,
+      requires: ['performance'],
+      check: () => ({ status: CheckStatus.PASS, score: 100, message: id, suggestion: null, metadata: {} }),
+    });
+
+    it('runs all registry rules in full mode', () => {
+      registry.register(pure('a', IssueCategory.META));
+      registry.register(http('b', IssueCategory.TECHNICAL));
+      registry.register(perf('c', IssueCategory.PERFORMANCE));
+      const out = runner.runContent(makePageData(), undefined, 'full');
+      expect(out.map((r) => r.ruleId).sort()).toEqual(['a', 'b', 'c']);
+    });
+
+    it('skips http_metadata + performance rules in content_only mode', () => {
+      registry.register(pure('a', IssueCategory.META));
+      registry.register(http('b', IssueCategory.TECHNICAL));
+      registry.register(perf('c', IssueCategory.PERFORMANCE));
+      const out = runner.runContent(makePageData(), undefined, 'content_only');
+      expect(out.map((r) => r.ruleId)).toEqual(['a']);
+    });
+
+    it('defaults to content_only mode', () => {
+      registry.register(pure('a', IssueCategory.META));
+      registry.register(http('b', IssueCategory.TECHNICAL));
+      const out = runner.runContent(makePageData());
+      expect(out.map((r) => r.ruleId)).toEqual(['a']);
+    });
+
+    it('catches exceptions in registry-driven mode too', () => {
+      const broken: ISeoRule = {
+        id: 'broken',
+        category: IssueCategory.META,
+        check: () => { throw new Error('boom'); },
+      };
+      registry.register(broken);
+      const out = runner.runContent(makePageData(), undefined, 'content_only');
+      expect(out).toHaveLength(1);
+      expect(out[0].status).toBe(CheckStatus.FAIL);
+      expect(out[0].message).toMatch(/boom/);
+    });
+  });
 });
