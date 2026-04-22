@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { PublicApiModule } from './public-api/public-api.module';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -70,6 +71,32 @@ So sanh 2 lan audit google.com: \`audit1=b0000001-...01\` vs \`audit2=b0000001-.
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
+
+  // Public API spec — scope-limited to PublicApiModule only. External
+  // consumers see ONLY /public/* + /users/me/api-keys endpoints, never
+  // /auth, /audits, /admin, /scheduled-audits.
+  const publicSwaggerConfig = new DocumentBuilder()
+    .setTitle('SEO Analyst Public API')
+    .setDescription(
+      'Third-party SEO content check API. Authenticate with `Authorization: Bearer sk_live_...` or `sk_test_...` (create keys at `/api/v1/users/me/api-keys`).',
+    )
+    .setVersion('1.0.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'sk_live_...' },
+      'apiKey',
+    )
+    .addServer(
+      process.env.PUBLIC_API_BASE_URL ?? `http://localhost:${process.env.PORT ?? 3000}`,
+      'Current',
+    )
+    .build();
+  const publicDocument = SwaggerModule.createDocument(app, publicSwaggerConfig, {
+    include: [PublicApiModule],
+  });
+  SwaggerModule.setup('api/v1/public/docs', app, publicDocument, {
+    jsonDocumentUrl: 'api/v1/public/openapi.json',
+    swaggerOptions: { persistAuthorization: true },
+  });
 
   app.enableShutdownHooks();
 

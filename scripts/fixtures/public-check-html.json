@@ -1,0 +1,8 @@
+{
+  "input": {
+    "type": "html",
+    "html": "<html><head><title>Blog về SEO 2026 — Hướng dẫn cho beginner</title><meta name=\"description\" content=\"Tìm hiểu các khái niệm SEO cơ bản và các best practice 2026.\"/></head><body><h1>SEO 2026 cơ bản cho người mới</h1><h2>Giới thiệu</h2><p>SEO là Search Engine Optimization — tối ưu website để tăng khả năng hiển thị trên Google và các công cụ tìm kiếm khác. Năm 2026, trọng tâm dịch chuyển về Core Web Vitals, intent matching, và E-E-A-T.</p><h2>On-page</h2><p>Title, meta description, H1, heading hierarchy, internal links là những yếu tố on-page quan trọng nhất. Keyword density không còn là tín hiệu mạnh như trước — thay vào đó là ngữ cảnh và intent.</p><p>Bài viết nên có ít nhất 500 từ, sử dụng keyword chính trong 100 từ đầu, và có các heading con rõ ràng.</p><h2>Kết luận</h2><p>SEO là marathon chứ không phải sprint. Tập trung vào nội dung chất lượng + trải nghiệm người dùng sẽ thắng lâu dài.</p><img src=\"/seo.png\" alt=\"Biểu đồ tăng trưởng SEO\"/></body></html>"
+  },
+  "targetKeyword": "seo 2026",
+  "options": { "enrichMode": "template", "language": "vi" }
+}

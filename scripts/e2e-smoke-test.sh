@@ -214,6 +214,32 @@ else
   log_fail "PDF export returned HTTP ${PDF_HTTP_CODE}"
 fi
 
+
+# ─── Test 8: Public API (content-only check, template mode) ───
+log_info "Test 8: Public API content-check"
+
+KEY_RESP=$(curl -sf -X POST "${BASE_URL}/users/me/api-keys" \
+  -H "${AUTH_HEADER}" \
+  -H "content-type: application/json" \
+  -d '{"name":"smoke","environment":"test"}' 2>/dev/null || echo "")
+API_KEY=$(echo "$KEY_RESP" | jq -r '.plaintext // empty' 2>/dev/null)
+if [ -z "$API_KEY" ]; then
+  log_fail "Public API: could not create API key"
+else
+  log_pass "Public API: API key created (${API_KEY:0:16}...)"
+  PUB_RESP=$(curl -sf -X POST "${BASE_URL}/public/check" \
+    -H "authorization: Bearer ${API_KEY}" \
+    -H "content-type: application/json" \
+    -d @scripts/fixtures/public-check-html.json 2>/dev/null || echo "")
+  PUB_SCORE=$(echo "$PUB_RESP" | jq -r '.score // empty' 2>/dev/null)
+  PUB_ISSUES=$(echo "$PUB_RESP" | jq -r '.issues | length // 0' 2>/dev/null || echo "0")
+  if [ -n "$PUB_SCORE" ] && [ "$PUB_ISSUES" -gt 0 ]; then
+    log_pass "Public API: /public/check returned score=${PUB_SCORE}, issues=${PUB_ISSUES}"
+  else
+    log_fail "Public API: /public/check response malformed (resp=${PUB_RESP:0:200})"
+  fi
+fi
+
 echo ""
 echo "========================================"
 echo "  Smoke Test Summary"
