@@ -16,11 +16,14 @@ import { Module } from '@nestjs/common';
 import { PrismaModule } from '../infra/prisma/prisma.module';
 import { RedisModule } from '../infra/redis/redis.module';
 import { GrpcModule } from '../infra/grpc/grpc.module';
+import { ApiKeyService } from './services/api-key.service';
+import { ApiKeyGuard } from './guards/api-key.guard';
+import { ApiKeysController } from './controllers/api-keys.controller';
 
 @Module({
   imports: [PrismaModule, RedisModule, GrpcModule],
-  providers: [],
-  controllers: [],
-  exports: [],
+  providers: [ApiKeyService, ApiKeyGuard],
+  controllers: [ApiKeysController],
+  exports: [ApiKeyService, ApiKeyGuard],
 })
 export class PublicApiModule {}
