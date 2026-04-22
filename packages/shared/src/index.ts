@@ -181,3 +181,7 @@ export function classify(score: number): Classification {
   if (score >= 40) return Classification.FAIR;
   return Classification.POOR;
 }
+
+// ─── Public API (gateway /api/v1/public/*) ───
+
+export * from './public-api';
