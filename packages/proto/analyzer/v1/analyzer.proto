@@ -3,9 +3,11 @@ package analyzer.v1;
 
 import "common/v1/common.proto";
 import "crawler/v1/crawler.proto";
+import "google/protobuf/struct.proto";
 
 service SeoAnalyzerService {
   rpc AnalyzePage(AnalyzeRequest) returns (AnalyzeResponse);
+  rpc AnalyzeContent(AnalyzeContentRequest) returns (AnalyzeContentResult);
   rpc ListRules(ListRulesRequest) returns (ListRulesResponse);
   rpc UpdateRuleWeight(UpdateRuleWeightRequest) returns (UpdateRuleWeightResponse);
   rpc GetRulesByCategory(GetRulesByCategoryRequest) returns (ListRulesResponse);
@@ -55,6 +57,11 @@ message SeoRule {
   common.v1.IssueCategory category = 5;
   int32 weight = 6;
   bool is_enabled = 7;
+  // Public-API metadata (additive; consumers of audit flow may ignore)
+  string severity = 8;
+  repeated string audiences = 9;
+  string doc_ref = 10;
+  string available_in = 11;
 }
 
 message ListRulesRequest {}
@@ -64,3 +71,52 @@ message UpdateRuleWeightResponse { SeoRule rule = 1; }
 message GetRulesByCategoryRequest { common.v1.IssueCategory category = 1; }
 message HealthCheckRequest {}
 message HealthCheckResponse { bool healthy = 1; string version = 2; }
+
+// ===========================================================================
+// Public API (content-only analysis) — additive, used by gateway's /public/check
+// ===========================================================================
+
+enum AnalyzeMode {
+  ANALYZE_MODE_UNSPECIFIED = 0;
+  ANALYZE_MODE_CONTENT_ONLY = 1;
+  ANALYZE_MODE_FULL = 2;
+}
+
+message AnalyzeContentRequest {
+  string request_id = 1;
+  string html = 2;
+  string target_keyword = 3;
+  repeated string secondary_keywords = 4;
+  string language = 5;        // "vi" | "en"
+  AnalyzeMode mode = 6;
+  string resolved_url = 7;
+}
+
+message AnalyzeContentResult {
+  string rule_version = 1;
+  repeated RuleIssue issues = 2;
+  ContentStats content_stats = 3;
+}
+
+message RuleIssue {
+  string rule_id = 1;
+  string status = 2;            // "pass" | "warn" | "fail"
+  int32 score = 3;              // 0 | 50 | 100
+  string category = 4;
+  string severity = 5;          // "error" | "warning" | "info"
+  repeated string audiences = 6;
+  string message = 7;
+  string template_suggestion = 8;
+  google.protobuf.Struct evidence = 9;
+  string doc_ref = 10;
+}
+
+message ContentStats {
+  int32 word_count = 1;
+  int32 character_count = 2;
+  int32 reading_time_sec = 3;
+  int32 paragraph_count = 4;
+  int32 image_count = 5;
+  int32 internal_link_count = 6;
+  int32 external_link_count = 7;
+}
