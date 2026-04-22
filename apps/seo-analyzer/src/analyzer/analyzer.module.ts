@@ -9,6 +9,7 @@ import { RuleRegistry } from './services/rule-registry';
 import { RuleRunner } from './services/rule-runner';
 import { ScoreCalculator } from './services/score-calculator';
 import { PageDataBuilderService } from './services/page-data-builder.service';
+import { RuleMetadataService } from './services/rule-metadata.service';
 import { BULLMQ_QUEUES } from '@repo/shared';
 
 @Module({
@@ -33,9 +34,10 @@ import { BULLMQ_QUEUES } from '@repo/shared';
     RuleRunner,
     ScoreCalculator,
     PageDataBuilderService,
+    RuleMetadataService,
     AnalyzerService,
     AnalyzerWorker,
   ],
-  exports: [AnalyzerService, PageDataBuilderService, RuleRunner, RuleRegistry],
+  exports: [AnalyzerService, PageDataBuilderService, RuleMetadataService, RuleRunner, RuleRegistry],
 })
 export class AnalyzerModule {}
