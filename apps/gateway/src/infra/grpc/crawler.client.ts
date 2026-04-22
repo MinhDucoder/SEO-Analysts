@@ -2,8 +2,28 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GrpcClientFactory } from './grpc-client.factory';
 
+export interface LiteFetchResponse {
+  final_url: string;
+  status_code: number;
+  html: string;
+  size_bytes: number;
+  fetch_time_ms: number;
+  redirect_chain: string[];
+  from_cache: boolean;
+}
+
 interface CrawlerService {
   CrawlUrl(req: { url: string; auditId: string }, cb: (err: Error | null, res?: unknown) => void): void;
+  LiteFetch(
+    req: {
+      request_id: string;
+      url: string;
+      timeout_ms: number;
+      user_agent: string;
+      follow_redirects: boolean;
+    },
+    cb: (err: Error | null, res?: LiteFetchResponse) => void,
+  ): void;
   HealthCheck(req: object, cb: (err: Error | null, res?: { healthy: boolean }) => void): void;
 }
 
@@ -33,6 +53,47 @@ export class CrawlerGrpcClient implements OnModuleInit {
         if (err) return reject(err);
         resolve(res);
       });
+    });
+  }
+
+  async liteFetch(input: {
+    requestId: string;
+    url: string;
+    timeoutMs?: number;
+    userAgent?: string;
+    followRedirects?: boolean;
+  }): Promise<{
+    finalUrl: string;
+    statusCode: number;
+    html: string;
+    sizeBytes: number;
+    fetchTimeMs: number;
+    redirectChain: string[];
+    fromCache: boolean;
+  }> {
+    return new Promise((resolve, reject) => {
+      this.client.LiteFetch(
+        {
+          request_id: input.requestId,
+          url: input.url,
+          timeout_ms: input.timeoutMs ?? 10_000,
+          user_agent: input.userAgent ?? '',
+          follow_redirects: input.followRedirects ?? true,
+        },
+        (err, res) => {
+          if (err) return reject(err);
+          if (!res) return reject(new Error('Empty LiteFetch response'));
+          resolve({
+            finalUrl: res.final_url,
+            statusCode: res.status_code,
+            html: res.html,
+            sizeBytes: res.size_bytes,
+            fetchTimeMs: res.fetch_time_ms,
+            redirectChain: res.redirect_chain ?? [],
+            fromCache: res.from_cache,
+          });
+        },
+      );
     });
   }
 

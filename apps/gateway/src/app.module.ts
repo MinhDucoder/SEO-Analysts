@@ -12,6 +12,7 @@ import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { WebsocketModule } from './infra/websocket/websocket.module';
 import { HealthModule } from './health/health.module';
+import { PublicApiModule } from './public-api/public-api.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
@@ -30,6 +31,7 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     AdminModule,
     WebsocketModule,
     HealthModule,
+    PublicApiModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
