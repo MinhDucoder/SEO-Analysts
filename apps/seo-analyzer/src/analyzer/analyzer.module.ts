@@ -8,6 +8,7 @@ import { AnalyzerWorker } from './controllers/analyzer.worker';
 import { RuleRegistry } from './services/rule-registry';
 import { RuleRunner } from './services/rule-runner';
 import { ScoreCalculator } from './services/score-calculator';
+import { PageDataBuilderService } from './services/page-data-builder.service';
 import { BULLMQ_QUEUES } from '@repo/shared';
 
 @Module({
@@ -27,7 +28,14 @@ import { BULLMQ_QUEUES } from '@repo/shared';
     BullModule.registerQueue({ name: BULLMQ_QUEUES.ANALYZE_START }),
   ],
   controllers: [AnalyzerController],
-  providers: [RuleRegistry, RuleRunner, ScoreCalculator, AnalyzerService, AnalyzerWorker],
-  exports: [AnalyzerService],
+  providers: [
+    RuleRegistry,
+    RuleRunner,
+    ScoreCalculator,
+    PageDataBuilderService,
+    AnalyzerService,
+    AnalyzerWorker,
+  ],
+  exports: [AnalyzerService, PageDataBuilderService, RuleRunner, RuleRegistry],
 })
 export class AnalyzerModule {}

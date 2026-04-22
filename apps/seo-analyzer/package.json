@@ -27,6 +27,7 @@
     "@repo/proto": "*",
     "@repo/shared": "*",
     "bullmq": "^5.25.0",
+    "cheerio": "^1.2.0",
     "ioredis": "^5.4.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
