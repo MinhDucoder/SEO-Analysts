@@ -5,6 +5,7 @@ import { PrismaModule } from '../infra/prisma/prisma.module';
 import { AnalyzerService } from './services/analyzer.service';
 import { AnalyzerController } from './controllers/analyzer.controller';
 import { AnalyzerWorker } from './controllers/analyzer.worker';
+import { AnalyzeContentController } from './controllers/analyze-content.controller';
 import { RuleRegistry } from './services/rule-registry';
 import { RuleRunner } from './services/rule-runner';
 import { ScoreCalculator } from './services/score-calculator';
@@ -28,7 +29,7 @@ import { BULLMQ_QUEUES } from '@repo/shared';
     }),
     BullModule.registerQueue({ name: BULLMQ_QUEUES.ANALYZE_START }),
   ],
-  controllers: [AnalyzerController],
+  controllers: [AnalyzerController, AnalyzeContentController],
   providers: [
     RuleRegistry,
     RuleRunner,
