@@ -875,3 +875,10 @@ None blocking at spec time. Items surfaced in brainstorm and deferred by design:
 - npm publication of SDK + CLI (post-feedback)
 - GitHub secret-scanning partner enrollment (post-launch)
 - Tiered plans / billing (business decision, post-academic-demo)
+
+---
+
+## Changelog
+
+- **2026-04-23 — Plan 2 landed.** LLM enrichment wired via new `@repo/seo-ai-core` minimal MVP (LLM adapter + prompt loader + output parser + BaseChain + errors). `SuggestionEnricherService` owns enrichment with Redis cache (`suggest:<hash>` TTL 1h), per-key LLM concurrency bucket (5), 8s timeout, graceful degrade to template on any failure. `PublicCheckService` shim removed. RAG / retriever / streaming / additional providers deferred. Manual Anthropic fixture smoke (Plan Task L14) deferred — runs outside CI when a real key is available.
+- **2026-04-22 — Plan 1 landed.** Foundation: proto additions, Prisma ApiKey/UsageDaily, seo-analyzer AnalyzeContent, crawler LiteFetch, gateway PublicApiModule (template + off modes), API key CRUD, rate limit, Swagger scope-limited.
