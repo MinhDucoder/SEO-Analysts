@@ -6,6 +6,7 @@
  */
 import { Injectable } from '@nestjs/common';
 import { RateLimiterService } from '../../infra/redis/rate-limiter.service';
+import { RedisService } from '../../infra/redis/redis.service';
 import { PUBLIC_API_REDIS_KEYS, PUBLIC_API_RATE_LIMITS } from '@repo/shared';
 
 export interface EnforceInput {
@@ -22,7 +23,10 @@ export interface EnforceResult {
 
 @Injectable()
 export class PublicApiRateLimitService {
-  constructor(private readonly rl: RateLimiterService) {}
+  constructor(
+    private readonly rl: RateLimiterService,
+    private readonly redis: RedisService,
+  ) {}
 
   async enforce({ apiKeyId, ip }: EnforceInput): Promise<EnforceResult> {
     const now = Date.now();
@@ -79,5 +83,23 @@ export class PublicApiRateLimitService {
       retryAfterSeconds: 0,
       resetAt,
     };
+  }
+
+  /** Try to acquire one LLM slot for this API key. Returns false if cap reached. */
+  async acquireConcurrency(apiKeyId: string): Promise<boolean> {
+    const key = PUBLIC_API_REDIS_KEYS.rateLimitConcurrency(apiKeyId);
+    const count = await this.redis.client.incr(key);
+    await this.redis.client.expire(key, 30);
+    if (count > PUBLIC_API_RATE_LIMITS.PER_KEY_CONCURRENCY) {
+      await this.redis.client.decr(key);
+      return false;
+    }
+    return true;
+  }
+
+  /** Release one LLM slot. Called in `finally` blocks after enrichment. */
+  async releaseConcurrency(apiKeyId: string): Promise<void> {
+    const key = PUBLIC_API_REDIS_KEYS.rateLimitConcurrency(apiKeyId);
+    await this.redis.client.decr(key);
   }
 }
