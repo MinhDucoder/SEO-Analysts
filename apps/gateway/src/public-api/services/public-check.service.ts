@@ -1,14 +1,14 @@
 /**
- * @file Orchestrator for POST /api/v1/public/check. Flow:
+ * @file Orchestrator for POST /api/v1/public/check.
+ *
+ * Flow:
  *   1. Cache lookup (sha256 of content+keyword+lang+mode+ruleVersion)
  *   2. ContentExtractor (html passthrough | markdown→html | url→liteFetch)
  *   3. AnalyzerGrpcClient.analyzeContent
- *   4. Build issues[] with suggestion per enrichMode
- *   5. Optional filter (categories/audiences/minSeverity)
+ *   4. SuggestionEnricherService.enrich (off/template/llm) — returns parallel
+ *      suggestions[] + source + degraded flag
+ *   5. Build issues[], optional filter (categories/audiences/minSeverity)
  *   6. Assemble response, cache, return
- *
- * Plan-1 shim: enrichMode=llm degrades to template with meta.degraded=true.
- * Plan 2 replaces this with real LLM enrichment via @repo/seo-ai-core.
  */
 import { Injectable, Logger } from '@nestjs/common';
 import { createHash, randomUUID } from 'node:crypto';
@@ -18,11 +18,13 @@ import {
 } from './content-extractor.service';
 import { AnalyzerGrpcClient } from '../../infra/grpc/analyzer.client';
 import { RedisService } from '../../infra/redis/redis.service';
-import {
-  PUBLIC_API_REDIS_KEYS,
-  PUBLIC_API_CACHE_TTL,
-} from '@repo/shared';
+import { PUBLIC_API_REDIS_KEYS, PUBLIC_API_CACHE_TTL } from '@repo/shared';
 import type { PublicCheckRequestDto } from '../dto/public-check-request.dto';
+import {
+  SuggestionEnricherService,
+  type EnrichMode,
+  type Suggestion,
+} from './suggestion-enricher.service';
 
 export interface ExecuteCtx {
   apiKeyId: string;
@@ -36,7 +38,6 @@ export interface ExecuteCtx {
 
 type IssueSeverity = 'info' | 'warning' | 'error';
 type IssueAudience = 'writer' | 'dev';
-type EnrichMode = 'off' | 'template' | 'llm';
 
 export interface PublicCheckIssue {
   ruleId: string;
@@ -46,11 +47,7 @@ export interface PublicCheckIssue {
   title: string;
   description: string;
   evidence: Record<string, unknown>;
-  suggestion: {
-    type: 'rewrite' | 'add' | 'remove' | 'reorder';
-    text: string;
-    rationale: string;
-  } | null;
+  suggestion: Suggestion | null;
   docRef?: string;
 }
 
@@ -87,6 +84,7 @@ export class PublicCheckService {
     private readonly extractor: ContentExtractorService,
     private readonly analyzer: AnalyzerGrpcClient,
     private readonly redis: RedisService,
+    private readonly enricher: SuggestionEnricherService,
   ) {}
 
   async execute(
@@ -120,15 +118,32 @@ export class PublicCheckService {
       resolvedUrl: extracted.resolvedUrl,
     });
 
-    let issues: PublicCheckIssue[] = result.issues.map((i) => ({
+    const contentHash = createHash('sha256').update(extracted.html).digest('hex').slice(0, 32);
+    const enrichment = await this.enricher.enrich(
+      result.issues,
+      {
+        apiKeyId: ctx.apiKeyId,
+        targetKeyword: dto.targetKeyword,
+        secondaryKeywords: dto.secondaryKeywords ?? [],
+        language,
+        contentExcerpt: extracted.html,
+        ruleVersion: result.rule_version,
+        contentHash,
+      },
+      enrichMode,
+    );
+
+    let issues: PublicCheckIssue[] = result.issues.map((i, idx) => ({
       ruleId: i.rule_id,
       severity: this.toSeverity(i.severity),
       category: i.category,
-      audience: (i.audiences ?? []).filter((a): a is IssueAudience => a === 'writer' || a === 'dev'),
+      audience: (i.audiences ?? []).filter(
+        (a): a is IssueAudience => a === 'writer' || a === 'dev',
+      ),
       title: this.shortTitle(i.message),
       description: i.message,
       evidence: i.evidence ?? {},
-      suggestion: this.buildSuggestion(i.template_suggestion, enrichMode),
+      suggestion: enrichment.suggestions[idx] ?? null,
       docRef: i.doc_ref || undefined,
     }));
 
@@ -136,23 +151,18 @@ export class PublicCheckService {
       issues = issues.filter((iss) => {
         if (filter.categories && !filter.categories.includes(iss.category)) return false;
         if (filter.audiences && !iss.audience.some((a) => filter.audiences!.includes(a))) return false;
-        if (filter.minSeverity && SEVERITY_ORDER[iss.severity] < SEVERITY_ORDER[filter.minSeverity]) return false;
+        if (
+          filter.minSeverity &&
+          SEVERITY_ORDER[iss.severity] < SEVERITY_ORDER[filter.minSeverity]
+        ) {
+          return false;
+        }
         return true;
       });
     }
 
     const score = this.computeScore(result.issues);
     const scoreBreakdown = this.computeBreakdown(result.issues);
-
-    let suggestionSource: PublicCheckResponse['meta']['suggestionSource'] = 'none';
-    let degraded = false;
-    if (enrichMode === 'off') suggestionSource = 'none';
-    else if (enrichMode === 'template') suggestionSource = 'template';
-    else if (enrichMode === 'llm') {
-      // Plan-1 shim: no LLM yet. Fall back to template.
-      suggestionSource = 'template';
-      degraded = true;
-    }
 
     const response: PublicCheckResponse = {
       score,
@@ -169,8 +179,8 @@ export class PublicCheckService {
         processingTimeMs: Date.now() - t0,
         ruleVersion: result.rule_version,
         enrichMode,
-        suggestionSource,
-        degraded,
+        suggestionSource: enrichment.source,
+        degraded: enrichment.degraded,
         cached: false,
         requestId,
         usage: ctx.usage ?? {
@@ -181,21 +191,12 @@ export class PublicCheckService {
     };
 
     const ttl =
-      enrichMode === 'llm'
+      enrichment.source === 'llm' || enrichment.source === 'mixed'
         ? PUBLIC_API_CACHE_TTL.PUBLIC_CHECK_LLM_SECONDS
         : PUBLIC_API_CACHE_TTL.PUBLIC_CHECK_TEMPLATE_SECONDS;
     await this.trySet(cacheKey, response, ttl);
 
     return response;
-  }
-
-  private buildSuggestion(
-    template: string,
-    mode: EnrichMode,
-  ): PublicCheckIssue['suggestion'] {
-    if (mode === 'off') return null;
-    if (!template) return null;
-    return { type: 'rewrite', text: template, rationale: '' };
   }
 
   private toSeverity(s: string): IssueSeverity {
@@ -209,9 +210,7 @@ export class PublicCheckService {
 
   private computeScore(issues: Array<{ score: number }>): number {
     if (issues.length === 0) return 100;
-    return Math.round(
-      issues.reduce((a, i) => a + i.score, 0) / issues.length,
-    );
+    return Math.round(issues.reduce((a, i) => a + i.score, 0) / issues.length);
   }
 
   private computeBreakdown(
@@ -256,7 +255,11 @@ export class PublicCheckService {
       const raw = await this.redis.client.get(key);
       return raw ? (JSON.parse(raw) as PublicCheckResponse) : null;
     } catch (e) {
-      this.logger.warn({ err: e, key }, 'public-check cache read failed');
+      this.logger.warn(
+        `public-check cache read failed key=${key}: ${
+          e instanceof Error ? e.message : String(e)
+        }`,
+      );
       return null;
     }
   }
@@ -269,7 +272,11 @@ export class PublicCheckService {
     try {
       await this.redis.client.setex(key, ttl, JSON.stringify(value));
     } catch (e) {
-      this.logger.warn({ err: e, key }, 'public-check cache write failed');
+      this.logger.warn(
+        `public-check cache write failed key=${key}: ${
+          e instanceof Error ? e.message : String(e)
+        }`,
+      );
     }
   }
 }
