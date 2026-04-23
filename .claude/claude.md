@@ -33,9 +33,14 @@
 3. **Skill-driven**: Sử dụng `skills/` cho domain-specific patterns
 4. **NestJS-first**: Backend luôn dùng NestJS patterns (modules, decorators, DI, guards, pipes)
 
+## Graph-first exploration (code-review-graph)
+
+Dự án có persistent knowledge graph. **Luôn ưu tiên MCP tools** (`detect_changes_tool`, `get_impact_radius_tool`, `query_graph_tool`, `semantic_search_nodes_tool`, `get_architecture_overview_tool`, `get_minimal_context_tool`) thay vì Grep/Glob/Read cho câu hỏi structural. Chi tiết tool catalog + decision tree + limitations: xem `CLAUDE.md` (project root).
+
 ## Thứ tự ưu tiên khi xử lý task
 
-1. Kiểm tra `context/` → hiểu hệ thống
+0. **Graph-first** (nếu câu hỏi là structural: callers, impact, coverage, architecture) → dùng code-review-graph MCP tools, KHÔNG Grep/Read để trace.
+1. Kiểm tra `context/` → hiểu hệ thống (business/domain)
 2. Kiểm tra `skills/` → có domain knowledge sẵn không
 3. Kiểm tra auto memory → đã giải quyết vấn đề tương tự chưa
 4. Thực hiện task → tuân thủ patterns trong skills
