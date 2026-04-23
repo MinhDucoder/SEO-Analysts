@@ -16,7 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { toast } from '@/components/ui/toast';
 import { useAuth } from '@/lib/auth';
 import { ApiError } from '@/lib/api';
@@ -67,7 +74,9 @@ export default function LoginPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
-                  <Input type="email" autoComplete="email" {...field} />
+                  <FormControl>
+                    <Input type="email" autoComplete="email" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -78,7 +87,9 @@ export default function LoginPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
-                  <Input type="password" autoComplete="current-password" {...field} />
+                  <FormControl>
+                    <Input type="password" autoComplete="current-password" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
