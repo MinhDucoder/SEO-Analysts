@@ -238,6 +238,23 @@ else
   else
     log_fail "Public API: /public/check response malformed (resp=${PUB_RESP:0:200})"
   fi
+
+  # ─── Test 8b: Public API LLM mode (degrade-on-no-key or real LLM) ───
+  log_info "Test 8b: Public API /check enrichMode=llm"
+
+  LLM_RESP=$(curl -sf -X POST "${BASE_URL}/public/check" \
+    -H "authorization: Bearer ${API_KEY}" \
+    -H "content-type: application/json" \
+    -d '{"input":{"type":"html","html":"<title>x</title>"},"targetKeyword":"seo","options":{"enrichMode":"llm","language":"vi"}}' 2>/dev/null || echo "")
+  LLM_DEGRADED=$(echo "$LLM_RESP" | jq -r '.meta.degraded // empty' 2>/dev/null)
+  LLM_SOURCE=$(echo "$LLM_RESP" | jq -r '.meta.suggestionSource // empty' 2>/dev/null)
+  if [ "$LLM_DEGRADED" = "true" ] && [ "$LLM_SOURCE" = "template" ]; then
+    log_pass "Public API: LLM mode degrades to template with degraded=true (no ANTHROPIC_API_KEY)"
+  elif [ "$LLM_SOURCE" = "llm" ] && [ "$LLM_DEGRADED" = "false" ]; then
+    log_pass "Public API: LLM mode returned real LLM response (ANTHROPIC_API_KEY set)"
+  else
+    log_fail "Public API: LLM mode unexpected (source=${LLM_SOURCE}, degraded=${LLM_DEGRADED}, resp=${LLM_RESP:0:200})"
+  fi
 fi
 
 echo ""
