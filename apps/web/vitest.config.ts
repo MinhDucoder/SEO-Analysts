@@ -7,5 +7,8 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['test/**/*.spec.ts', 'test/**/*.spec.tsx'],
     alias: { '@': resolve(__dirname, 'src') },
+    env: {
+      NEXT_PUBLIC_API_BASE: 'http://api.test/v1',
+    },
   },
 });
