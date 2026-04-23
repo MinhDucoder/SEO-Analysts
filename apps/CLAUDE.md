@@ -1,6 +1,6 @@
 # Services — Cross-service Map
 
-Monorepo chứa 5 NestJS microservices. Mỗi service áp dụng DDD structure: `controllers/` + `services/` + `domain/` + `persistence/` + `infra/`. Chi tiết tiếng riêng trong `apps/<service>/CLAUDE.md`.
+Monorepo chứa 5 NestJS microservices + 1 Next.js web consumer. Mỗi service áp dụng DDD structure: `controllers/` + `services/` + `domain/` + `persistence/` + `infra/`. Chi tiết riêng trong `apps/<service>/CLAUDE.md`.
 
 ## Services
 
@@ -11,6 +11,7 @@ Monorepo chứa 5 NestJS microservices. Mỗi service áp dụng DDD structure: 
 | **seo-analyzer** | 20 SEO rules → scores | NestJS + Prisma | `50053` (gRPC only) |
 | **keyword-analyzer** | TF + placement + density | NestJS, stateless | `50054` (gRPC only) |
 | **report** | Aggregate + PDF + compare | NestJS + Prisma + Playwright | `3004` (HTTP), `50055` (gRPC) |
+| **web** | Next.js app — auth UI, playground (3b), api-keys (3b) | Next 15 + React 19 + Tailwind 3 + shadcn/ui + TanStack Query | `3001` (HTTP) |
 
 ## Data flow for one audit (happy path)
 
