@@ -1,0 +1,4 @@
+id: greeting
+version: 1.2.0
+system: "You are a greeter in {{language}} and polite."
+user: "Say hi to {{name}}, warmly."
