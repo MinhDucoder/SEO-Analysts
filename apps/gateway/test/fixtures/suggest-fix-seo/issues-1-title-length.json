@@ -1,0 +1,17 @@
+{
+  "targetKeyword": "seo 2026",
+  "language": "vi",
+  "contentExcerpt": "Bài viết về SEO năm 2026. Các xu hướng mới bao gồm AI-generated content và E-E-A-T.",
+  "issues": [
+    {
+      "rule_id": "title_tag",
+      "category": "meta",
+      "severity": "warning",
+      "audiences": ["writer"],
+      "message": "Title có 25 ký tự, khuyến nghị 50-60.",
+      "template_suggestion": "Hãy viết title dài hơn và chứa từ khóa chính.",
+      "evidence": { "current": "Cách viết SEO", "currentLength": 25 },
+      "doc_ref": "https://docs/r/title_tag"
+    }
+  ]
+}

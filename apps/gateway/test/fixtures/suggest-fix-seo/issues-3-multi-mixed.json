@@ -1,0 +1,27 @@
+{
+  "targetKeyword": "on-page seo",
+  "language": "vi",
+  "contentExcerpt": "On-page SEO là tối ưu các yếu tố bên trong trang web.",
+  "issues": [
+    {
+      "rule_id": "meta_description",
+      "category": "meta",
+      "severity": "warning",
+      "audiences": ["writer"],
+      "message": "Meta description thiếu",
+      "template_suggestion": "Viết meta description 120-158 ký tự",
+      "evidence": {},
+      "doc_ref": "https://docs/r/meta_description"
+    },
+    {
+      "rule_id": "image_alt",
+      "category": "images",
+      "severity": "warning",
+      "audiences": ["writer", "dev"],
+      "message": "Ảnh thiếu alt text",
+      "template_suggestion": "Thêm alt mô tả cho mỗi ảnh",
+      "evidence": { "imagesWithoutAlt": 3 },
+      "doc_ref": "https://docs/r/image_alt"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "targetKeyword": "seo 2026",
+  "language": "vi",
+  "contentExcerpt": "Nội dung thiếu heading chính.",
+  "issues": [
+    {
+      "rule_id": "h1_tag",
+      "category": "headings",
+      "severity": "error",
+      "audiences": ["writer", "dev"],
+      "message": "Trang không có thẻ H1",
+      "template_suggestion": "Thêm một H1 chứa từ khóa chính",
+      "evidence": { "h1Count": 0 },
+      "doc_ref": "https://docs/r/h1_tag"
+    }
+  ]
+}
