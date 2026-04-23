@@ -5,7 +5,8 @@
   "compilerOptions": {
     "deleteOutDir": false,
     "assets": [
-      { "include": "infra/prisma/generated/**/*", "watchAssets": true }
+      { "include": "infra/prisma/generated/**/*", "watchAssets": true },
+      { "include": "public-api/prompts/**/*.yaml", "watchAssets": true }
     ]
   }
 }
