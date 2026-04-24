@@ -213,4 +213,122 @@ describe('PublicCheckService (with enricher)', () => {
     expect(r2.meta.cached).toBe(true);
     expect(enricher.enrich).toHaveBeenCalledTimes(1);
   });
+
+  it('cache-hit re-applies the CURRENT filter, not the one cached from the previous request', async () => {
+    const mkIssue = (rule_id: string, severity: 'info' | 'warning' | 'error') => ({
+      rule_id,
+      status: 'warn',
+      score: 50,
+      category: 'meta',
+      severity,
+      audiences: ['writer'],
+      message: `${rule_id} msg`,
+      template_suggestion: '',
+      evidence: {},
+      doc_ref: '',
+    });
+    const analyzer = makeAnalyzer({
+      rule_version: '1.2.0',
+      issues: [mkIssue('a', 'error'), mkIssue('b', 'warning'), mkIssue('c', 'info')],
+      content_stats: {
+        word_count: 1,
+        character_count: 2,
+        reading_time_sec: 1,
+        paragraph_count: 0,
+        image_count: 0,
+        internal_link_count: 0,
+        external_link_count: 0,
+      },
+    });
+    enricher.enrich.mockResolvedValue({
+      suggestions: [null, null, null],
+      source: 'none',
+      degraded: false,
+    });
+    const redis = makeRedis();
+    svc = new PublicCheckService(extractor, analyzer, redis, enricher as never);
+
+    const r1 = await svc.execute(
+      {
+        ...baseReq,
+        options: {
+          ...baseReq.options,
+          enrichMode: 'off',
+          filter: { minSeverity: 'error' },
+        },
+      },
+      ctx,
+    );
+    expect(r1.meta.cached).toBe(false);
+    expect(r1.issues).toHaveLength(1);
+    expect(r1.issues[0]!.ruleId).toBe('a');
+
+    const r2 = await svc.execute(
+      {
+        ...baseReq,
+        options: {
+          ...baseReq.options,
+          enrichMode: 'off',
+          filter: { minSeverity: 'info' },
+        },
+      },
+      ctx,
+    );
+    expect(r2.meta.cached).toBe(true);
+    expect(r2.issues).toHaveLength(3);
+    expect(r2.issues.map((i) => i.ruleId)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('cache-hit with no filter returns ALL issues even when first request was filtered', async () => {
+    const mkIssue = (rule_id: string, severity: 'info' | 'warning' | 'error') => ({
+      rule_id,
+      status: 'warn',
+      score: 50,
+      category: 'meta',
+      severity,
+      audiences: ['writer'],
+      message: 'm',
+      template_suggestion: '',
+      evidence: {},
+      doc_ref: '',
+    });
+    const analyzer = makeAnalyzer({
+      rule_version: '1.2.0',
+      issues: [mkIssue('a', 'error'), mkIssue('b', 'info')],
+      content_stats: {
+        word_count: 1,
+        character_count: 2,
+        reading_time_sec: 1,
+        paragraph_count: 0,
+        image_count: 0,
+        internal_link_count: 0,
+        external_link_count: 0,
+      },
+    });
+    enricher.enrich.mockResolvedValue({
+      suggestions: [null, null],
+      source: 'none',
+      degraded: false,
+    });
+    const redis = makeRedis();
+    svc = new PublicCheckService(extractor, analyzer, redis, enricher as never);
+
+    await svc.execute(
+      {
+        ...baseReq,
+        options: {
+          ...baseReq.options,
+          enrichMode: 'off',
+          filter: { minSeverity: 'error' },
+        },
+      },
+      ctx,
+    );
+    const r2 = await svc.execute(
+      { ...baseReq, options: { ...baseReq.options, enrichMode: 'off' } },
+      ctx,
+    );
+    expect(r2.meta.cached).toBe(true);
+    expect(r2.issues).toHaveLength(2);
+  });
 });

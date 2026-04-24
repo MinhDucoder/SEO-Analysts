@@ -19,7 +19,7 @@ import {
 import { AnalyzerGrpcClient } from '../../infra/grpc/analyzer.client';
 import { RedisService } from '../../infra/redis/redis.service';
 import { PUBLIC_API_REDIS_KEYS, PUBLIC_API_CACHE_TTL } from '@repo/shared';
-import type { PublicCheckRequestDto } from '../dto/public-check-request.dto';
+import type { PublicCheckRequestDto, PublicCheckFilterDto } from '../dto/public-check-request.dto';
 import {
   SuggestionEnricherService,
   type EnrichMode,
@@ -103,7 +103,10 @@ export class PublicCheckService {
       cached.meta.cached = true;
       cached.meta.requestId = requestId;
       if (ctx.usage) cached.meta.usage = ctx.usage;
-      return cached;
+      // Cache stores the FULL (pre-filter) issue list. Apply the
+      // current request's filter on read so different filters across
+      // requests with identical content don't return stale projections.
+      return { ...cached, issues: this.applyFilter(cached.issues, filter) };
     }
 
     const extracted = await this.extractor.extract(dto.input as PublicCheckInput);
@@ -133,7 +136,7 @@ export class PublicCheckService {
       enrichMode,
     );
 
-    let issues: PublicCheckIssue[] = result.issues.map((i, idx) => ({
+    const allIssues: PublicCheckIssue[] = result.issues.map((i, idx) => ({
       ruleId: i.rule_id,
       severity: this.toSeverity(i.severity),
       category: i.category,
@@ -147,27 +150,13 @@ export class PublicCheckService {
       docRef: i.doc_ref || undefined,
     }));
 
-    if (filter) {
-      issues = issues.filter((iss) => {
-        if (filter.categories && !filter.categories.includes(iss.category)) return false;
-        if (filter.audiences && !iss.audience.some((a) => filter.audiences!.includes(a))) return false;
-        if (
-          filter.minSeverity &&
-          SEVERITY_ORDER[iss.severity] < SEVERITY_ORDER[filter.minSeverity]
-        ) {
-          return false;
-        }
-        return true;
-      });
-    }
-
     const score = this.computeScore(result.issues);
     const scoreBreakdown = this.computeBreakdown(result.issues);
 
-    const response: PublicCheckResponse = {
+    const fullResponse: PublicCheckResponse = {
       score,
       scoreBreakdown,
-      issues,
+      issues: allIssues,
       meta: {
         inputType: dto.input.type,
         resolvedUrl: extracted.resolvedUrl,
@@ -194,9 +183,29 @@ export class PublicCheckService {
       enrichment.source === 'llm' || enrichment.source === 'mixed'
         ? PUBLIC_API_CACHE_TTL.PUBLIC_CHECK_LLM_SECONDS
         : PUBLIC_API_CACHE_TTL.PUBLIC_CHECK_TEMPLATE_SECONDS;
-    await this.trySet(cacheKey, response, ttl);
+    await this.trySet(cacheKey, fullResponse, ttl);
 
-    return response;
+    return { ...fullResponse, issues: this.applyFilter(allIssues, filter) };
+  }
+
+  private applyFilter(
+    issues: PublicCheckIssue[],
+    filter: PublicCheckFilterDto | undefined,
+  ): PublicCheckIssue[] {
+    if (!filter) return issues;
+    return issues.filter((iss) => {
+      if (filter.categories && !filter.categories.includes(iss.category)) return false;
+      if (filter.audiences && !iss.audience.some((a) => filter.audiences!.includes(a))) {
+        return false;
+      }
+      if (
+        filter.minSeverity &&
+        SEVERITY_ORDER[iss.severity] < SEVERITY_ORDER[filter.minSeverity]
+      ) {
+        return false;
+      }
+      return true;
+    });
   }
 
   private toSeverity(s: string): IssueSeverity {
