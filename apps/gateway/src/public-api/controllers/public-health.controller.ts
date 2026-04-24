@@ -1,11 +1,13 @@
 /**
  * @file GET /api/v1/public/health — unauthenticated liveness probe.
  */
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseFilters } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/public.decorator';
+import { PublicApiExceptionFilter } from '../filters/public-api-exception.filter';
 
 @ApiTags('Public SEO Check')
+@UseFilters(PublicApiExceptionFilter)
 @Controller('public')
 export class PublicHealthController {
   @Get('health')

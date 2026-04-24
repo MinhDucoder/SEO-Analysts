@@ -3,7 +3,7 @@
  * seo-analyzer's ListRules gRPC. Cached in Redis (10m TTL) per language.
  * API-key protected.
  */
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/public.decorator';
 import { ApiKeyGuard } from '../guards/api-key.guard';
@@ -13,9 +13,11 @@ import {
   PUBLIC_API_REDIS_KEYS,
   PUBLIC_API_CACHE_TTL,
 } from '@repo/shared';
+import { PublicApiExceptionFilter } from '../filters/public-api-exception.filter';
 
 @ApiTags('Public SEO Check')
 @ApiBearerAuth('apiKey')
+@UseFilters(PublicApiExceptionFilter)
 @Controller('public')
 export class PublicRulesController {
   constructor(

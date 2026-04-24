@@ -13,6 +13,7 @@ import {
   Post,
   Req,
   Res,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -28,9 +29,11 @@ import { ApiKeyGuard, RequestWithApiKey } from '../guards/api-key.guard';
 import { PublicCheckService } from '../services/public-check.service';
 import { PublicApiRateLimitService } from '../services/public-api-rate-limit.service';
 import { PublicCheckRequestDto } from '../dto/public-check-request.dto';
+import { PublicApiExceptionFilter } from '../filters/public-api-exception.filter';
 
 @ApiTags('Public SEO Check')
 @ApiBearerAuth('apiKey')
+@UseFilters(PublicApiExceptionFilter)
 @Controller('public')
 export class PublicCheckController {
   constructor(
