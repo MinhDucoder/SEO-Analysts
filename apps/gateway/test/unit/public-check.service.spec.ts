@@ -279,6 +279,33 @@ describe('PublicCheckService (with enricher)', () => {
     expect(r2.issues.map((i) => i.ruleId)).toEqual(['a', 'b', 'c']);
   });
 
+  it('cache key uses PUBLIC_API_CACHE_SCHEMA_VERSION env var so ops can flush cache without redeploy', async () => {
+    enricher.enrich.mockResolvedValue({
+      suggestions: [{ type: 'rewrite', text: 't', rationale: '' }],
+      source: 'template',
+      degraded: false,
+    });
+    const redis1 = makeRedis();
+    const svc1 = new PublicCheckService(extractor, makeAnalyzer(), redis1, enricher as never);
+    const req = {
+      ...baseReq,
+      options: { ...baseReq.options, enrichMode: 'template' as const },
+    };
+    await svc1.execute(req, ctx);
+    const key1 = (redis1.client.setex as ReturnType<typeof vi.fn>).mock.calls[0]![0];
+
+    process.env.PUBLIC_API_CACHE_SCHEMA_VERSION = '99.99.99';
+    try {
+      const redis2 = makeRedis();
+      const svc2 = new PublicCheckService(extractor, makeAnalyzer(), redis2, enricher as never);
+      await svc2.execute(req, ctx);
+      const key2 = (redis2.client.setex as ReturnType<typeof vi.fn>).mock.calls[0]![0];
+      expect(key2).not.toBe(key1);
+    } finally {
+      delete process.env.PUBLIC_API_CACHE_SCHEMA_VERSION;
+    }
+  });
+
   it('cache-hit with no filter returns ALL issues even when first request was filtered', async () => {
     const mkIssue = (rule_id: string, severity: 'info' | 'warning' | 'error') => ({
       rule_id,

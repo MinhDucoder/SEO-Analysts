@@ -46,6 +46,16 @@ export const PUBLIC_API_RATE_LIMITS = {
   LLM_TIMEOUT_MS: 8_000,
 } as const;
 
+/**
+ * Cache schema version for /public/check responses. Bump when the
+ * analyzer rule semantics, enrichment prompt, or response shape change
+ * — bumping this string invalidates ALL cached check responses.
+ *
+ * Override at runtime via `PUBLIC_API_CACHE_SCHEMA_VERSION` env var so
+ * ops can flush cache without a redeploy.
+ */
+export const PUBLIC_API_CACHE_SCHEMA_VERSION = '1.2.0';
+
 export const PUBLIC_API_CACHE_TTL = {
   API_KEY_VERIFY_SECONDS: 60,
   PUBLIC_CHECK_LLM_SECONDS: 3600,

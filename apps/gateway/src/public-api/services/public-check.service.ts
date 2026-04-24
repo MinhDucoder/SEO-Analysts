@@ -18,7 +18,11 @@ import {
 } from './content-extractor.service';
 import { AnalyzerGrpcClient } from '../../infra/grpc/analyzer.client';
 import { RedisService } from '../../infra/redis/redis.service';
-import { PUBLIC_API_REDIS_KEYS, PUBLIC_API_CACHE_TTL } from '@repo/shared';
+import {
+  PUBLIC_API_REDIS_KEYS,
+  PUBLIC_API_CACHE_TTL,
+  PUBLIC_API_CACHE_SCHEMA_VERSION,
+} from '@repo/shared';
 import type { PublicCheckRequestDto, PublicCheckFilterDto } from '../dto/public-check-request.dto';
 import {
   SuggestionEnricherService,
@@ -79,6 +83,11 @@ const SEVERITY_ORDER: Record<IssueSeverity, number> = { info: 0, warning: 1, err
 @Injectable()
 export class PublicCheckService {
   private readonly logger = new Logger(PublicCheckService.name);
+  // Captured per-instance so tests + ops env overrides take effect at
+  // service construction; bumping the env or the shared default forces
+  // a fresh cache namespace.
+  private readonly cacheSchemaVersion: string =
+    process.env.PUBLIC_API_CACHE_SCHEMA_VERSION ?? PUBLIC_API_CACHE_SCHEMA_VERSION;
 
   constructor(
     private readonly extractor: ContentExtractorService,
@@ -97,7 +106,7 @@ export class PublicCheckService {
     const language = dto.options?.language ?? 'vi';
     const filter = dto.options?.filter;
 
-    const cacheKey = this.cacheKey(dto, '1.2.0');
+    const cacheKey = this.cacheKey(dto, this.cacheSchemaVersion);
     const cached = await this.tryGet(cacheKey);
     if (cached) {
       cached.meta.cached = true;
