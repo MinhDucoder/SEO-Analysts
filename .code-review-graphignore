@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/**
+venv/**
+.venv/**
+__pycache__/**
+.pytest_cache/**
+
+# Build artifacts
+dist/**
+build/**
+target/**
+*.min.js
+*.bundle.js
+
+# Generated
+*.generated.ts
+*.generated.js
+generated/**
+*_pb2.py
+*.pb.go
+
+# Vendor
+vendor/**
+third_party/**
+
+# Data / large files
+*.lock
+*.log
+coverage/**
+.next/**
+.nuxt/**

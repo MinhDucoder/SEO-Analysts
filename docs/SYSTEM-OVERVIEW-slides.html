@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEO Analysts Platform — System Overview</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --c-bg: #ffffff;
+      --c-text: #0f172a;
+      --c-muted: #475569;
+      --c-border: #e2e8f0;
+      --c-accent: #4f46e5;
+      --c-accent-soft: #eef2ff;
+      --c-success: #059669;
+      --c-warn: #d97706;
+      --c-danger: #dc2626;
+      --c-code-bg: #f8fafc;
+    }
+
+    .reveal {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 28px;
+      color: var(--c-text);
+    }
+
+    .reveal .slides { text-align: left; }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      color: var(--c-text);
+      line-height: 1.2;
+    }
+
+    .reveal h1 { font-size: 2.6em; }
+    .reveal h2 { font-size: 1.8em; margin-bottom: 0.5em; }
+    .reveal h3 { font-size: 1.15em; color: var(--c-accent); margin-bottom: 0.3em; }
+    .reveal h4 { font-size: 0.95em; color: var(--c-muted); font-weight: 500; }
+
+    .reveal p, .reveal li { line-height: 1.5; color: var(--c-text); }
+    .reveal strong { color: var(--c-text); font-weight: 600; }
+    .reveal em { font-style: normal; color: var(--c-accent); font-weight: 500; }
+
+    .reveal code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--c-code-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.82em;
+      color: var(--c-accent);
+    }
+
+    .reveal pre code {
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+
+    .reveal ul, .reveal ol { margin-left: 1em; }
+    .reveal li { margin-bottom: 0.3em; }
+    .reveal li::marker { color: var(--c-accent); }
+
+    .reveal table {
+      font-size: 0.7em;
+      border-collapse: collapse;
+      margin-top: 0.4em;
+      width: 100%;
+    }
+    .reveal table th {
+      background: var(--c-accent-soft);
+      color: var(--c-accent);
+      font-weight: 600;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--c-accent);
+      text-align: left;
+    }
+    .reveal table td {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--c-border);
+      vertical-align: top;
+    }
+    .reveal table tr:hover td { background: var(--c-code-bg); }
+
+    /* Title slide */
+    .title-slide {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+    .title-slide .eyebrow {
+      color: var(--c-accent);
+      font-weight: 600;
+      font-size: 0.7em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.8em;
+    }
+    .title-slide h1 {
+      font-size: 3em;
+      line-height: 1.05;
+      margin-bottom: 0.4em;
+    }
+    .title-slide .tagline {
+      font-size: 1.1em;
+      color: var(--c-muted);
+      max-width: 80%;
+      margin-bottom: 2em;
+    }
+    .title-slide .meta {
+      font-size: 0.7em;
+      color: var(--c-muted);
+      border-top: 1px solid var(--c-border);
+      padding-top: 1em;
+      display: flex;
+      gap: 2.5em;
+    }
+    .title-slide .meta strong { color: var(--c-accent); font-weight: 600; }
+
+    /* Section label */
+    .section-label {
+      display: inline-block;
+      color: var(--c-accent);
+      font-size: 0.55em;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5em;
+    }
+
+    /* Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8em; }
+
+    .card {
+      background: var(--c-code-bg);
+      border: 1px solid var(--c-border);
+      border-left: 4px solid var(--c-accent);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 0.85em;
+    }
+    .card h4 {
+      color: var(--c-accent);
+      font-size: 0.8em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 0 0.4em 0;
+    }
+    .card p { margin: 0 0 0.4em 0; font-size: 0.95em; }
+    .card ul { margin: 0.3em 0 0 1em; font-size: 0.95em; }
+    .card li { margin-bottom: 0.2em; }
+
+    /* What/Why 2-column for services */
+    .what-why { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 0.3em; }
+    .what-why .col { padding: 14px 18px; border-radius: 8px; font-size: 0.8em; }
+    .what-why .what { background: var(--c-accent-soft); border-left: 4px solid var(--c-accent); }
+    .what-why .why { background: #fef9c3; border-left: 4px solid var(--c-warn); }
+    .what-why h3 {
+      font-size: 0.75em;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 0.6em 0;
+    }
+    .what-why .what h3 { color: var(--c-accent); }
+    .what-why .why h3 { color: var(--c-warn); }
+    .what-why ul { margin: 0 0 0 1em; }
+    .what-why li { margin-bottom: 0.3em; font-size: 0.95em; }
+
+    /* Key point callout */
+    .callout {
+      background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+      border-left: 4px solid var(--c-accent);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 0.8em 0;
+      font-size: 0.8em;
+    }
+    .callout strong { color: var(--c-accent); }
+    .callout.warn { border-left-color: var(--c-warn); background: #fffbeb; }
+    .callout.warn strong { color: var(--c-warn); }
+
+    /* Service name + port header */
+    .service-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1em;
+      margin-bottom: 0.5em;
+    }
+    .service-head h2 { margin: 0; font-size: 1.6em; }
+    .service-head .port {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7em;
+      color: var(--c-muted);
+      background: var(--c-code-bg);
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--c-border);
+    }
+
+    /* Mermaid */
+    .mermaid {
+      background: transparent;
+      font-family: 'Inter', sans-serif !important;
+      text-align: center;
+    }
+
+    /* Progress + slide numbers */
+    .reveal .progress {
+      color: var(--c-accent);
+      height: 3px;
+    }
+    .reveal .slide-number {
+      background: transparent;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      right: 1em;
+      bottom: 0.5em;
+    }
+
+    /* Inline chip for queue/topic names */
+    .chip {
+      display: inline-block;
+      background: var(--c-accent-soft);
+      color: var(--c-accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .chip.queue { background: #fef3c7; color: #92400e; }
+    .chip.pub { background: #dcfce7; color: #166534; }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1. Title -->
+    <section class="title-slide" data-state="no-footer">
+      <div class="eyebrow">Đồ án tốt nghiệp · 2026</div>
+      <h1>SEO Analysts<br/>Platform</h1>
+      <p class="tagline">Nền tảng phân tích SEO tự host, xây trên kiến trúc <em>5 microservices NestJS</em> giao tiếp qua gRPC · BullMQ · Redis Pub/Sub.</p>
+      <div class="meta">
+        <span><strong>5</strong> microservices</span>
+        <span><strong>22</strong> SEO rules</span>
+        <span><strong>3</strong> databases</span>
+        <span><strong>4</strong> BullMQ queues · <strong>7</strong> pub/sub topics</span>
+      </div>
+      <aside class="notes">
+        Chào hội đồng. Đây là SEO Analysts — công cụ phân tích SEO dành cho cá nhân và SME. 15 phút tới tôi sẽ đi qua: vấn đề, giải pháp, 5 service làm gì và vì sao, message pipeline, luồng audit end-to-end, các quyết định kiến trúc, và điểm yếu tôi biết trước.
+      </aside>
+    </section>
+
+    <!-- 2. Vấn đề -->
+    <section>
+      <div class="section-label">01 · Vấn đề</div>
+      <h2>Công cụ SEO hiện tại thiếu gì?</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h4>Quá đắt</h4>
+          <p>Ahrefs, SEMrush: <strong>$99–449/tháng</strong>. Vượt ngân sách cá nhân và SME.</p>
+        </div>
+        <div class="card">
+          <h4>Quá giới hạn</h4>
+          <p>Free tools: <strong>1–3 audit/tháng</strong>, không export PDF, không lưu lịch sử để compare.</p>
+        </div>
+        <div class="card">
+          <h4>Quá hẹp</h4>
+          <p>Lighthouse chỉ đo <strong>performance</strong>, không có rule SEO chuyên sâu, không share được.</p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top: 1.2em;">
+        <strong>Khoảng trống</strong> → cần một SaaS tự host được, có đủ rule SEO + Core Web Vitals + share + compare, vận hành dưới $40/tháng.
+      </div>
+      <aside class="notes">
+        Ba gap rõ: giá, giới hạn audit, và scope. Lighthouse built-in của Chrome tốt về performance nhưng không chấm SEO theo rule và không lưu lịch sử.
+      </aside>
+    </section>
+
+    <!-- 3. Giải pháp — What -->
+    <section>
+      <div class="section-label">02 · Giải pháp — What</div>
+      <h2>SEO Analysts làm được gì?</h2>
+      <ul>
+        <li><strong>Crawler thực sự</strong> — Cheerio default, fallback Playwright nếu trang là SPA.</li>
+        <li><strong>22 SEO rules</strong> custom, mỗi rule có weight cấu hình được live qua admin API.</li>
+        <li><strong>Core Web Vitals</strong> qua Lighthouse — chiếm 30% tổng điểm.</li>
+        <li><strong>Keyword analysis</strong> — TF, density, placement (title / H1 / URL / 100 từ đầu).</li>
+        <li><strong>PDF report + share link</strong> công khai — token 64 ký tự hex, revoke được.</li>
+        <li><strong>Compare 2 audits</strong> cùng domain để theo dõi tiến triển theo thời gian.</li>
+      </ul>
+      <aside class="notes">
+        Nói nhanh 6 features. Nhấn điểm 1 (Playwright fallback) và điểm 6 (compare) — đây là 2 thứ tool free thường không có.
+      </aside>
+    </section>
+
+    <!-- 4. Kiến trúc tổng — Big Picture -->
+    <section>
+      <div class="section-label">03 · Kiến trúc tổng</div>
+      <h2>Bức tranh hệ thống</h2>
+      <div class="mermaid" style="font-size: 0.55em;">
+flowchart TB
+    User["User · Browser<br/>Next.js 15"]
+    GW["Gateway<br/>REST + WS + Auth"]
+    CR["Crawler<br/>Cheerio + Playwright<br/>+ Lighthouse"]
+    AN["SEO Analyzer<br/>22 rules"]
+    KW["Keyword Analyzer<br/>TF · density"]
+    RP["Report<br/>Aggregate · PDF"]
+    Redis{{"Redis<br/>BullMQ · Pub/Sub · Cache"}}
+    DB_GW[("seo_gateway")]
+    DB_AN[("seo_analyzer")]
+    DB_RP[("seo_report")]
+
+    User <--"HTTP + WebSocket"--> GW
+    GW --"gRPC (PDF, Share)"--> RP
+
+    GW ==>|"crawl.start"| Redis
+    Redis ==> CR
+    CR ==>|"analyze.start"| Redis
+    CR ==>|"keyword.start"| Redis
+    Redis ==> AN
+    Redis ==> KW
+
+    CR -.->|"pub crawl.done"| Redis
+    AN -.->|"pub analyze.done"| Redis
+    KW -.->|"pub keyword.done"| Redis
+    Redis -.->|sub| RP
+
+    RP ==>|"report.start (self)"| Redis
+    Redis ==> RP
+    RP -.->|"pub report.done<br/>audit.completed"| Redis
+    CR -.->|"pub audit.progress"| Redis
+    Redis -.-> GW
+
+    GW --- DB_GW
+    AN --- DB_AN
+    RP --- DB_RP
+
+    classDef user fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef gw fill:#eef2ff,stroke:#4f46e5,color:#312e81,stroke-width:2px
+    classDef svc fill:#fdf4ff,stroke:#a855f7,color:#581c87
+    classDef infra fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef db fill:#f1f5f9,stroke:#64748b,color:#0f172a
+    class User user
+    class GW gw
+    class CR,AN,KW,RP svc
+    class Redis infra
+    class DB_GW,DB_AN,DB_RP db
+      </div>
+      <p style="font-size: 0.58em; color: var(--c-muted); margin-top: 0.3em; text-align: center;">
+        <span style="display:inline-block; margin:0 0.8em;"><strong style="color:#d97706">═══▶</strong> BullMQ queue (async work)</span>
+        <span style="display:inline-block; margin:0 0.8em;"><strong style="color:#166534">┄┄┄▶</strong> Redis pub/sub (event)</span>
+        <span style="display:inline-block; margin:0 0.8em;"><strong>───</strong> Postgres (ownership)</span>
+      </p>
+      <aside class="notes">
+        Gateway là public API duy nhất. 3 DB tách rời theo service. Redis làm trục liên lạc cho cả queue lẫn events. Lưu ý: Gateway gọi Crawler bằng BullMQ (async) chứ không phải gRPC — crawl là long-running. Gateway chỉ gọi Report bằng gRPC cho read-only (xem report, sinh PDF, tạo share link).
+      </aside>
+    </section>
+
+    <!-- 5. Triết lý — Why -->
+    <section>
+      <div class="section-label">04 · Triết lý — Why</div>
+      <h2>Orchestration + Choreography</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h4>Orchestration (cứng) — khởi đầu</h4>
+          <p><strong>Gateway cầm trịch</strong>: validate request, auth, rate-limit, enqueue. Một điểm vào duy nhất → dễ kiểm soát security + consistency.</p>
+        </div>
+        <div class="card">
+          <h4>Choreography (mềm) — xử lý</h4>
+          <p><strong>Workers tự diễn</strong> qua BullMQ + Pub/Sub. Không service nào "ra lệnh" — analyze + keyword tự chạy song song, report tự lắng nghe event.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Vì sao hybrid?</strong> Khởi đầu cần validation tập trung → chọn orchestration. Xử lý cần scale độc lập và loose coupling → chọn choreography. Pattern này được khuyến nghị trong <em>Building Event-Driven Microservices</em> (Bellemare, O'Reilly 2020) cho workload có bước khởi đầu cần gate tập trung.
+      </div>
+      <aside class="notes">
+        Đây là điểm nhấn số 1 của deck. Nhiều project sinh viên chọn 1 trong 2 thuần — ở đây mình chọn kết hợp vì đó là realistic pattern. Dừng 30 giây ở slide này.
+      </aside>
+    </section>
+
+    <!-- 6. Gateway What/Why -->
+    <section>
+      <div class="section-label">05 · Services · 1/5</div>
+      <div class="service-head">
+        <h2>Gateway</h2>
+        <span class="port">HTTP :3000 · gRPC client :50051</span>
+      </div>
+      <p style="color: var(--c-muted); font-size: 0.85em; margin-top: 0;">Cổng vào duy nhất. Chỉ service này expose ra public.</p>
+      <div class="what-why">
+        <div class="col what">
+          <h3>What · trách nhiệm</h3>
+          <ul>
+            <li>Auth: register, login, JWT + refresh rotation, Google OAuth, verify email</li>
+            <li>REST <code>/api/v1/{auth,audits,users,admin,shared}</code></li>
+            <li>Socket.IO <code>/ws</code> — đẩy progress real-time</li>
+            <li>Orchestrator: nhận POST audit → enqueue <span class="chip queue">crawl.start</span></li>
+            <li>Rate-limit Redis (audit/hour, login/15min)</li>
+          </ul>
+        </div>
+        <div class="col why">
+          <h3>Why · quyết định thiết kế</h3>
+          <ul>
+            <li><strong>Chỉ Gateway public</strong> → giảm attack surface; service khác không cần auth nội bộ.</li>
+            <li><strong>Refresh token rotated + hashed</strong> (OWASP) → an toàn trước XSS/CSRF cơ bản.</li>
+            <li><strong>Cookie HTTP-only scope hẹp</strong> <code>/api/v1/auth</code> → không bị JS đọc được.</li>
+            <li><strong>SSRF validator</strong> trước khi enqueue → chặn private IP từ URL input.</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        Auth làm đúng chuẩn OWASP chứ không dừng ở "JWT-trong-localStorage" như nhiều project. Điểm này hội đồng hay hỏi về security.
+      </aside>
+    </section>
+
+    <!-- 7. Crawler What/Why -->
+    <section>
+      <div class="section-label">05 · Services · 2/5</div>
+      <div class="service-head">
+        <h2>Crawler</h2>
+        <span class="port">gRPC :50052 · stateless · cache Redis 1h</span>
+      </div>
+      <p style="color: var(--c-muted); font-size: 0.85em; margin-top: 0;">Lấy dữ liệu trang, đo Core Web Vitals, fan-out analysis.</p>
+      <div class="what-why">
+        <div class="col what">
+          <h3>What · trách nhiệm</h3>
+          <ul>
+            <li>Consume <span class="chip queue">crawl.start</span></li>
+            <li>Cheerio fetch HTML → detect SPA → fallback Playwright</li>
+            <li>Lighthouse Programmatic API → LCP, CLS, INP, TBT</li>
+            <li><code>PageDataExtractor</code> chuẩn hoá data cho downstream</li>
+            <li><strong>Fan-out</strong> → <span class="chip queue">analyze.start</span> + <span class="chip queue">keyword.start</span></li>
+            <li>Pub <span class="chip pub">audit.progress</span>, <span class="chip pub">crawl.done</span></li>
+          </ul>
+        </div>
+        <div class="col why">
+          <h3>Why · quyết định thiết kế</h3>
+          <ul>
+            <li><strong>Cheerio default + Playwright fallback</strong> → nhanh cho trang tĩnh, đúng cho SPA. Không tốn RAM 200MB cho mọi request.</li>
+            <li><strong>Browser pool</strong> (<code>BROWSER_POOL_SIZE</code>) → tránh cold-start Playwright → tiết kiệm 2–3s/audit.</li>
+            <li><strong>Stateless</strong> → scale ngang tự do, không cần DB.</li>
+            <li><strong>Cache Redis 1h</strong> theo URL hash → request lặp trong ngày không tốn Playwright.</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        Service này gánh phần rủi ro nhất — network, browser, timeout. Browser pool là micro-optimization ROI rất cao.
+      </aside>
+    </section>
+
+    <!-- 8. SEO Analyzer What/Why -->
+    <section>
+      <div class="section-label">05 · Services · 3/5</div>
+      <div class="service-head">
+        <h2>SEO Analyzer</h2>
+        <span class="port">gRPC :50053 · DB seo_analyzer</span>
+      </div>
+      <p style="color: var(--c-muted); font-size: 0.85em; margin-top: 0;">Rule engine — 22 rules trên 7 categories.</p>
+      <div class="what-why">
+        <div class="col what">
+          <h3>What · trách nhiệm</h3>
+          <ul>
+            <li>Consume <span class="chip queue">analyze.start</span></li>
+            <li>Chạy 22 rule theo interface <code>ISeoRule</code></li>
+            <li>Category score = weighted avg; overall score</li>
+            <li>Persist <code>RuleResult</code> (22 rows / audit)</li>
+            <li>Pub <span class="chip pub">analyze.done</span></li>
+            <li>Admin gRPC: list rules, update weight live</li>
+          </ul>
+        </div>
+        <div class="col why">
+          <h3>Why · quyết định thiết kế</h3>
+          <ul>
+            <li><strong>Open/Closed Principle</strong> — <code>ISeoRule</code> + <code>RuleRegistry</code>. Thêm rule = 1 file mới + register, không đụng engine.</li>
+            <li><strong>Weight lưu trong DB</strong> (không hard-code) → admin chỉnh weight không cần deploy.</li>
+            <li><strong>22 rule / 7 category</strong>: meta (4), headings (2), images (2), links (3), content (1), performance (1), technical (9).</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        Đây là ví dụ sống của OCP trong code thực. Hội đồng hay hỏi "thêm rule mới làm thế nào" — trả lời: 1 file, 10 phút, không cần biết phần còn lại.
+      </aside>
+    </section>
+
+    <!-- 9. Keyword Analyzer What/Why -->
+    <section>
+      <div class="section-label">05 · Services · 4/5</div>
+      <div class="service-head">
+        <h2>Keyword Analyzer</h2>
+        <span class="port">gRPC :50054 · stateless</span>
+      </div>
+      <p style="color: var(--c-muted); font-size: 0.85em; margin-top: 0;">Phân tích từ khoá theo target keyword người dùng nhập.</p>
+      <div class="what-why">
+        <div class="col what">
+          <h3>What · trách nhiệm</h3>
+          <ul>
+            <li>Consume <span class="chip queue">keyword.start</span></li>
+            <li>Tokenize với stopwords Việt + Anh</li>
+            <li>Term Frequency (TF) cho top keywords</li>
+            <li>Density check: healthy = <strong>1–3%</strong></li>
+            <li>Placement check: title · H1 · URL · 100 từ đầu</li>
+            <li>Verdict: <em>missing</em> / <em>under-optimized</em> / <em>optimal</em> / <em>stuffed</em></li>
+            <li>Pub <span class="chip pub">keyword.done</span></li>
+          </ul>
+        </div>
+        <div class="col why">
+          <h3>Why · quyết định thiết kế</h3>
+          <ul>
+            <li><strong>Service nhẹ nhất</strong> — ví dụ chuẩn của Single Responsibility.</li>
+            <li><strong>Stateless</strong> — không có DB riêng, cache Redis kết quả; scale ngang tự do.</li>
+            <li><strong>Replace-able</strong> — nếu sau này thay bằng AI-based keyword scoring, chỉ cần rewrite service này.</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        Minh chứng rõ ràng cho lợi ích của microservice: nếu cần đổi logic keyword scoring sang AI, chỉ sửa service này mà không đụng phần còn lại.
+      </aside>
+    </section>
+
+    <!-- 10. Report What/Why -->
+    <section>
+      <div class="section-label">05 · Services · 5/5</div>
+      <div class="service-head">
+        <h2>Report</h2>
+        <span class="port">HTTP :3004 · gRPC :50055 · DB seo_report</span>
+      </div>
+      <p style="color: var(--c-muted); font-size: 0.85em; margin-top: 0;">Tổng hợp, sinh PDF, quản lý share link.</p>
+      <div class="what-why">
+        <div class="col what">
+          <h3>What · trách nhiệm</h3>
+          <ul>
+            <li>Sub <span class="chip pub">analyze.done</span> + <span class="chip pub">keyword.done</span> + <span class="chip pub">crawl.done</span></li>
+            <li><code>WaitForBothService</code> đếm 2/2 → enqueue <span class="chip queue">report.start</span> (self)</li>
+            <li>Aggregate: <code>0.7 × analyzer + 0.3 × CWV</code></li>
+            <li>Persist <code>Report</code> + pub <span class="chip pub">report.done</span> / <span class="chip pub">audit.completed</span></li>
+            <li>PDF = Playwright render + Handlebars template</li>
+            <li>Share link = <code>randomBytes(32).toString('hex')</code> (64 chars)</li>
+          </ul>
+        </div>
+        <div class="col why">
+          <h3>Why · quyết định thiết kế</h3>
+          <ul>
+            <li><strong>WaitForBothService = Join pattern</strong>: 2 async stream gặp nhau qua Redis counter. Không có nó → hoặc poll (waste), hoặc race condition (thiếu data).</li>
+            <li><strong>Self-enqueue</strong> <span class="chip queue">report.start</span> → giãn áp lực; retry/DLQ miễn phí từ BullMQ.</li>
+            <li><strong>Playwright tái dùng</strong> → không thêm tool PDF mới, share browser pool với crawler.</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        Đây là chỗ technical sâu nhất. WaitForBothService là pattern "join" cổ điển nhưng áp dụng cho microservice qua Redis counter — đáng dừng 1 phút.
+      </aside>
+    </section>
+
+    <!-- 11. Pipeline topology -->
+    <section>
+      <div class="section-label">06 · Pipeline — Message topology</div>
+      <h2>4 BullMQ queues + 7 Pub/Sub topics</h2>
+      <div class="grid-2" style="gap: 0.6em;">
+        <div>
+          <h3 style="color: #92400e; font-size: 0.75em; margin-bottom: 0.3em;">BullMQ queues (work)</h3>
+          <table style="font-size: 0.55em;">
+            <thead><tr><th>Queue</th><th>Producer</th><th>Consumer</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip queue">crawl.start</span></td><td>Gateway</td><td>Crawler</td></tr>
+              <tr><td><span class="chip queue">analyze.start</span></td><td>Crawler</td><td>Analyzer</td></tr>
+              <tr><td><span class="chip queue">keyword.start</span></td><td>Crawler</td><td>Keyword</td></tr>
+              <tr><td><span class="chip queue">report.start</span></td><td>Report (self)</td><td>Report</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 style="color: #166534; font-size: 0.75em; margin-bottom: 0.3em;">Redis Pub/Sub (events)</h3>
+          <table style="font-size: 0.55em;">
+            <thead><tr><th>Topic</th><th>Publisher</th><th>Subscriber</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip pub">audit.progress</span></td><td>Crawler</td><td>Gateway (WS)</td></tr>
+              <tr><td><span class="chip pub">crawl.done</span></td><td>Crawler</td><td>Report (cache CWV)</td></tr>
+              <tr><td><span class="chip pub">analyze.done</span></td><td>Analyzer</td><td>Report (counter)</td></tr>
+              <tr><td><span class="chip pub">keyword.done</span></td><td>Keyword</td><td>Report (counter)</td></tr>
+              <tr><td><span class="chip pub">report.done</span></td><td>Report</td><td>Gateway (WS)</td></tr>
+              <tr><td><span class="chip pub">audit.completed</span></td><td>Report</td><td>Gateway (WS)</td></tr>
+              <tr><td><span class="chip pub">audit.failed</span></td><td>Any worker</td><td>Gateway (WS)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Queues vs Topics khác nhau ở đâu?</strong>  Queue đảm bảo <em>exactly-one consumer</em> xử lý + retry/DLQ. Topic broadcast <em>fire-and-forget</em>, subscriber nào offline lúc đó là mất event.
+      </div>
+      <aside class="notes">
+        Nhấn mạnh: 4 queue cho "làm việc" (có retry/DLQ), 7 topic cho "thông báo" (không persist). Chọn sai cơ chế là sai kiến trúc. Ví dụ: nếu dùng pub/sub cho crawl.start thì job nào fail là mất luôn.
+      </aside>
+    </section>
+
+    <!-- 12. Happy Path — Flow -->
+    <section>
+      <div class="section-label">07 · Flow — Happy path</div>
+      <h2>Luồng một audit end-to-end (~15 giây)</h2>
+      <div class="mermaid" style="font-size: 0.48em;">
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant G as Gateway
+    participant R as Redis
+    participant C as Crawler
+    participant A as Analyzer
+    participant K as Keyword
+    participant P as Report
+
+    U->>G: POST /api/v1/audits
+    G-->>U: 202 {auditId}
+    U->>G: WS audit:subscribe
+    G->>R: enqueue crawl.start
+    R->>C: consume crawl.start
+    C->>C: Cheerio → Playwright fallback + Lighthouse
+    C->>R: pub audit.progress
+    R->>G: sub → WS emit
+    G-->>U: progress 40%
+    C->>R: pub crawl.done (CWV cached)
+    R->>P: sub (cache for later aggregate)
+    C->>R: enqueue analyze.start + keyword.start
+    par Parallel
+        R->>A: consume analyze.start
+        A->>A: 22 rules → persist RuleResult
+        A->>R: pub analyze.done
+        R->>P: sub → WaitForBoth counter 1/2
+    and
+        R->>K: consume keyword.start
+        K->>K: TF + density + placement
+        K->>R: pub keyword.done
+        R->>P: sub → WaitForBoth counter 2/2 ✓
+    end
+    P->>R: enqueue report.start (self)
+    R->>P: consume report.start
+    P->>P: aggregate analyzer + CWV → persist Report
+    P->>R: pub report.done + audit.completed
+    R->>G: sub → WS emit
+    G-->>U: audit:completed
+      </div>
+      <aside class="notes">
+        Kể chuyện theo 3 pha: (1) Khởi đầu — bước 1-5, Gateway cầm trịch. (2) Song song — bước 14-21, analyze + keyword chạy đồng thời. (3) Hội tụ — bước 22-26, WaitForBoth + aggregate. Nhấn mạnh từ bước 14 trở đi không có service nào ra lệnh.
+      </aside>
+    </section>
+
+    <!-- 13. 3 cơ chế giao tiếp -->
+    <section>
+      <div class="section-label">08 · Communication</div>
+      <h2>3 cơ chế giao tiếp — dùng đúng việc</h2>
+      <table style="font-size: 0.68em;">
+        <thead>
+          <tr><th>Cơ chế</th><th>Dùng khi</th><th>Ví dụ</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>gRPC</strong><br/><span style="color:var(--c-muted); font-size:0.88em;">synchronous</span></td>
+            <td>Cần response ngay, type-safe request/reply</td>
+            <td>Gateway → Report <code>GetReport</code>, <code>GeneratePdf</code>, <code>CreateShareLink</code></td>
+          </tr>
+          <tr>
+            <td><strong>BullMQ</strong><br/><span style="color:var(--c-muted); font-size:0.88em;">async queue</span></td>
+            <td>Long-running, cần retry, fan-out, DLQ</td>
+            <td><span class="chip queue">crawl.start</span> → <span class="chip queue">analyze.start</span> + <span class="chip queue">keyword.start</span> → <span class="chip queue">report.start</span></td>
+          </tr>
+          <tr>
+            <td><strong>Pub/Sub</strong><br/><span style="color:var(--c-muted); font-size:0.88em;">event broadcast</span></td>
+            <td>Choreography, nhiều subscriber, không cần delivery guarantee</td>
+            <td>Progress updates, <span class="chip pub">*.done</span> events, audit completion</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Kỷ luật kiến trúc:</strong> Service boundary = Postgres DB boundary; chỉ Gateway public HTTP; không thêm cơ chế giao tiếp khác.
+      </div>
+      <aside class="notes">
+        Nhiều project lạm dụng REST cho mọi thứ — đó là anti-pattern. Mỗi cơ chế giải quyết 1 vấn đề khác nhau, trade-off khác nhau.
+      </aside>
+    </section>
+
+    <!-- 14. Database boundary -->
+    <section>
+      <div class="section-label">09 · Data ownership</div>
+      <h2>Database-per-service — vì sao 3 DB?</h2>
+      <div class="mermaid" style="font-size: 0.7em;">
+flowchart LR
+    GW["Gateway"] --> DB1[("seo_gateway<br/>User · Audit<br/>RefreshToken")]
+    AN["SEO Analyzer"] --> DB2[("seo_analyzer<br/>SeoRule<br/>RuleResult")]
+    RP["Report"] --> DB3[("seo_report<br/>Report<br/>ShareLink")]
+
+    classDef db1 fill:#dbeafe,stroke:#1e40af
+    classDef db2 fill:#f3e8ff,stroke:#7c3aed
+    classDef db3 fill:#fef3c7,stroke:#d97706
+    class DB1 db1
+    class DB2 db2
+    class DB3 db3
+      </div>
+      <div class="grid-2" style="margin-top: 0.8em;">
+        <div class="card">
+          <h4>Được gì</h4>
+          <ul>
+            <li>Loose coupling — schema Analyzer đổi không kéo migration Gateway</li>
+            <li>Scale độc lập — Analyzer ghi nhiều có thể tune riêng</li>
+            <li>Failure isolation — DB analyzer down, user vẫn login được</li>
+            <li>Compliance-ready — phân quyền theo nhóm dữ liệu</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left-color: var(--c-warn); background: #fffbeb;">
+          <h4 style="color: var(--c-warn);">Trade-off</h4>
+          <ul>
+            <li>Không JOIN cross-service → phải aggregate ở application layer</li>
+            <li>Query analytics ("top user có score cao") cần ETL riêng</li>
+            <li>Transaction phân tán phải dùng saga + compensation</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        Hội đồng hay hỏi "sao không 1 DB cho đơn giản" → trả lời: coupling giết khả năng scale/deploy độc lập. Cái giá là aggregator ở app layer. Đây là trade-off có chủ đích.
+      </aside>
+    </section>
+
+    <!-- 15. Tech Stack -->
+    <section>
+      <div class="section-label">10 · Tech Stack</div>
+      <h2>Quyết định chính</h2>
+      <table style="font-size: 0.62em;">
+        <thead><tr><th>Layer</th><th>Chọn</th><th>Vì sao</th></tr></thead>
+        <tbody>
+          <tr><td>Backend</td><td>NestJS 10.4</td><td>DI built-in, DDD-friendly, gRPC native</td></tr>
+          <tr><td>Sync RPC</td><td>gRPC</td><td>Type-safe qua <code>.proto</code>, binary nhỏ</td></tr>
+          <tr><td>Async queue</td><td>BullMQ 5.25</td><td>Redis-backed, retry/DLQ, BullBoard UI</td></tr>
+          <tr><td>ORM</td><td>Prisma 5.22</td><td>Type-safe schema, multi-DB tốt</td></tr>
+          <tr><td>Crawl</td><td>Cheerio + Playwright 1.50</td><td>Fast default + SPA fallback</td></tr>
+          <tr><td>CWV</td><td>Lighthouse 12.2</td><td>Chuẩn Google, programmatic API</td></tr>
+          <tr><td>Real-time</td><td>Socket.IO 4.8 + Redis adapter</td><td>Scale nhiều instance</td></tr>
+          <tr><td>Frontend</td><td>Next.js 15.1 + React 19 + shadcn/ui</td><td>RSC, Tailwind, copy-paste components</td></tr>
+          <tr><td>Monorepo</td><td>Turborepo</td><td>Remote cache, pipeline DAG</td></tr>
+          <tr><td>Deploy</td><td>Railway + Supabase</td><td>Free tier đủ, GitHub integration</td></tr>
+        </tbody>
+      </table>
+      <aside class="notes">
+        Không đọc từng dòng. Chốt 3 điểm: (1) NestJS vì DDD-friendly; (2) gRPC vì type-safe; (3) BullMQ vì đã có Redis sẵn, không thêm broker.
+      </aside>
+    </section>
+
+    <!-- 16. Takeaways -->
+    <section>
+      <div class="section-label">11 · Key Takeaways</div>
+      <h2>5 điểm nếu chỉ nhớ được 5 thứ</h2>
+      <ol style="font-size: 0.8em;">
+        <li><strong>Database-per-service</strong> là ràng buộc kỷ luật, không phải trang trí — mất JOIN để được decoupling.</li>
+        <li><strong>Hybrid orchestration + choreography</strong> — Gateway cứng khi khởi đầu, workers mềm khi xử lý.</li>
+        <li><strong>22 SEO rules theo Open/Closed</strong> — thêm rule = 1 file mới, không chạm engine.</li>
+        <li><strong>WaitForBothService = Join pattern</strong> — 2 async streams gặp nhau qua Redis counter.</li>
+        <li><strong>Dùng đúng cơ chế</strong> — BullMQ khi cần retry/DLQ; Pub/Sub khi cần broadcast; gRPC khi cần sync type-safe.</li>
+      </ol>
+      <aside class="notes">
+        Nhắc lại 5 điểm để đóng gói. Mỗi điểm là 1 quyết định thiết kế có chủ đích.
+      </aside>
+    </section>
+
+    <!-- 17. Self-critique -->
+    <section>
+      <div class="section-label">12 · Self-critique</div>
+      <h2>Điểm yếu biết trước & roadmap</h2>
+      <div class="grid-2">
+        <div>
+          <h3 style="color: var(--c-warn); font-size: 0.85em;">Hạn chế</h3>
+          <ul style="font-size: 0.72em;">
+            <li><strong>Redis là SPOF</strong> — queue + pub/sub + cache + rate-limit cùng phụ thuộc</li>
+            <li><strong>Không distributed tracing</strong> — debug cross-service phải grep log</li>
+            <li><strong>Không timeout <code>WaitForBothService</code></strong> → counter kẹt 1/2 → audit treo</li>
+            <li><strong>Không saga compensation</strong> — keyword fail sau 3 retry là không có cơ chế rollback audit</li>
+            <li><strong>Proto evolution chưa lint</strong> → breaking change có thể lọt vào PR</li>
+            <li><strong>Observability dừng ở logs</strong> — chưa có Prometheus metrics</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: var(--c-success); font-size: 0.85em;">Roadmap</h3>
+          <ul style="font-size: 0.72em;">
+            <li><strong>Ngắn hạn:</strong> Public API + API key · timeout <code>WaitForBothService</code> · tăng test cho Report</li>
+            <li><strong>Trung hạn:</strong> OpenTelemetry + Prometheus · proto-lint enforce backward compat · Redis Sentinel</li>
+            <li><strong>Dài hạn:</strong> Multi-page crawl (sitemap) · backlink check (Common Crawl) · AI-powered recommendations qua <code>packages/seo-ai-core</code></li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout warn">
+        <strong>Nguyên tắc trình bày:</strong> kể điểm yếu trước khi hội đồng hỏi ra — thể hiện mình hiểu hệ thống chứ không build theo template.
+      </div>
+      <aside class="notes">
+        Slide quan trọng nhất về ấn tượng. Nhiều sinh viên giấu điểm yếu — kể ra chủ động sẽ được đánh giá cao vì cho thấy hiểu sâu.
+      </aside>
+    </section>
+
+    <!-- 18. Q&A -->
+    <section class="title-slide" data-state="no-footer">
+      <div class="eyebrow">Thank you</div>
+      <h1>Q&amp;A</h1>
+      <p class="tagline">Sẵn sàng trả lời về kiến trúc, trade-offs, và hướng phát triển.</p>
+      <div class="meta">
+        <span><strong>Repo:</strong> feat/seo-public-api</span>
+        <span><strong>Docs:</strong> docs/SYSTEM-OVERVIEW.md</span>
+        <span><strong>Diagrams:</strong> diagrams/*.puml</span>
+      </div>
+      <aside class="notes">
+        Q&A chuẩn bị sẵn trong docs/SYSTEM-OVERVIEW.md §9.2. Nếu bị hỏi ngoài scope, lịch sự nói "điểm này tôi chưa research kỹ, tôi ghi lại và trả lời sau" — tốt hơn là bịa.
+      </aside>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#eef2ff',
+      primaryTextColor: '#312e81',
+      primaryBorderColor: '#4f46e5',
+      lineColor: '#64748b',
+      secondaryColor: '#fdf4ff',
+      tertiaryColor: '#f8fafc',
+      fontFamily: 'Inter, sans-serif',
+      fontSize: '15px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 8 },
+    sequence: { actorMargin: 55, messageFontSize: 13, noteFontSize: 12 }
+  });
+
+  (async () => {
+    const nodes = document.querySelectorAll('.mermaid');
+    for (let i = 0; i < nodes.length; i++) {
+      const el = nodes[i];
+      const src = el.textContent.trim();
+      try {
+        const { svg } = await mermaid.render('mmd-' + i, src);
+        el.innerHTML = svg;
+      } catch (e) {
+        el.innerHTML = '<pre style="color:#dc2626">Mermaid error: ' + e.message + '</pre>';
+      }
+    }
+
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      controls: true,
+      progress: true,
+      center: false,
+      transition: 'fade',
+      transitionSpeed: 'fast',
+      width: 1280,
+      height: 800,
+      margin: 0.06,
+      minScale: 0.3,
+      maxScale: 1.6,
+      plugins: [RevealNotes, RevealZoom]
+    });
+  })();
+</script>
+
+</body>
+</html>

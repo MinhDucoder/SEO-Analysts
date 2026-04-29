@@ -1,0 +1,195 @@
+@startuml 20-activity-seo-ai-core-rag
+' ========================================
+' Figure 2.20 — seo-ai-core: createRagChain Flow
+' Source: packages/seo-ai-core/src/chains/rag.chain.ts
+'         packages/seo-ai-core/src/chains/base.chain.ts
+'         packages/seo-ai-core/src/prompt/loader.ts
+'         packages/seo-ai-core/src/guardrails/output-parser.ts
+' Generated: 2026-04-23
+' Type: activity (with swimlanes)
+' ========================================
+
+!include _style.iuml
+scale max 1920 width
+
+title Figure 2.20 — @repo/seo-ai-core: RAG Chain Flow\n(BaseChain wrap → Retriever → PromptLoader → LLM → parseStructured)
+
+|#E8F5E9|Consumer|
+|#FFF8E1|BaseChain (wrap)|
+|#E3F2FD|RagChain (compose)|
+|#F3E5F5|Adapters (LangChain boundary)|
+
+|Consumer|
+start
+:**chain.invoke(input, ctx)**\n{ traceId, signal };
+
+|BaseChain (wrap)|
+partition "**0. BaseChain — observability + retry**" #FFF8E1 {
+  :logger.info("chain.start")\nattempt = 0;
+  :Forward AbortSignal\nto downstream;
+}
+
+|RagChain (compose)|
+partition "**1. Retrieve context**" #E3F2FD {
+  if (cfg.buildQuery defined?) then (yes)
+    :query = buildQuery(input);
+  else (no)
+    :query = (input as { query }).query\n(runtime cast — TS not enforced);
+  endif
+
+  :retriever.search(query, { topK });
+  note right
+    MemoryRetriever (MVP):
+    fake embedding cosine
+    on token-hash vectors
+  end note
+
+  if (search throws?) then (error)
+    #FF6B6B:throw **RetrieverError**;
+    stop
+  else (ok)
+    :docs: RetrievedDoc[];
+  endif
+}
+
+partition "**2. Build context string**" #E3F2FD {
+  :contextDocs =\ndocs.map(d => d.content)\n.join('\\n\\n');
+  :vars = buildVariables(input, contextDocs);
+}
+
+partition "**3. Render prompt**" #E3F2FD {
+  :promptLoader.render(\n  promptId, vars,\n  { version: range }\n);
+
+  partition "FileSystemPromptLoader.render" #FFF8E1 {
+    :resolveVersion(range)\n→ semver.maxSatisfying();
+
+    if (no version satisfies?) then (none)
+      #FF6B6B:throw **PromptError**\n("no matching version");
+      stop
+    else (found)
+    endif
+
+    if (cache hit on (id, version)?) then (hit)
+      :Use cached PromptTemplate;
+      note right: in-memory,\nno invalidation
+    else (miss)
+      :Read YAML file\nvX.Y.Z.prompt.yaml;
+      :Parse + validate shape\n(system, user, vars);
+
+      if (YAML invalid?) then (bad)
+        #FF6B6B:throw **PromptError**\n(schema mismatch);
+        stop
+      else (ok)
+        :Cache PromptTemplate;
+      endif
+    endif
+
+    :renderTemplate(system, vars)\n← Handlebars strict;
+    :renderTemplate(user, vars)\n← HTML-escape default;
+
+    if (unknown var in template?) then (yes)
+      #FF6B6B:throw **PromptError**\n(strict mode missing var);
+      stop
+    else (no)
+    endif
+
+    :hash = sha256(\n  id + version + messages\n).slice(0, 16);
+  }
+
+  :rendered: RenderedPrompt\n{ messages, hash };
+}
+
+partition "**4. Invoke LLM**" #E3F2FD {
+  :llm.invoke({\n  messages,\n  metadata: { promptHash: hash }\n}, signal);
+}
+
+|Adapters (LangChain boundary)|
+partition "AnthropicAdapter (only file allowed @langchain/*)" #F3E5F5 {
+  :_mappers.toBaseMessages(messages);
+  :ChatAnthropic.invoke(...)\n→ HTTP Anthropic API;
+
+  if (network/rate-limit/auth error?) then (transient)
+    #FF6B6B:throw **LLMError** (raw cause);
+  else (ok)
+    :_mappers.toLLMResponse(aiMessage);
+    note right
+      Drops non-text blocks
+      (tool_use, image)
+      → MVP text-only
+    end note
+    :return LLMResponse\n{ content, usage, finishReason };
+  endif
+}
+
+|BaseChain (wrap)|
+if (caught **LLMError** AND attempt < 1?) then (retry)
+  :logger.warn("retry transient")\nattempt = 1;
+  #FFE0E0:Re-enter step 4;
+  detach
+else (no retry)
+endif
+
+|RagChain (compose)|
+partition "**5. Parse structured output**" #E3F2FD {
+  :parseStructured(\n  response.content,\n  outputSchema\n);
+
+  partition "parseStructured (guardrail)" #FFF8E1 {
+    :stripFence(content)\n→ remove ```json fences;
+    :JSON.parse(...);
+
+    if (parse error?) then (yes)
+      :repairJson()\nfix smart quotes,\ntrailing commas;
+      :JSON.parse(repaired);
+
+      if (still fails?) then (yes)
+        #FF6B6B:throw **GuardrailError**\n{ raw, cause };
+        stop
+      else (ok)
+      endif
+    else (ok)
+    endif
+
+    :zodSchema.safeParse(json);
+
+    if (Zod invalid?) then (yes)
+      #FF6B6B:throw **GuardrailError**\n{ raw, issues };
+      stop
+    else (ok)
+      :return TOutput (validated);
+    endif
+  }
+}
+
+|BaseChain (wrap)|
+if (any error caught?) then (yes)
+  :logger.error("chain.failed")\n{ traceId, errClass };
+
+  if (LLMError after retry?) then (yes)
+    #FF6B6B:throw **ChainError**\n(wraps LLMError);
+  elseif (GuardrailError?) then (yes)
+    #FF6B6B:throw **ChainError**\n(wraps GuardrailError);
+  else (PromptError / RetrieverError)
+    #FF6B6B:throw **ChainError**\n(wraps original);
+  endif
+  stop
+else (no)
+  :logger.info("chain.success")\n{ traceId, durationMs,\n  promptHash, usage };
+endif
+
+|Consumer|
+:**TOutput** (Zod-validated);
+stop
+
+legend right
+  |= Color |= Meaning |
+  | <#E8F5E9> | Consumer entry/exit |
+  | <#FFF8E1> | BaseChain wrap (retry/log) |
+  | <#E3F2FD> | RagChain compose steps |
+  | <#F3E5F5> | LangChain adapter boundary |
+  | <#FFE0E0> | Retry path (LLMError only) |
+  | <#FF6B6B> | Error / throw |
+endlegend
+
+caption Source: packages/seo-ai-core/src/chains/{rag,base}.chain.ts + prompt/loader.ts + guardrails/output-parser.ts
+
+@enduml
