@@ -18,8 +18,8 @@ Chrome extension là **thin client** gọi `POST /api/v1/public/check` (đã shi
 | Auth | JWT bridge qua `externally_connectable` | Bearer API key (BYOK), giống CLI |
 | Build tool | `@crxjs/vite-plugin` | **WXT** (Vite-based, framework-agnostic, leader 2026) |
 | Prisma migration | Thêm `AuditSource` enum vào `seo-analyzer` DB | Không. `ApiKey` model đã có ở gateway DB |
-| Workflow tier | LARGE × 8 phase | MEDIUM × 4-5 phase |
-| Roadmap | 8 tuần | 4-5 tuần |
+| Workflow tier | LARGE × 8 phase | **LARGE × 5 phase** (full gates: discuss → plan → execute → review/cso/qa → ship/canary) |
+| Roadmap | 8 tuần | 5-6 tuần (LARGE ceremony bao gồm) |
 
 ---
 
@@ -652,27 +652,70 @@ V1 đề xuất `enum AuditSource { WEB, EXTENSION, API }`. Trong v2:
 
 → Khi nào nên tách: nếu chuyển sang multi-provider (OpenAI + Claude + Gemini) với routing logic phức tạp, hoặc khi LLM traffic > 50% gateway CPU. Hiện chưa.
 
-### 12.4. Workflow tier — MEDIUM, không LARGE
+### 12.4. Workflow tier — LARGE
 
-Theo `CLAUDE.md` rule: `proto change || ≥2 apps touched || Prisma migration → MEDIUM minimum`. V2 chạm:
-- `apps/extension` (mới)
-- `apps/gateway/src/main.ts` (CORS, ~10 dòng)
+Lý do upgrade từ MEDIUM lên LARGE (theo `CLAUDE.md` rules + judgment call):
 
-= 2 apps touched, **không** proto change, **không** Prisma migration → **MEDIUM** vừa đủ. Phase đi qua: `/office-hours` → `gsd:quick` → SP:TDD → `/review` + `e2e:smoke` → commit.
+1. **File count thực tế > 7**: `apps/extension` đầy đủ sẽ gồm ~25-30 files (4 entrypoints, 4 lib modules, 2 _locales, tests, configs, icons) — vượt threshold "Small" (≤2) và "Medium" (3-7) của CLAUDE.md.
+2. **Published artifact**: Extension submit Chrome Web Store + Edge Add-ons → fix bug sau publish mất 1-3 ngày review. Cần `/qa` + `/cso` trước submit, không xuề xòa như internal service.
+3. **Security-sensitive**: API key handling, `chrome-extension://` CORS boundary, privacy policy compliance — cần `/cso` audit chứ không chỉ `/review`.
+4. **Multi-step orchestration**: 5 phase tuần tự, mỗi phase có UAT criteria độc lập (auth flow → audit flow → UX → i18n → publish) — phù hợp `gsd:plan` chia plan cụ thể.
+5. **Đã cần research** (đã làm — competitor analysis, build tool comparison, public API contract). Research yêu cầu = LARGE signal.
+6. **Cross-app touched**: `apps/extension` (mới) + `apps/gateway` (CORS) — auto-MEDIUM minimum, nhưng các yếu tố trên đẩy lên LARGE.
+
+Phase đi qua đầy đủ workflow LARGE (per `CLAUDE.md` § "Quick Route"):
+
+```
+/office-hours + /plan-eng-review
+   ↓
+gsd:discuss-phase + gsd:plan-phase
+   ↓
+gsd:execute-phase (TDD waves)
+   ↓
+/review + /cso + /qa + e2e:smoke
+   ↓
+/ship + /land-and-deploy + /canary
+```
+
+**Ngoại lệ phase 5 (Publish)**: Phase này thuần config + asset (icons, store listing, privacy policy, submit form). Áp `SMALL` exception per CLAUDE.md ("Small tasks: KIEM DINH uses SP:verify — overhead not justified for ≤2 files"). Vẫn cần `/qa` cho final smoke test trước submit.
 
 ---
 
-## 13. Roadmap (4-5 tuần)
+## 13. Roadmap (5-6 tuần) — LARGE workflow per phase
 
-| Tuần | Phase | Output | Tier |
-|---|---|---|---|
-| 1 | **Skeleton + auth** | `apps/extension` WXT scaffold, options page paste API key + encrypt + save, content script extract URL/HTML, service worker route message. CORS patch gateway. | MEDIUM |
-| 2 | **Audit flow E2E** | `lib/client.ts` gọi `/public/check`, popup UI hiển thị score + issues + suggestion từ response. Error code dispatch. | MEDIUM |
-| 3 | **UX polish + cache** | Loading states, retry on rate limit (respect `Retry-After`), local cache 1h cho cùng URL+keyword (giảm hit rate limit), auto-fallback URL→HTML mode khi gateway 424. | MEDIUM |
-| 4 | **Side panel + i18n** | Side panel cho detailed view (lịch sử audit của tab hiện tại từ `chrome.storage.local`), `_locales/vi` + `_locales/en`. | MEDIUM |
-| 5 | **Polish + publish** | Icons, screenshot, store listing, privacy policy, submit Chrome Web Store + Edge Add-ons (cùng codebase, `wxt build -b firefox` cho v2). | SMALL |
+Mỗi phase chạy đầy đủ ceremony LARGE (trừ phase 5 — SMALL exception). Cụ thể gates per phase:
 
-V2 backlog: streaming AI fix, team workspace, auto-apply CMS, Firefox port.
+```
+THIET KE  → /office-hours + /plan-eng-review
+CHIA NHO  → gsd:discuss-phase + gsd:plan-phase
+CODE      → gsd:execute-phase (TDD waves)
+KIEM DINH → /review + /cso (security) + /qa (functional) + e2e:smoke
+SHIP      → /ship + /land-and-deploy + /canary
+```
+
+### 13.1. Phase breakdown
+
+| # | Phase | Tier | Tuần | Output | KIEM DINH gates |
+|---|---|---|---|---|---|
+| 1 | **Skeleton + Auth foundation** | LARGE | T1-T2 | `apps/extension` WXT scaffold (entrypoints, lib, configs, tests). Options page: API key paste + validate prefix + save `chrome.storage.local`. Service worker auth routing. CORS patch `apps/gateway/main.ts`. | `/review` (auth boundary), `/cso` (storage threat model), `/qa` (manual: paste key → ext nhớ qua reload), e2e:smoke (Playwright + ext install) |
+| 2 | **Audit flow E2E** | LARGE | T2-T3 | `lib/client.ts` → `POST /public/check`, content script DOM extract (URL mode + HTML mode), popup UI: keyword input + score + issues + AI suggestion. Error code dispatch (15 codes). | `/review` (error handling, type safety vs `@repo/shared`), `/cso` (Bearer header sanitization, no log), `/qa` (audit URL public + audit CMS draft), e2e:smoke (real gateway) |
+| 3 | **UX polish + resilience** | LARGE | T3-T4 | Loading states, retry on 429 với `Retry-After` countdown, local cache 1h cho cùng URL+keyword, auto-fallback URL→HTML khi gateway trả `URL_FETCH_FAILED`, optimistic UI cho HTTPS/viewport. | `/review` (cache invalidation logic), `/qa` (rate-limit chain: hit 20 lần → wait → resume), e2e:smoke |
+| 4 | **Side panel + i18n + history** | LARGE | T4-T5 | Side panel với detailed view, lịch sử audit lưu `chrome.storage.local` (per-tab), `_locales/vi` + `_locales/en`, audience filter (writer/dev), keyword history autocomplete. | `/review` (i18n key coverage), `/qa` (toggle ngôn ngữ runtime, side panel responsive), e2e:smoke |
+| 5 | **Publish prep** | SMALL | T5-T6 | Icons (16/48/128), screenshots (5 cảnh), store listing copy (vi + en), privacy policy URL, justify permission rationale, build production zip, submit Chrome Web Store + Edge Add-ons. | `/qa` smoke cuối cùng (production build), SP:verify cho config/asset changes — không cần full LARGE ceremony cho task config |
+
+### 13.2. Cross-phase gates (theo `.claude/workflow/WORKFLOW-LARGE.md`)
+
+- **Forcing escalation check** mỗi phase: nếu touch proto / Prisma / `@repo/shared` ≥1 thì re-confirm tier.
+- **Microservices gates** (per CLAUDE.md): proto typecheck + e2e:smoke pass trước `/review` cho phase chạm cross-service. Phase 1 chạm gateway → bắt buộc.
+- **Failure handling**: KIEM DINH fail → quay về CODE → fix → re-run. Max 2 retry, sau đó STOP + ask user.
+
+### 13.3. V2 backlog (sau khi MVP ship)
+
+- Streaming AI fix (gateway endpoint mới + SSE)
+- Team workspace shared history
+- Auto-apply fix vào CMS (WordPress/Webflow OAuth)
+- Firefox port (`wxt build -b firefox` + manifest fixup)
+- Anonymous / no-key tier để conversion
 
 ---
 
@@ -683,7 +726,7 @@ V2 backlog: streaming AI fix, team workspace, auto-apply CMS, Firefox port.
 - `host_permissions`: chỉ `https://api.seoanalyst.app/*` (production), không `<all_urls>`.
 - `permissions`: `activeTab` + `storage` only. **Không** `tabs`, **không** `webNavigation`, **không** `cookies`.
 - DOM scraped chỉ gửi khi user click, không persist client-side ngoài cache 1h.
-- API key plaintext encrypted-at-rest qua AES-GCM, key dẫn xuất từ install ID.
+- API key lưu plain trong `chrome.storage.local` (xem § 6.3 — encryption không tăng security thực sự khi attacker có local file access; storage đã được Chrome scope theo extension ID, content script không có quyền đọc).
 - Privacy policy: chỉ nêu DOM/URL gửi qua HTTPS, gateway cache 24h Redis, không log full HTML.
 
 ### 14.2. Risks
