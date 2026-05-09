@@ -3438,6 +3438,225 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "N8dLJg",
+      "x": 3600,
+      "y": 0,
+      "name": "Page/AuthOAuthSuccess/Loading",
+      "width": 480,
+      "height": 600,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "ellipse",
+          "id": "c24g7",
+          "name": "o1ring",
+          "startAngle": 90,
+          "sweepAngle": -270,
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "width": 48,
+          "height": 48,
+          "stroke": {
+            "align": "inside",
+            "thickness": 4,
+            "fill": "$color-class-good"
+          }
+        },
+        {
+          "type": "text",
+          "id": "uN0up",
+          "name": "o1title",
+          "fill": "$color-fg",
+          "content": "Đang xác thực với Google...",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-lg",
+          "fontWeight": "$weight-medium"
+        },
+        {
+          "type": "text",
+          "id": "LCLDH",
+          "name": "o1sub",
+          "fill": "$color-fg-muted",
+          "content": "Vui lòng đợi trong giây lát",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "aYExQ",
+      "x": 4180,
+      "y": 0,
+      "name": "Page/AuthOAuthSuccess/Success",
+      "width": 480,
+      "height": 600,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "KQ9ty",
+          "name": "o2icon",
+          "width": 64,
+          "height": 64,
+          "iconFontName": "circle-check",
+          "iconFontFamily": "lucide",
+          "fill": "$color-class-excellent"
+        },
+        {
+          "type": "text",
+          "id": "JpSU4",
+          "name": "o2title",
+          "fill": "$color-fg",
+          "content": "Đăng nhập thành công!",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-2xl",
+          "fontWeight": "$weight-semibold"
+        },
+        {
+          "type": "text",
+          "id": "R0JV4",
+          "name": "o2sub",
+          "fill": "$color-fg-muted",
+          "content": "Đang chuyển đến dashboard...",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "gZz6h",
+      "x": 4760,
+      "y": 0,
+      "name": "Page/AuthOAuthSuccess/Error/MissingToken",
+      "width": 480,
+      "height": 600,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "jk2EK",
+          "name": "o3icon",
+          "width": 64,
+          "height": 64,
+          "iconFontName": "circle-x",
+          "iconFontFamily": "lucide",
+          "fill": "$color-class-poor"
+        },
+        {
+          "type": "text",
+          "id": "YXShU",
+          "name": "o3title",
+          "fill": "$color-fg",
+          "content": "Xác thực thất bại",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-2xl",
+          "fontWeight": "$weight-semibold"
+        },
+        {
+          "type": "text",
+          "id": "fFRXJ",
+          "name": "o3sub",
+          "fill": "$color-fg-muted",
+          "content": "Token không hợp lệ hoặc đã hết hạn",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "id": "rzmhw",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "name": "o3btn",
+          "descendants": {
+            "HmcyL": {
+              "content": "Quay lại đăng nhập"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "M3IP2",
+      "x": 5340,
+      "y": 0,
+      "name": "Page/AuthOAuthSuccess/Error/InvalidToken",
+      "width": 480,
+      "height": 600,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "icon_font",
+          "id": "CadMQ",
+          "name": "o4icon",
+          "width": 64,
+          "height": 64,
+          "iconFontName": "circle-x",
+          "iconFontFamily": "lucide",
+          "fill": "$color-class-poor"
+        },
+        {
+          "type": "text",
+          "id": "ycbEz",
+          "name": "o4title",
+          "fill": "$color-fg",
+          "content": "Xác thực thất bại",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-2xl",
+          "fontWeight": "$weight-semibold"
+        },
+        {
+          "type": "text",
+          "id": "jnCbg",
+          "name": "o4sub",
+          "fill": "$color-fg-muted",
+          "content": "Đường dẫn đăng nhập không hợp lệ",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "id": "LgOPM",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "name": "o4btn",
+          "descendants": {
+            "HmcyL": {
+              "content": "Quay lại đăng nhập"
+            }
+          }
+        }
+      ]
     }
   ],
   "themes": {
