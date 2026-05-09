@@ -4877,6 +4877,1194 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "V94vd",
+      "x": 3600,
+      "y": 1500,
+      "name": "Page/AuthRegister/Default",
+      "width": 520,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "dkcZO",
+          "name": "regCard",
+          "width": 440,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "icw9l",
+              "name": "regBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "eNB7M",
+                  "name": "regIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "MsDO6",
+                  "name": "regWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Flpyz",
+              "name": "regHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "B4Zy6",
+                  "name": "regTitle",
+                  "fill": "$color-fg",
+                  "content": "Tạo tài khoản",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "n3HNb",
+                  "name": "regSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Bắt đầu audit SEO miễn phí",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "JEUy1",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "regName",
+              "descendants": {
+                "hAriX": {
+                  "content": "Họ tên"
+                },
+                "tgH70": {
+                  "content": "Nguyễn Văn A"
+                }
+              }
+            },
+            {
+              "id": "PaXgx",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "regEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "q1O1B6",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "regPwd",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "uxFvW",
+              "name": "regRules",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "P9tNT",
+                  "name": "rule1",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Tối thiểu 8 ký tự",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ATaEC",
+                  "name": "rule2",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Có ít nhất 1 chữ hoa",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "htua3",
+                  "name": "rule3",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Có ít nhất 1 chữ số",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "wVflX",
+                  "name": "rule4",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "moK3m",
+              "name": "regTerms",
+              "fill": "$color-fg-muted",
+              "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            },
+            {
+              "id": "IoVr0",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "regSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Tạo tài khoản"
+                }
+              }
+            },
+            {
+              "id": "HYrIN",
+              "type": "ref",
+              "ref": "QThUr",
+              "width": "fill_container",
+              "name": "regGoogle",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "🇬 Đăng ký với Google"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "j2sPLN",
+              "name": "regFooter",
+              "fill": "$color-fg-muted",
+              "content": "Đã có tài khoản? Đăng nhập",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "eFPAB",
+      "x": 4220,
+      "y": 1500,
+      "name": "Page/AuthRegister/PasswordTyping",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "typwe",
+          "name": "regBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "Rnn7l",
+              "name": "regIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "thfmZ",
+              "name": "regWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "t3Zs8",
+          "name": "regHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "AB4dC",
+              "name": "regTitle",
+              "fill": "$color-fg",
+              "content": "Tạo tài khoản",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "TD40E",
+              "name": "regSub",
+              "fill": "$color-fg-muted",
+              "content": "Bắt đầu audit SEO miễn phí",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "dDbYR",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regName",
+          "descendants": {
+            "hAriX": {
+              "content": "Họ tên"
+            },
+            "tgH70": {
+              "content": "Nguyễn Văn A"
+            }
+          }
+        },
+        {
+          "id": "ubZpm",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "RIjyT",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regPwd",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "DfQYL",
+          "name": "regRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "amKur",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "dnpme",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "t59ksk",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "BLLtD",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "bRtgq",
+          "name": "regTerms",
+          "fill": "$color-fg-muted",
+          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "id": "d0Hry",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "regSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Tạo tài khoản"
+            }
+          }
+        },
+        {
+          "id": "dQm8y",
+          "type": "ref",
+          "ref": "QThUr",
+          "width": "fill_container",
+          "name": "regGoogle",
+          "descendants": {
+            "Nu8z5": {
+              "content": "🇬 Đăng ký với Google"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "RizDD",
+          "name": "regFooter",
+          "fill": "$color-fg-muted",
+          "content": "Đã có tài khoản? Đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "JUVG8",
+      "x": 4760,
+      "y": 1500,
+      "name": "Page/AuthRegister/PasswordValid",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "JD5E9",
+          "name": "regBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "IfEwc",
+              "name": "regIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "jmEBv",
+              "name": "regWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d1xJ2",
+          "name": "regHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "p3SSER",
+              "name": "regTitle",
+              "fill": "$color-fg",
+              "content": "Tạo tài khoản",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "a0Zfd",
+              "name": "regSub",
+              "fill": "$color-fg-muted",
+              "content": "Bắt đầu audit SEO miễn phí",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "WDjxi",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regName",
+          "descendants": {
+            "hAriX": {
+              "content": "Họ tên"
+            },
+            "tgH70": {
+              "content": "Nguyễn Văn A"
+            }
+          }
+        },
+        {
+          "id": "J7bA6d",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "mwrJX",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regPwd",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "HEuOi",
+          "name": "regRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "MFiT6",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "HHMTP",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "LsAQa",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "w1mwD",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "DCI5U",
+          "name": "regTerms",
+          "fill": "$color-fg-muted",
+          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "id": "y6DQJu",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "regSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Tạo tài khoản"
+            }
+          }
+        },
+        {
+          "id": "cKbSv",
+          "type": "ref",
+          "ref": "QThUr",
+          "width": "fill_container",
+          "name": "regGoogle",
+          "descendants": {
+            "Nu8z5": {
+              "content": "🇬 Đăng ký với Google"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "gT0Yf",
+          "name": "regFooter",
+          "fill": "$color-fg-muted",
+          "content": "Đã có tài khoản? Đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "mjbHM",
+      "x": 5300,
+      "y": 1500,
+      "name": "Page/AuthRegister/Success",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "vLAb3",
+          "name": "regBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "cdzSl",
+              "name": "regIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "hz0k3",
+              "name": "regWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "v74Vt",
+          "name": "regHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "FcVdp",
+              "name": "regTitle",
+              "fill": "$color-fg",
+              "content": "Tạo tài khoản",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "TNvXL",
+              "name": "regSub",
+              "fill": "$color-fg-muted",
+              "content": "Bắt đầu audit SEO miễn phí",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "PZ0gb",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regName",
+          "descendants": {
+            "hAriX": {
+              "content": "Họ tên"
+            },
+            "tgH70": {
+              "content": "Nguyễn Văn A"
+            }
+          }
+        },
+        {
+          "id": "GfMOs",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "VMkLz",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regPwd",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "A2jDAg",
+          "name": "regRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "BoDfd",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "wtnvk",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "o9x1PT",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "P7AqE",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "mbGjl",
+          "name": "regTerms",
+          "fill": "$color-fg-muted",
+          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "id": "B48oQ",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "regSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Tạo tài khoản"
+            }
+          }
+        },
+        {
+          "id": "cBLiN",
+          "type": "ref",
+          "ref": "QThUr",
+          "width": "fill_container",
+          "name": "regGoogle",
+          "descendants": {
+            "Nu8z5": {
+              "content": "🇬 Đăng ký với Google"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "S9CZ6e",
+          "name": "regFooter",
+          "fill": "$color-fg-muted",
+          "content": "Đã có tài khoản? Đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W75Yx",
+      "x": 5840,
+      "y": 1500,
+      "name": "Page/AuthRegister/Error/EmailTaken",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "mDdyB",
+          "name": "regBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "yAHR5",
+              "name": "regIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "Xb4pZ",
+              "name": "regWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bnxzF",
+          "name": "regHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "e3yPdO",
+              "name": "regTitle",
+              "fill": "$color-fg",
+              "content": "Tạo tài khoản",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "OZOv0",
+              "name": "regSub",
+              "fill": "$color-fg-muted",
+              "content": "Bắt đầu audit SEO miễn phí",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "S6dluG",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regName",
+          "descendants": {
+            "hAriX": {
+              "content": "Họ tên"
+            },
+            "tgH70": {
+              "content": "Nguyễn Văn A"
+            }
+          }
+        },
+        {
+          "id": "SRJyU",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "r7XqS4",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "regPwd",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "rOrKS",
+          "name": "regRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "qtXYD",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Qa9i9",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "yTKHR",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Da17V",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "iFWij",
+          "name": "regTerms",
+          "fill": "$color-fg-muted",
+          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "id": "LjyrJ",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "regSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Tạo tài khoản"
+            }
+          }
+        },
+        {
+          "id": "y7Nd5c",
+          "type": "ref",
+          "ref": "QThUr",
+          "width": "fill_container",
+          "name": "regGoogle",
+          "descendants": {
+            "Nu8z5": {
+              "content": "🇬 Đăng ký với Google"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "JAk1q",
+          "name": "regFooter",
+          "fill": "$color-fg-muted",
+          "content": "Đã có tài khoản? Đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
     }
   ],
   "themes": {
