@@ -2037,6 +2037,353 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "ipQBS",
+      "x": 2040,
+      "y": 0,
+      "name": "Page/SharedReport/Default",
+      "clip": true,
+      "width": 1440,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "YkpWe",
+          "name": "PublicHeader",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$color-border"
+          },
+          "padding": [
+            0,
+            24
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "DuPGD",
+              "name": "headerLeft",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "EPKQs",
+                  "name": "brandIcon",
+                  "width": 24,
+                  "height": 24,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "jJ5bH",
+                  "name": "brandText",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-base",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "id": "tUCO0",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "name": "headerCta",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Tạo audit miễn phí →"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SAlhA",
+          "name": "Hero",
+          "width": "fill_container",
+          "fill": "$color-bg",
+          "gap": 48,
+          "padding": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "blYAo",
+              "name": "heroLeft",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "JWXzG",
+                  "name": "eyebrow",
+                  "fill": "$color-fg-muted",
+                  "content": "BÁO CÁO SEO",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-bold",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "jtZMy",
+                  "name": "urlText",
+                  "fill": "$color-fg",
+                  "content": "google.com",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-3xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "SBsgt",
+                  "name": "metaText",
+                  "fill": "$color-fg-muted",
+                  "content": "Audit ngày 15/03/2025 lúc 14:32",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "I5O2c7",
+                  "name": "heroSpacer",
+                  "width": "fill_container",
+                  "height": 16,
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "m6JR4",
+                  "name": "statsRow",
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  },
+                  "gap": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U0z9YC",
+                      "name": "statPass",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wMdU7",
+                          "name": "statPassNum",
+                          "fill": "$color-class-excellent",
+                          "content": "15",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-3xl",
+                          "fontWeight": "$weight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "UpEak",
+                          "name": "statPassLabel",
+                          "fill": "$color-fg-muted",
+                          "content": "Pass",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RFuQk",
+                      "name": "statWarn",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "v7toCw",
+                          "name": "statWarnNum",
+                          "fill": "$color-class-fair",
+                          "content": "3",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-3xl",
+                          "fontWeight": "$weight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "T5s6Uu",
+                          "name": "statWarnLabel",
+                          "fill": "$color-fg-muted",
+                          "content": "Warn",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "dqGam",
+                      "name": "statFail",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PUAwn",
+                          "name": "statFailNum",
+                          "fill": "$color-class-poor",
+                          "content": "2",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-3xl",
+                          "fontWeight": "$weight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kG01t",
+                          "name": "statFailLabel",
+                          "fill": "$color-fg-muted",
+                          "content": "Fail",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t2rGJ6",
+              "type": "ref",
+              "ref": "lHEAG",
+              "name": "heroRight"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "V8fzWh",
+          "name": "FooterCTA",
+          "width": "fill_container",
+          "fill": "$color-bg",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 64,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "rRKzX",
+              "name": "ctaTitle",
+              "fill": "$color-fg",
+              "content": "Muốn audit cho website của bạn?",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-3xl",
+              "fontWeight": "$weight-bold"
+            },
+            {
+              "type": "text",
+              "id": "UIxL7",
+              "name": "ctaSub",
+              "fill": "$color-fg-muted",
+              "content": "Tạo tài khoản miễn phí và audit không giới hạn.",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-base",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "fhTQc",
+              "name": "ctaButtons",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 12,
+              "children": [
+                {
+                  "id": "VZeVD",
+                  "type": "ref",
+                  "ref": "o8AJkQ",
+                  "name": "ctaPrimary",
+                  "descendants": {
+                    "HmcyL": {
+                      "content": "Tạo tài khoản miễn phí"
+                    }
+                  }
+                },
+                {
+                  "id": "silYv",
+                  "type": "ref",
+                  "ref": "QThUr",
+                  "name": "ctaOutline",
+                  "descendants": {
+                    "Nu8z5": {
+                      "content": "Xem demo audit khác"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
