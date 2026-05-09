@@ -3657,6 +3657,1226 @@
           }
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "G0opE",
+      "x": 3600,
+      "y": 680,
+      "name": "Page/AuthLogin/Default",
+      "width": 480,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "lFNdA",
+          "name": "loginCard",
+          "width": 400,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "GBHe7",
+              "name": "loginBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "FwiGh",
+                  "name": "loginIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "ILg0C",
+                  "name": "loginWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "CCbqQ",
+              "name": "loginHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Vg3DP",
+                  "name": "loginTitle",
+                  "fill": "$color-fg",
+                  "content": "Đăng nhập",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "QpVcD",
+                  "name": "loginSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Truy cập dashboard SEO của bạn",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "v2CmpJ",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "Qewmj",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginPwd",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "y2pbUO",
+              "name": "loginRow",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "LfPsq",
+                  "name": "loginRemember",
+                  "fill": "$color-fg-muted",
+                  "content": "☐ Ghi nhớ tôi",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "KYUAu",
+                  "name": "loginForgot",
+                  "fill": "$color-primary",
+                  "content": "Quên mật khẩu?",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "wEAgu",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "loginSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Đăng nhập"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "V7GD0i",
+              "name": "loginDiv",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "q1186c",
+                  "name": "loginDivL",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "w5azM",
+                  "name": "loginDivT",
+                  "fill": "$color-fg-muted",
+                  "content": "hoặc",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "rectangle",
+                  "id": "X7r5Q",
+                  "name": "loginDivR",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "id": "QL8tl",
+              "type": "ref",
+              "ref": "QThUr",
+              "width": "fill_container",
+              "name": "loginGoogle",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "🇬 Đăng nhập với Google"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "NChhv",
+              "name": "loginFooter",
+              "fill": "$color-fg-muted",
+              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "F7HhWX",
+      "x": 4180,
+      "y": 680,
+      "name": "Page/AuthLogin/Loading",
+      "width": 480,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "byujQ",
+          "name": "loginCard",
+          "width": 400,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "hOEZL",
+              "name": "loginBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "da1Ci",
+                  "name": "loginIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "t2qvA",
+                  "name": "loginWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tvgdy",
+              "name": "loginHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K9EKN",
+                  "name": "loginTitle",
+                  "fill": "$color-fg",
+                  "content": "Đăng nhập",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "Z5HyZq",
+                  "name": "loginSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Truy cập dashboard SEO của bạn",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "wF5QJ",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "hB0AY",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginPwd",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "EVGtR",
+              "name": "loginRow",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xNHfj",
+                  "name": "loginRemember",
+                  "fill": "$color-fg-muted",
+                  "content": "☐ Ghi nhớ tôi",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "MgBFA",
+                  "name": "loginForgot",
+                  "fill": "$color-primary",
+                  "content": "Quên mật khẩu?",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "VZLNu",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "loginSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Đăng nhập"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "c4SRd",
+              "name": "loginDiv",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "Pt0ob",
+                  "name": "loginDivL",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "b8Qv4",
+                  "name": "loginDivT",
+                  "fill": "$color-fg-muted",
+                  "content": "hoặc",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "rectangle",
+                  "id": "gGlOK",
+                  "name": "loginDivR",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "id": "XTQuR",
+              "type": "ref",
+              "ref": "QThUr",
+              "width": "fill_container",
+              "name": "loginGoogle",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "🇬 Đăng nhập với Google"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "nbIYV",
+              "name": "loginFooter",
+              "fill": "$color-fg-muted",
+              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "n6OfGa",
+      "x": 4760,
+      "y": 680,
+      "name": "Page/AuthLogin/Error/Validation",
+      "width": 480,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "mjsQZ",
+          "name": "loginCard",
+          "width": 400,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "H0Gcgu",
+              "name": "loginBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "GDPkP",
+                  "name": "loginIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "Hp5zM",
+                  "name": "loginWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "CbrZo",
+              "name": "loginHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "s5TcN",
+                  "name": "loginTitle",
+                  "fill": "$color-fg",
+                  "content": "Đăng nhập",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "spxUI",
+                  "name": "loginSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Truy cập dashboard SEO của bạn",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "js1et",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "bes9G",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginPwd",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "GRSMy",
+              "name": "loginRow",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "J9W8Kh",
+                  "name": "loginRemember",
+                  "fill": "$color-fg-muted",
+                  "content": "☐ Ghi nhớ tôi",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "LVdmj",
+                  "name": "loginForgot",
+                  "fill": "$color-primary",
+                  "content": "Quên mật khẩu?",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "Z19uMW",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "loginSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Đăng nhập"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "ROVcY",
+              "name": "loginDiv",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "V274w",
+                  "name": "loginDivL",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "bVZeX",
+                  "name": "loginDivT",
+                  "fill": "$color-fg-muted",
+                  "content": "hoặc",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "rectangle",
+                  "id": "TlQjm",
+                  "name": "loginDivR",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "id": "a6wWKd",
+              "type": "ref",
+              "ref": "QThUr",
+              "width": "fill_container",
+              "name": "loginGoogle",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "🇬 Đăng nhập với Google"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "kqXGQ",
+              "name": "loginFooter",
+              "fill": "$color-fg-muted",
+              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "DUtqL",
+      "x": 5340,
+      "y": 680,
+      "name": "Page/AuthLogin/Error/RateLimit",
+      "width": 480,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Tzh8R",
+          "name": "loginCard",
+          "width": 400,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "CGADO",
+              "name": "loginBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "R6d3w",
+                  "name": "loginIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "R7uArj",
+                  "name": "loginWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kLXNh",
+              "name": "loginHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "J1Nyc",
+                  "name": "loginTitle",
+                  "fill": "$color-fg",
+                  "content": "Đăng nhập",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "asj6v",
+                  "name": "loginSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Truy cập dashboard SEO của bạn",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "Y2ATHk",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "W9TL8a",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginPwd",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "UHMoz",
+              "name": "loginRow",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "C8Bjve",
+                  "name": "loginRemember",
+                  "fill": "$color-fg-muted",
+                  "content": "☐ Ghi nhớ tôi",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "L2B0c",
+                  "name": "loginForgot",
+                  "fill": "$color-primary",
+                  "content": "Quên mật khẩu?",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "aCE2Y",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "loginSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Đăng nhập"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "z71px",
+              "name": "loginDiv",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "OeVHJ",
+                  "name": "loginDivL",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "E4MNYT",
+                  "name": "loginDivT",
+                  "fill": "$color-fg-muted",
+                  "content": "hoặc",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "rectangle",
+                  "id": "Jjozk",
+                  "name": "loginDivR",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "id": "M1oxc",
+              "type": "ref",
+              "ref": "QThUr",
+              "width": "fill_container",
+              "name": "loginGoogle",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "🇬 Đăng nhập với Google"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "LVXEh",
+              "name": "loginFooter",
+              "fill": "$color-fg-muted",
+              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "WNWMH",
+      "x": 5920,
+      "y": 680,
+      "name": "Page/AuthLogin/Error/AccountLocked",
+      "width": 480,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Z2AfJ",
+          "name": "loginCard",
+          "width": 400,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "qLxqn",
+              "name": "loginBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "QDtid",
+                  "name": "loginIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "R4RJc",
+                  "name": "loginWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mx79a",
+              "name": "loginHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Ng5B8",
+                  "name": "loginTitle",
+                  "fill": "$color-fg",
+                  "content": "Đăng nhập",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "Pon45",
+                  "name": "loginSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Truy cập dashboard SEO của bạn",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "mLysX",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "c7OkG",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "loginPwd",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "zRnoa",
+              "name": "loginRow",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "yrTDa",
+                  "name": "loginRemember",
+                  "fill": "$color-fg-muted",
+                  "content": "☐ Ghi nhớ tôi",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ZaRO6",
+                  "name": "loginForgot",
+                  "fill": "$color-primary",
+                  "content": "Quên mật khẩu?",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "QJb2o",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "loginSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Đăng nhập"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "YImeq",
+              "name": "loginDiv",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "l5B7cD",
+                  "name": "loginDivL",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "L3qBE3",
+                  "name": "loginDivT",
+                  "fill": "$color-fg-muted",
+                  "content": "hoặc",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "rectangle",
+                  "id": "oqejg",
+                  "name": "loginDivR",
+                  "fill": "$color-border",
+                  "width": "fill_container",
+                  "height": 1
+                }
+              ]
+            },
+            {
+              "id": "FlBPB",
+              "type": "ref",
+              "ref": "QThUr",
+              "width": "fill_container",
+              "name": "loginGoogle",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "🇬 Đăng nhập với Google"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "fHjam",
+              "name": "loginFooter",
+              "fill": "$color-fg-muted",
+              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
