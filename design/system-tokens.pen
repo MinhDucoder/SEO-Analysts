@@ -6065,6 +6065,2076 @@
           "fontWeight": "normal"
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "WqGE2",
+      "x": 3600,
+      "y": 2500,
+      "name": "Page/AuthForgotPassword/Default",
+      "width": 480,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "F7EHkM",
+          "name": "fpwCard",
+          "width": 400,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Hcctn",
+              "name": "fpwBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "Gl9rn",
+                  "name": "fpwIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "x9lUde",
+                  "name": "fpwWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LMKcX",
+              "name": "fpwHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "I4l6M",
+                  "name": "fpwTitle",
+                  "fill": "$color-fg",
+                  "content": "Quên mật khẩu?",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "S7lLEa",
+                  "name": "fpwSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Nhập email để nhận link đặt lại mật khẩu",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "vCXnq",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "fpwEmail",
+              "descendants": {
+                "hAriX": {
+                  "content": "Email"
+                },
+                "tgH70": {
+                  "content": "you@example.com"
+                }
+              }
+            },
+            {
+              "id": "gezZP",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "fpwSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Gửi link đặt lại"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "jTbZu",
+              "name": "fpwFooter",
+              "fill": "$color-fg-muted",
+              "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "m3a7GD",
+      "x": 4180,
+      "y": 2500,
+      "name": "Page/AuthForgotPassword/Loading",
+      "width": 400,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "c7cNR5",
+          "name": "fpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "s7fTBq",
+              "name": "fpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "HEOCW",
+              "name": "fpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ejMYt",
+          "name": "fpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "eG0ap",
+              "name": "fpwTitle",
+              "fill": "$color-fg",
+              "content": "Quên mật khẩu?",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "KgrSx",
+              "name": "fpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "nPkTq",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "fpwEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "a7KwpA",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "fpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Gửi link đặt lại"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "etP2b",
+          "name": "fpwFooter",
+          "fill": "$color-fg-muted",
+          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "BcN1A",
+      "x": 4760,
+      "y": 2500,
+      "name": "Page/AuthForgotPassword/Success",
+      "width": 400,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "bMaIz",
+          "name": "fpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "F7lLVD",
+              "name": "fpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "tBjGS",
+              "name": "fpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "OT6R5",
+          "name": "fpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "c03NTR",
+              "name": "fpwTitle",
+              "fill": "$color-fg",
+              "content": "Quên mật khẩu?",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "lGdqI",
+              "name": "fpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "rIbGL",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "fpwEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "PHsrM",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "fpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Gửi link đặt lại"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "M3IyF",
+          "name": "fpwFooter",
+          "fill": "$color-fg-muted",
+          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "do4Np",
+      "x": 5340,
+      "y": 2500,
+      "name": "Page/AuthForgotPassword/Error/Validation",
+      "width": 400,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "ZCXRq",
+          "name": "fpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "qWPya",
+              "name": "fpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "Pwsby",
+              "name": "fpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mozFN",
+          "name": "fpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "KJnes",
+              "name": "fpwTitle",
+              "fill": "$color-fg",
+              "content": "Quên mật khẩu?",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "Z2p5w",
+              "name": "fpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "qtZEr",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "fpwEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "L2EbLN",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "fpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Gửi link đặt lại"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "GGUnu",
+          "name": "fpwFooter",
+          "fill": "$color-fg-muted",
+          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "hTPdk",
+      "x": 5920,
+      "y": 2500,
+      "name": "Page/AuthForgotPassword/Error/RateLimit",
+      "width": 400,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "OXJpG",
+          "name": "fpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "BC8yz",
+              "name": "fpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "sbOGK",
+              "name": "fpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Vqv1h",
+          "name": "fpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "CIooZ",
+              "name": "fpwTitle",
+              "fill": "$color-fg",
+              "content": "Quên mật khẩu?",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "Az3q5",
+              "name": "fpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "knP2T",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "fpwEmail",
+          "descendants": {
+            "hAriX": {
+              "content": "Email"
+            },
+            "tgH70": {
+              "content": "you@example.com"
+            }
+          }
+        },
+        {
+          "id": "LyYTw",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "fpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Gửi link đặt lại"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "dSA7u",
+          "name": "fpwFooter",
+          "fill": "$color-fg-muted",
+          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "hOTxB",
+      "x": 3600,
+      "y": 3300,
+      "name": "Page/AuthResetPassword/Default",
+      "width": 520,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 48,
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "fyfSv",
+          "name": "rpwCard",
+          "width": 440,
+          "fill": "$color-bg-elevated",
+          "cornerRadius": "$radius-lg",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "fRZ1r",
+              "name": "rpwBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "zyXlI",
+                  "name": "rpwIcon",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "jAw5h",
+                  "name": "rpwWord",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "G1VoxX",
+              "name": "rpwHeader",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Y1k2ir",
+                  "name": "rpwTitle",
+                  "fill": "$color-fg",
+                  "content": "Đặt lại mật khẩu",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "o6htD",
+                  "name": "rpwSub",
+                  "fill": "$color-fg-muted",
+                  "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "obKK9",
+              "name": "rpwToken",
+              "width": "fill_container",
+              "fill": "$color-bg-overlay",
+              "cornerRadius": "$radius-sm",
+              "gap": 8,
+              "padding": [
+                8,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "QW9JY",
+                  "name": "rpwTokenIcon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "key",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg-muted"
+                },
+                {
+                  "type": "text",
+                  "id": "lHixO",
+                  "name": "rpwTokenText",
+                  "fill": "$color-fg-muted",
+                  "content": "Token: reset_abc...xyz",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "EgK4Q",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "rpwNew",
+              "descendants": {
+                "hAriX": {
+                  "content": "Mật khẩu mới"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "FSQnr",
+              "name": "rpwRules",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "B3HMb",
+                  "name": "rule1",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Tối thiểu 8 ký tự",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "SozXG",
+                  "name": "rule2",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Có ít nhất 1 chữ hoa",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ZnUbk",
+                  "name": "rule3",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Có ít nhất 1 chữ số",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "C5VGz3",
+                  "name": "rule4",
+                  "fill": "$color-fg-muted",
+                  "content": "○ Có ít nhất 1 ký tự đặc biệt",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "l4Fmx",
+              "type": "ref",
+              "ref": "F7L51P",
+              "width": "fill_container",
+              "name": "rpwConfirm",
+              "descendants": {
+                "hAriX": {
+                  "content": "Xác nhận mật khẩu"
+                },
+                "tgH70": {
+                  "content": "••••••••"
+                }
+              }
+            },
+            {
+              "id": "X04f7",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "width": "fill_container",
+              "name": "rpwSubmit",
+              "descendants": {
+                "HmcyL": {
+                  "content": "Đặt lại mật khẩu"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "oWraj",
+              "name": "rpwFooter",
+              "fill": "$color-primary",
+              "content": "Quay lại đăng nhập",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "tQUlC",
+      "x": 4220,
+      "y": 3300,
+      "name": "Page/AuthResetPassword/PasswordValid",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "wTloU",
+          "name": "rpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "ZTh2p",
+              "name": "rpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "qk1Jk",
+              "name": "rpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "YX806",
+          "name": "rpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "b8TGv2",
+              "name": "rpwTitle",
+              "fill": "$color-fg",
+              "content": "Đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "XkJDO",
+              "name": "rpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "WTf5u",
+          "name": "rpwToken",
+          "width": "fill_container",
+          "fill": "$color-bg-overlay",
+          "cornerRadius": "$radius-sm",
+          "gap": 8,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "YJVhY",
+              "name": "rpwTokenIcon",
+              "width": 14,
+              "height": 14,
+              "iconFontName": "key",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg-muted"
+            },
+            {
+              "type": "text",
+              "id": "QGH5I",
+              "name": "rpwTokenText",
+              "fill": "$color-fg-muted",
+              "content": "Token: reset_abc...xyz",
+              "fontFamily": "$font-mono",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "H3Zgn",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwNew",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu mới"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "Rf64f",
+          "name": "rpwRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "ERWE5",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "lohOp",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "xhzpQ",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "C3eEI1",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "X4cPdv",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwConfirm",
+          "descendants": {
+            "hAriX": {
+              "content": "Xác nhận mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "id": "N6lt7w",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "rpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Đặt lại mật khẩu"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "wL1NP",
+          "name": "rpwFooter",
+          "fill": "$color-primary",
+          "content": "Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "J0gPwk",
+      "x": 4760,
+      "y": 3300,
+      "name": "Page/AuthResetPassword/MismatchError",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "Gw3tl",
+          "name": "rpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "kKtU1",
+              "name": "rpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "qdxf0",
+              "name": "rpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "BIW6Q",
+          "name": "rpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "lSBg8",
+              "name": "rpwTitle",
+              "fill": "$color-fg",
+              "content": "Đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "zyg6v",
+              "name": "rpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Hl8v6",
+          "name": "rpwToken",
+          "width": "fill_container",
+          "fill": "$color-bg-overlay",
+          "cornerRadius": "$radius-sm",
+          "gap": 8,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "PZSpq",
+              "name": "rpwTokenIcon",
+              "width": 14,
+              "height": 14,
+              "iconFontName": "key",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg-muted"
+            },
+            {
+              "type": "text",
+              "id": "tkHwO",
+              "name": "rpwTokenText",
+              "fill": "$color-fg-muted",
+              "content": "Token: reset_abc...xyz",
+              "fontFamily": "$font-mono",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "jZv1r",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwNew",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu mới"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "GkoOX",
+          "name": "rpwRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "ESsXZ",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "j5FjR",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "S4NaN",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "N6Cp4",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "KKRfZ",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwConfirm",
+          "descendants": {
+            "hAriX": {
+              "content": "Xác nhận mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "id": "sEYOB",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "rpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Đặt lại mật khẩu"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "GziTq",
+          "name": "rpwFooter",
+          "fill": "$color-primary",
+          "content": "Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Z71zB",
+      "x": 5300,
+      "y": 3300,
+      "name": "Page/AuthResetPassword/Success",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "O34FZ",
+          "name": "rpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "v4kxc",
+              "name": "rpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "w0tdKe",
+              "name": "rpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bKvF9",
+          "name": "rpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "mIxq8",
+              "name": "rpwTitle",
+              "fill": "$color-fg",
+              "content": "Đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "R8kYe",
+              "name": "rpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZVc6A",
+          "name": "rpwToken",
+          "width": "fill_container",
+          "fill": "$color-bg-overlay",
+          "cornerRadius": "$radius-sm",
+          "gap": 8,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "Pufch",
+              "name": "rpwTokenIcon",
+              "width": 14,
+              "height": 14,
+              "iconFontName": "key",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg-muted"
+            },
+            {
+              "type": "text",
+              "id": "p18DO",
+              "name": "rpwTokenText",
+              "fill": "$color-fg-muted",
+              "content": "Token: reset_abc...xyz",
+              "fontFamily": "$font-mono",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "C6E0JN",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwNew",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu mới"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "zJeef",
+          "name": "rpwRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "CyDfr",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "iGylP",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "QYeL8",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "T5Ih3L",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "RNfRc",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwConfirm",
+          "descendants": {
+            "hAriX": {
+              "content": "Xác nhận mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "id": "H9jJN",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "rpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Đặt lại mật khẩu"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "QIxhK",
+          "name": "rpwFooter",
+          "fill": "$color-primary",
+          "content": "Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "PYLWV",
+      "x": 5840,
+      "y": 3300,
+      "name": "Page/AuthResetPassword/Error/InvalidToken",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "RcMg6",
+          "name": "rpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "GpXWQ",
+              "name": "rpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "Saz3g",
+              "name": "rpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ehzOP",
+          "name": "rpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "b8E3w",
+              "name": "rpwTitle",
+              "fill": "$color-fg",
+              "content": "Đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "ln1vn",
+              "name": "rpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "rk6aS",
+          "name": "rpwToken",
+          "width": "fill_container",
+          "fill": "$color-bg-overlay",
+          "cornerRadius": "$radius-sm",
+          "gap": 8,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "p9Qiwq",
+              "name": "rpwTokenIcon",
+              "width": 14,
+              "height": 14,
+              "iconFontName": "key",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg-muted"
+            },
+            {
+              "type": "text",
+              "id": "kmHwF",
+              "name": "rpwTokenText",
+              "fill": "$color-fg-muted",
+              "content": "Token: reset_abc...xyz",
+              "fontFamily": "$font-mono",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "ivJAM",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwNew",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu mới"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "UbOw9",
+          "name": "rpwRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "Iz1sU",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "md6hP",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "TKrST",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "gOiTv",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "TZHuW",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwConfirm",
+          "descendants": {
+            "hAriX": {
+              "content": "Xác nhận mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "id": "ZwRr6",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "rpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Đặt lại mật khẩu"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "kR7gV",
+          "name": "rpwFooter",
+          "fill": "$color-primary",
+          "content": "Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Dk2Ae",
+      "x": 6380,
+      "y": 3300,
+      "name": "Page/AuthResetPassword/Error/MissingToken",
+      "width": 440,
+      "fill": "$color-bg-elevated",
+      "cornerRadius": "$radius-lg",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$color-border"
+      },
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "X05DVL",
+          "name": "rpwBrand",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "gap": 8,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "sJI1B",
+              "name": "rpwIcon",
+              "width": 28,
+              "height": 28,
+              "iconFontName": "gauge",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg"
+            },
+            {
+              "type": "text",
+              "id": "T6RD6n",
+              "name": "rpwWord",
+              "fill": "$color-fg",
+              "content": "SEO Audit",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "n77zj",
+          "name": "rpwHeader",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "hvWAM",
+              "name": "rpwTitle",
+              "fill": "$color-fg",
+              "content": "Đặt lại mật khẩu",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "text",
+              "id": "T6fq3",
+              "name": "rpwSub",
+              "fill": "$color-fg-muted",
+              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "AmEYd",
+          "name": "rpwToken",
+          "width": "fill_container",
+          "fill": "$color-bg-overlay",
+          "cornerRadius": "$radius-sm",
+          "gap": 8,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "Opmly",
+              "name": "rpwTokenIcon",
+              "width": 14,
+              "height": 14,
+              "iconFontName": "key",
+              "iconFontFamily": "lucide",
+              "fill": "$color-fg-muted"
+            },
+            {
+              "type": "text",
+              "id": "f6uege",
+              "name": "rpwTokenText",
+              "fill": "$color-fg-muted",
+              "content": "Token: reset_abc...xyz",
+              "fontFamily": "$font-mono",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "cyX0m",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwNew",
+          "descendants": {
+            "hAriX": {
+              "content": "Mật khẩu mới"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "DvUEO",
+          "name": "rpwRules",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "text",
+              "id": "d3InaE",
+              "name": "rule1",
+              "fill": "$color-fg-muted",
+              "content": "○ Tối thiểu 8 ký tự",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "eLe3R",
+              "name": "rule2",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ hoa",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "X4fzw",
+              "name": "rule3",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 chữ số",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Ltif8",
+              "name": "rule4",
+              "fill": "$color-fg-muted",
+              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "id": "sBrpG",
+          "type": "ref",
+          "ref": "F7L51P",
+          "width": "fill_container",
+          "name": "rpwConfirm",
+          "descendants": {
+            "hAriX": {
+              "content": "Xác nhận mật khẩu"
+            },
+            "tgH70": {
+              "content": "••••••••"
+            }
+          }
+        },
+        {
+          "id": "cyD3o",
+          "type": "ref",
+          "ref": "o8AJkQ",
+          "width": "fill_container",
+          "name": "rpwSubmit",
+          "descendants": {
+            "HmcyL": {
+              "content": "Đặt lại mật khẩu"
+            }
+          }
+        },
+        {
+          "type": "text",
+          "id": "f52Ly",
+          "name": "rpwFooter",
+          "fill": "$color-primary",
+          "content": "Quay lại đăng nhập",
+          "textAlign": "center",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        }
+      ]
     }
   ],
   "themes": {
