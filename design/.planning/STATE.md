@@ -33,6 +33,77 @@
 **Backup stale main**: `/tmp/system-tokens.pen.main-backup-1778314611.pen`
 **Pencil MCP**: 1 server still running (PID 232762, em main agent dùng).
 
+## 🆕 PICKUP INSTRUCTIONS for new Claude Code session
+
+User đang **pause session cũ** (Option 2). Mở session mới với prompt:
+
+```
+Đọc design/.planning/STATE.md để pickup. Continue Phase 2 — bắt đầu với 5 domain components + AppShell extend foundation, rồi 9 page Phase 2.
+Foundation file: design/system-tokens.pen (263KB, 11 reusable components đã có).
+AutoSave VS Code đã enable (.vscode/settings.json) — pencil persist work.
+Branch: feat/web-fresh (HEAD 2fd4d37).
+```
+
+### Critical context cho session mới
+
+1. **AutoSave WORKS**: `.vscode/settings.json` đã set `files.autoSave: afterDelay 500ms`. Pencil flush 1-2s sau mỗi `batch_design`. KHÔNG cần test lại.
+
+2. **Pencil cache pitfall**: KHÔNG re-open page files đã từng `cp` ra (sẽ overwrite disk với in-memory cũ). Design TRỰC TIẾP trong `design/system-tokens.pen` foundation file. Split file thành per-page sau (manual JSON manipulation).
+
+3. **Headless `claude -p` KHÔNG persist** — đừng spawn background agents cho pencil work. Sequential trong main session.
+
+4. **C() copy operation rename descendant IDs** — variant copies có content giống Default. Để differentiate, dùng C() với explicit `descendants={"oldId":{...override}}` mapping. Hoặc accept gap + fix manual sau.
+
+### Component IDs (wire-ready trong foundation)
+
+```
+Button/Primary    o8AJkQ  (label HmcyL)
+Button/Secondary  NaTK3   (label CtpTV)
+Button/Outline    QThUr   (label Nu8z5)
+Button/Ghost      VDsXn   (label u5cpKE)
+Button/Destructive tibBu  (label L5gKU)
+Input/Default     F7L51P  (label hAriX, box A0Qou, placeholder tgH70)
+Card              h62450  (header iuXjT, body ndInL)
+Badge/Success     o7UmW   (label U9EAY)
+Badge/Error       GSTlC   (label D71vi6)
+Badge/Warn        lXuzr   (label cu0as)
+ScoreRing/Lg      lHEAG   (track d8oK6m, fill iAuA4, num GM65e, suffix S9h7E)
+```
+
+### Recommended Phase 2 order
+
+**Step 1 — Build 5 domain components** trong frame Domain (id `tGelB`):
+- CategoryRadar (6-axis spider chart, 280×280)
+- RuleResultRow (collapsible row: status icon + name + score badge + weight + chevron)
+- CwvCard (3 metric inline trong card, threshold coloring)
+- KeywordTable (table với 4 boolean badge columns)
+- ScoreDelta (pill +5.2 green / -3.1 red)
+
+**Step 2 — Build AppShell components** trong NEW frame "AppShell":
+- Sidebar/Header (240/64 variants, logo + collapse toggle)
+- Sidebar/NavItem (active/inactive)
+- Sidebar/Footer (avatar + theme toggle)
+- Sidebar/Container (combine 3 sub)
+- Topbar (breadcrumb + actions slot + user menu, sticky 56h)
+- AppShell/Wrapper (sidebar + topbar + main slot)
+
+**Step 3 — Build 9 Phase 2 pages** (specs in `.planning/PHASE-2-AGENT-A{1,2,3,4}.md`):
+- A1: settings + audit-create + audit-list (3)
+- A2: audit-detail (1, heaviest — 11 state frame)
+- A3: audit-compare + scheduled-list (2)
+- A4: admin-stats + admin-users + admin-rules (3)
+
+**Pattern per page**: Insert new top-level frame `Page/<Name>/Default` ở vị trí trống (use `find_empty_space_on_canvas`), build content inline, use C() for state variants. Wait 2-3s autosave between sections. Commit atomic per page.
+
+### File state ready
+
+- Branch: `feat/web-fresh` HEAD `2fd4d37`
+- Foundation: `design/system-tokens.pen` 263KB MD5 `04b344528143a5c919e510a9d2aee00e`
+- 29 top-level frames (3 foundation + 26 page state)
+- Phase 2 specs already committed (af50cab) — agent đọc qua filesystem path
+
+---
+
 ## ✅ PHASE 1 PAGES COMPLETED 16:35 — 6/6 pages with 26 state frames
 
 Foundation file `design/system-tokens.pen` (263KB) chứa:
