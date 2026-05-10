@@ -1050,7 +1050,7 @@
               "type": "text",
               "id": "Z8Z9PM",
               "fill": "$color-fg",
-              "content": "text-xs (12) — Aa Bb 123 The quick brown fox",
+              "content": "text-xs (12) \u2014 Aa Bb 123 The quick brown fox",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "$weight-regular"
@@ -1059,7 +1059,7 @@
               "type": "text",
               "id": "QUB97",
               "fill": "$color-fg",
-              "content": "text-sm (13) — Aa Bb 123 The quick brown fox",
+              "content": "text-sm (13) \u2014 Aa Bb 123 The quick brown fox",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "$weight-regular"
@@ -1068,7 +1068,7 @@
               "type": "text",
               "id": "htDNB",
               "fill": "$color-fg",
-              "content": "text-base (14) — Aa Bb 123 The quick brown fox",
+              "content": "text-base (14) \u2014 Aa Bb 123 The quick brown fox",
               "fontFamily": "$font-ui",
               "fontSize": "$text-base",
               "fontWeight": "$weight-regular"
@@ -1077,7 +1077,7 @@
               "type": "text",
               "id": "cA7Tg",
               "fill": "$color-fg",
-              "content": "text-md (15) — Aa Bb 123 The quick brown fox",
+              "content": "text-md (15) \u2014 Aa Bb 123 The quick brown fox",
               "fontFamily": "$font-ui",
               "fontSize": "$text-md",
               "fontWeight": "$weight-regular"
@@ -1086,7 +1086,7 @@
               "type": "text",
               "id": "ckxUA",
               "fill": "$color-fg",
-              "content": "text-lg (16) — Aa Bb 123 The quick brown fox",
+              "content": "text-lg (16) \u2014 Aa Bb 123 The quick brown fox",
               "fontFamily": "$font-ui",
               "fontSize": "$text-lg",
               "fontWeight": "$weight-regular"
@@ -1095,7 +1095,7 @@
               "type": "text",
               "id": "PFnWu",
               "fill": "$color-fg",
-              "content": "text-xl (18) — Aa Bb 123",
+              "content": "text-xl (18) \u2014 Aa Bb 123",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xl",
               "fontWeight": "$weight-medium"
@@ -1104,7 +1104,7 @@
               "type": "text",
               "id": "wqL01",
               "fill": "$color-fg",
-              "content": "text-2xl (20) — Aa Bb 123",
+              "content": "text-2xl (20) \u2014 Aa Bb 123",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-medium"
@@ -1113,7 +1113,7 @@
               "type": "text",
               "id": "EMPfF",
               "fill": "$color-fg",
-              "content": "text-3xl (24) — Aa Bb 123",
+              "content": "text-3xl (24) \u2014 Aa Bb 123",
               "fontFamily": "$font-ui",
               "fontSize": "$text-3xl",
               "fontWeight": "$weight-semibold"
@@ -1122,7 +1122,7 @@
               "type": "text",
               "id": "zMcJd",
               "fill": "$color-fg",
-              "content": "text-4xl (32) — Aa Bb",
+              "content": "text-4xl (32) \u2014 Aa Bb",
               "fontFamily": "$font-ui",
               "fontSize": "$text-4xl",
               "fontWeight": "$weight-semibold"
@@ -1131,7 +1131,7 @@
               "type": "text",
               "id": "c1sgv",
               "fill": "$color-fg",
-              "content": "text-5xl (48) — Aa Bb",
+              "content": "text-5xl (48) \u2014 Aa Bb",
               "fontFamily": "$font-mono",
               "fontSize": "$text-5xl",
               "fontWeight": "$weight-bold"
@@ -1371,7 +1371,7 @@
               "type": "text",
               "id": "FnZSA",
               "fill": "$color-fg-muted",
-              "content": "radius-none (0) — table, sharp",
+              "content": "radius-none (0) \u2014 table, sharp",
               "fontFamily": "$font-mono",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -1393,7 +1393,7 @@
               "type": "text",
               "id": "f2EM9",
               "fill": "$color-fg-muted",
-              "content": "radius-sm (4) — badge, input",
+              "content": "radius-sm (4) \u2014 badge, input",
               "fontFamily": "$font-mono",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -1415,7 +1415,7 @@
               "type": "text",
               "id": "nxrLI",
               "fill": "$color-fg-muted",
-              "content": "radius-md (6) — default card, button",
+              "content": "radius-md (6) \u2014 default card, button",
               "fontFamily": "$font-mono",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -1437,7 +1437,7 @@
               "type": "text",
               "id": "D82US",
               "fill": "$color-fg-muted",
-              "content": "radius-lg (8) — dialog",
+              "content": "radius-lg (8) \u2014 dialog",
               "fontFamily": "$font-mono",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -1459,7 +1459,7 @@
               "type": "text",
               "id": "RvAr5",
               "fill": "$color-fg-muted",
-              "content": "radius-xl (12) — score card prominent",
+              "content": "radius-xl (12) \u2014 score card prominent",
               "fontFamily": "$font-mono",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -1481,7 +1481,7 @@
               "type": "text",
               "id": "UvveX",
               "fill": "$color-fg-muted",
-              "content": "radius-pill (999) — pill badge, avatar",
+              "content": "radius-pill (999) \u2014 pill badge, avatar",
               "fontFamily": "$font-mono",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -2035,6 +2035,660 @@
               ]
             }
           ]
+        },
+        {
+          "type": "frame",
+          "id": "scoreDeltaC",
+          "name": "Component/ScoreDelta",
+          "reusable": true,
+          "width": "fit_content",
+          "height": "fit_content",
+          "fill": "#22C55E1F",
+          "cornerRadius": "$radius-pill",
+          "layout": "horizontal",
+          "padding": [
+            4,
+            10
+          ],
+          "gap": 4,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "sdIcon",
+              "iconFontFamily": "lucide",
+              "iconFontName": "trending-up",
+              "width": 14,
+              "height": 14,
+              "fill": "$color-class-excellent"
+            },
+            {
+              "type": "text",
+              "id": "sdText",
+              "content": "+5.2",
+              "fill": "$color-class-excellent",
+              "fontFamily": "$font-mono",
+              "fontSize": "$text-xs",
+              "fontWeight": "$weight-semibold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ruleRowC",
+          "name": "Component/RuleResultRow",
+          "reusable": true,
+          "width": 960,
+          "height": "fit_content",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "layout": "horizontal",
+          "padding": [
+            12,
+            16
+          ],
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "rrIcon",
+              "iconFontFamily": "lucide",
+              "iconFontName": "circle-check",
+              "width": 24,
+              "height": 24,
+              "fill": "$color-class-excellent"
+            },
+            {
+              "type": "frame",
+              "id": "rrText",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 2,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rrName",
+                  "content": "Title Tag",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                },
+                {
+                  "type": "text",
+                  "id": "rrMeta",
+                  "content": "Meta \u00b7 weight 8",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rrScore",
+              "fill": "$color-class-excellent",
+              "cornerRadius": "$radius-pill",
+              "padding": [
+                2,
+                8
+              ],
+              "layout": "horizontal",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rrScoreVal",
+                  "content": "95",
+                  "fill": "$color-primary-fg",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "icon_font",
+              "id": "rrChev",
+              "iconFontFamily": "lucide",
+              "iconFontName": "chevron-down",
+              "width": 16,
+              "height": 16,
+              "fill": "$color-fg-muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "cwvCardC",
+          "name": "Component/CwvCard",
+          "reusable": true,
+          "width": 960,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": 1,
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "cornerRadius": "$radius-lg",
+          "layout": "horizontal",
+          "padding": 24,
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "cwvLcp",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lcpLab",
+                  "content": "LCP",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "lcpVal",
+                  "content": "1.8s",
+                  "fill": "$color-class-excellent",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-3xl",
+                  "fontWeight": "$weight-bold"
+                },
+                {
+                  "type": "text",
+                  "id": "lcpBadge",
+                  "content": "Good",
+                  "fill": "$color-class-excellent",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cwvInp",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "inpLab",
+                  "content": "INP",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "inpVal",
+                  "content": "180ms",
+                  "fill": "$color-class-excellent",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-3xl",
+                  "fontWeight": "$weight-bold"
+                },
+                {
+                  "type": "text",
+                  "id": "inpBadge",
+                  "content": "Good",
+                  "fill": "$color-class-excellent",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cwvCls",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "clsLab",
+                  "content": "CLS",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "clsVal",
+                  "content": "0.05",
+                  "fill": "$color-class-excellent",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-3xl",
+                  "fontWeight": "$weight-bold"
+                },
+                {
+                  "type": "text",
+                  "id": "clsBadge",
+                  "content": "Good",
+                  "fill": "$color-class-excellent",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "kwTableC",
+          "name": "Component/KeywordTable",
+          "reusable": true,
+          "width": 960,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": 1,
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "cornerRadius": "$radius-md",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "kwHead",
+              "width": "fill_container",
+              "fill": "$color-bg-overlay",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "$color-border",
+                "align": "inside"
+              },
+              "layout": "horizontal",
+              "padding": [
+                10,
+                16
+              ],
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kwH1",
+                  "content": "#",
+                  "width": 30,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH2",
+                  "content": "Keyword",
+                  "width": 200,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH3",
+                  "content": "Freq",
+                  "width": 60,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH4",
+                  "content": "Density",
+                  "width": 80,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH5",
+                  "content": "T",
+                  "width": 30,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "textAlign": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH6",
+                  "content": "H1",
+                  "width": 30,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "textAlign": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH7",
+                  "content": "P1",
+                  "width": 30,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "textAlign": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "kwH8",
+                  "content": "Meta",
+                  "width": 40,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold",
+                  "textAlign": "center"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kwRow1",
+              "width": "fill_container",
+              "layout": "horizontal",
+              "padding": [
+                10,
+                16
+              ],
+              "gap": 12,
+              "alignItems": "center",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kwR1c1",
+                  "content": "1",
+                  "width": 30,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-sm"
+                },
+                {
+                  "type": "text",
+                  "id": "kwR1c2",
+                  "content": "seo audit",
+                  "width": 200,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                },
+                {
+                  "type": "text",
+                  "id": "kwR1c3",
+                  "content": "24",
+                  "width": 60,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-sm",
+                  "textAlign": "right"
+                },
+                {
+                  "type": "text",
+                  "id": "kwR1c4",
+                  "content": "3.2%",
+                  "width": 80,
+                  "textGrowth": "fixed-width",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-sm",
+                  "textAlign": "right"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "kwR1c5",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$color-class-excellent"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "kwR1c6",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$color-class-excellent"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "kwR1c7",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$color-class-excellent"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "kwR1c8",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$color-class-excellent"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "catRadarC",
+          "name": "Component/CategoryRadar",
+          "reusable": true,
+          "width": 280,
+          "height": 280,
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "polygon",
+              "id": "radarHex1",
+              "x": 20,
+              "y": 20,
+              "width": 240,
+              "height": 240,
+              "polygonCount": 6,
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "stroke": {
+                "thickness": 1,
+                "fill": "$color-border",
+                "align": "center"
+              }
+            },
+            {
+              "type": "polygon",
+              "id": "radarHex2",
+              "x": 60,
+              "y": 60,
+              "width": 160,
+              "height": 160,
+              "polygonCount": 6,
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "stroke": {
+                "thickness": 1,
+                "fill": "$color-border",
+                "align": "center"
+              }
+            },
+            {
+              "type": "polygon",
+              "id": "radarHex3",
+              "x": 100,
+              "y": 100,
+              "width": 80,
+              "height": 80,
+              "polygonCount": 6,
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "stroke": {
+                "thickness": 1,
+                "fill": "$color-border",
+                "align": "center"
+              }
+            },
+            {
+              "type": "polygon",
+              "id": "radarData",
+              "x": 30,
+              "y": 35,
+              "width": 220,
+              "height": 210,
+              "polygonCount": 6,
+              "fill": "#3B82F633",
+              "stroke": {
+                "thickness": 2,
+                "fill": "$color-class-good",
+                "align": "center"
+              }
+            },
+            {
+              "type": "text",
+              "id": "radarL1",
+              "x": 110,
+              "y": 0,
+              "content": "Meta",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs"
+            },
+            {
+              "type": "text",
+              "id": "radarL2",
+              "x": 230,
+              "y": 75,
+              "content": "Headings",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs"
+            },
+            {
+              "type": "text",
+              "id": "radarL3",
+              "x": 230,
+              "y": 195,
+              "content": "Images",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs"
+            },
+            {
+              "type": "text",
+              "id": "radarL4",
+              "x": 110,
+              "y": 265,
+              "content": "Links",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs"
+            },
+            {
+              "type": "text",
+              "id": "radarL5",
+              "x": 0,
+              "y": 195,
+              "content": "Performance",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs"
+            },
+            {
+              "type": "text",
+              "id": "radarL6",
+              "x": 5,
+              "y": 75,
+              "content": "Technical",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs"
+            }
+          ]
         }
       ]
     },
@@ -2111,7 +2765,7 @@
               "name": "headerCta",
               "descendants": {
                 "HmcyL": {
-                  "content": "Tạo audit miễn phí →"
+                  "content": "T\u1ea1o audit mi\u1ec5n ph\u00ed \u2192"
                 }
               }
             }
@@ -2146,7 +2800,7 @@
                   "id": "JWXzG",
                   "name": "eyebrow",
                   "fill": "$color-fg-muted",
-                  "content": "BÁO CÁO SEO",
+                  "content": "B\u00c1O C\u00c1O SEO",
                   "fontFamily": "$font-mono",
                   "fontSize": "$text-xs",
                   "fontWeight": "$weight-bold",
@@ -2167,7 +2821,7 @@
                   "id": "SBsgt",
                   "name": "metaText",
                   "fill": "$color-fg-muted",
-                  "content": "Audit ngày 15/03/2025 lúc 14:32",
+                  "content": "Audit ng\u00e0y 15/03/2025 l\u00fac 14:32",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -2360,7 +3014,7 @@
                   "id": "BAuIG",
                   "name": "catSub",
                   "fill": "$color-fg-muted",
-                  "content": "Điểm phân chia theo 6 category SEO",
+                  "content": "\u0110i\u1ec3m ph\u00e2n chia theo 6 category SEO",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -2977,7 +3631,7 @@
                   "id": "v6G2Ap",
                   "name": "issueSub",
                   "fill": "$color-fg-muted",
-                  "content": "Vấn đề ưu tiên giải quyết để cải thiện điểm",
+                  "content": "V\u1ea5n \u0111\u1ec1 \u01b0u ti\u00ean gi\u1ea3i quy\u1ebft \u0111\u1ec3 c\u1ea3i thi\u1ec7n \u0111i\u1ec3m",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -3041,7 +3695,7 @@
                           "id": "ZTlNF",
                           "name": "iss1name",
                           "fill": "$color-fg",
-                          "content": "Title tag dài quá 60 ký tự",
+                          "content": "Title tag d\u00e0i qu\u00e1 60 k\u00fd t\u1ef1",
                           "fontFamily": "$font-ui",
                           "fontSize": "$text-sm",
                           "fontWeight": "$weight-medium"
@@ -3114,7 +3768,7 @@
                           "id": "vdSIC",
                           "name": "iss2name",
                           "fill": "$color-fg",
-                          "content": "Heading H1 không có target keyword",
+                          "content": "Heading H1 kh\u00f4ng c\u00f3 target keyword",
                           "fontFamily": "$font-ui",
                           "fontSize": "$text-sm",
                           "fontWeight": "$weight-medium"
@@ -3187,7 +3841,7 @@
                           "id": "ziSJH",
                           "name": "iss3name",
                           "fill": "$color-fg",
-                          "content": "Một số ảnh thiếu alt text",
+                          "content": "M\u1ed9t s\u1ed1 \u1ea3nh thi\u1ebfu alt text",
                           "fontFamily": "$font-ui",
                           "fontSize": "$text-sm",
                           "fontWeight": "$weight-medium"
@@ -3260,7 +3914,7 @@
                           "id": "NX7fH",
                           "name": "iss4name",
                           "fill": "$color-fg",
-                          "content": "Internal links chưa optimal",
+                          "content": "Internal links ch\u01b0a optimal",
                           "fontFamily": "$font-ui",
                           "fontSize": "$text-sm",
                           "fontWeight": "$weight-medium"
@@ -3333,7 +3987,7 @@
                           "id": "hUkY0",
                           "name": "iss5name",
                           "fill": "$color-fg",
-                          "content": "Robots.txt block một số resources",
+                          "content": "Robots.txt block m\u1ed9t s\u1ed1 resources",
                           "fontFamily": "$font-ui",
                           "fontSize": "$text-sm",
                           "fontWeight": "$weight-medium"
@@ -3383,7 +4037,7 @@
               "id": "rRKzX",
               "name": "ctaTitle",
               "fill": "$color-fg",
-              "content": "Muốn audit cho website của bạn?",
+              "content": "Mu\u1ed1n audit cho website c\u1ee7a b\u1ea1n?",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-3xl",
@@ -3394,7 +4048,7 @@
               "id": "UIxL7",
               "name": "ctaSub",
               "fill": "$color-fg-muted",
-              "content": "Tạo tài khoản miễn phí và audit không giới hạn.",
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n mi\u1ec5n ph\u00ed v\u00e0 audit kh\u00f4ng gi\u1edbi h\u1ea1n.",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-base",
@@ -3418,7 +4072,7 @@
                   "name": "ctaPrimary",
                   "descendants": {
                     "HmcyL": {
-                      "content": "Tạo tài khoản miễn phí"
+                      "content": "T\u1ea1o t\u00e0i kho\u1ea3n mi\u1ec5n ph\u00ed"
                     }
                   }
                 },
@@ -3429,7 +4083,7 @@
                   "name": "ctaOutline",
                   "descendants": {
                     "Nu8z5": {
-                      "content": "Xem demo audit khác"
+                      "content": "Xem demo audit kh\u00e1c"
                     }
                   }
                 }
@@ -3478,7 +4132,7 @@
           "id": "uN0up",
           "name": "o1title",
           "fill": "$color-fg",
-          "content": "Đang xác thực với Google...",
+          "content": "\u0110ang x\u00e1c th\u1ef1c v\u1edbi Google...",
           "fontFamily": "$font-ui",
           "fontSize": "$text-lg",
           "fontWeight": "$weight-medium"
@@ -3488,7 +4142,7 @@
           "id": "LCLDH",
           "name": "o1sub",
           "fill": "$color-fg-muted",
-          "content": "Vui lòng đợi trong giây lát",
+          "content": "Vui l\u00f2ng \u0111\u1ee3i trong gi\u00e2y l\u00e1t",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -3525,7 +4179,7 @@
           "id": "JpSU4",
           "name": "o2title",
           "fill": "$color-fg",
-          "content": "Đăng nhập thành công!",
+          "content": "\u0110\u0103ng nh\u1eadp th\u00e0nh c\u00f4ng!",
           "fontFamily": "$font-ui",
           "fontSize": "$text-2xl",
           "fontWeight": "$weight-semibold"
@@ -3535,7 +4189,7 @@
           "id": "R0JV4",
           "name": "o2sub",
           "fill": "$color-fg-muted",
-          "content": "Đang chuyển đến dashboard...",
+          "content": "\u0110ang chuy\u1ec3n \u0111\u1ebfn dashboard...",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -3572,7 +4226,7 @@
           "id": "YXShU",
           "name": "o3title",
           "fill": "$color-fg",
-          "content": "Xác thực thất bại",
+          "content": "X\u00e1c th\u1ef1c th\u1ea5t b\u1ea1i",
           "fontFamily": "$font-ui",
           "fontSize": "$text-2xl",
           "fontWeight": "$weight-semibold"
@@ -3582,7 +4236,7 @@
           "id": "fFRXJ",
           "name": "o3sub",
           "fill": "$color-fg-muted",
-          "content": "Token không hợp lệ hoặc đã hết hạn",
+          "content": "Token kh\u00f4ng h\u1ee3p l\u1ec7 ho\u1eb7c \u0111\u00e3 h\u1ebft h\u1ea1n",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -3594,7 +4248,7 @@
           "name": "o3btn",
           "descendants": {
             "HmcyL": {
-              "content": "Quay lại đăng nhập"
+              "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp"
             }
           }
         }
@@ -3630,7 +4284,7 @@
           "id": "ycbEz",
           "name": "o4title",
           "fill": "$color-fg",
-          "content": "Xác thực thất bại",
+          "content": "X\u00e1c th\u1ef1c th\u1ea5t b\u1ea1i",
           "fontFamily": "$font-ui",
           "fontSize": "$text-2xl",
           "fontWeight": "$weight-semibold"
@@ -3640,7 +4294,7 @@
           "id": "jnCbg",
           "name": "o4sub",
           "fill": "$color-fg-muted",
-          "content": "Đường dẫn đăng nhập không hợp lệ",
+          "content": "\u0110\u01b0\u1eddng d\u1eabn \u0111\u0103ng nh\u1eadp kh\u00f4ng h\u1ee3p l\u1ec7",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -3652,7 +4306,7 @@
           "name": "o4btn",
           "descendants": {
             "HmcyL": {
-              "content": "Quay lại đăng nhập"
+              "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp"
             }
           }
         }
@@ -3740,7 +4394,7 @@
                   "id": "Vg3DP",
                   "name": "loginTitle",
                   "fill": "$color-fg",
-                  "content": "Đăng nhập",
+                  "content": "\u0110\u0103ng nh\u1eadp",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -3750,7 +4404,7 @@
                   "id": "QpVcD",
                   "name": "loginSub",
                   "fill": "$color-fg-muted",
-                  "content": "Truy cập dashboard SEO của bạn",
+                  "content": "Truy c\u1eadp dashboard SEO c\u1ee7a b\u1ea1n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -3780,10 +4434,10 @@
               "name": "loginPwd",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu"
+                  "content": "M\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -3805,7 +4459,7 @@
                   "id": "LfPsq",
                   "name": "loginRemember",
                   "fill": "$color-fg-muted",
-                  "content": "☐ Ghi nhớ tôi",
+                  "content": "\u2610 Ghi nh\u1edb t\u00f4i",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -3815,7 +4469,7 @@
                   "id": "KYUAu",
                   "name": "loginForgot",
                   "fill": "$color-primary",
-                  "content": "Quên mật khẩu?",
+                  "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -3830,7 +4484,7 @@
               "name": "loginSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Đăng nhập"
+                  "content": "\u0110\u0103ng nh\u1eadp"
                 }
               }
             },
@@ -3860,7 +4514,7 @@
                   "id": "w5azM",
                   "name": "loginDivT",
                   "fill": "$color-fg-muted",
-                  "content": "hoặc",
+                  "content": "ho\u1eb7c",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -3883,7 +4537,7 @@
               "name": "loginGoogle",
               "descendants": {
                 "Nu8z5": {
-                  "content": "🇬 Đăng nhập với Google"
+                  "content": "\ud83c\uddec \u0110\u0103ng nh\u1eadp v\u1edbi Google"
                 }
               }
             },
@@ -3892,7 +4546,7 @@
               "id": "NChhv",
               "name": "loginFooter",
               "fill": "$color-fg-muted",
-              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "content": "Ch\u01b0a c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng k\u00fd ngay",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -3984,7 +4638,7 @@
                   "id": "K9EKN",
                   "name": "loginTitle",
                   "fill": "$color-fg",
-                  "content": "Đăng nhập",
+                  "content": "\u0110\u0103ng nh\u1eadp",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -3994,7 +4648,7 @@
                   "id": "Z5HyZq",
                   "name": "loginSub",
                   "fill": "$color-fg-muted",
-                  "content": "Truy cập dashboard SEO của bạn",
+                  "content": "Truy c\u1eadp dashboard SEO c\u1ee7a b\u1ea1n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4024,10 +4678,10 @@
               "name": "loginPwd",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu"
+                  "content": "M\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -4049,7 +4703,7 @@
                   "id": "xNHfj",
                   "name": "loginRemember",
                   "fill": "$color-fg-muted",
-                  "content": "☐ Ghi nhớ tôi",
+                  "content": "\u2610 Ghi nh\u1edb t\u00f4i",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4059,7 +4713,7 @@
                   "id": "MgBFA",
                   "name": "loginForgot",
                   "fill": "$color-primary",
-                  "content": "Quên mật khẩu?",
+                  "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4074,7 +4728,7 @@
               "name": "loginSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Đăng nhập"
+                  "content": "\u0110\u0103ng nh\u1eadp"
                 }
               }
             },
@@ -4104,7 +4758,7 @@
                   "id": "b8Qv4",
                   "name": "loginDivT",
                   "fill": "$color-fg-muted",
-                  "content": "hoặc",
+                  "content": "ho\u1eb7c",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -4127,7 +4781,7 @@
               "name": "loginGoogle",
               "descendants": {
                 "Nu8z5": {
-                  "content": "🇬 Đăng nhập với Google"
+                  "content": "\ud83c\uddec \u0110\u0103ng nh\u1eadp v\u1edbi Google"
                 }
               }
             },
@@ -4136,7 +4790,7 @@
               "id": "nbIYV",
               "name": "loginFooter",
               "fill": "$color-fg-muted",
-              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "content": "Ch\u01b0a c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng k\u00fd ngay",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -4228,7 +4882,7 @@
                   "id": "s5TcN",
                   "name": "loginTitle",
                   "fill": "$color-fg",
-                  "content": "Đăng nhập",
+                  "content": "\u0110\u0103ng nh\u1eadp",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -4238,7 +4892,7 @@
                   "id": "spxUI",
                   "name": "loginSub",
                   "fill": "$color-fg-muted",
-                  "content": "Truy cập dashboard SEO của bạn",
+                  "content": "Truy c\u1eadp dashboard SEO c\u1ee7a b\u1ea1n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4268,10 +4922,10 @@
               "name": "loginPwd",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu"
+                  "content": "M\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -4293,7 +4947,7 @@
                   "id": "J9W8Kh",
                   "name": "loginRemember",
                   "fill": "$color-fg-muted",
-                  "content": "☐ Ghi nhớ tôi",
+                  "content": "\u2610 Ghi nh\u1edb t\u00f4i",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4303,7 +4957,7 @@
                   "id": "LVdmj",
                   "name": "loginForgot",
                   "fill": "$color-primary",
-                  "content": "Quên mật khẩu?",
+                  "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4318,7 +4972,7 @@
               "name": "loginSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Đăng nhập"
+                  "content": "\u0110\u0103ng nh\u1eadp"
                 }
               }
             },
@@ -4348,7 +5002,7 @@
                   "id": "bVZeX",
                   "name": "loginDivT",
                   "fill": "$color-fg-muted",
-                  "content": "hoặc",
+                  "content": "ho\u1eb7c",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -4371,7 +5025,7 @@
               "name": "loginGoogle",
               "descendants": {
                 "Nu8z5": {
-                  "content": "🇬 Đăng nhập với Google"
+                  "content": "\ud83c\uddec \u0110\u0103ng nh\u1eadp v\u1edbi Google"
                 }
               }
             },
@@ -4380,7 +5034,7 @@
               "id": "kqXGQ",
               "name": "loginFooter",
               "fill": "$color-fg-muted",
-              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "content": "Ch\u01b0a c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng k\u00fd ngay",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -4472,7 +5126,7 @@
                   "id": "J1Nyc",
                   "name": "loginTitle",
                   "fill": "$color-fg",
-                  "content": "Đăng nhập",
+                  "content": "\u0110\u0103ng nh\u1eadp",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -4482,7 +5136,7 @@
                   "id": "asj6v",
                   "name": "loginSub",
                   "fill": "$color-fg-muted",
-                  "content": "Truy cập dashboard SEO của bạn",
+                  "content": "Truy c\u1eadp dashboard SEO c\u1ee7a b\u1ea1n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4512,10 +5166,10 @@
               "name": "loginPwd",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu"
+                  "content": "M\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -4537,7 +5191,7 @@
                   "id": "C8Bjve",
                   "name": "loginRemember",
                   "fill": "$color-fg-muted",
-                  "content": "☐ Ghi nhớ tôi",
+                  "content": "\u2610 Ghi nh\u1edb t\u00f4i",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4547,7 +5201,7 @@
                   "id": "L2B0c",
                   "name": "loginForgot",
                   "fill": "$color-primary",
-                  "content": "Quên mật khẩu?",
+                  "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4562,7 +5216,7 @@
               "name": "loginSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Đăng nhập"
+                  "content": "\u0110\u0103ng nh\u1eadp"
                 }
               }
             },
@@ -4592,7 +5246,7 @@
                   "id": "E4MNYT",
                   "name": "loginDivT",
                   "fill": "$color-fg-muted",
-                  "content": "hoặc",
+                  "content": "ho\u1eb7c",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -4615,7 +5269,7 @@
               "name": "loginGoogle",
               "descendants": {
                 "Nu8z5": {
-                  "content": "🇬 Đăng nhập với Google"
+                  "content": "\ud83c\uddec \u0110\u0103ng nh\u1eadp v\u1edbi Google"
                 }
               }
             },
@@ -4624,7 +5278,7 @@
               "id": "LVXEh",
               "name": "loginFooter",
               "fill": "$color-fg-muted",
-              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "content": "Ch\u01b0a c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng k\u00fd ngay",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -4716,7 +5370,7 @@
                   "id": "Ng5B8",
                   "name": "loginTitle",
                   "fill": "$color-fg",
-                  "content": "Đăng nhập",
+                  "content": "\u0110\u0103ng nh\u1eadp",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -4726,7 +5380,7 @@
                   "id": "Pon45",
                   "name": "loginSub",
                   "fill": "$color-fg-muted",
-                  "content": "Truy cập dashboard SEO của bạn",
+                  "content": "Truy c\u1eadp dashboard SEO c\u1ee7a b\u1ea1n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4756,10 +5410,10 @@
               "name": "loginPwd",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu"
+                  "content": "M\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -4781,7 +5435,7 @@
                   "id": "yrTDa",
                   "name": "loginRemember",
                   "fill": "$color-fg-muted",
-                  "content": "☐ Ghi nhớ tôi",
+                  "content": "\u2610 Ghi nh\u1edb t\u00f4i",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4791,7 +5445,7 @@
                   "id": "ZaRO6",
                   "name": "loginForgot",
                   "fill": "$color-primary",
-                  "content": "Quên mật khẩu?",
+                  "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4806,7 +5460,7 @@
               "name": "loginSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Đăng nhập"
+                  "content": "\u0110\u0103ng nh\u1eadp"
                 }
               }
             },
@@ -4836,7 +5490,7 @@
                   "id": "L3qBE3",
                   "name": "loginDivT",
                   "fill": "$color-fg-muted",
-                  "content": "hoặc",
+                  "content": "ho\u1eb7c",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -4859,7 +5513,7 @@
               "name": "loginGoogle",
               "descendants": {
                 "Nu8z5": {
-                  "content": "🇬 Đăng nhập với Google"
+                  "content": "\ud83c\uddec \u0110\u0103ng nh\u1eadp v\u1edbi Google"
                 }
               }
             },
@@ -4868,7 +5522,7 @@
               "id": "fHjam",
               "name": "loginFooter",
               "fill": "$color-fg-muted",
-              "content": "Chưa có tài khoản? Đăng ký ngay",
+              "content": "Ch\u01b0a c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng k\u00fd ngay",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -4960,7 +5614,7 @@
                   "id": "B4Zy6",
                   "name": "regTitle",
                   "fill": "$color-fg",
-                  "content": "Tạo tài khoản",
+                  "content": "T\u1ea1o t\u00e0i kho\u1ea3n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -4970,7 +5624,7 @@
                   "id": "n3HNb",
                   "name": "regSub",
                   "fill": "$color-fg-muted",
-                  "content": "Bắt đầu audit SEO miễn phí",
+                  "content": "B\u1eaft \u0111\u1ea7u audit SEO mi\u1ec5n ph\u00ed",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -4985,10 +5639,10 @@
               "name": "regName",
               "descendants": {
                 "hAriX": {
-                  "content": "Họ tên"
+                  "content": "H\u1ecd t\u00ean"
                 },
                 "tgH70": {
-                  "content": "Nguyễn Văn A"
+                  "content": "Nguy\u1ec5n V\u0103n A"
                 }
               }
             },
@@ -5015,10 +5669,10 @@
               "name": "regPwd",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu"
+                  "content": "M\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -5040,7 +5694,7 @@
                   "id": "P9tNT",
                   "name": "rule1",
                   "fill": "$color-fg-muted",
-                  "content": "○ Tối thiểu 8 ký tự",
+                  "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -5050,7 +5704,7 @@
                   "id": "ATaEC",
                   "name": "rule2",
                   "fill": "$color-fg-muted",
-                  "content": "○ Có ít nhất 1 chữ hoa",
+                  "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -5060,7 +5714,7 @@
                   "id": "htua3",
                   "name": "rule3",
                   "fill": "$color-fg-muted",
-                  "content": "○ Có ít nhất 1 chữ số",
+                  "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -5070,7 +5724,7 @@
                   "id": "wVflX",
                   "name": "rule4",
                   "fill": "$color-fg-muted",
-                  "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+                  "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t (!@#$%^&*)",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -5082,7 +5736,7 @@
               "id": "moK3m",
               "name": "regTerms",
               "fill": "$color-fg-muted",
-              "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+              "content": "\u2610 T\u00f4i \u0111\u1ed3ng \u00fd v\u1edbi \u0110i\u1ec1u kho\u1ea3n v\u00e0 Ch\u00ednh s\u00e1ch",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -5095,7 +5749,7 @@
               "name": "regSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Tạo tài khoản"
+                  "content": "T\u1ea1o t\u00e0i kho\u1ea3n"
                 }
               }
             },
@@ -5107,7 +5761,7 @@
               "name": "regGoogle",
               "descendants": {
                 "Nu8z5": {
-                  "content": "🇬 Đăng ký với Google"
+                  "content": "\ud83c\uddec \u0110\u0103ng k\u00fd v\u1edbi Google"
                 }
               }
             },
@@ -5116,7 +5770,7 @@
               "id": "j2sPLN",
               "name": "regFooter",
               "fill": "$color-fg-muted",
-              "content": "Đã có tài khoản? Đăng nhập",
+              "content": "\u0110\u00e3 c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng nh\u1eadp",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -5197,7 +5851,7 @@
               "id": "AB4dC",
               "name": "regTitle",
               "fill": "$color-fg",
-              "content": "Tạo tài khoản",
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -5207,7 +5861,7 @@
               "id": "TD40E",
               "name": "regSub",
               "fill": "$color-fg-muted",
-              "content": "Bắt đầu audit SEO miễn phí",
+              "content": "B\u1eaft \u0111\u1ea7u audit SEO mi\u1ec5n ph\u00ed",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -5222,10 +5876,10 @@
           "name": "regName",
           "descendants": {
             "hAriX": {
-              "content": "Họ tên"
+              "content": "H\u1ecd t\u00ean"
             },
             "tgH70": {
-              "content": "Nguyễn Văn A"
+              "content": "Nguy\u1ec5n V\u0103n A"
             }
           }
         },
@@ -5252,10 +5906,10 @@
           "name": "regPwd",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu"
+              "content": "M\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -5277,7 +5931,7 @@
               "id": "amKur",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5287,7 +5941,7 @@
               "id": "dnpme",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5297,7 +5951,7 @@
               "id": "t59ksk",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5307,7 +5961,7 @@
               "id": "BLLtD",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t (!@#$%^&*)",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5319,7 +5973,7 @@
           "id": "bRtgq",
           "name": "regTerms",
           "fill": "$color-fg-muted",
-          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "content": "\u2610 T\u00f4i \u0111\u1ed3ng \u00fd v\u1edbi \u0110i\u1ec1u kho\u1ea3n v\u00e0 Ch\u00ednh s\u00e1ch",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -5332,7 +5986,7 @@
           "name": "regSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Tạo tài khoản"
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n"
             }
           }
         },
@@ -5344,7 +5998,7 @@
           "name": "regGoogle",
           "descendants": {
             "Nu8z5": {
-              "content": "🇬 Đăng ký với Google"
+              "content": "\ud83c\uddec \u0110\u0103ng k\u00fd v\u1edbi Google"
             }
           }
         },
@@ -5353,7 +6007,7 @@
           "id": "RizDD",
           "name": "regFooter",
           "fill": "$color-fg-muted",
-          "content": "Đã có tài khoản? Đăng nhập",
+          "content": "\u0110\u00e3 c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -5432,7 +6086,7 @@
               "id": "p3SSER",
               "name": "regTitle",
               "fill": "$color-fg",
-              "content": "Tạo tài khoản",
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -5442,7 +6096,7 @@
               "id": "a0Zfd",
               "name": "regSub",
               "fill": "$color-fg-muted",
-              "content": "Bắt đầu audit SEO miễn phí",
+              "content": "B\u1eaft \u0111\u1ea7u audit SEO mi\u1ec5n ph\u00ed",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -5457,10 +6111,10 @@
           "name": "regName",
           "descendants": {
             "hAriX": {
-              "content": "Họ tên"
+              "content": "H\u1ecd t\u00ean"
             },
             "tgH70": {
-              "content": "Nguyễn Văn A"
+              "content": "Nguy\u1ec5n V\u0103n A"
             }
           }
         },
@@ -5487,10 +6141,10 @@
           "name": "regPwd",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu"
+              "content": "M\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -5512,7 +6166,7 @@
               "id": "MFiT6",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5522,7 +6176,7 @@
               "id": "HHMTP",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5532,7 +6186,7 @@
               "id": "LsAQa",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5542,7 +6196,7 @@
               "id": "w1mwD",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t (!@#$%^&*)",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5554,7 +6208,7 @@
           "id": "DCI5U",
           "name": "regTerms",
           "fill": "$color-fg-muted",
-          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "content": "\u2610 T\u00f4i \u0111\u1ed3ng \u00fd v\u1edbi \u0110i\u1ec1u kho\u1ea3n v\u00e0 Ch\u00ednh s\u00e1ch",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -5567,7 +6221,7 @@
           "name": "regSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Tạo tài khoản"
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n"
             }
           }
         },
@@ -5579,7 +6233,7 @@
           "name": "regGoogle",
           "descendants": {
             "Nu8z5": {
-              "content": "🇬 Đăng ký với Google"
+              "content": "\ud83c\uddec \u0110\u0103ng k\u00fd v\u1edbi Google"
             }
           }
         },
@@ -5588,7 +6242,7 @@
           "id": "gT0Yf",
           "name": "regFooter",
           "fill": "$color-fg-muted",
-          "content": "Đã có tài khoản? Đăng nhập",
+          "content": "\u0110\u00e3 c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -5667,7 +6321,7 @@
               "id": "FcVdp",
               "name": "regTitle",
               "fill": "$color-fg",
-              "content": "Tạo tài khoản",
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -5677,7 +6331,7 @@
               "id": "TNvXL",
               "name": "regSub",
               "fill": "$color-fg-muted",
-              "content": "Bắt đầu audit SEO miễn phí",
+              "content": "B\u1eaft \u0111\u1ea7u audit SEO mi\u1ec5n ph\u00ed",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -5692,10 +6346,10 @@
           "name": "regName",
           "descendants": {
             "hAriX": {
-              "content": "Họ tên"
+              "content": "H\u1ecd t\u00ean"
             },
             "tgH70": {
-              "content": "Nguyễn Văn A"
+              "content": "Nguy\u1ec5n V\u0103n A"
             }
           }
         },
@@ -5722,10 +6376,10 @@
           "name": "regPwd",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu"
+              "content": "M\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -5747,7 +6401,7 @@
               "id": "BoDfd",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5757,7 +6411,7 @@
               "id": "wtnvk",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5767,7 +6421,7 @@
               "id": "o9x1PT",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5777,7 +6431,7 @@
               "id": "P7AqE",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t (!@#$%^&*)",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5789,7 +6443,7 @@
           "id": "mbGjl",
           "name": "regTerms",
           "fill": "$color-fg-muted",
-          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "content": "\u2610 T\u00f4i \u0111\u1ed3ng \u00fd v\u1edbi \u0110i\u1ec1u kho\u1ea3n v\u00e0 Ch\u00ednh s\u00e1ch",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -5802,7 +6456,7 @@
           "name": "regSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Tạo tài khoản"
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n"
             }
           }
         },
@@ -5814,7 +6468,7 @@
           "name": "regGoogle",
           "descendants": {
             "Nu8z5": {
-              "content": "🇬 Đăng ký với Google"
+              "content": "\ud83c\uddec \u0110\u0103ng k\u00fd v\u1edbi Google"
             }
           }
         },
@@ -5823,7 +6477,7 @@
           "id": "S9CZ6e",
           "name": "regFooter",
           "fill": "$color-fg-muted",
-          "content": "Đã có tài khoản? Đăng nhập",
+          "content": "\u0110\u00e3 c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -5902,7 +6556,7 @@
               "id": "e3yPdO",
               "name": "regTitle",
               "fill": "$color-fg",
-              "content": "Tạo tài khoản",
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -5912,7 +6566,7 @@
               "id": "OZOv0",
               "name": "regSub",
               "fill": "$color-fg-muted",
-              "content": "Bắt đầu audit SEO miễn phí",
+              "content": "B\u1eaft \u0111\u1ea7u audit SEO mi\u1ec5n ph\u00ed",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -5927,10 +6581,10 @@
           "name": "regName",
           "descendants": {
             "hAriX": {
-              "content": "Họ tên"
+              "content": "H\u1ecd t\u00ean"
             },
             "tgH70": {
-              "content": "Nguyễn Văn A"
+              "content": "Nguy\u1ec5n V\u0103n A"
             }
           }
         },
@@ -5957,10 +6611,10 @@
           "name": "regPwd",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu"
+              "content": "M\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -5982,7 +6636,7 @@
               "id": "qtXYD",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -5992,7 +6646,7 @@
               "id": "Qa9i9",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -6002,7 +6656,7 @@
               "id": "yTKHR",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -6012,7 +6666,7 @@
               "id": "Da17V",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt (!@#$%^&*)",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t (!@#$%^&*)",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -6024,7 +6678,7 @@
           "id": "iFWij",
           "name": "regTerms",
           "fill": "$color-fg-muted",
-          "content": "☐ Tôi đồng ý với Điều khoản và Chính sách",
+          "content": "\u2610 T\u00f4i \u0111\u1ed3ng \u00fd v\u1edbi \u0110i\u1ec1u kho\u1ea3n v\u00e0 Ch\u00ednh s\u00e1ch",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
@@ -6037,7 +6691,7 @@
           "name": "regSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Tạo tài khoản"
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n"
             }
           }
         },
@@ -6049,7 +6703,7 @@
           "name": "regGoogle",
           "descendants": {
             "Nu8z5": {
-              "content": "🇬 Đăng ký với Google"
+              "content": "\ud83c\uddec \u0110\u0103ng k\u00fd v\u1edbi Google"
             }
           }
         },
@@ -6058,7 +6712,7 @@
           "id": "JAk1q",
           "name": "regFooter",
           "fill": "$color-fg-muted",
-          "content": "Đã có tài khoản? Đăng nhập",
+          "content": "\u0110\u00e3 c\u00f3 t\u00e0i kho\u1ea3n? \u0110\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -6148,7 +6802,7 @@
                   "id": "I4l6M",
                   "name": "fpwTitle",
                   "fill": "$color-fg",
-                  "content": "Quên mật khẩu?",
+                  "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -6158,7 +6812,7 @@
                   "id": "S7lLEa",
                   "name": "fpwSub",
                   "fill": "$color-fg-muted",
-                  "content": "Nhập email để nhận link đặt lại mật khẩu",
+                  "content": "Nh\u1eadp email \u0111\u1ec3 nh\u1eadn link \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -6188,7 +6842,7 @@
               "name": "fpwSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Gửi link đặt lại"
+                  "content": "G\u1eedi link \u0111\u1eb7t l\u1ea1i"
                 }
               }
             },
@@ -6197,7 +6851,7 @@
               "id": "jTbZu",
               "name": "fpwFooter",
               "fill": "$color-fg-muted",
-              "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+              "content": "Nh\u1edb m\u1eadt kh\u1ea9u r\u1ed3i? Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -6278,7 +6932,7 @@
               "id": "eG0ap",
               "name": "fpwTitle",
               "fill": "$color-fg",
-              "content": "Quên mật khẩu?",
+              "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -6288,7 +6942,7 @@
               "id": "KgrSx",
               "name": "fpwSub",
               "fill": "$color-fg-muted",
-              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "content": "Nh\u1eadp email \u0111\u1ec3 nh\u1eadn link \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -6318,7 +6972,7 @@
           "name": "fpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Gửi link đặt lại"
+              "content": "G\u1eedi link \u0111\u1eb7t l\u1ea1i"
             }
           }
         },
@@ -6327,7 +6981,7 @@
           "id": "etP2b",
           "name": "fpwFooter",
           "fill": "$color-fg-muted",
-          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "content": "Nh\u1edb m\u1eadt kh\u1ea9u r\u1ed3i? Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -6406,7 +7060,7 @@
               "id": "c03NTR",
               "name": "fpwTitle",
               "fill": "$color-fg",
-              "content": "Quên mật khẩu?",
+              "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -6416,7 +7070,7 @@
               "id": "lGdqI",
               "name": "fpwSub",
               "fill": "$color-fg-muted",
-              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "content": "Nh\u1eadp email \u0111\u1ec3 nh\u1eadn link \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -6446,7 +7100,7 @@
           "name": "fpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Gửi link đặt lại"
+              "content": "G\u1eedi link \u0111\u1eb7t l\u1ea1i"
             }
           }
         },
@@ -6455,7 +7109,7 @@
           "id": "M3IyF",
           "name": "fpwFooter",
           "fill": "$color-fg-muted",
-          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "content": "Nh\u1edb m\u1eadt kh\u1ea9u r\u1ed3i? Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -6534,7 +7188,7 @@
               "id": "KJnes",
               "name": "fpwTitle",
               "fill": "$color-fg",
-              "content": "Quên mật khẩu?",
+              "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -6544,7 +7198,7 @@
               "id": "Z2p5w",
               "name": "fpwSub",
               "fill": "$color-fg-muted",
-              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "content": "Nh\u1eadp email \u0111\u1ec3 nh\u1eadn link \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -6574,7 +7228,7 @@
           "name": "fpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Gửi link đặt lại"
+              "content": "G\u1eedi link \u0111\u1eb7t l\u1ea1i"
             }
           }
         },
@@ -6583,7 +7237,7 @@
           "id": "GGUnu",
           "name": "fpwFooter",
           "fill": "$color-fg-muted",
-          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "content": "Nh\u1edb m\u1eadt kh\u1ea9u r\u1ed3i? Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -6662,7 +7316,7 @@
               "id": "CIooZ",
               "name": "fpwTitle",
               "fill": "$color-fg",
-              "content": "Quên mật khẩu?",
+              "content": "Qu\u00ean m\u1eadt kh\u1ea9u?",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -6672,7 +7326,7 @@
               "id": "Az3q5",
               "name": "fpwSub",
               "fill": "$color-fg-muted",
-              "content": "Nhập email để nhận link đặt lại mật khẩu",
+              "content": "Nh\u1eadp email \u0111\u1ec3 nh\u1eadn link \u0111\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -6702,7 +7356,7 @@
           "name": "fpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Gửi link đặt lại"
+              "content": "G\u1eedi link \u0111\u1eb7t l\u1ea1i"
             }
           }
         },
@@ -6711,7 +7365,7 @@
           "id": "dSA7u",
           "name": "fpwFooter",
           "fill": "$color-fg-muted",
-          "content": "Nhớ mật khẩu rồi? Quay lại đăng nhập",
+          "content": "Nh\u1edb m\u1eadt kh\u1ea9u r\u1ed3i? Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -6801,7 +7455,7 @@
                   "id": "Y1k2ir",
                   "name": "rpwTitle",
                   "fill": "$color-fg",
-                  "content": "Đặt lại mật khẩu",
+                  "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-2xl",
                   "fontWeight": "$weight-semibold"
@@ -6811,7 +7465,7 @@
                   "id": "o6htD",
                   "name": "rpwSub",
                   "fill": "$color-fg-muted",
-                  "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+                  "content": "T\u1ea1o m\u1eadt kh\u1ea9u m\u1edbi cho t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-sm",
                   "fontWeight": "normal"
@@ -6862,10 +7516,10 @@
               "name": "rpwNew",
               "descendants": {
                 "hAriX": {
-                  "content": "Mật khẩu mới"
+                  "content": "M\u1eadt kh\u1ea9u m\u1edbi"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -6887,7 +7541,7 @@
                   "id": "B3HMb",
                   "name": "rule1",
                   "fill": "$color-fg-muted",
-                  "content": "○ Tối thiểu 8 ký tự",
+                  "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -6897,7 +7551,7 @@
                   "id": "SozXG",
                   "name": "rule2",
                   "fill": "$color-fg-muted",
-                  "content": "○ Có ít nhất 1 chữ hoa",
+                  "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -6907,7 +7561,7 @@
                   "id": "ZnUbk",
                   "name": "rule3",
                   "fill": "$color-fg-muted",
-                  "content": "○ Có ít nhất 1 chữ số",
+                  "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -6917,7 +7571,7 @@
                   "id": "C5VGz3",
                   "name": "rule4",
                   "fill": "$color-fg-muted",
-                  "content": "○ Có ít nhất 1 ký tự đặc biệt",
+                  "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t",
                   "fontFamily": "$font-ui",
                   "fontSize": "$text-xs",
                   "fontWeight": "normal"
@@ -6932,10 +7586,10 @@
               "name": "rpwConfirm",
               "descendants": {
                 "hAriX": {
-                  "content": "Xác nhận mật khẩu"
+                  "content": "X\u00e1c nh\u1eadn m\u1eadt kh\u1ea9u"
                 },
                 "tgH70": {
-                  "content": "••••••••"
+                  "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 }
               }
             },
@@ -6947,7 +7601,7 @@
               "name": "rpwSubmit",
               "descendants": {
                 "HmcyL": {
-                  "content": "Đặt lại mật khẩu"
+                  "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u"
                 }
               }
             },
@@ -6956,7 +7610,7 @@
               "id": "oWraj",
               "name": "rpwFooter",
               "fill": "$color-primary",
-              "content": "Quay lại đăng nhập",
+              "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
               "textAlign": "center",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
@@ -7037,7 +7691,7 @@
               "id": "b8TGv2",
               "name": "rpwTitle",
               "fill": "$color-fg",
-              "content": "Đặt lại mật khẩu",
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -7047,7 +7701,7 @@
               "id": "XkJDO",
               "name": "rpwSub",
               "fill": "$color-fg-muted",
-              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "content": "T\u1ea1o m\u1eadt kh\u1ea9u m\u1edbi cho t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -7098,10 +7752,10 @@
           "name": "rpwNew",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu mới"
+              "content": "M\u1eadt kh\u1ea9u m\u1edbi"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7123,7 +7777,7 @@
               "id": "ERWE5",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7133,7 +7787,7 @@
               "id": "lohOp",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7143,7 +7797,7 @@
               "id": "xhzpQ",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7153,7 +7807,7 @@
               "id": "C3eEI1",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7168,10 +7822,10 @@
           "name": "rpwConfirm",
           "descendants": {
             "hAriX": {
-              "content": "Xác nhận mật khẩu"
+              "content": "X\u00e1c nh\u1eadn m\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7183,7 +7837,7 @@
           "name": "rpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Đặt lại mật khẩu"
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u"
             }
           }
         },
@@ -7192,7 +7846,7 @@
           "id": "wL1NP",
           "name": "rpwFooter",
           "fill": "$color-primary",
-          "content": "Quay lại đăng nhập",
+          "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -7271,7 +7925,7 @@
               "id": "lSBg8",
               "name": "rpwTitle",
               "fill": "$color-fg",
-              "content": "Đặt lại mật khẩu",
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -7281,7 +7935,7 @@
               "id": "zyg6v",
               "name": "rpwSub",
               "fill": "$color-fg-muted",
-              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "content": "T\u1ea1o m\u1eadt kh\u1ea9u m\u1edbi cho t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -7332,10 +7986,10 @@
           "name": "rpwNew",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu mới"
+              "content": "M\u1eadt kh\u1ea9u m\u1edbi"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7357,7 +8011,7 @@
               "id": "ESsXZ",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7367,7 +8021,7 @@
               "id": "j5FjR",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7377,7 +8031,7 @@
               "id": "S4NaN",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7387,7 +8041,7 @@
               "id": "N6Cp4",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7402,10 +8056,10 @@
           "name": "rpwConfirm",
           "descendants": {
             "hAriX": {
-              "content": "Xác nhận mật khẩu"
+              "content": "X\u00e1c nh\u1eadn m\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7417,7 +8071,7 @@
           "name": "rpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Đặt lại mật khẩu"
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u"
             }
           }
         },
@@ -7426,7 +8080,7 @@
           "id": "GziTq",
           "name": "rpwFooter",
           "fill": "$color-primary",
-          "content": "Quay lại đăng nhập",
+          "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -7505,7 +8159,7 @@
               "id": "mIxq8",
               "name": "rpwTitle",
               "fill": "$color-fg",
-              "content": "Đặt lại mật khẩu",
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -7515,7 +8169,7 @@
               "id": "R8kYe",
               "name": "rpwSub",
               "fill": "$color-fg-muted",
-              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "content": "T\u1ea1o m\u1eadt kh\u1ea9u m\u1edbi cho t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -7566,10 +8220,10 @@
           "name": "rpwNew",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu mới"
+              "content": "M\u1eadt kh\u1ea9u m\u1edbi"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7591,7 +8245,7 @@
               "id": "CyDfr",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7601,7 +8255,7 @@
               "id": "iGylP",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7611,7 +8265,7 @@
               "id": "QYeL8",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7621,7 +8275,7 @@
               "id": "T5Ih3L",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7636,10 +8290,10 @@
           "name": "rpwConfirm",
           "descendants": {
             "hAriX": {
-              "content": "Xác nhận mật khẩu"
+              "content": "X\u00e1c nh\u1eadn m\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7651,7 +8305,7 @@
           "name": "rpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Đặt lại mật khẩu"
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u"
             }
           }
         },
@@ -7660,7 +8314,7 @@
           "id": "QIxhK",
           "name": "rpwFooter",
           "fill": "$color-primary",
-          "content": "Quay lại đăng nhập",
+          "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -7739,7 +8393,7 @@
               "id": "b8E3w",
               "name": "rpwTitle",
               "fill": "$color-fg",
-              "content": "Đặt lại mật khẩu",
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -7749,7 +8403,7 @@
               "id": "ln1vn",
               "name": "rpwSub",
               "fill": "$color-fg-muted",
-              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "content": "T\u1ea1o m\u1eadt kh\u1ea9u m\u1edbi cho t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -7800,10 +8454,10 @@
           "name": "rpwNew",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu mới"
+              "content": "M\u1eadt kh\u1ea9u m\u1edbi"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7825,7 +8479,7 @@
               "id": "Iz1sU",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7835,7 +8489,7 @@
               "id": "md6hP",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7845,7 +8499,7 @@
               "id": "TKrST",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7855,7 +8509,7 @@
               "id": "gOiTv",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -7870,10 +8524,10 @@
           "name": "rpwConfirm",
           "descendants": {
             "hAriX": {
-              "content": "Xác nhận mật khẩu"
+              "content": "X\u00e1c nh\u1eadn m\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -7885,7 +8539,7 @@
           "name": "rpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Đặt lại mật khẩu"
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u"
             }
           }
         },
@@ -7894,7 +8548,7 @@
           "id": "kR7gV",
           "name": "rpwFooter",
           "fill": "$color-primary",
-          "content": "Quay lại đăng nhập",
+          "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
@@ -7973,7 +8627,7 @@
               "id": "hvWAM",
               "name": "rpwTitle",
               "fill": "$color-fg",
-              "content": "Đặt lại mật khẩu",
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u",
               "fontFamily": "$font-ui",
               "fontSize": "$text-2xl",
               "fontWeight": "$weight-semibold"
@@ -7983,7 +8637,7 @@
               "id": "T6fq3",
               "name": "rpwSub",
               "fill": "$color-fg-muted",
-              "content": "Tạo mật khẩu mới cho tài khoản của bạn",
+              "content": "T\u1ea1o m\u1eadt kh\u1ea9u m\u1edbi cho t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n",
               "fontFamily": "$font-ui",
               "fontSize": "$text-sm",
               "fontWeight": "normal"
@@ -8034,10 +8688,10 @@
           "name": "rpwNew",
           "descendants": {
             "hAriX": {
-              "content": "Mật khẩu mới"
+              "content": "M\u1eadt kh\u1ea9u m\u1edbi"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -8059,7 +8713,7 @@
               "id": "d3InaE",
               "name": "rule1",
               "fill": "$color-fg-muted",
-              "content": "○ Tối thiểu 8 ký tự",
+              "content": "\u25cb T\u1ed1i thi\u1ec3u 8 k\u00fd t\u1ef1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -8069,7 +8723,7 @@
               "id": "eLe3R",
               "name": "rule2",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ hoa",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef hoa",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -8079,7 +8733,7 @@
               "id": "X4fzw",
               "name": "rule3",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 chữ số",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 ch\u1eef s\u1ed1",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -8089,7 +8743,7 @@
               "id": "Ltif8",
               "name": "rule4",
               "fill": "$color-fg-muted",
-              "content": "○ Có ít nhất 1 ký tự đặc biệt",
+              "content": "\u25cb C\u00f3 \u00edt nh\u1ea5t 1 k\u00fd t\u1ef1 \u0111\u1eb7c bi\u1ec7t",
               "fontFamily": "$font-ui",
               "fontSize": "$text-xs",
               "fontWeight": "normal"
@@ -8104,10 +8758,10 @@
           "name": "rpwConfirm",
           "descendants": {
             "hAriX": {
-              "content": "Xác nhận mật khẩu"
+              "content": "X\u00e1c nh\u1eadn m\u1eadt kh\u1ea9u"
             },
             "tgH70": {
-              "content": "••••••••"
+              "content": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
             }
           }
         },
@@ -8119,7 +8773,7 @@
           "name": "rpwSubmit",
           "descendants": {
             "HmcyL": {
-              "content": "Đặt lại mật khẩu"
+              "content": "\u0110\u1eb7t l\u1ea1i m\u1eadt kh\u1ea9u"
             }
           }
         },
@@ -8128,11 +8782,485 @@
           "id": "f52Ly",
           "name": "rpwFooter",
           "fill": "$color-primary",
-          "content": "Quay lại đăng nhập",
+          "content": "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp",
           "textAlign": "center",
           "fontFamily": "$font-ui",
           "fontSize": "$text-sm",
           "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "appShellFrameTop",
+      "name": "AppShell",
+      "x": 0,
+      "y": 4570,
+      "width": 1920,
+      "height": "fit_content(1000)",
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "padding": 32,
+      "gap": 32,
+      "children": [
+        {
+          "type": "text",
+          "id": "asTitle",
+          "content": "AppShell Components",
+          "fill": "$color-fg",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-3xl",
+          "fontWeight": "$weight-bold"
+        },
+        {
+          "type": "frame",
+          "id": "navItemC",
+          "name": "Component/AppShell/Sidebar/NavItem",
+          "reusable": true,
+          "width": 208,
+          "height": 36,
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "cornerRadius": "$radius-md",
+          "layout": "horizontal",
+          "padding": [
+            8,
+            12
+          ],
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "navIcon",
+              "iconFontFamily": "lucide",
+              "iconFontName": "layout-dashboard",
+              "width": 20,
+              "height": 20,
+              "fill": "$color-fg-muted"
+            },
+            {
+              "type": "text",
+              "id": "navLabel",
+              "content": "Dashboard",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "$weight-regular"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "sidebarHeaderC",
+          "name": "Component/AppShell/Sidebar/Header",
+          "reusable": true,
+          "width": 240,
+          "height": 56,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "layout": "horizontal",
+          "padding": [
+            0,
+            24
+          ],
+          "gap": 12,
+          "alignItems": "center",
+          "justifyContent": "space_between",
+          "children": [
+            {
+              "type": "frame",
+              "id": "shBrand",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "shLogo",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "gauge",
+                  "width": 24,
+                  "height": 24,
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "shWord",
+                  "content": "SEO Audit",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-base",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "icon_font",
+              "id": "shToggle",
+              "iconFontFamily": "lucide",
+              "iconFontName": "panel-left-close",
+              "width": 16,
+              "height": 16,
+              "fill": "$color-fg-muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "sidebarFooterC",
+          "name": "Component/AppShell/Sidebar/Footer",
+          "reusable": true,
+          "width": 240,
+          "height": 56,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": {
+              "top": 1
+            },
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "layout": "horizontal",
+          "padding": [
+            12,
+            16
+          ],
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "ellipse",
+              "id": "sfAvatar",
+              "width": 32,
+              "height": 32,
+              "fill": "$color-bg-overlay",
+              "stroke": {
+                "thickness": 1,
+                "fill": "$color-border"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "sfName",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 2,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "sfNameTxt",
+                  "content": "Duc Pham",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "sfPlan",
+                  "content": "Free plan",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs"
+                }
+              ]
+            },
+            {
+              "type": "icon_font",
+              "id": "sfTheme",
+              "iconFontFamily": "lucide",
+              "iconFontName": "moon",
+              "width": 16,
+              "height": 16,
+              "fill": "$color-fg-muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "topbarC",
+          "name": "Component/AppShell/Topbar",
+          "reusable": true,
+          "width": 1200,
+          "height": 56,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "layout": "horizontal",
+          "padding": [
+            0,
+            24
+          ],
+          "gap": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "tbBread",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 8,
+              "alignItems": "center",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tbCrumb1",
+                  "content": "Audits",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "tbSep",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "chevron-right",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$color-fg-subtle"
+                },
+                {
+                  "type": "text",
+                  "id": "tbCrumb2",
+                  "content": "google.com",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tbActions",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "tbBell",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "bell",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "$color-fg-muted"
+                },
+                {
+                  "type": "ellipse",
+                  "id": "tbUser",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$color-bg-overlay",
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "sidebarContC",
+          "name": "Component/AppShell/Sidebar/Container",
+          "reusable": true,
+          "width": 240,
+          "height": 720,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": {
+              "right": 1
+            },
+            "fill": "$color-border",
+            "align": "inside"
+          },
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "ref",
+              "id": "scHead",
+              "ref": "sidebarHeaderC"
+            },
+            {
+              "type": "frame",
+              "id": "scNav",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "padding": [
+                16,
+                16
+              ],
+              "gap": 4,
+              "width": "fill_container",
+              "height": "fill_container",
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "scN1",
+                  "ref": "navItemC",
+                  "fill": "$color-bg-overlay",
+                  "descendants": {
+                    "navIcon": {
+                      "iconFontName": "layout-dashboard",
+                      "fill": "$color-fg"
+                    },
+                    "navLabel": {
+                      "content": "Dashboard",
+                      "fill": "$color-fg",
+                      "fontWeight": "$weight-medium"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "scN2",
+                  "ref": "navItemC",
+                  "descendants": {
+                    "navIcon": {
+                      "iconFontName": "search"
+                    },
+                    "navLabel": {
+                      "content": "Audits"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "scN3",
+                  "ref": "navItemC",
+                  "descendants": {
+                    "navIcon": {
+                      "iconFontName": "calendar-clock"
+                    },
+                    "navLabel": {
+                      "content": "Scheduled"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "scN4",
+                  "ref": "navItemC",
+                  "descendants": {
+                    "navIcon": {
+                      "iconFontName": "git-compare"
+                    },
+                    "navLabel": {
+                      "content": "Compare"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "scN5",
+                  "ref": "navItemC",
+                  "descendants": {
+                    "navIcon": {
+                      "iconFontName": "settings"
+                    },
+                    "navLabel": {
+                      "content": "Settings"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "id": "scFoot",
+              "ref": "sidebarFooterC"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "appShellC",
+          "name": "Component/AppShell/Wrapper",
+          "reusable": true,
+          "width": 1440,
+          "height": 820,
+          "fill": "$color-bg",
+          "layout": "horizontal",
+          "children": [
+            {
+              "type": "ref",
+              "id": "asSide",
+              "ref": "sidebarContC",
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "asMain",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "asTop",
+                  "ref": "topbarC",
+                  "width": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "asMainSlot",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$color-bg",
+                  "layout": "vertical",
+                  "padding": 32,
+                  "gap": 24,
+                  "slot": []
+                }
+              ]
+            }
+          ]
         }
       ]
     }

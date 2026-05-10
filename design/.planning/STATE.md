@@ -157,7 +157,7 @@ Em (main agent) đã consume nhiều context cho debug pencil persistence + spec
 | `e331ca8` | Phase 1 rebuild minimal: 11 components + .vscode/settings.json autoSave |
 | `bf4fb8d` | shared-report Default state partial (header + hero + footer; Category/CWV/Issues skipped) |
 
-### State foundation file `design/system-tokens.pen`
+### State foundation file `design/system-tokens.pen``
 
 - 58 variables (themes dark/light, color, typography, spacing, radius)
 - 4 top-level frames:
