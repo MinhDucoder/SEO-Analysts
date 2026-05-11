@@ -32338,6 +32338,1215 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "ipQBS",
+      "x": 2040,
+      "y": 4570,
+      "name": "Page/SharedReport/LowScore",
+      "clip": true,
+      "width": 1440,
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "YkpWe",
+          "name": "PublicHeader",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$color-border"
+          },
+          "padding": [
+            0,
+            24
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "DuPGD",
+              "name": "headerLeft",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "EPKQs",
+                  "name": "brandIcon",
+                  "width": 24,
+                  "height": 24,
+                  "iconFontName": "gauge",
+                  "iconFontFamily": "lucide",
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "id": "jJ5bH",
+                  "name": "brandText",
+                  "fill": "$color-fg",
+                  "content": "SEO Audit",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-base",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "id": "tUCO0",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "name": "headerCta",
+              "descendants": {
+                "HmcyL": {
+                  "content": "T\u1ea1o audit mi\u1ec5n ph\u00ed \u2192"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SAlhA",
+          "name": "Hero",
+          "width": "fill_container",
+          "fill": "$color-bg",
+          "gap": 48,
+          "padding": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "blYAo",
+              "name": "heroLeft",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "JWXzG",
+                  "name": "eyebrow",
+                  "fill": "$color-fg-muted",
+                  "content": "B\u00c1O C\u00c1O SEO \u2022 C\u1ea6N C\u1ea2I THI\u1ec6N",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-bold",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "jtZMy",
+                  "name": "urlText",
+                  "fill": "$color-fg",
+                  "content": "example-low.com",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-3xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "SBsgt",
+                  "name": "metaText",
+                  "fill": "$color-fg-muted",
+                  "content": "Audit ng\u00e0y 15/03/2025 l\u00fac 14:32",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "I5O2c7",
+                  "name": "heroSpacer",
+                  "width": "fill_container",
+                  "height": 16,
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "m6JR4",
+                  "name": "statsRow",
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  },
+                  "gap": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U0z9YC",
+                      "name": "statPass",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wMdU7",
+                          "name": "statPassNum",
+                          "fill": "$color-class-excellent",
+                          "content": "15",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-3xl",
+                          "fontWeight": "$weight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "UpEak",
+                          "name": "statPassLabel",
+                          "fill": "$color-fg-muted",
+                          "content": "Pass",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RFuQk",
+                      "name": "statWarn",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "v7toCw",
+                          "name": "statWarnNum",
+                          "fill": "$color-class-fair",
+                          "content": "3",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-3xl",
+                          "fontWeight": "$weight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "T5s6Uu",
+                          "name": "statWarnLabel",
+                          "fill": "$color-fg-muted",
+                          "content": "Warn",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "dqGam",
+                      "name": "statFail",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PUAwn",
+                          "name": "statFailNum",
+                          "fill": "$color-class-poor",
+                          "content": "2",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-3xl",
+                          "fontWeight": "$weight-bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kG01t",
+                          "name": "statFailLabel",
+                          "fill": "$color-fg-muted",
+                          "content": "Fail",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "t2rGJ6",
+              "type": "ref",
+              "ref": "lHEAG",
+              "name": "heroRight",
+              "descendants": {
+                "GM65e": {
+                  "content": "42"
+                },
+                "iAuA4": {
+                  "fill": "$color-class-fair",
+                  "sweepAngle": -151.2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "e7VTZs",
+          "name": "CategoryBreakdown",
+          "width": "fill_container",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "top": 1,
+              "bottom": 1
+            },
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            48,
+            64
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "XdiHT",
+              "name": "catHeader",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Z7gvIq",
+                  "name": "catTitle",
+                  "fill": "$color-fg",
+                  "content": "Category Breakdown",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "BAuIG",
+                  "name": "catSub",
+                  "fill": "$color-fg-muted",
+                  "content": "\u0110i\u1ec3m ph\u00e2n chia theo 6 category SEO",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "sr_catBars",
+              "type": "ref",
+              "ref": "catBarsLgC",
+              "name": "CategoryBars",
+              "descendants": {
+                "tfg0x": {
+                  "content": "58",
+                  "fill": "$color-class-fair"
+                },
+                "AUpab": {
+                  "fill": "$color-class-fair",
+                  "width": 638
+                },
+                "V9vcz9": {
+                  "content": "51",
+                  "fill": "$color-class-fair"
+                },
+                "c5cUa": {
+                  "fill": "$color-class-fair",
+                  "width": 561
+                },
+                "ODYNW": {
+                  "content": "38",
+                  "fill": "$color-class-poor"
+                },
+                "eEqOM": {
+                  "fill": "$color-class-poor",
+                  "width": 418
+                },
+                "nMEBE": {
+                  "content": "62",
+                  "fill": "$color-class-fair"
+                },
+                "DzdUH": {
+                  "fill": "$color-class-fair",
+                  "width": 682
+                },
+                "FjwI4": {
+                  "content": "29",
+                  "fill": "$color-class-poor"
+                },
+                "oRAC2": {
+                  "fill": "$color-class-poor",
+                  "width": 319
+                },
+                "c8NHr2": {
+                  "content": "44",
+                  "fill": "$color-class-fair"
+                },
+                "eExzk": {
+                  "fill": "$color-class-fair",
+                  "width": 484
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "eEnZi",
+          "name": "CWVSummary",
+          "width": "fill_container",
+          "fill": "$color-bg",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            48,
+            64
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "E40E6",
+              "name": "cwvHeader",
+              "fill": "$color-fg",
+              "content": "Core Web Vitals",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-2xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "frame",
+              "id": "J1XZVw",
+              "name": "cwvCards",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Mbkbu",
+                  "name": "cwv1",
+                  "width": "fill_container",
+                  "fill": "$color-bg-elevated",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "bdkWx",
+                      "name": "cwv1lab",
+                      "fill": "$color-fg-muted",
+                      "content": "LCP",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "Qbt44",
+                      "name": "cwv1val",
+                      "fill": "$color-class-excellent",
+                      "content": "1.8s",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-3xl",
+                      "fontWeight": "$weight-bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "uO0Jg",
+                      "name": "cwv1badge",
+                      "fill": "$color-class-excellent",
+                      "content": "Good",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "movOZ",
+                  "name": "cwv2",
+                  "width": "fill_container",
+                  "fill": "$color-bg-elevated",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "O4Uo2G",
+                      "name": "cwv2lab",
+                      "fill": "$color-fg-muted",
+                      "content": "INP",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "CJTxq",
+                      "name": "cwv2val",
+                      "fill": "$color-class-excellent",
+                      "content": "180ms",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-3xl",
+                      "fontWeight": "$weight-bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "NNeQJ",
+                      "name": "cwv2badge",
+                      "fill": "$color-class-excellent",
+                      "content": "Good",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VxIfO",
+                  "name": "cwv3",
+                  "width": "fill_container",
+                  "fill": "$color-bg-elevated",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HRRyz",
+                      "name": "cwv3lab",
+                      "fill": "$color-fg-muted",
+                      "content": "CLS",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "MW1Tr",
+                      "name": "cwv3val",
+                      "fill": "$color-class-excellent",
+                      "content": "0.05",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-3xl",
+                      "fontWeight": "$weight-bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Dmgvp",
+                      "name": "cwv3badge",
+                      "fill": "$color-class-excellent",
+                      "content": "Good",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "JvCnG",
+          "name": "TopIssues",
+          "width": "fill_container",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "top": 1
+            },
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            48,
+            64
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "jnxot",
+              "name": "issueHeader",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "JnO0Y",
+                  "name": "issueTitle",
+                  "fill": "$color-fg",
+                  "content": "Top 5 Issues to Fix",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-2xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "v6G2Ap",
+                  "name": "issueSub",
+                  "fill": "$color-fg-muted",
+                  "content": "V\u1ea5n \u0111\u1ec1 \u01b0u ti\u00ean gi\u1ea3i quy\u1ebft \u0111\u1ec3 c\u1ea3i thi\u1ec7n \u0111i\u1ec3m",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "axnDT",
+              "name": "issueList",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "HYcVb",
+                  "name": "iss1",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "gap": 16,
+                  "padding": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "OUVHF",
+                      "name": "iss1icon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "circle-x",
+                      "iconFontFamily": "lucide",
+                      "fill": "$color-class-poor"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lp1mB",
+                      "name": "iss1text",
+                      "width": "fill_container",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZTlNF",
+                          "name": "iss1name",
+                          "fill": "$color-fg",
+                          "content": "Title tag thi\u1ebfu ho\u1eb7c r\u1ed7ng",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "text",
+                          "id": "C1iNoI",
+                          "name": "iss1desc",
+                          "fill": "$color-fg-muted",
+                          "content": "M\u1ecdi trang c\u1ea7n title tag \u0111\u1ec3 hi\u1ec3n th\u1ecb tr\u00ean SERP",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "DboEQ",
+                      "name": "iss1score",
+                      "fill": "$color-class-fair",
+                      "content": "65",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-base",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JJWvy",
+                  "name": "iss2",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "gap": 16,
+                  "padding": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "wCuXw",
+                      "name": "iss2icon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "circle-x",
+                      "iconFontFamily": "lucide",
+                      "fill": "$color-class-poor"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "h643q",
+                      "name": "iss2text",
+                      "width": "fill_container",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vdSIC",
+                          "name": "iss2name",
+                          "fill": "$color-fg",
+                          "content": "Meta description qu\u00e1 ng\u1eafn (< 50 k\u00fd t\u1ef1)",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vnKJk",
+                          "name": "iss2desc",
+                          "fill": "$color-fg-muted",
+                          "content": "Recommended length: 120-160 characters",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "qUvrq",
+                      "name": "iss2score",
+                      "fill": "$color-class-poor",
+                      "content": "30",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-base",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B5ttfs",
+                  "name": "iss3",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "gap": 16,
+                  "padding": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "STtcr",
+                      "name": "iss3icon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "circle-x",
+                      "iconFontFamily": "lucide",
+                      "fill": "$color-class-poor"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "h8TrQ",
+                      "name": "iss3text",
+                      "width": "fill_container",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ziSJH",
+                          "name": "iss3name",
+                          "fill": "$color-fg",
+                          "content": "Heading H1 tr\u00f9ng l\u1eb7p tr\u00ean trang",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "text",
+                          "id": "KlIwi",
+                          "name": "iss3desc",
+                          "fill": "$color-fg-muted",
+                          "content": "M\u1ed9t trang ch\u1ec9 n\u00ean c\u00f3 1 th\u1ebb H1",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "F3irRl",
+                      "name": "iss3score",
+                      "fill": "$color-class-fair",
+                      "content": "70",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-base",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "G8e0r",
+                  "name": "iss4",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "gap": 16,
+                  "padding": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "P9Xuhh",
+                      "name": "iss4icon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "triangle-alert",
+                      "iconFontFamily": "lucide",
+                      "fill": "$color-class-fair"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ahh4g",
+                      "name": "iss4text",
+                      "width": "fill_container",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "NX7fH",
+                          "name": "iss4name",
+                          "fill": "$color-fg",
+                          "content": "LCP qu\u00e1 ch\u1eadm (4.2s > 2.5s)",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MnN4e",
+                          "name": "iss4desc",
+                          "fill": "$color-fg-muted",
+                          "content": "T\u1ed1i \u01b0u h\u00ecnh \u1ea3nh v\u00e0 CSS critical",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "LnMr4",
+                      "name": "iss4score",
+                      "fill": "$color-class-fair",
+                      "content": "68",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-base",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fgggL",
+                  "name": "iss5",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "gap": 16,
+                  "padding": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "KX3YV",
+                      "name": "iss5icon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "triangle-alert",
+                      "iconFontFamily": "lucide",
+                      "fill": "$color-class-fair"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xf1oJ",
+                      "name": "iss5text",
+                      "width": "fill_container",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "hUkY0",
+                          "name": "iss5name",
+                          "fill": "$color-fg",
+                          "content": "15 \u1ea3nh thi\u1ebfu alt text",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Oh43D",
+                          "name": "iss5desc",
+                          "fill": "$color-fg-muted",
+                          "content": "C\u1ea3i thi\u1ec7n accessibility v\u00e0 SEO",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "OMVzU",
+                      "name": "iss5score",
+                      "fill": "$color-class-poor",
+                      "content": "25",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-base",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "V8fzWh",
+          "name": "FooterCTA",
+          "width": "fill_container",
+          "fill": "$color-bg",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 64,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "rRKzX",
+              "name": "ctaTitle",
+              "fill": "$color-fg",
+              "content": "Mu\u1ed1n audit cho website c\u1ee7a b\u1ea1n?",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-3xl",
+              "fontWeight": "$weight-bold"
+            },
+            {
+              "type": "text",
+              "id": "UIxL7",
+              "name": "ctaSub",
+              "fill": "$color-fg-muted",
+              "content": "T\u1ea1o t\u00e0i kho\u1ea3n mi\u1ec5n ph\u00ed v\u00e0 audit kh\u00f4ng gi\u1edbi h\u1ea1n.",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-base",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "fhTQc",
+              "name": "ctaButtons",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "gap": 12,
+              "children": [
+                {
+                  "id": "VZeVD",
+                  "type": "ref",
+                  "ref": "o8AJkQ",
+                  "name": "ctaPrimary",
+                  "descendants": {
+                    "HmcyL": {
+                      "content": "T\u1ea1o t\u00e0i kho\u1ea3n mi\u1ec5n ph\u00ed"
+                    }
+                  }
+                },
+                {
+                  "id": "silYv",
+                  "type": "ref",
+                  "ref": "QThUr",
+                  "name": "ctaOutline",
+                  "descendants": {
+                    "Nu8z5": {
+                      "content": "Xem demo audit kh\u00e1c"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "name": "Page/SharedReport/Error/NotFound",
+      "x": 3700,
+      "y": 4570,
+      "width": 1440,
+      "height": "fit_content",
+      "fill": "$color-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "name": "PublicHeader",
+          "width": "fill_container",
+          "fill": "$color-bg",
+          "stroke": {
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$color-border"
+          },
+          "layout": "horizontal",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "padding": [
+            20,
+            32
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "gauge",
+                  "width": 24,
+                  "height": 24,
+                  "fill": "$color-fg"
+                },
+                {
+                  "type": "text",
+                  "content": "SEO Audit",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-lg",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 24,
+          "alignItems": "center",
+          "justifyContent": "center",
+          "padding": [
+            120,
+            32
+          ],
+          "width": "fill_container",
+          "children": [
+            {
+              "type": "icon_font",
+              "iconFontFamily": "lucide",
+              "iconFontName": "ban",
+              "width": 96,
+              "height": 96,
+              "fill": "#EF4444"
+            },
+            {
+              "type": "text",
+              "content": "B\u00e1o c\u00e1o kh\u00f4ng kh\u1ea3 d\u1ee5ng",
+              "fill": "$color-fg",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-3xl",
+              "fontWeight": "$weight-semibold",
+              "textAlign": "center"
+            },
+            {
+              "type": "text",
+              "content": "Link chia s\u1ebb n\u00e0y \u0111\u00e3 b\u1ecb thu h\u1ed3i ho\u1eb7c kh\u00f4ng t\u1ed3n t\u1ea1i.",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-base",
+              "fontWeight": "$weight-regular",
+              "textAlign": "center"
+            },
+            {
+              "id": "srErr_ctaBtn",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "name": "CtaBtn",
+              "descendants": {
+                "HmcyL": {
+                  "content": "T\u1ea1o audit c\u1ee7a ri\u00eang b\u1ea1n"
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
