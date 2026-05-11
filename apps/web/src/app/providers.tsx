@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeApplier } from "@/lib/ui/theme";
+import { Toaster } from "@/components/ui/sonner";
 
-// Phase 5 will re-add Toaster (sonner) + AuthBootstrap once the new UI
-// primitives + auth shell are rebuilt to match the Pencil design system.
+// Phase 5d will re-add AuthBootstrap when auth pages land.
 
 function makeQueryClient(): QueryClient {
   return new QueryClient({
@@ -35,7 +36,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeApplier />
       {children}
+      <Toaster />
     </QueryClientProvider>
   );
 }
