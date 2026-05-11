@@ -4,8 +4,7 @@ import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeApplier } from "@/lib/ui/theme";
 import { Toaster } from "@/components/ui/sonner";
-
-// Phase 5d will re-add AuthBootstrap when auth pages land.
+import { AuthBootstrap } from "@/components/auth/auth-bootstrap";
 
 function makeQueryClient(): QueryClient {
   return new QueryClient({
@@ -37,6 +36,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeApplier />
+      <AuthBootstrap />
       {children}
       <Toaster />
     </QueryClientProvider>

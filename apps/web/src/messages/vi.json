@@ -40,5 +40,76 @@
   "locale": {
     "vi": "Tiếng Việt",
     "en": "English"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "emailPlaceholder": "ban@example.com",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Tối thiểu 8 ký tự",
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nguyễn Văn A",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "orContinueWith": "Hoặc tiếp tục với",
+      "google": "Tiếp tục với Google",
+      "termsAgree": "Tôi đồng ý với điều khoản sử dụng",
+      "rule8chars": "Tối thiểu 8 ký tự",
+      "ruleUppercase": "Có ít nhất 1 chữ hoa",
+      "ruleNumber": "Có ít nhất 1 chữ số",
+      "ruleSpecial": "Có ít nhất 1 ký tự đặc biệt"
+    },
+    "login": {
+      "title": "Đăng nhập",
+      "subtitle": "Chào mừng trở lại! Vui lòng đăng nhập để tiếp tục.",
+      "submit": "Đăng nhập",
+      "submitting": "Đang đăng nhập…",
+      "forgotPassword": "Quên mật khẩu?",
+      "noAccount": "Chưa có tài khoản?",
+      "registerLink": "Đăng ký ngay"
+    },
+    "register": {
+      "title": "Tạo tài khoản",
+      "subtitle": "Đăng ký miễn phí và bắt đầu phân tích SEO ngay.",
+      "submit": "Đăng ký",
+      "submitting": "Đang tạo tài khoản…",
+      "hasAccount": "Đã có tài khoản?",
+      "loginLink": "Đăng nhập",
+      "successTitle": "Đăng ký thành công",
+      "successBody": "Chúng tôi đã gửi email xác thực đến hộp thư của bạn. Vui lòng kiểm tra và nhấn liên kết để kích hoạt tài khoản."
+    },
+    "forgot": {
+      "title": "Quên mật khẩu",
+      "subtitle": "Nhập email và chúng tôi sẽ gửi liên kết đặt lại mật khẩu.",
+      "submit": "Gửi liên kết",
+      "submitting": "Đang gửi…",
+      "successTitle": "Đã gửi email",
+      "successBody": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu trong vài phút.",
+      "backToLogin": "Quay lại đăng nhập"
+    },
+    "reset": {
+      "title": "Đặt lại mật khẩu",
+      "subtitle": "Chọn mật khẩu mới cho tài khoản của bạn.",
+      "newPassword": "Mật khẩu mới",
+      "submit": "Đổi mật khẩu",
+      "submitting": "Đang xử lý…",
+      "successTitle": "Đặt lại thành công",
+      "successBody": "Mật khẩu đã được cập nhật. Vui lòng đăng nhập với mật khẩu mới.",
+      "loginCta": "Đăng nhập",
+      "invalidTokenTitle": "Liên kết không hợp lệ",
+      "invalidTokenBody": "Liên kết đặt lại mật khẩu đã hết hạn hoặc đã được sử dụng. Vui lòng yêu cầu liên kết mới.",
+      "missingTokenTitle": "Thiếu mã đặt lại",
+      "missingTokenBody": "Vui lòng truy cập trang này qua liên kết trong email."
+    },
+    "oauth": {
+      "loadingTitle": "Đang đăng nhập…",
+      "loadingBody": "Vui lòng đợi trong khi chúng tôi xác thực tài khoản của bạn.",
+      "successTitle": "Đăng nhập thành công",
+      "successBody": "Đang chuyển hướng đến trang tổng quan…",
+      "errorTitle": "Đăng nhập thất bại",
+      "errorMissingToken": "Không nhận được mã xác thực từ Google.",
+      "errorInvalidToken": "Mã xác thực không hợp lệ hoặc đã hết hạn.",
+      "retry": "Thử lại"
+    }
   }
 }

@@ -40,5 +40,76 @@
   "locale": {
     "vi": "Tiếng Việt",
     "en": "English"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Jane Doe",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "orContinueWith": "Or continue with",
+      "google": "Continue with Google",
+      "termsAgree": "I agree to the terms of service",
+      "rule8chars": "At least 8 characters",
+      "ruleUppercase": "At least 1 uppercase letter",
+      "ruleNumber": "At least 1 number",
+      "ruleSpecial": "At least 1 special character"
+    },
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Welcome back. Please sign in to continue.",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Create one"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Sign up free and start analyzing your SEO today.",
+      "submit": "Sign up",
+      "submitting": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "successTitle": "Account created",
+      "successBody": "We've sent a verification email. Please check your inbox and click the link to activate your account."
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "subtitle": "Enter your email and we'll send you a reset link.",
+      "submit": "Send link",
+      "submitting": "Sending…",
+      "successTitle": "Email sent",
+      "successBody": "If an account exists for that email, you'll receive a reset link shortly.",
+      "backToLogin": "Back to sign in"
+    },
+    "reset": {
+      "title": "Reset password",
+      "subtitle": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "submitting": "Working…",
+      "successTitle": "Password updated",
+      "successBody": "Your password has been changed. Please sign in with the new password.",
+      "loginCta": "Sign in",
+      "invalidTokenTitle": "Invalid link",
+      "invalidTokenBody": "This reset link has expired or already been used. Please request a new one.",
+      "missingTokenTitle": "Missing reset token",
+      "missingTokenBody": "Please open this page via the link in your email."
+    },
+    "oauth": {
+      "loadingTitle": "Signing in…",
+      "loadingBody": "Please wait while we verify your account.",
+      "successTitle": "Signed in",
+      "successBody": "Redirecting to your dashboard…",
+      "errorTitle": "Sign-in failed",
+      "errorMissingToken": "No authentication token was received from Google.",
+      "errorInvalidToken": "The authentication token is invalid or has expired.",
+      "retry": "Try again"
+    }
   }
 }
