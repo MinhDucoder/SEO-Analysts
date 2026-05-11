@@ -1931,6 +1931,333 @@
               ]
             }
           ]
+        },
+        {
+          "type": "frame",
+          "name": "Toast group",
+          "width": "fill_container",
+          "fill": {
+            "type": "color",
+            "color": "#000000",
+            "enabled": false
+          },
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "content": "Toasts",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 16,
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "toastSuccess",
+                  "name": "Component/Toast/Success",
+                  "reusable": true,
+                  "width": 400,
+                  "height": "fit_content",
+                  "fill": "#22C55E1A",
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$color-class-excellent",
+                    "align": "inside"
+                  },
+                  "cornerRadius": "$radius-md",
+                  "layout": "horizontal",
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "gap": 12,
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "toastSuccessIcon",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "circle-check",
+                      "width": 20,
+                      "height": 20,
+                      "fill": "$color-class-excellent"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "toastSuccessBody",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "toastSuccessTitle",
+                          "content": "Audit ho\u00e0n th\u00e0nh",
+                          "fill": "$color-fg",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-semibold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "toastSuccessDesc",
+                          "content": "B\u00e1o c\u00e1o SEO c\u1ee7a google.com \u0111\u00e3 s\u1eb5n s\u00e0ng.",
+                          "fill": "$color-fg-muted",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "toastSuccessClose",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "x",
+                      "width": 16,
+                      "height": 16,
+                      "fill": "$color-fg-muted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "toastWarning",
+                  "name": "Component/Toast/Warning",
+                  "reusable": true,
+                  "width": 400,
+                  "height": "fit_content",
+                  "fill": "#F59E0B1A",
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$color-class-fair",
+                    "align": "inside"
+                  },
+                  "cornerRadius": "$radius-md",
+                  "layout": "horizontal",
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "gap": 12,
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "toastWarningIcon",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "triangle-alert",
+                      "width": 20,
+                      "height": 20,
+                      "fill": "$color-class-fair"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "toastWarningBody",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "toastWarningTitle",
+                          "content": "\u0110\u00e3 \u0111\u1ea1t gi\u1edbi h\u1ea1n",
+                          "fill": "$color-fg",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-semibold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "toastWarningDesc",
+                          "content": "Th\u1eed l\u1ea1i sau 600 gi\u00e2y.",
+                          "fill": "$color-fg-muted",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "toastWarningClose",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "x",
+                      "width": 16,
+                      "height": 16,
+                      "fill": "$color-fg-muted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "toastError",
+                  "name": "Component/Toast/Error",
+                  "reusable": true,
+                  "width": 400,
+                  "height": "fit_content",
+                  "fill": "#EF44441A",
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$color-class-poor",
+                    "align": "inside"
+                  },
+                  "cornerRadius": "$radius-md",
+                  "layout": "horizontal",
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "gap": 12,
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "toastErrorIcon",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "circle-x",
+                      "width": 20,
+                      "height": 20,
+                      "fill": "$color-class-poor"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "toastErrorBody",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "toastErrorTitle",
+                          "content": "Audit th\u1ea5t b\u1ea1i",
+                          "fill": "$color-fg",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-semibold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "toastErrorDesc",
+                          "content": "Kh\u00f4ng th\u1ec3 crawl URL. Ki\u1ec3m tra l\u1ea1i \u0111\u01b0\u1eddng d\u1eabn.",
+                          "fill": "$color-fg-muted",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "toastErrorClose",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "x",
+                      "width": 16,
+                      "height": 16,
+                      "fill": "$color-fg-muted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "toastInfo",
+                  "name": "Component/Toast/Info",
+                  "reusable": true,
+                  "width": 400,
+                  "height": "fit_content",
+                  "fill": "#3B82F61A",
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$color-class-good",
+                    "align": "inside"
+                  },
+                  "cornerRadius": "$radius-md",
+                  "layout": "horizontal",
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "gap": 12,
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "toastInfoIcon",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "info",
+                      "width": 20,
+                      "height": 20,
+                      "fill": "$color-class-good"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "toastInfoBody",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "vertical",
+                      "gap": 2,
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "toastInfoTitle",
+                          "content": "\u0110\u00e3 sao ch\u00e9p link",
+                          "fill": "$color-fg",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-sm",
+                          "fontWeight": "$weight-semibold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "toastInfoDesc",
+                          "content": "Share URL \u0111\u01b0\u1ee3c copy v\u00e0o clipboard.",
+                          "fill": "$color-fg-muted",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "toastInfoClose",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "x",
+                      "width": 16,
+                      "height": 16,
+                      "fill": "$color-fg-muted"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
