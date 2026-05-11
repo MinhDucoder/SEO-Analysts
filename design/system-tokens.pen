@@ -28002,6 +28002,438 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "name": "Page/AuditDetail/Modal/Share",
+      "x": 11500,
+      "y": 1000,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0A0A0BCC",
+      "layout": "horizontal",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "name": "ShareCard",
+          "width": 520,
+          "height": "fit_content",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "cornerRadius": "$radius-lg",
+          "layout": "vertical",
+          "padding": 32,
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 12,
+              "alignItems": "center",
+              "justifyContent": "space_between",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  },
+                  "layout": "horizontal",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "share-2",
+                      "width": 24,
+                      "height": 24,
+                      "fill": "$color-fg"
+                    },
+                    {
+                      "type": "text",
+                      "content": "Chia s\u1ebb b\u00e1o c\u00e1o audit",
+                      "fill": "$color-fg",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xl",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "x",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "$color-fg-muted"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "content": "Ng\u01b0\u1eddi c\u00f3 link s\u1ebd xem \u0111\u01b0\u1ee3c b\u00e1o c\u00e1o (read-only, kh\u00f4ng c\u1ea7n \u0111\u0103ng nh\u1eadp).",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "$weight-regular",
+              "textGrowth": "fixed-width",
+              "width": 456
+            },
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "content": "Share URL",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                },
+                {
+                  "type": "frame",
+                  "fill": "$color-bg",
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "cornerRadius": "$radius-md",
+                  "layout": "horizontal",
+                  "padding": [
+                    10,
+                    12
+                  ],
+                  "gap": 8,
+                  "alignItems": "center",
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "link",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$color-fg-muted"
+                    },
+                    {
+                      "type": "frame",
+                      "fill": {
+                        "type": "color",
+                        "color": "#000000",
+                        "enabled": false
+                      },
+                      "layout": "horizontal",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "content": "https://app.seo/shared/share_google_abc123def456",
+                          "fill": "$color-fg",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-regular"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ref",
+                      "ref": "QThUr",
+                      "descendants": {
+                        "Nu8z5": {
+                          "content": "Copy"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "fill": "$color-bg-overlay",
+              "cornerRadius": "$radius-sm",
+              "padding": [
+                8,
+                12
+              ],
+              "layout": "horizontal",
+              "gap": 8,
+              "alignItems": "start",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "info",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$color-fg-muted"
+                },
+                {
+                  "type": "text",
+                  "content": "Link t\u1ef1 \u0111\u1ed9ng h\u1ebft h\u1ea1n sau 30 ng\u00e0y. C\u00f3 th\u1ec3 thu h\u1ed3i b\u1ea5t k\u1ef3 l\u00fac n\u00e0o.",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-regular",
+                  "textGrowth": "fixed-width",
+                  "width": 400
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  },
+                  "padding": [
+                    10,
+                    16
+                  ],
+                  "layout": "horizontal",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "ban",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$color-class-poor"
+                    },
+                    {
+                      "type": "text",
+                      "content": "Thu h\u1ed3i link",
+                      "fill": "$color-class-poor",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
+                },
+                {
+                  "type": "ref",
+                  "ref": "o8AJkQ",
+                  "descendants": {
+                    "HmcyL": {
+                      "content": "\u0110\u00f3ng"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "name": "Page/AuditDetail/Modal/Delete",
+      "x": 13000,
+      "y": 1000,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0A0A0BCC",
+      "layout": "horizontal",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "padding": 48,
+      "children": [
+        {
+          "type": "frame",
+          "name": "DeleteCard",
+          "width": 480,
+          "height": "fit_content",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "cornerRadius": "$radius-lg",
+          "layout": "vertical",
+          "padding": 32,
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "gap": 16,
+              "alignItems": "start",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "width": 48,
+                  "height": 48,
+                  "fill": "$color-class-poor1A",
+                  "cornerRadius": "$radius-pill",
+                  "layout": "horizontal",
+                  "alignItems": "center",
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "iconFontFamily": "lucide",
+                      "iconFontName": "triangle-alert",
+                      "width": 24,
+                      "height": 24,
+                      "fill": "$color-class-poor"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "fill": {
+                    "type": "color",
+                    "color": "#000000",
+                    "enabled": false
+                  },
+                  "layout": "vertical",
+                  "gap": 6,
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "content": "X\u00f3a audit n\u00e0y?",
+                      "fill": "$color-fg",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xl",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "text",
+                      "content": "H\u00e0nh \u0111\u1ed9ng kh\u00f4ng th\u1ec3 ho\u00e0n t\u00e1c.",
+                      "fill": "$color-class-poor",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "content": "Audit v\u00e0 b\u00e1o c\u00e1o s\u1ebd b\u1ecb x\u00f3a v\u0129nh vi\u1ec5n kh\u1ecfi h\u1ec7 th\u1ed1ng. T\u1ea5t c\u1ea3 c\u00e1c link chia s\u1ebb \u0111ang active s\u1ebd b\u1ecb thu h\u1ed3i t\u1ef1 \u0111\u1ed9ng.",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "$weight-regular",
+              "textGrowth": "fixed-width",
+              "width": 416
+            },
+            {
+              "type": "frame",
+              "fill": "$color-bg",
+              "stroke": {
+                "thickness": 1,
+                "fill": "$color-border"
+              },
+              "cornerRadius": "$radius-md",
+              "layout": "horizontal",
+              "padding": [
+                10,
+                12
+              ],
+              "gap": 8,
+              "alignItems": "center",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "content": "Audit ID:",
+                  "fill": "$color-fg-subtle",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-regular"
+                },
+                {
+                  "type": "text",
+                  "content": "b0000000-0000-0000-0000-000000000001",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-regular"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "fill": {
+                "type": "color",
+                "color": "#000000",
+                "enabled": false
+              },
+              "layout": "horizontal",
+              "justifyContent": "end",
+              "gap": 12,
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "ref",
+                  "ref": "QThUr",
+                  "descendants": {
+                    "Nu8z5": {
+                      "content": "H\u1ee7y"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "ref": "tibBu",
+                  "descendants": {
+                    "L5gKU": {
+                      "content": "X\u00f3a audit"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
