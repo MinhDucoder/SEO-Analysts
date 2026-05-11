@@ -201,11 +201,47 @@ Already has `lib/ws/client.ts` singleton. Need:
 
 ## 4. Decisions
 
-### 4.1 i18n — hard-code Vietnamese ✓
+### 4.1 i18n — `next-intl` with VN default + EN ✓
 
-**Reason**: Pencil content 100% Vietnamese. INTENT.md targets Vietnamese SMB SEO market. Adding `next-intl` adds bundle weight + DX friction with no near-term EN/multilingual requirement.
+**Decision** (user-chốt 2026-05-11): Ship VN + EN from Phase 5. VN is default
+locale (no URL prefix), EN gets `/en/...` prefix.
 
-**How to apply**: All copy lives inline in JSX. Reserve `src/i18n/` empty for future. If EN needed later → migrate via `next-intl` + extract messages.
+**Stack**:
+- `next-intl@^3` (Next 14 App Router compatible)
+- Middleware for locale detection (cookie + Accept-Language fallback to vi)
+- Messages JSON in `src/messages/{vi,en}.json`
+- `NextIntlClientProvider` wraps `Providers` in root layout
+- `getTranslations()` for Server Components, `useTranslations()` for Client
+
+**Routing strategy** — `localePrefix: 'as-needed'`:
+- `/login` → VN (default, no prefix)
+- `/en/login` → EN
+- Reason: VN is the primary market; clean URLs preserve SEO + sharing.
+
+**Folder layout**:
+```
+src/
+├── i18n/
+│   ├── config.ts          # locales = ['vi', 'en'], defaultLocale = 'vi'
+│   └── request.ts         # getRequestConfig — loads messages by locale
+├── messages/
+│   ├── vi.json            # canonical (Pencil content)
+│   └── en.json            # translated from vi
+├── middleware.ts          # next-intl/middleware
+└── app/
+    └── [locale]/          # All routes nested under [locale]
+        ├── layout.tsx
+        └── ...
+```
+
+**Translation source**: Pencil pages are 100% VN. Phase 5d extracts strings →
+`vi.json` keys. EN translation done in Phase 5d concurrently (LLM-assisted
+draft + manual review).
+
+**Locale switcher**: Sidebar Footer dropdown (VN 🇻🇳 / EN 🇬🇧) — toggles cookie
+`NEXT_LOCALE` + pushes new URL with locale prefix.
+
+**Server-rendered locale**: `<html lang={locale}>` set in `[locale]/layout.tsx`.
 
 ### 4.2 Page state variants — React state, not separate route files
 
@@ -244,20 +280,21 @@ WebSocket primary. If `socket.disconnected` for >10s OR initial connect fails �
 | Phase | Scope | Effort | Dependencies |
 |---|---|---|---|
 | **5a** | Tokens + Tailwind + globals.css + shadcn primitives re-add (button/input/card/badge/dialog/tabs/dropdown/skeleton/separator/label/sonner) | 30 min | none |
+| **5a-i18n** | next-intl setup (middleware + `[locale]` segment + vi.json/en.json + locale switcher hook) | 45 min | 5a |
 | **5b** | Domain components (8 custom: ScoreRing, ScoreDelta, RuleResultRow, CwvCard, KeywordTable, CategoryRadar, CategoryBars, StatusPipeline) | 90 min | 5a |
-| **5c** | AppShell (Sidebar Header/NavItem/Footer/Container + Topbar + Wrapper + Theme toggle + Collapsed mode) | 60 min | 5a |
-| **5d** | Auth pages reskin (login/register/forgot/reset/oauth-success — 5 routes, 25 state frames) | 90 min | 5a, 5b, 5c |
-| **6a** | Dashboard + audits list page (`/audits`) + filters + skeleton + empty + error500 | 60 min | 5b, 5c |
-| **6b** | Audits create (`/audits/new`) + scheduled list (`/scheduled`) | 45 min | 5c |
-| **6c** | Audit detail (`/audits/[id]`) — heaviest: 9 state frames, WS realtime, share/delete modals | 120 min | 5b, 5c, ws hook |
-| **6d** | Compare (`/audits/compare`) | 45 min | 5b |
-| **6e** | Public shared (`/shared/[token]`) — 3 state frames | 45 min | 5b |
-| **7a** | Settings profile + password | 45 min | 5c |
-| **7b** | Admin stats + users + rules (3 routes, role-guarded) | 75 min | 5c |
+| **5c** | AppShell (Sidebar Header/NavItem/Footer/Container + Topbar + Wrapper + Theme toggle + Locale toggle + Collapsed mode) | 75 min | 5a, 5a-i18n |
+| **5d** | Auth pages reskin (login/register/forgot/reset/oauth-success — 5 routes, 25 state frames) + extract VN strings → vi.json + draft en.json | 120 min | 5a, 5a-i18n, 5b, 5c |
+| **6a** | Dashboard + audits list page (`/audits`) + filters + skeleton + empty + error500 | 75 min | 5b, 5c |
+| **6b** | Audits create (`/audits/new`) + scheduled list (`/scheduled`) | 60 min | 5c |
+| **6c** | Audit detail (`/audits/[id]`) — heaviest: 9 state frames, WS realtime, share/delete modals | 135 min | 5b, 5c, ws hook |
+| **6d** | Compare (`/audits/compare`) | 60 min | 5b |
+| **6e** | Public shared (`/shared/[token]`) — 3 state frames | 60 min | 5b |
+| **7a** | Settings profile + password | 60 min | 5c |
+| **7b** | Admin stats + users + rules (3 routes, role-guarded) | 90 min | 5c |
 | **8** | Global modals (AccountLocked / RateLimit) wired to 403/429 interceptor | 30 min | 5a |
-| **9** | E2E + integration tests (use fe-test-harness + fe-be-integration skills) | 90 min | all |
+| **9** | E2E + integration tests (use fe-test-harness + fe-be-integration skills) | 120 min | all |
 
-**Total estimate**: ~14 hours of focused implementation across 9 sub-phases.
+**Total estimate**: ~17.5 hours focused implementation across 14 sub-phases (i18n adds ~45 min upfront + ~15 min per page for translation key extraction).
 
 ---
 
@@ -265,42 +302,44 @@ WebSocket primary. If `socket.disconnected` for >10s OR initial connect fails �
 
 ```
 apps/web/src/
+├── middleware.ts                       Phase 5a-i18n (next-intl locale detection)
+├── i18n/
+│   ├── config.ts                       locales = ['vi', 'en'], default 'vi'
+│   └── request.ts                      getRequestConfig — async messages loader
+├── messages/
+│   ├── vi.json                         canonical (Pencil VN content)
+│   └── en.json                         EN translation
 ├── app/
-│   ├── layout.tsx                      ✓ stripped (current)
-│   ├── providers.tsx                   ✓ stripped (current)
-│   ├── page.tsx                        Phase 5d (landing or redirect /dashboard)
-│   ├── (auth)/
-│   │   ├── layout.tsx
-│   │   ├── login/page.tsx
-│   │   ├── register/page.tsx
-│   │   ├── forgot-password/page.tsx
-│   │   └── reset-password/[token]/page.tsx
-│   ├── auth/oauth-success/page.tsx
-│   ├── (app)/
-│   │   ├── layout.tsx                  AppShell wrap
-│   │   ├── dashboard/page.tsx
-│   │   ├── audits/
-│   │   │   ├── page.tsx + loading + error
-│   │   │   ├── new/page.tsx
-│   │   │   ├── compare/page.tsx
-│   │   │   └── [id]/
-│   │   │       ├── page.tsx + loading + error + not-found
-│   │   │       ├── share-modal.tsx
-│   │   │       └── delete-modal.tsx
-│   │   ├── scheduled/page.tsx
-│   │   ├── settings/
-│   │   │   ├── profile/page.tsx
-│   │   │   └── password/page.tsx
-│   │   └── admin/
-│   │       ├── stats/page.tsx
-│   │       ├── users/page.tsx
-│   │       └── rules/page.tsx
-│   └── shared/[token]/
-│       ├── page.tsx + not-found
+│   ├── [locale]/
+│   │   ├── layout.tsx                  <html lang={locale}> + NextIntlClientProvider
+│   │   ├── (auth)/
+│   │   │   ├── layout.tsx
+│   │   │   ├── login/page.tsx
+│   │   │   ├── register/page.tsx
+│   │   │   ├── forgot-password/page.tsx
+│   │   │   └── reset-password/[token]/page.tsx
+│   │   ├── auth/oauth-success/page.tsx
+│   │   ├── (app)/
+│   │   │   ├── layout.tsx              AppShell wrap
+│   │   │   ├── dashboard/page.tsx
+│   │   │   ├── audits/
+│   │   │   │   ├── page.tsx + loading + error
+│   │   │   │   ├── new/page.tsx
+│   │   │   │   ├── compare/page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       ├── page.tsx + loading + error + not-found
+│   │   │   │       ├── share-modal.tsx
+│   │   │   │       └── delete-modal.tsx
+│   │   │   ├── scheduled/page.tsx
+│   │   │   ├── settings/{profile,password}/page.tsx
+│   │   │   └── admin/{stats,users,rules}/page.tsx
+│   │   └── shared/[token]/
+│   │       ├── page.tsx + not-found
+│   └── providers.tsx                   Phase 5a-i18n (extends with NextIntlProvider)
 ├── components/
 │   ├── ui/                             shadcn primitives
 │   ├── domain/                         8 custom domain components
-│   ├── layout/                         AppShell + Sidebar + Topbar
+│   ├── layout/                         AppShell + Sidebar + Topbar + LocaleSwitcher
 │   └── modals/                         AccountLocked + RateLimit (global)
 ├── lib/
 │   ├── api/                            ✓ kept
@@ -309,8 +348,10 @@ apps/web/src/
 │   ├── ws/                             ✓ kept + add use-audit-realtime
 │   ├── ui/                             new: theme.ts + prefs.ts (collapsed sidebar)
 │   ├── utils/                          ✓ kept
-│   └── constants.ts                    ✓ kept
+│   └── constants.ts                    ✓ kept (ROUTES — note: links go through next-intl `Link`)
 └── styles/
     ├── tokens.css                      Phase 5a (generated from Pencil)
     └── globals.css                     Phase 5a (Tailwind directives + tokens import)
 ```
+
+**Important**: Once `[locale]` is added, all current routes in `src/lib/constants.ts ROUTES` are still relative strings — use `next-intl/navigation` `Link` + `useRouter` which auto-prefix locale.
