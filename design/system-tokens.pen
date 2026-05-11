@@ -31053,6 +31053,221 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "name": "Page/Modal/AccountLocked",
+      "x": 14500,
+      "y": 1000,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0A0A0BCC",
+      "layout": "horizontal",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "width": 480,
+          "height": "fit_content",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "cornerRadius": "$radius-lg",
+          "layout": "vertical",
+          "padding": 32,
+          "gap": 20,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "width": 80,
+              "height": 80,
+              "cornerRadius": "$radius-pill",
+              "fill": "#EF44441F",
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "ban",
+                  "width": 40,
+                  "height": 40,
+                  "fill": "#EF4444"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "content": "T\u00e0i kho\u1ea3n b\u1ecb kh\u00f3a",
+              "fill": "$color-fg",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold",
+              "textAlign": "center"
+            },
+            {
+              "type": "text",
+              "content": "T\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n \u0111\u00e3 b\u1ecb kh\u00f3a b\u1edfi qu\u1ea3n tr\u1ecb vi\u00ean. Vui l\u00f2ng li\u00ean h\u1ec7 admin \u0111\u1ec3 m\u1edf kh\u00f3a.",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "$weight-regular",
+              "textAlign": "center",
+              "width": "fill_container"
+            },
+            {
+              "type": "frame",
+              "fill": "$color-bg-overlay",
+              "cornerRadius": "$radius-md",
+              "padding": [
+                8,
+                12
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "content": "admin@seo.local",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-regular"
+                }
+              ]
+            },
+            {
+              "id": "modalLocked_actionBtn",
+              "type": "ref",
+              "ref": "o8AJkQ",
+              "name": "AckBtn",
+              "descendants": {
+                "HmcyL": {
+                  "content": "\u0110\u00e3 hi\u1ec3u"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "name": "Page/Modal/RateLimit",
+      "x": 16000,
+      "y": 1000,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0A0A0BCC",
+      "layout": "horizontal",
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "width": 480,
+          "height": "fit_content",
+          "fill": "$color-bg-elevated",
+          "stroke": {
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "cornerRadius": "$radius-lg",
+          "layout": "vertical",
+          "padding": 32,
+          "gap": 20,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "width": 80,
+              "height": 80,
+              "cornerRadius": "$radius-pill",
+              "fill": "#F59E0B1F",
+              "layout": "horizontal",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "iconFontFamily": "lucide",
+                  "iconFontName": "timer",
+                  "width": 40,
+                  "height": 40,
+                  "fill": "#F59E0B"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "content": "\u0110\u00e3 \u0111\u1ea1t gi\u1edbi h\u1ea1n y\u00eau c\u1ea7u",
+              "fill": "$color-fg",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold",
+              "textAlign": "center"
+            },
+            {
+              "type": "text",
+              "content": "B\u1ea1n \u0111\u00e3 g\u1eedi qu\u00e1 nhi\u1ec1u request. Vui l\u00f2ng \u0111\u1ee3i tr\u01b0\u1edbc khi th\u1eed l\u1ea1i.",
+              "fill": "$color-fg-muted",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-sm",
+              "fontWeight": "$weight-regular",
+              "textAlign": "center",
+              "width": "fill_container"
+            },
+            {
+              "type": "frame",
+              "fill": "$color-bg-overlay",
+              "stroke": {
+                "thickness": 1,
+                "fill": "$color-border"
+              },
+              "cornerRadius": "$radius-md",
+              "padding": [
+                16,
+                24
+              ],
+              "layout": "vertical",
+              "gap": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "content": "00:09:53",
+                  "fill": "$color-fg",
+                  "fontFamily": "$font-mono",
+                  "fontSize": "$text-3xl",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "content": "c\u00f2n l\u1ea1i",
+                  "fill": "$color-fg-muted",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-regular"
+                }
+              ]
+            },
+            {
+              "id": "modalRate_closeBtn",
+              "type": "ref",
+              "ref": "QThUr",
+              "name": "CloseBtn",
+              "descendants": {
+                "Nu8z5": {
+                  "content": "\u0110\u00f3ng"
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
