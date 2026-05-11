@@ -1,20 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Manrope } from "next/font/google";
 import { Providers } from "./providers";
 import { APP_NAME, APP_TAGLINE, APP_URL } from "@/lib/constants";
-import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin", "vietnamese"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const manrope = Manrope({
-  subsets: ["latin", "vietnamese"],
-  variable: "--font-manrope",
-  display: "swap",
-});
+// Phase 5 will re-add: globals.css (Tailwind + tokens), fonts (per Pencil
+// $font-ui / $font-mono spec), and rebuild metadata once branding is wired.
 
 export const metadata: Metadata = {
   title: {
@@ -38,14 +27,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0052ff",
+  themeColor: "#0A0A0B",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className={`${manrope.variable} ${inter.variable}`}>
+    <html lang="vi">
       <body>
         <Providers>{children}</Providers>
       </body>
