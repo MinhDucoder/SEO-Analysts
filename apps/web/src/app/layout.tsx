@@ -1,9 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import { APP_NAME, APP_TAGLINE, APP_URL } from "@/lib/constants";
+import "@/styles/globals.css";
 
-// Phase 5 will re-add: globals.css (Tailwind + tokens), fonts (per Pencil
-// $font-ui / $font-mono spec), and rebuild metadata once branding is wired.
+// Pencil $font-ui = Inter, $font-mono = JetBrains Mono. CSS vars
+// --font-ui / --font-mono are mapped through tokens.css → tailwind.config.
+const inter = Inter({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-ui",
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +47,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi">
+    <html lang="vi" className={`${inter.variable} ${jetbrains.variable}`}>
       <body>
         <Providers>{children}</Providers>
       </body>
