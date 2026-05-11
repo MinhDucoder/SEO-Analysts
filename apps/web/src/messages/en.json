@@ -1,0 +1,44 @@
+{
+  "app": {
+    "name": "SEO Analyst",
+    "tagline": "SEO insights for Vietnamese websites"
+  },
+  "common": {
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "retry": "Retry",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "refresh": "Refresh",
+    "errorTitle": "Something went wrong",
+    "errorDescription": "Please try again in a moment.",
+    "reportIssue": "Report issue"
+  },
+  "nav": {
+    "dashboard": "Overview",
+    "audits": "Audits",
+    "scheduled": "Scheduled",
+    "compare": "Compare",
+    "settings": "Settings",
+    "admin": "Admin",
+    "users": "Users",
+    "rules": "Rules",
+    "stats": "Stats"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "vi": "Tiếng Việt",
+    "en": "English"
+  }
+}

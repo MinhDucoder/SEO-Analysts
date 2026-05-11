@@ -1,0 +1,44 @@
+{
+  "app": {
+    "name": "SEO Analyst",
+    "tagline": "Phân tích SEO cho website Việt"
+  },
+  "common": {
+    "loading": "Đang tải…",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "back": "Quay lại",
+    "next": "Tiếp tục",
+    "submit": "Gửi",
+    "retry": "Thử lại",
+    "close": "Đóng",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "refresh": "Tải lại",
+    "errorTitle": "Đã có lỗi xảy ra",
+    "errorDescription": "Vui lòng thử lại sau ít phút.",
+    "reportIssue": "Báo lỗi"
+  },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "audits": "Audit",
+    "scheduled": "Lịch chạy",
+    "compare": "So sánh",
+    "settings": "Cài đặt",
+    "admin": "Quản trị",
+    "users": "Người dùng",
+    "rules": "Quy tắc",
+    "stats": "Thống kê"
+  },
+  "theme": {
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Theo hệ thống"
+  },
+  "locale": {
+    "vi": "Tiếng Việt",
+    "en": "English"
+  }
+}

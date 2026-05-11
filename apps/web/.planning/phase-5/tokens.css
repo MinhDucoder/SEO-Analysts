@@ -1,8 +1,7 @@
 /* GENERATED — do not edit by hand. Run apps/web/.planning/phase-5/export-tokens.py */
 /* Source: design/system-tokens.pen variables ($color-*, $radius-*, $space-*, $text-*) */
 
-@layer base {
-  :root {
+:root {
     color-scheme: light dark;
 
     /* === Non-themed semantic colors (RGB triplets) === */
@@ -76,9 +75,9 @@
     --color-fg-subtle: 113 113 122;
     --color-primary: 10 10 11;
     --color-primary-fg: 250 250 250;
-  }
+}
 
-  :root[data-theme='dark'] {
+:root[data-theme='dark'] {
     --color-bg: 10 10 11;
     --color-bg-elevated: 17 17 19;
     --color-bg-overlay: 26 26 29;
@@ -90,9 +89,9 @@
     --color-fg-subtle: 113 113 122;
     --color-primary: 250 250 250;
     --color-primary-fg: 10 10 11;
-  }
+}
 
-  @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
       --color-bg: 10 10 11;
       --color-bg-elevated: 17 17 19;
@@ -106,5 +105,4 @@
       --color-primary: 250 250 250;
       --color-primary-fg: 10 10 11;
     }
-  }
 }

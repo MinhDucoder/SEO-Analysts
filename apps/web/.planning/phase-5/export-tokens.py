@@ -105,8 +105,7 @@ css_lines = [
     "/* GENERATED — do not edit by hand. Run apps/web/.planning/phase-5/export-tokens.py */",
     "/* Source: design/system-tokens.pen variables ($color-*, $radius-*, $space-*, $text-*) */",
     "",
-    "@layer base {",
-    "  :root {",
+    ":root {",
     "    color-scheme: light dark;",
     "",
     "    /* === Non-themed semantic colors (RGB triplets) === */",
@@ -167,9 +166,9 @@ for name in sorted(color_themed):
     css_lines.append(f"    {css_var_name(name)}: {triplet};")
 
 css_lines += [
-    "  }",
+    "}",
     "",
-    "  :root[data-theme='dark'] {",
+    ":root[data-theme='dark'] {",
 ]
 for name in sorted(color_themed):
     dark = color_themed[name].get('dark', '#FFFFFF')
@@ -177,9 +176,9 @@ for name in sorted(color_themed):
     css_lines.append(f"    {css_var_name(name)}: {triplet};")
 
 css_lines += [
-    "  }",
+    "}",
     "",
-    "  @media (prefers-color-scheme: dark) {",
+    "@media (prefers-color-scheme: dark) {",
     "    :root:not([data-theme='light']) {",
 ]
 for name in sorted(color_themed):
@@ -189,7 +188,6 @@ for name in sorted(color_themed):
 
 css_lines += [
     "    }",
-    "  }",
     "}",
     "",
 ]
