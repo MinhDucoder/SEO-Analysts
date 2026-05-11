@@ -34,6 +34,53 @@
 **Pencil MCP**: 1 server still running (PID 232762, em main agent dùng).
 
 
+## ✅ PHASE 4 GAP-FIX COMPLETE 2026-05-11
+
+All 8 gap-fix tasks done per PHASE-4-PLAN.md. Foundation file 1220KB.
+
+### Phase 4 commits
+- `9f58150` — Task A: promote CategoryBars to reusable + rewire SharedReport + AuditDetail
+- `02ff4b6` — Task B: Settings/Password page (form + 4 password rules + warning callout)
+- `5360a72` — Task C: AuditList/Loading skeleton (8 skeleton rows + dimmed pagination)
+- `6b59fdc` — Task D: 2 global Modals (AccountLocked + RateLimit)
+- `1b6d213` — Task E: AuditList/Error500 + AuditDetail/Empty pages
+- `c25a8dd` — Task F: SharedReport variants (LowScore 42 + Error/NotFound)
+- `c86ce68` — Task G: AppShell/WithToastStack + AppShell/SidebarCollapsed demos
+- `b2464fa` — Task H: AuditDetail/Completed/AltView (CategoryRadar wired)
+
+### Final foundation totals (Phase 4)
+- 57 top-level frames (+9 from Phase 3)
+- 4 foundation frames (Tokens / Base / Domain / AppShell)
+- 53 page state frames across 16 pages (+9 from Phase 3)
+- 28 reusable components (+1 CategoryBars/Lg)
+- AppShell frame now contains 9 children (7 components + 2 demo frames)
+
+### Phase 4 new pages
+| Page | Where | Notes |
+|---|---|---|
+| Settings/Password | x=13100, y=2500 | tab Mật khẩu active, 4 rules + amber warning |
+| AuditList/Loading | x=11500, y=2500 | 8 skeleton rows, pagination dimmed |
+| Modal/AccountLocked | x=14500, y=1000 | ban icon + admin email mono |
+| Modal/RateLimit | x=16000, y=1000 | timer + countdown 00:09:53 |
+| AuditList/Error500 | x=14600, y=2500 | triangle-alert + requestId mono |
+| AuditDetail/Empty | x=17500, y=2500 | search-x 96 + 'Audit không tồn tại' |
+| SharedReport/LowScore | x=2040, y=4570 | ScoreRing 42 fair + lower category scores |
+| SharedReport/Error/NotFound | x=3700, y=4570 | public header + ban 96 |
+| AuditDetail/Completed/AltView | x=11500, y=4570 | CategoryRadar swap + 6 mini stat rows |
+
+### Phase 4 CategoryBars promotion (Task A)
+- Extracted inline CategoryBars from SharedReport/Default/CategoryBreakdown
+- Added Component/CategoryBars/Lg (id=catBarsLgC, reusable=true) to Domain frame
+- SharedReport now uses ref `sr_catBars` → catBarsLgC
+- AuditDetail/Completed CategoryCard now uses ref `adc_catBars` → catBarsLgC
+- LowScore variant uses descendant override pattern (label/score/fill width per row)
+
+### Outstanding gaps (Phase 4 leftover)
+- Bar widths in CategoryBars rows 1-2 still use `fill_container` (renders 100%) — known Phase 1 gap. Other rows use absolute pixel widths.
+- LowScore override of row1bar / row2bar fill width may not render visually correct (Pencil rule: descendants only override leaf props, not layout containers).
+
+---
+
 ## ✅ PHASE 3 POLISH COMPLETE 2026-05-10
 
 All 4 polish tasks done per PHASE-3-POLISH-PLAN.md. Foundation file 1013KB.
