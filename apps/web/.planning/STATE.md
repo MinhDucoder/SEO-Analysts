@@ -1,8 +1,37 @@
-# apps/web STATE — Phase 6c complete, Phase 6d pending
+# apps/web STATE — Phase 6d complete, Phase 6e pending
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `fd2fc5b`
+> **Branch**: `feat/web-fresh` HEAD `340af33`
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+
+---
+
+## ✅ Phase 6d — DONE (3 commits)
+
+| Commit | What |
+|---|---|
+| `ab6aa2b` | `compareAudits(a1, a2)` + `CompareResult`/`CompareRuleDelta` types, `queryKeys.audits.compare`, `useCompareAudits`, `auditCompare` i18n namespace (vi + en) |
+| `66f66ca` | 4 components: `AuditPicker` (search + select, two-state card), `CompareSummary` (twin ScoreRings + ScoreDelta), `CompareRuleDeltaRow` (statusBefore → statusAfter badges + delta pill), `CompareIssues` (Fixed / Newly-failed lists) |
+| `340af33` | `/audits/compare` page — URL-synced picks (`?audit1=&audit2=`), exclusive picks, Suspense wrap for prerender, instructional / loading / error / loaded branches |
+
+### Phase 6d route shipped
+- `/audits/compare?audit1=&audit2=` — pick 2 completed audits, see scoreDelta + rule changes + fixed/new issues. Pickers exclude each other so the same audit can't be picked twice. URL state means the comparison is shareable.
+
+### Quality gates
+- `tsc --noEmit`: PASS
+- `eslint .`: PASS (same 2 pre-existing input.tsx warnings)
+- `vitest run`: 66/66 PASS
+- `next build`: PASS — **23 routes**, `/audits/compare` static (●) at 3.99KB First Load 150KB.
+
+### Outstanding gaps after Phase 6d
+1. Picker pulls the recent 20 COMPLETED audits per query. Filtering still works (search input + debounce), but if a user picks an audit older than the most recent 20 via URL deep-link, the picker shows only the auditId mono until the URL audit appears in a later list page. Acceptable for now — Phase 6e/7 can add a direct lookup if needed.
+2. The page assumes both audits are completed; the server returns an error otherwise. The retry button + error banner cover this case.
+
+### Pickup hints for Phase 6e (`/shared/[token]`)
+- Public route (no AuthGuard). Server component preferred — drop the `(app)` route group, place under `[locale]/shared/[token]/page.tsx`.
+- Add `getSharedReport(token)` api + `useSharedReport(token)` (no auth header).
+- 3 states per Pencil: Default (full report) · LowScore variant · Error/NotFound (revoked or expired).
+- Reuse the existing CompletedReport-like sections but with the public header instead of AppShell.
 
 ---
 
