@@ -1,8 +1,49 @@
-# apps/web STATE — Phase 6b complete, Phase 6c pending
+# apps/web STATE — Phase 6c complete, Phase 6d pending
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `49dd0ce`
+> **Branch**: `feat/web-fresh` HEAD `fd2fc5b`
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+
+---
+
+## ✅ Phase 6c — DONE (4 commits)
+
+| Commit | What |
+|---|---|
+| `7be071b` | API + types + WS hook: `AuditDetail`/`ReportDetail` types (proto-style enums kept verbatim), `getAudit`/`getAuditStatus`/`createShareLink`/`revokeShareLink` + `auditExportUrl`, `useAudit`/`useAuditStatus` (auto-poll until terminal) + `useCreateShareLink`/`useRevokeShareLink`, `useAuditRealtime` (Socket.IO subscribe + cache patching on `audit:progress`/`completed`/`failed`), `lib/audits/proto-map.ts`, full `auditDetail` i18n namespace (vi + en) |
+| `20fd645` | 5 state components: `CompletedReport` (hero + Bars/Radar toggle + CWV + grouped rules + target keyword + KeywordTable), `InProgressState` (StatusPipeline + progress bar + stage messages), `FailedState`, `NotFoundState`, `AuditDetailSkeleton` |
+| `e70c942` | 2 modals: `ShareDialog` (mint link → Copy / Revoke, resets state on re-open), `DeleteDialog` (confirm + cache invalidate + bounce to /audits) |
+| `fd2fc5b` | `/audits/[id]` page wiring header + status-driven body + WS subscription + Share/Delete modals |
+
+### Phase 6c route shipped
+- `/audits/[id]` — 9 states covered:
+  1. Loading (skeleton)
+  2. NotFound (404 from `useAudit`)
+  3. Pending / Crawling / Analyzing / Reporting → `InProgressState`
+  4. Failed → `FailedState`
+  5. Completed → `CompletedReport`
+  6. Modal/Share (overlay)
+  7. Modal/Delete (overlay)
+
+### Quality gates
+- `tsc --noEmit`: PASS
+- `eslint .`: PASS (same 2 pre-existing input.tsx warnings)
+- `vitest run`: 66/66 PASS
+- `next build`: PASS — **22 routes**, `/audits/[id]` is dynamic (ƒ) at 29.3KB First Load 288KB (heavy because of recharts radar + recharts line for trends).
+
+### WebSocket wiring
+`useAuditRealtime(auditId)` subscribes on mount, listens for `audit:progress` (patches `queryKeys.audits.status` cache), `audit:completed` + `audit:failed` (invalidates the detail query), and unsubscribes + emits `audit:unsubscribe` on unmount. The fallback `useAuditStatus` 3-second poll is gated off once the WS ack arrives so we don't double-fetch.
+
+### Outstanding gaps after Phase 6c
+1. Audit `errorMessage` arrives via the audit row; if a Failed audit's row hasn't been refetched yet the FailedState shows the i18n fallback message. The WS `audit:failed` event invalidation handles the common case.
+2. Share dialog stores the minted token only in component state — re-opening the dialog after a successful share but without minting again shows the "Generate" CTA. A future `GET /audits/:id/share/status` endpoint could surface the live token.
+3. Rerun button uses the same URL + targetKeyword but loses mode + maxUrls (not stored on the audit row). Acceptable: most rerun cases are single-page audits.
+
+### Pickup hints for Phase 6d (`/audits/compare`)
+- Add `useCompareAudits(audit1, audit2)` hook (`GET /audits/compare?audit1=&audit2=`).
+- Reuse `CategoryBars` + `ScoreDelta` + `RuleResultRow` for delta display.
+- 2× audit selector (typeahead off the existing `useAuditsList(search)`).
+- `CompareResult` from BACKEND-API §5 — proto-style enum quirk applies (reuse `proto-map.ts`).
 
 ---
 
