@@ -84,23 +84,44 @@ export const api: KyInstance = ky.create({
         }
 
         // 403 → surface AccountLocked modal when the body identifies as
-        // a lock event. The gateway uses a string code "ACCOUNT_LOCKED"
-        // in the error body to disambiguate from "EMAIL_NOT_VERIFIED" /
-        // "FORBIDDEN" cases which are handled per-feature via toast.
+        // a lock event. Gateway emits RFC 7807 problem-details
+        // (`{ type, title, status, detail, instance, requestId }`) where
+        // `detail` is a Vietnamese phrase. We accept both the legacy
+        // `{ code, message }` shape (used by some seed scripts) AND the
+        // RFC 7807 `detail` field, and we match Vietnamese phrasing
+        // alongside English so the contract stays robust if BE retitles
+        // its copy.
         if (response.status === 403) {
           const body = await response.clone().json().catch(() => null);
-          const code =
-            typeof body === "object" && body !== null && "code" in body
-              ? String((body as { code: unknown }).code)
-              : "";
-          const message =
-            typeof body === "object" && body !== null && "message" in body
-              ? String((body as { message: unknown }).message).toLowerCase()
-              : "";
-          if (
+          let code = "";
+          let phrase = "";
+          if (typeof body === "object" && body !== null) {
+            if ("code" in body) code = String((body as { code: unknown }).code);
+            if ("message" in body) phrase += " " + String((body as { message: unknown }).message);
+            if ("detail" in body) phrase += " " + String((body as { detail: unknown }).detail);
+            if ("title" in body) phrase += " " + String((body as { title: unknown }).title);
+          }
+          phrase = phrase.toLowerCase();
+          // Gateway also throttles via 403 (not 429) when the rate
+          // limit trips — copy reads "Quá nhiều lần đăng nhập thất bại.
+          // Thử lại sau 900s" (Vietnamese without diacritics). Extract
+          // the wait-seconds and route to RateLimitModal so the user
+          // sees a countdown instead of a vague 403 toast.
+          const tooManyMatch = /qua nhieu|quá nhiều|too many/.test(phrase);
+          if (tooManyMatch) {
+            const secMatch = phrase.match(/(\d+)\s*s\b/);
+            const retryAfterSec = secMatch ? Number(secMatch[1]) : 60;
+            useGlobalModalStore
+              .getState()
+              .open({ kind: "rateLimit", retryAfterSec });
+            return response;
+          }
+          // EN: "locked" (without "verify"); VI: "khoa" / "khóa".
+          const isLock =
             code === "ACCOUNT_LOCKED" ||
-            (message.includes("locked") && !message.includes("verify"))
-          ) {
+            (/\b(locked|khoa|khóa)\b/.test(phrase) &&
+              !/\b(verify|verif|xac minh|xác minh)\b/.test(phrase));
+          if (isLock) {
             useGlobalModalStore.getState().open({ kind: "accountLocked" });
           }
           return response;
