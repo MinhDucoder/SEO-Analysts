@@ -372,6 +372,86 @@
       "errorInvalidUrl": "URL không hợp lệ."
     }
   },
+  "admin": {
+    "stats": {
+      "title": "Thống kê nền tảng",
+      "subtitle": "Hoạt động tổng hợp trong {period} ngày gần nhất.",
+      "period": "Khoảng thời gian",
+      "period7": "7 ngày",
+      "period30": "30 ngày",
+      "period90": "90 ngày",
+      "loading": "Đang tải thống kê…",
+      "error": "Không tải được thống kê",
+      "overview": {
+        "totalUsers": "Tổng người dùng",
+        "totalAudits": "Tổng audit",
+        "successRate": "Tỉ lệ thành công",
+        "avgCrawlTime": "Thời gian crawl TB",
+        "avgSeoScore": "Điểm SEO TB"
+      },
+      "today": "Hôm nay",
+      "newUsersToday": "Người dùng mới hôm nay",
+      "auditsToday": "Audit hôm nay",
+      "topDomains": "Top domain",
+      "topDomainsEmpty": "Chưa có hoạt động"
+    },
+    "users": {
+      "title": "Người dùng",
+      "subtitle": "Quản lý tài khoản người dùng.",
+      "filters": {
+        "search": "Tìm email hoặc tên",
+        "role": "Vai trò",
+        "roleAll": "Tất cả",
+        "roleUser": "User",
+        "roleAdmin": "Admin",
+        "lock": "Trạng thái khóa",
+        "lockAll": "Tất cả",
+        "lockLocked": "Đã khóa",
+        "lockActive": "Hoạt động",
+        "clear": "Xóa lọc"
+      },
+      "table": {
+        "email": "Email",
+        "fullName": "Họ tên",
+        "role": "Vai trò",
+        "audits": "Số audit",
+        "status": "Trạng thái",
+        "createdAt": "Ngày tạo",
+        "actions": "Hành động"
+      },
+      "status": {
+        "verified": "Đã xác thực",
+        "unverified": "Chưa xác thực",
+        "locked": "Đã khóa"
+      },
+      "actions": {
+        "lock": "Khóa",
+        "unlock": "Mở khóa"
+      },
+      "lockSuccess": "Đã khóa {email}",
+      "unlockSuccess": "Đã mở khóa {email}",
+      "empty": "Không có user nào khớp bộ lọc.",
+      "error": "Không tải được danh sách người dùng",
+      "loading": "Đang tải danh sách…"
+    },
+    "rules": {
+      "title": "Quy tắc SEO",
+      "subtitle": "Điều chỉnh trọng số mỗi rule (1–10). Trọng số cao = tác động lớn hơn đến điểm SEO cuối cùng.",
+      "table": {
+        "name": "Rule",
+        "category": "Nhóm",
+        "weight": "Trọng số",
+        "enabled": "Bật"
+      },
+      "save": "Lưu thay đổi",
+      "saving": "Đang lưu…",
+      "noChanges": "Chưa có thay đổi nào.",
+      "success": "Đã cập nhật quy tắc",
+      "rangeError": "Trọng số phải từ 1 đến 10",
+      "loading": "Đang tải quy tắc…",
+      "error": "Không tải được quy tắc"
+    }
+  },
   "settings": {
     "title": "Cài đặt",
     "subtitle": "Quản lý hồ sơ và bảo mật tài khoản.",

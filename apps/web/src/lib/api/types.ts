@@ -218,3 +218,77 @@ export interface CompareResult {
   issuesFixed: string[];
   issuesNew: string[];
 }
+
+/**
+ * Pagination meta envelope used by admin endpoints. Distinct from
+ * `Paginated<T>` (which uses `data + total + page + limit`); admin endpoints
+ * also surface `totalPages` precomputed.
+ */
+export interface AdminPaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface AdminPaginated<T> {
+  data: T[];
+  meta: AdminPaginationMeta;
+}
+
+/**
+ * `GET /admin/users` row shape — extends UserPublic with `auditCount`.
+ */
+export interface AdminUser {
+  id: string;
+  email: string;
+  fullName: string;
+  role: "user" | "admin";
+  isVerified: boolean;
+  isLocked: boolean;
+  oauthProvider: string | null;
+  avatarUrl: string | null;
+  createdAt: string;
+  auditCount: number;
+}
+
+/**
+ * `GET /admin/stats?period=30d` aggregate shape.
+ */
+export interface AdminStats {
+  overview: {
+    totalUsers: number;
+    totalAudits: number;
+    successRate: number;
+    avgCrawlTimeMs: number;
+    avgSeoScore: number;
+  };
+  newUsersToday: number;
+  auditsToday: number;
+  topDomains: Array<{ domain: string; count: number }>;
+}
+
+/**
+ * `GET /admin/rules` row + `PUT /admin/rules` patch shape.
+ */
+export interface SeoRule {
+  id: string;
+  name: string;
+  displayName: string;
+  description: string;
+  category: ProtoIssueCategory;
+  weight: number;
+  isEnabled: boolean;
+}
+
+export interface UpdateRulesDto {
+  rules: Array<{ name: string; weight: number }>;
+}
+
+export interface ListAdminUsersQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  role?: "user" | "admin";
+  isLocked?: "true" | "false";
+}

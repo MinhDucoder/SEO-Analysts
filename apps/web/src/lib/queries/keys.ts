@@ -33,6 +33,13 @@ export const queryKeys = {
   shared: {
     detail: (token: string) => ["shared", "detail", token] as const,
   },
+  admin: {
+    all: () => ["admin"] as const,
+    stats: (period: number) => ["admin", "stats", period] as const,
+    users: (filters: Record<string, unknown>) =>
+      ["admin", "users", filters] as const,
+    rules: () => ["admin", "rules"] as const,
+  },
 } as const;
 
 export type QueryKeys = typeof queryKeys;

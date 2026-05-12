@@ -372,6 +372,86 @@
       "errorInvalidUrl": "Invalid URL."
     }
   },
+  "admin": {
+    "stats": {
+      "title": "Platform stats",
+      "subtitle": "Aggregate activity across the last {period} days.",
+      "period": "Period",
+      "period7": "Last 7 days",
+      "period30": "Last 30 days",
+      "period90": "Last 90 days",
+      "loading": "Loading stats…",
+      "error": "Couldn't load stats",
+      "overview": {
+        "totalUsers": "Total users",
+        "totalAudits": "Total audits",
+        "successRate": "Success rate",
+        "avgCrawlTime": "Avg crawl time",
+        "avgSeoScore": "Avg SEO score"
+      },
+      "today": "Today",
+      "newUsersToday": "New users today",
+      "auditsToday": "Audits today",
+      "topDomains": "Top domains",
+      "topDomainsEmpty": "No domain activity yet"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage user accounts.",
+      "filters": {
+        "search": "Search email or name",
+        "role": "Role",
+        "roleAll": "All roles",
+        "roleUser": "User",
+        "roleAdmin": "Admin",
+        "lock": "Lock status",
+        "lockAll": "All",
+        "lockLocked": "Locked",
+        "lockActive": "Active",
+        "clear": "Clear"
+      },
+      "table": {
+        "email": "Email",
+        "fullName": "Name",
+        "role": "Role",
+        "audits": "Audits",
+        "status": "Status",
+        "createdAt": "Joined",
+        "actions": "Actions"
+      },
+      "status": {
+        "verified": "Verified",
+        "unverified": "Unverified",
+        "locked": "Locked"
+      },
+      "actions": {
+        "lock": "Lock",
+        "unlock": "Unlock"
+      },
+      "lockSuccess": "{email} has been locked",
+      "unlockSuccess": "{email} has been unlocked",
+      "empty": "No users match the filter.",
+      "error": "Couldn't load users",
+      "loading": "Loading users…"
+    },
+    "rules": {
+      "title": "SEO rules",
+      "subtitle": "Adjust the weight of each rule (1–10). Higher weight = stronger impact on the final SEO score.",
+      "table": {
+        "name": "Rule",
+        "category": "Category",
+        "weight": "Weight",
+        "enabled": "Enabled"
+      },
+      "save": "Save changes",
+      "saving": "Saving…",
+      "noChanges": "Nothing to save yet.",
+      "success": "Rules updated",
+      "rangeError": "Weight must be between 1 and 10",
+      "loading": "Loading rules…",
+      "error": "Couldn't load rules"
+    }
+  },
   "settings": {
     "title": "Settings",
     "subtitle": "Manage your profile and security.",

@@ -68,7 +68,7 @@ export const SIDEBAR_NAV: readonly SidebarNavItem[] = [
   { label: "Dashboard", href: ROUTES.dashboard, iconName: "LayoutDashboard" },
   { label: "Audit",     href: ROUTES.audits,    iconName: "Search" },
   { label: "So sánh",   href: "/audits?compare=1", iconName: "GitCompare" },
-  { label: "Quản trị",  href: ROUTES.adminUsers, iconName: "Shield", adminOnly: true },
+  { label: "Quản trị",  href: ROUTES.adminStats, iconName: "Shield", adminOnly: true },
   { label: "Cài đặt",   href: ROUTES.settingsProfile, iconName: "Settings" },
 ] as const;
 
