@@ -181,6 +181,32 @@
       "fail": "Xóa thất bại"
     }
   },
+  "auditCompare": {
+    "title": "So sánh audit",
+    "subtitle": "Chọn 2 audit để xem chênh lệch điểm SEO, rule status và issue.",
+    "pickerA": "Audit A (trước)",
+    "pickerB": "Audit B (sau)",
+    "pickerCta": "Chọn audit",
+    "pickerSearch": "Tìm URL hoặc domain",
+    "pickerEmpty": "Không tìm thấy audit phù hợp",
+    "pickerOnlyCompleted": "Chỉ hiển thị audit đã hoàn thành",
+    "pickerChange": "Đổi audit",
+    "pickerClear": "Bỏ chọn",
+    "instructions": "Chọn 2 audit để xem so sánh.",
+    "summaryTitle": "Tổng quan",
+    "scoreDeltaLabel": "Chênh lệch điểm",
+    "rulesTitle": "Thay đổi rule",
+    "rulesEmpty": "Hai audit có cùng kết quả ở mọi rule",
+    "fixedTitle": "Vấn đề đã khắc phục",
+    "newTitle": "Vấn đề mới phát sinh",
+    "fixedEmpty": "Không có rule nào được khắc phục",
+    "newEmpty": "Không có rule nào mới fail",
+    "errorTitle": "Không tải được so sánh",
+    "errorBody": "Kiểm tra cả 2 audit đã hoàn thành chưa.",
+    "retry": "Thử lại",
+    "statusBeforeLabel": "Trước",
+    "statusAfterLabel": "Sau"
+  },
   "auditDetail": {
     "loading": "Đang tải báo cáo…",
     "notFoundTitle": "Audit không tồn tại",

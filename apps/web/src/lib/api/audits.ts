@@ -3,6 +3,7 @@ import type {
   AuditDetailResponse,
   AuditListItem,
   AuditStatusResponse,
+  CompareResult,
   Paginated,
   ShareLinkResponse,
 } from "@/lib/api/types";
@@ -117,4 +118,18 @@ export async function revokeShareLink(id: string): Promise<void> {
  */
 export function auditExportUrl(id: string): string {
   return `${API_URL.replace(/\/$/, "")}/audits/${id}/export`;
+}
+
+/**
+ * `GET /audits/compare?audit1=&audit2=` — diff between two completed
+ * audits. Both ids must be UUIDs owned by the caller (admin override
+ * server-side).
+ */
+export async function compareAudits(
+  audit1: string,
+  audit2: string,
+): Promise<CompareResult> {
+  return api
+    .get("audits/compare", { searchParams: { audit1, audit2 } })
+    .json<CompareResult>();
 }

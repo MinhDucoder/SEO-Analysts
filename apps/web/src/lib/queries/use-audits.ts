@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  compareAudits,
   createAudit,
   createShareLink,
   deleteAudit,
@@ -17,6 +18,7 @@ import type {
   AuditDetailResponse,
   AuditListItem,
   AuditStatusResponse,
+  CompareResult,
   Paginated,
   ShareLinkResponse,
 } from "@/lib/api/types";
@@ -166,5 +168,25 @@ export function useRevokeShareLink(auditId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.audits.detail(auditId) });
     },
+  });
+}
+
+/**
+ * `GET /audits/compare` — diff two completed audits. Disabled until
+ * both ids are present. Compare results are stable once both audits
+ * are completed, so we mark the result as effectively-immortal cache.
+ */
+export function useCompareAudits(
+  audit1: string | null | undefined,
+  audit2: string | null | undefined,
+) {
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const a1 = audit1 ?? "";
+  const a2 = audit2 ?? "";
+  return useQuery<CompareResult>({
+    queryKey: queryKeys.audits.compare(a1, a2),
+    queryFn: () => compareAudits(a1, a2),
+    enabled: accessToken !== null && Boolean(a1) && Boolean(a2),
+    staleTime: 5 * 60 * 1_000,
   });
 }

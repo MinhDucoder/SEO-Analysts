@@ -181,6 +181,32 @@
       "fail": "Deletion failed"
     }
   },
+  "auditCompare": {
+    "title": "Compare audits",
+    "subtitle": "Pick two audits to see the score delta, rule changes, and issue diff.",
+    "pickerA": "Audit A (before)",
+    "pickerB": "Audit B (after)",
+    "pickerCta": "Pick audit",
+    "pickerSearch": "Search URL or domain",
+    "pickerEmpty": "No matching audits",
+    "pickerOnlyCompleted": "Only completed audits are shown",
+    "pickerChange": "Change",
+    "pickerClear": "Clear",
+    "instructions": "Choose two audits to view their comparison.",
+    "summaryTitle": "Summary",
+    "scoreDeltaLabel": "Score delta",
+    "rulesTitle": "Rule changes",
+    "rulesEmpty": "Both audits scored identically on every rule",
+    "fixedTitle": "Fixed issues",
+    "newTitle": "New issues",
+    "fixedEmpty": "No rules were fixed",
+    "newEmpty": "No rules newly failed",
+    "errorTitle": "Couldn't load comparison",
+    "errorBody": "Make sure both audits are completed.",
+    "retry": "Retry",
+    "statusBeforeLabel": "Before",
+    "statusAfterLabel": "After"
+  },
   "auditDetail": {
     "loading": "Loading report…",
     "notFoundTitle": "Audit not found",

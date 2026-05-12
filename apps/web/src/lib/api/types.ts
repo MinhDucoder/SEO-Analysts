@@ -203,3 +203,18 @@ export interface ShareLinkResponse {
   shareToken: string;
   shareUrl: string;
 }
+
+export interface CompareRuleDelta {
+  ruleId: string;
+  ruleName: string;
+  statusBefore: ProtoCheckStatus | "UNSPECIFIED";
+  statusAfter: ProtoCheckStatus | "UNSPECIFIED";
+  scoreDelta: number;
+}
+
+export interface CompareResult {
+  scoreDelta: number;
+  ruleDeltas: CompareRuleDelta[];
+  issuesFixed: string[];
+  issuesNew: string[];
+}
