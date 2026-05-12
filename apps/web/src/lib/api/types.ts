@@ -89,3 +89,117 @@ export interface AuditListItem {
   createdAt: string;
   completedAt: string | null;
 }
+
+/**
+ * Detail-shape from `GET /audits/:id` — Summary plus errorMessage which
+ * is only populated when status === 'failed'.
+ */
+export interface AuditDetail extends AuditListItem {
+  errorMessage: string | null;
+}
+
+/**
+ * Proto-style enums forwarded verbatim by the gateway from the report
+ * service. UI maps them to short tokens — see lib/audits/proto-map.ts.
+ */
+export type ProtoCheckStatus =
+  | "CHECK_STATUS_PASS"
+  | "CHECK_STATUS_WARN"
+  | "CHECK_STATUS_FAIL"
+  | "CHECK_STATUS_UNSPECIFIED";
+
+export type ProtoIssueCategory =
+  | "ISSUE_CATEGORY_META"
+  | "ISSUE_CATEGORY_HEADINGS"
+  | "ISSUE_CATEGORY_IMAGES"
+  | "ISSUE_CATEGORY_LINKS"
+  | "ISSUE_CATEGORY_PERFORMANCE"
+  | "ISSUE_CATEGORY_TECHNICAL"
+  | "ISSUE_CATEGORY_UNSPECIFIED";
+
+export interface ReportRuleResult {
+  ruleId: string;
+  ruleName: string;
+  status: ProtoCheckStatus;
+  score: number;
+  weight: number;
+  category: ProtoIssueCategory;
+  message: string;
+  suggestion?: string;
+  metadata: Record<string, string>;
+}
+
+export interface ReportCategoryScore {
+  category: ProtoIssueCategory;
+  score: number;
+  totalRules: number;
+  passed: number;
+  warned: number;
+  failed: number;
+}
+
+export interface ReportKeyword {
+  keyword: string;
+  frequency: number;
+  densityPercent: number;
+  inTitle: boolean;
+  inH1: boolean;
+  inFirstParagraph: boolean;
+  inMetaDescription: boolean;
+  rank: number;
+}
+
+export interface ReportCwvMetrics {
+  lcpMs: number;
+  inpMs: number;
+  cls: number;
+  performanceScore: number;
+  accessibilityScore: number;
+  bestPracticesScore: number;
+  seoScore: number;
+}
+
+export interface ReportTargetKeyword {
+  keyword: string;
+  frequency: number;
+  densityPercent: number;
+  inTitle: boolean;
+  inH1: boolean;
+  inFirstParagraph: boolean;
+  inMetaDescription: boolean;
+  isStuffing: boolean;
+  verdict: string;
+}
+
+export interface ReportDetail {
+  reportId: string;
+  auditId: string;
+  url: string;
+  domain: string;
+  finalScore: number;
+  classification: "excellent" | "good" | "fair" | "poor";
+  ruleResults: ReportRuleResult[];
+  categoryScores: ReportCategoryScore[];
+  keywords: ReportKeyword[];
+  cwvMetrics: ReportCwvMetrics;
+  targetKeyword?: ReportTargetKeyword;
+  createdAt: string;
+}
+
+export interface AuditDetailResponse {
+  audit: AuditDetail;
+  report: ReportDetail | null;
+}
+
+export interface AuditStatusResponse {
+  auditId: string;
+  status: import("@repo/shared").AuditStatus;
+  progress: number;
+  stage: string;
+  seoScore?: number | null;
+}
+
+export interface ShareLinkResponse {
+  shareToken: string;
+  shareUrl: string;
+}

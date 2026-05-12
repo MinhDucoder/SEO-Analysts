@@ -3,13 +3,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createAudit,
+  createShareLink,
   deleteAudit,
+  getAudit,
+  getAuditStatus,
   listAudits,
+  revokeShareLink,
   type CreateAuditDto,
   type CreateAuditResponse,
   type ListAuditsParams,
 } from "@/lib/api/audits";
-import type { AuditListItem, Paginated } from "@/lib/api/types";
+import type {
+  AuditDetailResponse,
+  AuditListItem,
+  AuditStatusResponse,
+  Paginated,
+  ShareLinkResponse,
+} from "@/lib/api/types";
+import { AuditStatus } from "@repo/shared";
 import { useAuthStore } from "@/lib/auth/store";
 import { queryKeys } from "@/lib/queries/keys";
 
@@ -85,6 +96,75 @@ export function useCreateAudit() {
     mutationFn: (body) => createAudit(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.audits.all() });
+    },
+  });
+}
+
+/**
+ * `GET /audits/:id` — the canonical detail query. Driven by the page
+ * route param. Disabled when unauthenticated. Refetches on focus only
+ * if the audit is still in flight (terminal states are stable forever).
+ */
+export function useAudit(id: string | null | undefined) {
+  const accessToken = useAuthStore((s) => s.accessToken);
+  return useQuery<AuditDetailResponse>({
+    queryKey: id ? queryKeys.audits.detail(id) : ["audits", "detail", "noop"],
+    queryFn: () => getAudit(id as string),
+    enabled: accessToken !== null && Boolean(id),
+    staleTime: 30 * 1_000,
+  });
+}
+
+/**
+ * `GET /audits/:id/status` — short-poll fallback for clients without
+ * working WebSocket. Polls every 3s while status is non-terminal.
+ *
+ * Pass `enabled=false` when the WS hook is active to avoid duplicate
+ * traffic; the WS path is the primary update channel.
+ */
+export interface UseAuditStatusOptions {
+  enabled?: boolean;
+}
+
+const TERMINAL_STATUSES = new Set<AuditStatus>([
+  AuditStatus.COMPLETED,
+  AuditStatus.FAILED,
+]);
+
+export function useAuditStatus(
+  id: string | null | undefined,
+  opts: UseAuditStatusOptions = {},
+) {
+  const { enabled = true } = opts;
+  const accessToken = useAuthStore((s) => s.accessToken);
+  return useQuery<AuditStatusResponse>({
+    queryKey: id ? queryKeys.audits.status(id) : ["audits", "status", "noop"],
+    queryFn: () => getAuditStatus(id as string),
+    enabled: enabled && accessToken !== null && Boolean(id),
+    refetchInterval: (q) => {
+      const data = q.state.data as AuditStatusResponse | undefined;
+      if (!data || TERMINAL_STATUSES.has(data.status)) return false;
+      return 3_000;
+    },
+  });
+}
+
+export function useCreateShareLink(auditId: string) {
+  const queryClient = useQueryClient();
+  return useMutation<ShareLinkResponse, Error, void>({
+    mutationFn: () => createShareLink(auditId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.audits.detail(auditId) });
+    },
+  });
+}
+
+export function useRevokeShareLink(auditId: string) {
+  const queryClient = useQueryClient();
+  return useMutation<void, Error, void>({
+    mutationFn: () => revokeShareLink(auditId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.audits.detail(auditId) });
     },
   });
 }

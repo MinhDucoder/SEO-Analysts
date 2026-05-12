@@ -181,6 +181,109 @@
       "fail": "Deletion failed"
     }
   },
+  "auditDetail": {
+    "loading": "Loading report…",
+    "notFoundTitle": "Audit not found",
+    "notFoundBody": "This audit was deleted or you don't have access.",
+    "backToList": "Back to audits",
+    "actions": {
+      "export": "Export PDF",
+      "share": "Share",
+      "delete": "Delete audit",
+      "rerun": "Re-run",
+      "toggleView": "Toggle view"
+    },
+    "meta": {
+      "url": "URL",
+      "createdAt": "Created at",
+      "completedAt": "Completed",
+      "duration": "Duration",
+      "crawler": "Crawler"
+    },
+    "sections": {
+      "categoryBreakdown": "Category scores",
+      "cwv": "Core Web Vitals",
+      "rules": "Rule results",
+      "keywords": "Content keywords",
+      "targetKeyword": "Target keyword"
+    },
+    "rules": {
+      "empty": "No rules in this report",
+      "weightLabel": "Weight",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Other"
+      }
+    },
+    "keywords": {
+      "empty": "No keyword data",
+      "rank": "#",
+      "frequency": "Count",
+      "density": "Density"
+    },
+    "targetKeyword": {
+      "verdict": "Verdict",
+      "stuffing": "Keyword stuffing detected",
+      "ok": "Density is healthy"
+    },
+    "inProgress": {
+      "title": "Audit in progress",
+      "subtitle": "Feel free to close this tab — we'll keep running in the background.",
+      "stage": {
+        "pending": "Queued",
+        "crawling": "Crawl HTML",
+        "analyzing": "Run 20 SEO rules",
+        "reporting": "Aggregate report",
+        "completed": "Done"
+      },
+      "messages": {
+        "crawling": "Fetching HTML and assets…",
+        "analyzing": "Scoring 20 SEO rules…",
+        "reporting": "Aggregating the final report…",
+        "pending": "Audit is queued and will start shortly."
+      }
+    },
+    "failed": {
+      "title": "Audit failed",
+      "fallbackMessage": "The pipeline hit an unknown error.",
+      "rerun": "Re-run audit",
+      "reportIssue": "Report issue"
+    },
+    "share": {
+      "title": "Share audit report",
+      "subtitle": "Anyone with the link can view the report (read-only, no login).",
+      "helper": "Link expires automatically after 30 days. You can revoke it anytime.",
+      "createCta": "Generate share link",
+      "creating": "Generating…",
+      "linkLabel": "Share link",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "revoke": "Revoke link",
+      "revoking": "Revoking…",
+      "revokeConfirm": "Revoke this share link?",
+      "revokeSuccess": "Link revoked",
+      "noLink": "No share link yet.",
+      "close": "Close",
+      "errorCreate": "Failed to create link",
+      "errorRevoke": "Failed to revoke"
+    },
+    "delete": {
+      "title": "Delete this audit?",
+      "subtitle": "This action cannot be undone.",
+      "body": "The audit and its report will be permanently removed. Active share links will be revoked.",
+      "auditIdLabel": "Audit ID",
+      "cancel": "Cancel",
+      "confirm": "Delete audit",
+      "submitting": "Deleting…",
+      "success": "Audit deleted",
+      "fail": "Deletion failed"
+    }
+  },
   "scheduled": {
     "title": "Scheduled audits",
     "subtitle": "Automate recurring SEO audits via cron schedule.",

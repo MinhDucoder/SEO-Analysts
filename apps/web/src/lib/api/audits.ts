@@ -1,5 +1,12 @@
 import { api } from "@/lib/api/client";
-import type { AuditListItem, Paginated } from "@/lib/api/types";
+import type {
+  AuditDetailResponse,
+  AuditListItem,
+  AuditStatusResponse,
+  Paginated,
+  ShareLinkResponse,
+} from "@/lib/api/types";
+import { API_URL } from "@/lib/constants";
 
 /**
  * Thin wrapper around gateway `GET /audits` (list endpoint). Slug 3 only
@@ -67,4 +74,47 @@ export async function createAudit(
   body: CreateAuditDto,
 ): Promise<CreateAuditResponse> {
   return api.post("audits", { json: body }).json<CreateAuditResponse>();
+}
+
+/**
+ * `GET /audits/:id` — returns `{ audit, report }`. `report` is null
+ * while the pipeline is in-flight; it gets populated once status
+ * advances to `completed`.
+ */
+export async function getAudit(id: string): Promise<AuditDetailResponse> {
+  return api.get(`audits/${id}`).json<AuditDetailResponse>();
+}
+
+/**
+ * `GET /audits/:id/status` — lightweight progress probe. Used as a poll
+ * fallback when the WebSocket is unavailable.
+ */
+export async function getAuditStatus(id: string): Promise<AuditStatusResponse> {
+  return api.get(`audits/${id}/status`).json<AuditStatusResponse>();
+}
+
+/**
+ * `POST /audits/:id/share` — mint a public share link. The gateway
+ * generates the `shareToken` and returns the canonical `shareUrl` the
+ * user can copy.
+ */
+export async function createShareLink(id: string): Promise<ShareLinkResponse> {
+  return api.post(`audits/${id}/share`).json<ShareLinkResponse>();
+}
+
+/**
+ * `DELETE /audits/:id/share` — revoke the active share link. 204
+ * no-content on success.
+ */
+export async function revokeShareLink(id: string): Promise<void> {
+  await api.delete(`audits/${id}/share`);
+}
+
+/**
+ * Direct URL for the gateway's PDF export endpoint. The gateway returns
+ * 302 → the report-service PDF stream; using `<a href>` lets the
+ * browser handle the redirect + download natively.
+ */
+export function auditExportUrl(id: string): string {
+  return `${API_URL.replace(/\/$/, "")}/audits/${id}/export`;
 }

@@ -181,6 +181,109 @@
       "fail": "Xóa thất bại"
     }
   },
+  "auditDetail": {
+    "loading": "Đang tải báo cáo…",
+    "notFoundTitle": "Audit không tồn tại",
+    "notFoundBody": "Audit này đã bị xóa hoặc bạn không có quyền truy cập.",
+    "backToList": "Về danh sách audit",
+    "actions": {
+      "export": "Xuất PDF",
+      "share": "Chia sẻ",
+      "delete": "Xóa audit",
+      "rerun": "Chạy lại",
+      "toggleView": "Đổi cách hiển thị"
+    },
+    "meta": {
+      "url": "URL",
+      "createdAt": "Tạo lúc",
+      "completedAt": "Hoàn thành",
+      "duration": "Thời gian",
+      "crawler": "Crawler"
+    },
+    "sections": {
+      "categoryBreakdown": "Điểm theo nhóm rule",
+      "cwv": "Core Web Vitals",
+      "rules": "Chi tiết từng rule",
+      "keywords": "Từ khóa nội dung",
+      "targetKeyword": "Từ khóa mục tiêu"
+    },
+    "rules": {
+      "empty": "Báo cáo chưa có rule nào",
+      "weightLabel": "Trọng số",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Khác"
+      }
+    },
+    "keywords": {
+      "empty": "Chưa có dữ liệu từ khóa",
+      "rank": "#",
+      "frequency": "Số lần",
+      "density": "Mật độ"
+    },
+    "targetKeyword": {
+      "verdict": "Đánh giá",
+      "stuffing": "Cảnh báo nhồi nhét",
+      "ok": "Mật độ hợp lý"
+    },
+    "inProgress": {
+      "title": "Audit đang chạy",
+      "subtitle": "Bạn có thể đóng tab — chúng tôi sẽ tiếp tục chạy nền.",
+      "stage": {
+        "pending": "Hàng chờ",
+        "crawling": "Crawl HTML",
+        "analyzing": "Chạy 20 rule SEO",
+        "reporting": "Tổng hợp báo cáo",
+        "completed": "Hoàn thành"
+      },
+      "messages": {
+        "crawling": "Đang fetch HTML và tài nguyên…",
+        "analyzing": "Đang chấm điểm 20 SEO rule…",
+        "reporting": "Đang tổng hợp báo cáo cuối cùng…",
+        "pending": "Audit nằm trong hàng chờ, sắp được xử lý."
+      }
+    },
+    "failed": {
+      "title": "Audit thất bại",
+      "fallbackMessage": "Pipeline gặp lỗi không xác định.",
+      "rerun": "Chạy lại audit",
+      "reportIssue": "Báo lỗi"
+    },
+    "share": {
+      "title": "Chia sẻ báo cáo audit",
+      "subtitle": "Người có link sẽ xem được báo cáo (chỉ đọc, không cần đăng nhập).",
+      "helper": "Link tự động hết hạn sau 30 ngày. Có thể thu hồi bất kỳ lúc nào.",
+      "createCta": "Tạo link chia sẻ",
+      "creating": "Đang tạo link…",
+      "linkLabel": "Link chia sẻ",
+      "copy": "Copy link",
+      "copied": "Đã copy",
+      "revoke": "Thu hồi link",
+      "revoking": "Đang thu hồi…",
+      "revokeConfirm": "Thu hồi link chia sẻ này?",
+      "revokeSuccess": "Đã thu hồi link",
+      "noLink": "Chưa có link chia sẻ.",
+      "close": "Đóng",
+      "errorCreate": "Tạo link thất bại",
+      "errorRevoke": "Thu hồi thất bại"
+    },
+    "delete": {
+      "title": "Xóa audit này?",
+      "subtitle": "Hành động không thể hoàn tác.",
+      "body": "Audit và báo cáo sẽ bị xóa vĩnh viễn. Các link chia sẻ đang hoạt động sẽ bị thu hồi.",
+      "auditIdLabel": "Audit ID",
+      "cancel": "Hủy",
+      "confirm": "Xóa audit",
+      "submitting": "Đang xóa…",
+      "success": "Đã xóa audit",
+      "fail": "Xóa thất bại"
+    }
+  },
   "scheduled": {
     "title": "Lịch chạy audit",
     "subtitle": "Tự động hóa audit định kỳ với cron schedule.",
