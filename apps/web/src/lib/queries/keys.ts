@@ -30,6 +30,9 @@ export const queryKeys = {
     list: () => ["scheduled", "list"] as const,
     detail: (id: string) => ["scheduled", "detail", id] as const,
   },
+  shared: {
+    detail: (token: string) => ["shared", "detail", token] as const,
+  },
 } as const;
 
 export type QueryKeys = typeof queryKeys;

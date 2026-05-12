@@ -372,6 +372,51 @@
       "errorInvalidUrl": "URL không hợp lệ."
     }
   },
+  "sharedReport": {
+    "headerBadge": "Báo cáo công khai",
+    "publicNotice": "Bạn đang xem báo cáo SEO công khai (chỉ đọc). Người có link đều xem được.",
+    "classification": {
+      "excellent": "Xuất sắc",
+      "good": "Tốt",
+      "fair": "Khá",
+      "poor": "Cần cải thiện"
+    },
+    "lowScoreNotice": "Website này có nhiều vấn đề SEO. Dưới đây là tóm tắt báo cáo.",
+    "sections": {
+      "categoryBreakdown": "Điểm theo nhóm rule",
+      "cwv": "Core Web Vitals",
+      "rules": "Chi tiết từng rule",
+      "keywords": "Từ khóa nội dung",
+      "targetKeyword": "Từ khóa mục tiêu"
+    },
+    "rules": {
+      "empty": "Báo cáo chưa có rule nào",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Khác"
+      }
+    },
+    "targetKeyword": {
+      "verdict": "Đánh giá",
+      "stuffing": "Cảnh báo nhồi nhét",
+      "ok": "Mật độ hợp lý"
+    },
+    "loading": "Đang tải báo cáo…",
+    "notFoundTitle": "Báo cáo không khả dụng",
+    "notFoundBody": "Link chia sẻ không hợp lệ, đã hết hạn hoặc bị chủ sở hữu thu hồi.",
+    "errorTitle": "Không tải được báo cáo",
+    "errorBody": "Vui lòng thử lại sau ít phút.",
+    "retry": "Thử lại",
+    "createdAt": "Thời điểm audit",
+    "ctaTitle": "Muốn audit website của bạn?",
+    "ctaBody": "Chạy audit SEO miễn phí cho bất kỳ URL nào.",
+    "ctaButton": "Mở SEO Analyst"
+  },
   "auth": {
     "common": {
       "email": "Email",

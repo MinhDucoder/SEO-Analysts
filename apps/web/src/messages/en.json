@@ -372,6 +372,51 @@
       "errorInvalidUrl": "Invalid URL."
     }
   },
+  "sharedReport": {
+    "headerBadge": "Public report",
+    "publicNotice": "You are viewing a read-only shared SEO report. Anyone with the link can see this.",
+    "classification": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "fair": "Fair",
+      "poor": "Needs attention"
+    },
+    "lowScoreNotice": "This site has significant SEO issues. Below is the audit summary.",
+    "sections": {
+      "categoryBreakdown": "Category scores",
+      "cwv": "Core Web Vitals",
+      "rules": "Rule results",
+      "keywords": "Content keywords",
+      "targetKeyword": "Target keyword"
+    },
+    "rules": {
+      "empty": "No rules in this report",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Other"
+      }
+    },
+    "targetKeyword": {
+      "verdict": "Verdict",
+      "stuffing": "Keyword stuffing detected",
+      "ok": "Density is healthy"
+    },
+    "loading": "Loading shared report…",
+    "notFoundTitle": "Report not available",
+    "notFoundBody": "This share link is invalid, expired, or has been revoked by the owner.",
+    "errorTitle": "Couldn't load the report",
+    "errorBody": "Please try again in a moment.",
+    "retry": "Retry",
+    "createdAt": "Audited",
+    "ctaTitle": "Want to audit your own site?",
+    "ctaBody": "Run a free SEO audit on any URL.",
+    "ctaButton": "Open SEO Analyst"
+  },
   "auth": {
     "common": {
       "email": "Email",
