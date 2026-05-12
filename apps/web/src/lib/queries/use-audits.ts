@@ -2,8 +2,11 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  createAudit,
   deleteAudit,
   listAudits,
+  type CreateAuditDto,
+  type CreateAuditResponse,
   type ListAuditsParams,
 } from "@/lib/api/audits";
 import type { AuditListItem, Paginated } from "@/lib/api/types";
@@ -67,6 +70,21 @@ export function useDeleteAudit() {
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.audits.all() });
       queryClient.removeQueries({ queryKey: queryKeys.audits.detail(id) });
+    },
+  });
+}
+
+/**
+ * Submit a new audit via `POST /audits`. Invalidates every audits list
+ * query on success so the newly-created row appears at the top of both
+ * the dashboard recent list and the /audits table.
+ */
+export function useCreateAudit() {
+  const queryClient = useQueryClient();
+  return useMutation<CreateAuditResponse, Error, CreateAuditDto>({
+    mutationFn: (body) => createAudit(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.audits.all() });
     },
   });
 }

@@ -98,6 +98,30 @@
     "title": "Audit của tôi",
     "subtitle": "Quản lý mọi audit bạn đã chạy",
     "new": "+ Tạo audit mới",
+    "create": {
+      "title": "Tạo audit mới",
+      "subtitle": "Nhập URL và cấu hình để bắt đầu phân tích SEO.",
+      "urlLabel": "URL website",
+      "urlPlaceholder": "https://example.com",
+      "urlHint": "URL phải dùng http hoặc https.",
+      "keywordLabel": "Từ khóa mục tiêu (tùy chọn)",
+      "keywordPlaceholder": "Ví dụ: dịch vụ SEO",
+      "keywordHint": "Dùng để chấm điểm mật độ + vị trí từ khóa.",
+      "modeLabel": "Phạm vi",
+      "modeSingle": "Một trang",
+      "modeSingleDesc": "Chỉ phân tích URL bạn nhập.",
+      "modeSite": "Cả website",
+      "modeSiteDesc": "Crawl nhiều trang nội bộ tới giới hạn maxUrls.",
+      "maxUrlsLabel": "Số trang tối đa",
+      "maxUrlsHint": "Khoảng 1–5000. Càng nhiều thì càng tốn thời gian.",
+      "submit": "Bắt đầu audit",
+      "submitting": "Đang tạo audit…",
+      "successTitle": "Audit đã được tạo",
+      "successBody": "Chúng tôi đang phân tích {url}. Bạn có thể theo dõi tiến trình real-time tại trang chi tiết.",
+      "viewDetail": "Xem chi tiết",
+      "errorInvalidUrl": "URL không hợp lệ.",
+      "errorMaxUrlsRange": "Số trang phải từ 1 đến 5000."
+    },
     "filters": {
       "search": "Tìm URL hoặc domain",
       "status": "Trạng thái",
@@ -155,6 +179,68 @@
       "confirm": "Xóa audit này? Hành động không thể hoàn tác.",
       "success": "Đã xóa audit",
       "fail": "Xóa thất bại"
+    }
+  },
+  "scheduled": {
+    "title": "Lịch chạy audit",
+    "subtitle": "Tự động hóa audit định kỳ với cron schedule.",
+    "new": "+ Tạo lịch mới",
+    "table": {
+      "url": "URL",
+      "cron": "Cron",
+      "mode": "Phạm vi",
+      "lastRun": "Lần chạy cuối",
+      "lastScore": "Điểm cuối",
+      "active": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "active": {
+      "on": "Đang chạy",
+      "off": "Đã tạm dừng"
+    },
+    "actions": {
+      "pause": "Tạm dừng",
+      "resume": "Tiếp tục",
+      "delete": "Xóa"
+    },
+    "empty": {
+      "title": "Chưa có lịch audit",
+      "description": "Tạo lịch để tự động chạy audit theo cron schedule.",
+      "cta": "+ Tạo lịch đầu tiên"
+    },
+    "error": {
+      "title": "Không tải được danh sách",
+      "description": "Lỗi kết nối tới máy chủ.",
+      "retry": "Thử lại"
+    },
+    "delete": {
+      "confirm": "Xóa lịch này? Audit định kỳ sẽ ngừng chạy.",
+      "success": "Đã xóa lịch",
+      "fail": "Xóa thất bại"
+    },
+    "toggle": {
+      "pauseSuccess": "Đã tạm dừng lịch",
+      "resumeSuccess": "Đã tiếp tục lịch",
+      "fail": "Thao tác thất bại"
+    },
+    "create": {
+      "title": "Tạo lịch audit",
+      "subtitle": "Lên lịch chạy audit lặp lại theo cron.",
+      "urlLabel": "URL website",
+      "urlPlaceholder": "https://example.com",
+      "cronLabel": "Cron",
+      "cronPlaceholder": "0 9 * * MON",
+      "cronHint": "Định dạng 5 trường: phút giờ ngày tháng thứ. Ví dụ \"0 9 * * MON\" = 9h sáng thứ Hai.",
+      "modeLabel": "Phạm vi",
+      "modeSingle": "Một trang",
+      "modeSite": "Cả website",
+      "maxUrlsLabel": "Số trang tối đa",
+      "keywordLabel": "Từ khóa mục tiêu (tùy chọn)",
+      "submit": "Tạo lịch",
+      "submitting": "Đang tạo…",
+      "successToast": "Đã tạo lịch mới",
+      "errorCron": "Cron không hợp lệ (cần 5 trường).",
+      "errorInvalidUrl": "URL không hợp lệ."
     }
   },
   "auth": {

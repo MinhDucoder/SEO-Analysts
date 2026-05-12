@@ -98,6 +98,30 @@
     "title": "My audits",
     "subtitle": "Every audit you've run",
     "new": "+ New audit",
+    "create": {
+      "title": "Run a new audit",
+      "subtitle": "Enter a URL and configure the scope to start an SEO scan.",
+      "urlLabel": "Website URL",
+      "urlPlaceholder": "https://example.com",
+      "urlHint": "Must start with http or https.",
+      "keywordLabel": "Target keyword (optional)",
+      "keywordPlaceholder": "e.g. seo services",
+      "keywordHint": "Used to score keyword density + placement.",
+      "modeLabel": "Scope",
+      "modeSingle": "Single page",
+      "modeSingleDesc": "Only analyse the URL you provided.",
+      "modeSite": "Whole site",
+      "modeSiteDesc": "Crawl internal pages up to the maxUrls limit.",
+      "maxUrlsLabel": "Max pages",
+      "maxUrlsHint": "Range 1–5000. More pages → longer audit.",
+      "submit": "Start audit",
+      "submitting": "Creating audit…",
+      "successTitle": "Audit created",
+      "successBody": "We're analysing {url}. You can follow live progress on the detail page.",
+      "viewDetail": "Open detail",
+      "errorInvalidUrl": "Invalid URL.",
+      "errorMaxUrlsRange": "Max pages must be between 1 and 5000."
+    },
     "filters": {
       "search": "Search URL or domain",
       "status": "Status",
@@ -155,6 +179,68 @@
       "confirm": "Delete this audit? This action cannot be undone.",
       "success": "Audit deleted",
       "fail": "Deletion failed"
+    }
+  },
+  "scheduled": {
+    "title": "Scheduled audits",
+    "subtitle": "Automate recurring SEO audits via cron schedule.",
+    "new": "+ New schedule",
+    "table": {
+      "url": "URL",
+      "cron": "Cron",
+      "mode": "Scope",
+      "lastRun": "Last run",
+      "lastScore": "Last score",
+      "active": "Status",
+      "actions": "Actions"
+    },
+    "active": {
+      "on": "Running",
+      "off": "Paused"
+    },
+    "actions": {
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "No scheduled audits",
+      "description": "Create a schedule to run audits automatically on a cron timer.",
+      "cta": "+ Create first schedule"
+    },
+    "error": {
+      "title": "Couldn't load schedules",
+      "description": "Connection to the server failed.",
+      "retry": "Retry"
+    },
+    "delete": {
+      "confirm": "Delete this schedule? Recurring audits will stop.",
+      "success": "Schedule deleted",
+      "fail": "Deletion failed"
+    },
+    "toggle": {
+      "pauseSuccess": "Schedule paused",
+      "resumeSuccess": "Schedule resumed",
+      "fail": "Toggle failed"
+    },
+    "create": {
+      "title": "Create schedule",
+      "subtitle": "Run an audit repeatedly on a cron schedule.",
+      "urlLabel": "Website URL",
+      "urlPlaceholder": "https://example.com",
+      "cronLabel": "Cron",
+      "cronPlaceholder": "0 9 * * MON",
+      "cronHint": "5 fields: minute hour dom month dow. Example \"0 9 * * MON\" = 9 AM every Monday.",
+      "modeLabel": "Scope",
+      "modeSingle": "Single page",
+      "modeSite": "Whole site",
+      "maxUrlsLabel": "Max pages",
+      "keywordLabel": "Target keyword (optional)",
+      "submit": "Create schedule",
+      "submitting": "Creating…",
+      "successToast": "Schedule created",
+      "errorCron": "Invalid cron (5 fields required).",
+      "errorInvalidUrl": "Invalid URL."
     }
   },
   "auth": {

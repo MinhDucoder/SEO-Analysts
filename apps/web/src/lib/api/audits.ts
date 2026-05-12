@@ -41,3 +41,30 @@ export async function listAudits(
 export async function deleteAudit(id: string): Promise<void> {
   await api.delete(`audits/${id}`);
 }
+
+export type AuditMode = "single" | "site";
+
+export interface CreateAuditDto {
+  url: string;
+  targetKeyword?: string;
+  mode?: AuditMode;
+  /** 1..5000, only meaningful for mode='site'. */
+  maxUrls?: number;
+}
+
+export interface CreateAuditResponse {
+  auditId: string;
+  status: "pending";
+  mode: AuditMode;
+  message: string;
+}
+
+/**
+ * `POST /audits` — kicks off a new audit. Returns 202 with the auditId
+ * the caller can subscribe to via WebSocket or poll via `/audits/:id`.
+ */
+export async function createAudit(
+  body: CreateAuditDto,
+): Promise<CreateAuditResponse> {
+  return api.post("audits", { json: body }).json<CreateAuditResponse>();
+}
