@@ -14,7 +14,30 @@ import { ROUTES } from "@/lib/constants";
 
 type Phase = "loading" | "success" | "missing" | "invalid";
 
+/**
+ * Next 14 requires `useSearchParams()` consumers to be wrapped in a
+ * Suspense boundary so the page can prerender (we still SSG the auth
+ * route shells). The wrapper renders the loading shell as the fallback,
+ * which matches what `phase==='loading'` renders below.
+ */
 export default function OAuthSuccessPage() {
+  const t = useTranslations("auth.oauth");
+  return (
+    <React.Suspense
+      fallback={
+        <AuthShell title={t("loadingTitle")} subtitle={t("loadingBody")}>
+          <div className="flex justify-center">
+            <Loader2 className="h-16 w-16 animate-spin text-primary" aria-hidden />
+          </div>
+        </AuthShell>
+      }
+    >
+      <OAuthSuccessInner />
+    </React.Suspense>
+  );
+}
+
+function OAuthSuccessInner() {
   const t = useTranslations("auth.oauth");
   const params = useSearchParams();
   const router = useRouter();
