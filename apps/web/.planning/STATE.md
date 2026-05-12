@@ -1,8 +1,65 @@
-# apps/web STATE — Phase 7a complete, Phase 7b pending
+# apps/web STATE — Phase 9 complete, FE feature work landed
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `828fcaa` + Phase 7a (uncommitted at write time)
+> **Branch**: `feat/web-fresh` HEAD `Phase 9` (just committed)
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+> **All Phase 1–9 features shipped.** The branch is feature-complete pending
+> the L4 `fe-be-integration` pass (requires a running gateway + DB).
+
+---
+
+## ✅ Phase 9 — Test harness hardening — DONE
+
+| File | What |
+|---|---|
+| `tests/unit/user-schemas.test.ts` | 8 tests covering `updateProfileSchema` (2–100 char fullName) + `changePasswordSchema` (new ≠ current, confirm matches, ≥8 chars, empty current rejected). |
+| `tests/unit/global-modal-store.test.ts` | 7 tests: open/close, default + custom `contactEmail`, Retry-After clamp/floor, latest-wins ordering. |
+| `tests/unit/ky-interceptor.test.ts` | 5 tests via MSW: 403 `code='ACCOUNT_LOCKED'` opens AccountLocked; 403 with message `'locked'` (without 'verify') also opens it; 403 with `'verify'` does NOT (it's the unverified-email signal, surfaced as toast); 429 Retry-After honoured; 429 missing header → 60s default. |
+| `tests/unit/auth-admin-selector.test.ts` | 4 tests covering `isAdmin()` across no-user / role=user / role=admin / post-`clearAuth()`. |
+
+**Test totals**: 66 → **90** tests (8 files → 12 files). All pass in 2.5s.
+
+**L4 status (per project memory `feedback_fe_be_integration_skill`)**: deferred until a running gateway + Postgres docker stack is available. The slugs that would qualify (`auth/session`, `oauth`, `rate-limit`, `admin`) are now all implemented and ready for the L4 pass.
+
+---
+
+## ✅ Phase 8 — Global 403/429 modals — DONE
+
+| File | What |
+|---|---|
+| `lib/ui/global-modal-store.ts` | Zustand store, single-modal-at-a-time invariant. State `{ kind, retryAfterSec, contactEmail }`. `open()` overload for either modal kind. Negative `Retry-After` clamps to 0; fractional values floor. |
+| `lib/api/client.ts` | ky `afterResponse` expanded — 401 path unchanged (silent refresh + replay). 403: inspects body `code === 'ACCOUNT_LOCKED'` first, falls back to message-contains-`locked` minus the `verify` false-positive. 429: reads `Retry-After` header, defaults to 60s. Both call `useGlobalModalStore.getState().open(...)`. |
+| `components/global/account-locked-modal.tsx` | Ban icon hero + contact-email mono + Sign-out CTA (clearAuth + `router.replace(/login)`). |
+| `components/global/rate-limit-modal.tsx` | Clock hero + per-second countdown driven by `setInterval`. |
+| `app/providers.tsx` | Both modals mounted once at root inside `QueryClientProvider`. |
+| `messages/{vi,en}.json` | `globalModal.accountLocked` + `globalModal.rateLimit` namespaces. |
+
+### Trap caught
+The gateway also surfaces `403 EMAIL_NOT_VERIFIED` on login. The interceptor must NOT open AccountLocked for that case (mutations.ts already toasts a different message). The fix: gate the message-substring fallback on `!message.includes('verify')`. Tested in `tests/unit/ky-interceptor.test.ts`.
+
+---
+
+## ✅ Phase 7b — Admin pages — DONE
+
+| File | What |
+|---|---|
+| `lib/api/admin.ts` | `listAdminUsers`, `updateUserLock`, `getAdminStats`, `listAdminRules`, `updateAdminRules`. |
+| `lib/api/types.ts` | `AdminUser`, `AdminStats`, `SeoRule`, `ListAdminUsersQuery`, `UpdateRulesDto`, `AdminPaginated<T>` (meta wrapper distinct from `Paginated<T>`). |
+| `lib/queries/use-admin.ts` | `useAdminStats(period)`, `useAdminUsers(filters)` with `placeholderData: prev`, `useUpdateUserLock` with optimistic-rollback (snapshots every cached users-list query before flipping), `useAdminRules`, `useUpdateAdminRules`. All gated on `accessToken !== null && role === 'admin'` so a stale non-admin session never triggers 403 noise. |
+| `lib/auth/admin-guard.tsx` | Role gate composed inside the outer `AuthGuard` — non-admin → `/dashboard`. |
+| `lib/constants.ts` | Sidebar "Quản trị" now points at `ROUTES.adminStats` (was `adminUsers`). |
+| `messages/{vi,en}.json` | `admin.stats`, `admin.users`, `admin.rules` namespaces. |
+| `components/admin/admin-stats-cards.tsx` | 5 overview cards + 2 today cards + top-5 domains card. |
+| `components/admin/admin-users-filters.tsx` | Search + role + lock filter + clear. |
+| `components/admin/admin-users-table.tsx` | 7-col table with `Lock/Unlock` action gated against self-lock (`isSelf = me?.id === row.id`). |
+| `components/admin/admin-rules-table.tsx` | Per-row weight input (1–10), batch save sending only dirty rules; visual dirty marker via border colour. |
+| `(app)/admin/{layout,page,stats,users,rules}/page.tsx` | Routes + AdminGuard wrap + redirect index. |
+
+### Phase 7b routes shipped (+4)
+- `/admin` (299 B redirect → `/admin/stats`)
+- `/admin/stats` (6.6 KB / 142 KB)
+- `/admin/users` (7.37 KB / 143 KB)
+- `/admin/rules` (2.04 KB / 138 KB)
 
 ---
 
