@@ -372,6 +372,44 @@
       "errorInvalidUrl": "URL không hợp lệ."
     }
   },
+  "settings": {
+    "title": "Cài đặt",
+    "subtitle": "Quản lý hồ sơ và bảo mật tài khoản.",
+    "tabs": {
+      "profile": "Hồ sơ",
+      "password": "Mật khẩu"
+    },
+    "profile": {
+      "title": "Hồ sơ",
+      "subtitle": "Thông tin này hiển thị trên báo cáo và email tài khoản.",
+      "fullNameLabel": "Họ và tên",
+      "fullNamePlaceholder": "Nguyễn Văn A",
+      "emailLabel": "Email",
+      "emailHelper": "Email không thể thay đổi.",
+      "roleLabel": "Vai trò",
+      "createdAtLabel": "Ngày tạo tài khoản",
+      "submit": "Lưu thay đổi",
+      "submitting": "Đang lưu…",
+      "noChanges": "Chưa có thay đổi nào.",
+      "success": "Đã cập nhật hồ sơ",
+      "loading": "Đang tải hồ sơ…"
+    },
+    "password": {
+      "title": "Đổi mật khẩu",
+      "subtitle": "Chọn mật khẩu mới đủ mạnh.",
+      "currentLabel": "Mật khẩu hiện tại",
+      "currentPlaceholder": "Nhập mật khẩu đang dùng",
+      "newLabel": "Mật khẩu mới",
+      "newPlaceholder": "Tối thiểu 8 ký tự",
+      "confirmLabel": "Xác nhận mật khẩu mới",
+      "confirmPlaceholder": "Nhập lại mật khẩu mới",
+      "warningTitle": "Mọi phiên đăng nhập khác sẽ bị đăng xuất",
+      "warningBody": "Đổi mật khẩu sẽ thu hồi tất cả phiên đang hoạt động, kể cả phiên hiện tại. Bạn sẽ được chuyển về trang đăng nhập sau khi cập nhật thành công.",
+      "submit": "Cập nhật mật khẩu",
+      "submitting": "Đang cập nhật…",
+      "success": "Đã cập nhật mật khẩu — vui lòng đăng nhập lại"
+    }
+  },
   "sharedReport": {
     "headerBadge": "Báo cáo công khai",
     "publicNotice": "Bạn đang xem báo cáo SEO công khai (chỉ đọc). Người có link đều xem được.",

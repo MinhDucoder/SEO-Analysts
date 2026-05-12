@@ -52,3 +52,39 @@ export const resetPasswordSchema = z
   });
 
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
+/**
+ * Settings/Profile form. `fullName` is the only editable field today
+ * (avatar upload deferred); kept as a full object so future fields drop in
+ * without a breaking type change.
+ */
+export const updateProfileSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, "Họ tên tối thiểu 2 ký tự")
+    .max(100, "Họ tên tối đa 100 ký tự"),
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+/**
+ * Settings/Password form. Mirrors backend `ChangePasswordDto` plus a
+ * client-only `confirmPassword` field for typo guard. Also requires the
+ * new password to differ from the current one.
+ */
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Vui lòng nhập mật khẩu hiện tại"),
+    newPassword: z.string().min(8, "Mật khẩu tối thiểu 8 ký tự"),
+    confirmPassword: z.string().min(1, "Vui lòng xác nhận mật khẩu"),
+  })
+  .refine((d) => d.newPassword === d.confirmPassword, {
+    message: "Mật khẩu không khớp",
+    path: ["confirmPassword"],
+  })
+  .refine((d) => d.newPassword !== d.currentPassword, {
+    message: "Mật khẩu mới phải khác mật khẩu hiện tại",
+    path: ["newPassword"],
+  });
+
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;

@@ -372,6 +372,44 @@
       "errorInvalidUrl": "Invalid URL."
     }
   },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your profile and security.",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password"
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "These details appear on your reports and account email.",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "Jane Doe",
+      "emailLabel": "Email",
+      "emailHelper": "Email cannot be changed.",
+      "roleLabel": "Role",
+      "createdAtLabel": "Account created",
+      "submit": "Save changes",
+      "submitting": "Saving…",
+      "noChanges": "Nothing to save yet.",
+      "success": "Profile updated",
+      "loading": "Loading your profile…"
+    },
+    "password": {
+      "title": "Change password",
+      "subtitle": "Pick a strong new password.",
+      "currentLabel": "Current password",
+      "currentPlaceholder": "Enter your current password",
+      "newLabel": "New password",
+      "newPlaceholder": "At least 8 characters",
+      "confirmLabel": "Confirm new password",
+      "confirmPlaceholder": "Re-enter the new password",
+      "warningTitle": "All other sessions will be signed out",
+      "warningBody": "Changing your password revokes every active session, including this one. You will be redirected to the sign-in page after a successful update.",
+      "submit": "Update password",
+      "submitting": "Updating…",
+      "success": "Password updated — please sign in again"
+    }
+  },
   "sharedReport": {
     "headerBadge": "Public report",
     "publicNotice": "You are viewing a read-only shared SEO report. Anyone with the link can see this.",
