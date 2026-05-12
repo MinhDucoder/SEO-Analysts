@@ -1,0 +1,71 @@
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* shadcn-compat semantic aliases so primitives use Pencil tokens without patching */
+  :root {
+    --background: var(--color-bg);
+    --foreground: var(--color-fg);
+
+    --card: var(--color-bg-elevated);
+    --card-foreground: var(--color-fg);
+
+    --popover: var(--color-bg-elevated);
+    --popover-foreground: var(--color-fg);
+
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-fg);
+
+    --secondary: var(--color-bg-overlay);
+    --secondary-foreground: var(--color-fg);
+
+    --muted: var(--color-bg-overlay);
+    --muted-foreground: var(--color-fg-muted);
+
+    --accent: var(--color-bg-overlay);
+    --accent-foreground: var(--color-fg);
+
+    --destructive: var(--color-error);
+    --destructive-foreground: 250 250 250;
+
+    --border: var(--color-border);
+    --input: var(--color-border);
+    --ring: var(--color-primary);
+
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg text-fg font-ui antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+
+  /* Reduce motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Focus ring for keyboard navigation */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-bg;
+  }
+}

@@ -27,7 +27,7 @@ export const ROUTES = {
 
   // Settings (slug 8)
   settingsProfile: "/settings/profile",
-  settingsSecurity: "/settings/security",
+  settingsPassword: "/settings/password",
 
   // Admin (slug 7)
   adminUsers: "/admin/users",
@@ -68,7 +68,7 @@ export const SIDEBAR_NAV: readonly SidebarNavItem[] = [
   { label: "Dashboard", href: ROUTES.dashboard, iconName: "LayoutDashboard" },
   { label: "Audit",     href: ROUTES.audits,    iconName: "Search" },
   { label: "So sánh",   href: "/audits?compare=1", iconName: "GitCompare" },
-  { label: "Quản trị",  href: ROUTES.adminUsers, iconName: "Shield", adminOnly: true },
+  { label: "Quản trị",  href: ROUTES.adminStats, iconName: "Shield", adminOnly: true },
   { label: "Cài đặt",   href: ROUTES.settingsProfile, iconName: "Settings" },
 ] as const;
 
@@ -86,7 +86,7 @@ export const PAGE_TITLE_MAP: ReadonlyArray<[string, PageTitle]> = [
   ["/audits",          { title: "Audit của tôi", subtitle: "Quản lý mọi audit bạn đã chạy" }],
   ["/dashboard",       { title: "Tổng quan", subtitle: "Sức khỏe SEO của bạn" }],
   ["/settings/profile",{ title: "Hồ sơ", subtitle: "Cập nhật thông tin cá nhân" }],
-  ["/settings/security",{ title: "Bảo mật", subtitle: "Quản lý mật khẩu và phiên đăng nhập" }],
+  ["/settings/password",{ title: "Mật khẩu", subtitle: "Đổi mật khẩu tài khoản" }],
   ["/admin/users",     { title: "Người dùng", subtitle: "Quản lý tài khoản" }],
   ["/admin/rules",     { title: "Quy tắc SEO", subtitle: "Trọng số các rule" }],
   ["/admin/stats",     { title: "Thống kê", subtitle: "Hoạt động nền tảng" }],

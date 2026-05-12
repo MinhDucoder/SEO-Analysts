@@ -1,0 +1,624 @@
+{
+  "app": {
+    "name": "SEO Analyst",
+    "tagline": "Phân tích SEO cho website Việt"
+  },
+  "common": {
+    "loading": "Đang tải…",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "back": "Quay lại",
+    "next": "Tiếp tục",
+    "submit": "Gửi",
+    "retry": "Thử lại",
+    "close": "Đóng",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "refresh": "Tải lại",
+    "errorTitle": "Đã có lỗi xảy ra",
+    "errorDescription": "Vui lòng thử lại sau ít phút.",
+    "reportIssue": "Báo lỗi"
+  },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "audits": "Audit",
+    "auditsNew": "Tạo audit mới",
+    "auditsDetail": "Chi tiết audit",
+    "scheduled": "Lịch chạy",
+    "compare": "So sánh",
+    "settings": "Cài đặt",
+    "profile": "Hồ sơ",
+    "password": "Mật khẩu",
+    "admin": "Quản trị",
+    "users": "Người dùng",
+    "rules": "Quy tắc",
+    "stats": "Thống kê"
+  },
+  "theme": {
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Theo hệ thống"
+  },
+  "locale": {
+    "vi": "Tiếng Việt",
+    "en": "English"
+  },
+  "auditStatus": {
+    "pending": "Đang chờ",
+    "crawling": "Đang crawl",
+    "analyzing": "Đang phân tích",
+    "reporting": "Đang tổng hợp",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại"
+  },
+  "dashboard": {
+    "title": "Tổng quan",
+    "subtitle": "Sức khỏe SEO của bạn",
+    "newAudit": "+ Tạo audit mới",
+    "heroTitle": "Điểm SEO mới nhất",
+    "heroNoData": "Chưa có audit hoàn thành",
+    "heroVsLast": "so với lần trước",
+    "stats": {
+      "auditsThisMonth": "Audit tháng này",
+      "auditsThisMonthDesc": "Tổng số audit đã chạy trong tháng",
+      "avgScore": "Điểm trung bình",
+      "avgScoreDesc": "Trung bình điểm SEO trong tháng",
+      "criticalIssues": "Vấn đề nghiêm trọng",
+      "criticalIssuesDesc": "Số rule bị fail trong audit mới nhất",
+      "pdfsExported": "PDF đã xuất",
+      "pdfsExportedDesc": "Số lần tải PDF report",
+      "vsLastMonth": "so với tháng trước",
+      "noData": "—",
+      "comingSoon": "Sẽ có sớm"
+    },
+    "trend": {
+      "title": "Xu hướng điểm SEO",
+      "subtitle": "30 ngày gần nhất",
+      "needMore": "Cần ≥ 2 audit hoàn thành để vẽ xu hướng"
+    },
+    "recent": {
+      "title": "Audit gần đây",
+      "viewAll": "Xem tất cả",
+      "empty": "Chưa có audit nào"
+    },
+    "empty": {
+      "title": "Bắt đầu phân tích SEO",
+      "description": "Chạy audit đầu tiên để xem điểm SEO, Core Web Vitals và các vấn đề cần khắc phục.",
+      "cta": "+ Tạo audit đầu tiên"
+    },
+    "error": {
+      "title": "Không tải được dashboard",
+      "description": "Lỗi kết nối tới máy chủ.",
+      "retry": "Thử lại"
+    }
+  },
+  "audits": {
+    "title": "Audit của tôi",
+    "subtitle": "Quản lý mọi audit bạn đã chạy",
+    "new": "+ Tạo audit mới",
+    "create": {
+      "title": "Tạo audit mới",
+      "subtitle": "Nhập URL và cấu hình để bắt đầu phân tích SEO.",
+      "urlLabel": "URL website",
+      "urlPlaceholder": "https://example.com",
+      "urlHint": "URL phải dùng http hoặc https.",
+      "keywordLabel": "Từ khóa mục tiêu (tùy chọn)",
+      "keywordPlaceholder": "Ví dụ: dịch vụ SEO",
+      "keywordHint": "Dùng để chấm điểm mật độ + vị trí từ khóa.",
+      "modeLabel": "Phạm vi",
+      "modeSingle": "Một trang",
+      "modeSingleDesc": "Chỉ phân tích URL bạn nhập.",
+      "modeSite": "Cả website",
+      "modeSiteDesc": "Crawl nhiều trang nội bộ tới giới hạn maxUrls.",
+      "maxUrlsLabel": "Số trang tối đa",
+      "maxUrlsHint": "Khoảng 1–5000. Càng nhiều thì càng tốn thời gian.",
+      "submit": "Bắt đầu audit",
+      "submitting": "Đang tạo audit…",
+      "successTitle": "Audit đã được tạo",
+      "successBody": "Chúng tôi đang phân tích {url}. Bạn có thể theo dõi tiến trình real-time tại trang chi tiết.",
+      "viewDetail": "Xem chi tiết",
+      "errorInvalidUrl": "URL không hợp lệ.",
+      "errorMaxUrlsRange": "Số trang phải từ 1 đến 5000."
+    },
+    "filters": {
+      "search": "Tìm URL hoặc domain",
+      "status": "Trạng thái",
+      "statusAll": "Tất cả trạng thái",
+      "scoreMin": "Điểm tối thiểu",
+      "scoreMax": "Điểm tối đa",
+      "dateFrom": "Từ ngày",
+      "dateTo": "Đến ngày",
+      "sortBy": "Sắp xếp theo",
+      "sortCreatedAt": "Ngày tạo",
+      "sortScore": "Điểm SEO",
+      "orderDesc": "Giảm dần",
+      "orderAsc": "Tăng dần",
+      "clear": "Xóa bộ lọc",
+      "apply": "Áp dụng"
+    },
+    "table": {
+      "url": "URL",
+      "score": "Điểm",
+      "status": "Trạng thái",
+      "createdAt": "Ngày tạo",
+      "duration": "Thời gian",
+      "keyword": "Từ khóa",
+      "actions": "Thao tác"
+    },
+    "actions": {
+      "view": "Xem chi tiết",
+      "delete": "Xóa",
+      "share": "Chia sẻ",
+      "rerun": "Chạy lại"
+    },
+    "pagination": {
+      "showing": "Đang hiển thị {from}–{to} / {total}",
+      "previous": "Trước",
+      "next": "Sau",
+      "page": "Trang {page}"
+    },
+    "empty": {
+      "title": "Chưa có audit nào",
+      "description": "Bắt đầu phân tích SEO website đầu tiên của bạn.",
+      "cta": "+ Tạo audit đầu tiên"
+    },
+    "noResults": {
+      "title": "Không tìm thấy audit phù hợp",
+      "description": "Thử bỏ một số bộ lọc hoặc đổi từ khóa.",
+      "cta": "Xóa bộ lọc"
+    },
+    "error": {
+      "title": "Lỗi máy chủ",
+      "description": "Không tải được danh sách audit. Vui lòng thử lại.",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu"
+    },
+    "delete": {
+      "confirm": "Xóa audit này? Hành động không thể hoàn tác.",
+      "success": "Đã xóa audit",
+      "fail": "Xóa thất bại"
+    }
+  },
+  "auditCompare": {
+    "title": "So sánh audit",
+    "subtitle": "Chọn 2 audit để xem chênh lệch điểm SEO, rule status và issue.",
+    "pickerA": "Audit A (trước)",
+    "pickerB": "Audit B (sau)",
+    "pickerCta": "Chọn audit",
+    "pickerSearch": "Tìm URL hoặc domain",
+    "pickerEmpty": "Không tìm thấy audit phù hợp",
+    "pickerOnlyCompleted": "Chỉ hiển thị audit đã hoàn thành",
+    "pickerChange": "Đổi audit",
+    "pickerClear": "Bỏ chọn",
+    "instructions": "Chọn 2 audit để xem so sánh.",
+    "summaryTitle": "Tổng quan",
+    "scoreDeltaLabel": "Chênh lệch điểm",
+    "rulesTitle": "Thay đổi rule",
+    "rulesEmpty": "Hai audit có cùng kết quả ở mọi rule",
+    "fixedTitle": "Vấn đề đã khắc phục",
+    "newTitle": "Vấn đề mới phát sinh",
+    "fixedEmpty": "Không có rule nào được khắc phục",
+    "newEmpty": "Không có rule nào mới fail",
+    "errorTitle": "Không tải được so sánh",
+    "errorBody": "Kiểm tra cả 2 audit đã hoàn thành chưa.",
+    "retry": "Thử lại",
+    "statusBeforeLabel": "Trước",
+    "statusAfterLabel": "Sau"
+  },
+  "auditDetail": {
+    "loading": "Đang tải báo cáo…",
+    "notFoundTitle": "Audit không tồn tại",
+    "notFoundBody": "Audit này đã bị xóa hoặc bạn không có quyền truy cập.",
+    "backToList": "Về danh sách audit",
+    "actions": {
+      "export": "Xuất PDF",
+      "share": "Chia sẻ",
+      "delete": "Xóa audit",
+      "rerun": "Chạy lại",
+      "toggleView": "Đổi cách hiển thị"
+    },
+    "meta": {
+      "url": "URL",
+      "createdAt": "Tạo lúc",
+      "completedAt": "Hoàn thành",
+      "duration": "Thời gian",
+      "crawler": "Crawler"
+    },
+    "sections": {
+      "categoryBreakdown": "Điểm theo nhóm rule",
+      "cwv": "Core Web Vitals",
+      "rules": "Chi tiết từng rule",
+      "keywords": "Từ khóa nội dung",
+      "targetKeyword": "Từ khóa mục tiêu"
+    },
+    "rules": {
+      "empty": "Báo cáo chưa có rule nào",
+      "weightLabel": "Trọng số",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Khác"
+      }
+    },
+    "keywords": {
+      "empty": "Chưa có dữ liệu từ khóa",
+      "rank": "#",
+      "frequency": "Số lần",
+      "density": "Mật độ"
+    },
+    "targetKeyword": {
+      "verdict": "Đánh giá",
+      "stuffing": "Cảnh báo nhồi nhét",
+      "ok": "Mật độ hợp lý"
+    },
+    "inProgress": {
+      "title": "Audit đang chạy",
+      "subtitle": "Bạn có thể đóng tab — chúng tôi sẽ tiếp tục chạy nền.",
+      "stage": {
+        "pending": "Hàng chờ",
+        "crawling": "Crawl HTML",
+        "analyzing": "Chạy 20 rule SEO",
+        "reporting": "Tổng hợp báo cáo",
+        "completed": "Hoàn thành"
+      },
+      "messages": {
+        "crawling": "Đang fetch HTML và tài nguyên…",
+        "analyzing": "Đang chấm điểm 20 SEO rule…",
+        "reporting": "Đang tổng hợp báo cáo cuối cùng…",
+        "pending": "Audit nằm trong hàng chờ, sắp được xử lý."
+      }
+    },
+    "failed": {
+      "title": "Audit thất bại",
+      "fallbackMessage": "Pipeline gặp lỗi không xác định.",
+      "rerun": "Chạy lại audit",
+      "reportIssue": "Báo lỗi"
+    },
+    "share": {
+      "title": "Chia sẻ báo cáo audit",
+      "subtitle": "Người có link sẽ xem được báo cáo (chỉ đọc, không cần đăng nhập).",
+      "helper": "Link tự động hết hạn sau 30 ngày. Có thể thu hồi bất kỳ lúc nào.",
+      "createCta": "Tạo link chia sẻ",
+      "creating": "Đang tạo link…",
+      "linkLabel": "Link chia sẻ",
+      "copy": "Copy link",
+      "copied": "Đã copy",
+      "revoke": "Thu hồi link",
+      "revoking": "Đang thu hồi…",
+      "revokeConfirm": "Thu hồi link chia sẻ này?",
+      "revokeSuccess": "Đã thu hồi link",
+      "noLink": "Chưa có link chia sẻ.",
+      "close": "Đóng",
+      "errorCreate": "Tạo link thất bại",
+      "errorRevoke": "Thu hồi thất bại"
+    },
+    "delete": {
+      "title": "Xóa audit này?",
+      "subtitle": "Hành động không thể hoàn tác.",
+      "body": "Audit và báo cáo sẽ bị xóa vĩnh viễn. Các link chia sẻ đang hoạt động sẽ bị thu hồi.",
+      "auditIdLabel": "Audit ID",
+      "cancel": "Hủy",
+      "confirm": "Xóa audit",
+      "submitting": "Đang xóa…",
+      "success": "Đã xóa audit",
+      "fail": "Xóa thất bại"
+    }
+  },
+  "scheduled": {
+    "title": "Lịch chạy audit",
+    "subtitle": "Tự động hóa audit định kỳ với cron schedule.",
+    "new": "+ Tạo lịch mới",
+    "table": {
+      "url": "URL",
+      "cron": "Cron",
+      "mode": "Phạm vi",
+      "lastRun": "Lần chạy cuối",
+      "lastScore": "Điểm cuối",
+      "active": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "active": {
+      "on": "Đang chạy",
+      "off": "Đã tạm dừng"
+    },
+    "actions": {
+      "pause": "Tạm dừng",
+      "resume": "Tiếp tục",
+      "delete": "Xóa"
+    },
+    "empty": {
+      "title": "Chưa có lịch audit",
+      "description": "Tạo lịch để tự động chạy audit theo cron schedule.",
+      "cta": "+ Tạo lịch đầu tiên"
+    },
+    "error": {
+      "title": "Không tải được danh sách",
+      "description": "Lỗi kết nối tới máy chủ.",
+      "retry": "Thử lại"
+    },
+    "delete": {
+      "confirm": "Xóa lịch này? Audit định kỳ sẽ ngừng chạy.",
+      "success": "Đã xóa lịch",
+      "fail": "Xóa thất bại"
+    },
+    "toggle": {
+      "pauseSuccess": "Đã tạm dừng lịch",
+      "resumeSuccess": "Đã tiếp tục lịch",
+      "fail": "Thao tác thất bại"
+    },
+    "create": {
+      "title": "Tạo lịch audit",
+      "subtitle": "Lên lịch chạy audit lặp lại theo cron.",
+      "urlLabel": "URL website",
+      "urlPlaceholder": "https://example.com",
+      "cronLabel": "Cron",
+      "cronPlaceholder": "0 9 * * MON",
+      "cronHint": "Định dạng 5 trường: phút giờ ngày tháng thứ. Ví dụ \"0 9 * * MON\" = 9h sáng thứ Hai.",
+      "modeLabel": "Phạm vi",
+      "modeSingle": "Một trang",
+      "modeSite": "Cả website",
+      "maxUrlsLabel": "Số trang tối đa",
+      "keywordLabel": "Từ khóa mục tiêu (tùy chọn)",
+      "submit": "Tạo lịch",
+      "submitting": "Đang tạo…",
+      "successToast": "Đã tạo lịch mới",
+      "errorCron": "Cron không hợp lệ (cần 5 trường).",
+      "errorInvalidUrl": "URL không hợp lệ."
+    }
+  },
+  "globalModal": {
+    "accountLocked": {
+      "title": "Tài khoản đã bị khóa",
+      "body": "Tài khoản của bạn đang tạm thời bị khóa. Vui lòng liên hệ hỗ trợ để mở khóa.",
+      "contact": "Liên hệ",
+      "signOut": "Đăng xuất"
+    },
+    "rateLimit": {
+      "title": "Quá nhiều yêu cầu",
+      "body": "Bạn đã đạt giới hạn yêu cầu. Vui lòng đợi trước khi thử lại.",
+      "retryIn": "Thử lại sau",
+      "seconds": "{n}s",
+      "close": "Đóng"
+    }
+  },
+  "admin": {
+    "stats": {
+      "title": "Thống kê nền tảng",
+      "subtitle": "Hoạt động tổng hợp trong {period} ngày gần nhất.",
+      "period": "Khoảng thời gian",
+      "period7": "7 ngày",
+      "period30": "30 ngày",
+      "period90": "90 ngày",
+      "loading": "Đang tải thống kê…",
+      "error": "Không tải được thống kê",
+      "overview": {
+        "totalUsers": "Tổng người dùng",
+        "totalAudits": "Tổng audit",
+        "successRate": "Tỉ lệ thành công",
+        "avgCrawlTime": "Thời gian crawl TB",
+        "avgSeoScore": "Điểm SEO TB"
+      },
+      "today": "Hôm nay",
+      "newUsersToday": "Người dùng mới hôm nay",
+      "auditsToday": "Audit hôm nay",
+      "topDomains": "Top domain",
+      "topDomainsEmpty": "Chưa có hoạt động"
+    },
+    "users": {
+      "title": "Người dùng",
+      "subtitle": "Quản lý tài khoản người dùng.",
+      "filters": {
+        "search": "Tìm email hoặc tên",
+        "role": "Vai trò",
+        "roleAll": "Tất cả",
+        "roleUser": "User",
+        "roleAdmin": "Admin",
+        "lock": "Trạng thái khóa",
+        "lockAll": "Tất cả",
+        "lockLocked": "Đã khóa",
+        "lockActive": "Hoạt động",
+        "clear": "Xóa lọc"
+      },
+      "table": {
+        "email": "Email",
+        "fullName": "Họ tên",
+        "role": "Vai trò",
+        "audits": "Số audit",
+        "status": "Trạng thái",
+        "createdAt": "Ngày tạo",
+        "actions": "Hành động"
+      },
+      "status": {
+        "verified": "Đã xác thực",
+        "unverified": "Chưa xác thực",
+        "locked": "Đã khóa"
+      },
+      "actions": {
+        "lock": "Khóa",
+        "unlock": "Mở khóa"
+      },
+      "lockSuccess": "Đã khóa {email}",
+      "unlockSuccess": "Đã mở khóa {email}",
+      "empty": "Không có user nào khớp bộ lọc.",
+      "error": "Không tải được danh sách người dùng",
+      "loading": "Đang tải danh sách…"
+    },
+    "rules": {
+      "title": "Quy tắc SEO",
+      "subtitle": "Điều chỉnh trọng số mỗi rule (1–10). Trọng số cao = tác động lớn hơn đến điểm SEO cuối cùng.",
+      "table": {
+        "name": "Rule",
+        "category": "Nhóm",
+        "weight": "Trọng số",
+        "enabled": "Bật"
+      },
+      "save": "Lưu thay đổi",
+      "saving": "Đang lưu…",
+      "noChanges": "Chưa có thay đổi nào.",
+      "success": "Đã cập nhật quy tắc",
+      "rangeError": "Trọng số phải từ 1 đến 10",
+      "loading": "Đang tải quy tắc…",
+      "error": "Không tải được quy tắc"
+    }
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "subtitle": "Quản lý hồ sơ và bảo mật tài khoản.",
+    "tabs": {
+      "profile": "Hồ sơ",
+      "password": "Mật khẩu"
+    },
+    "profile": {
+      "title": "Hồ sơ",
+      "subtitle": "Thông tin này hiển thị trên báo cáo và email tài khoản.",
+      "fullNameLabel": "Họ và tên",
+      "fullNamePlaceholder": "Nguyễn Văn A",
+      "emailLabel": "Email",
+      "emailHelper": "Email không thể thay đổi.",
+      "roleLabel": "Vai trò",
+      "createdAtLabel": "Ngày tạo tài khoản",
+      "submit": "Lưu thay đổi",
+      "submitting": "Đang lưu…",
+      "noChanges": "Chưa có thay đổi nào.",
+      "success": "Đã cập nhật hồ sơ",
+      "loading": "Đang tải hồ sơ…"
+    },
+    "password": {
+      "title": "Đổi mật khẩu",
+      "subtitle": "Chọn mật khẩu mới đủ mạnh.",
+      "currentLabel": "Mật khẩu hiện tại",
+      "currentPlaceholder": "Nhập mật khẩu đang dùng",
+      "newLabel": "Mật khẩu mới",
+      "newPlaceholder": "Tối thiểu 8 ký tự",
+      "confirmLabel": "Xác nhận mật khẩu mới",
+      "confirmPlaceholder": "Nhập lại mật khẩu mới",
+      "warningTitle": "Mọi phiên đăng nhập khác sẽ bị đăng xuất",
+      "warningBody": "Đổi mật khẩu sẽ thu hồi tất cả phiên đang hoạt động, kể cả phiên hiện tại. Bạn sẽ được chuyển về trang đăng nhập sau khi cập nhật thành công.",
+      "submit": "Cập nhật mật khẩu",
+      "submitting": "Đang cập nhật…",
+      "success": "Đã cập nhật mật khẩu — vui lòng đăng nhập lại"
+    }
+  },
+  "sharedReport": {
+    "headerBadge": "Báo cáo công khai",
+    "publicNotice": "Bạn đang xem báo cáo SEO công khai (chỉ đọc). Người có link đều xem được.",
+    "classification": {
+      "excellent": "Xuất sắc",
+      "good": "Tốt",
+      "fair": "Khá",
+      "poor": "Cần cải thiện"
+    },
+    "lowScoreNotice": "Website này có nhiều vấn đề SEO. Dưới đây là tóm tắt báo cáo.",
+    "sections": {
+      "categoryBreakdown": "Điểm theo nhóm rule",
+      "cwv": "Core Web Vitals",
+      "rules": "Chi tiết từng rule",
+      "keywords": "Từ khóa nội dung",
+      "targetKeyword": "Từ khóa mục tiêu"
+    },
+    "rules": {
+      "empty": "Báo cáo chưa có rule nào",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Khác"
+      }
+    },
+    "targetKeyword": {
+      "verdict": "Đánh giá",
+      "stuffing": "Cảnh báo nhồi nhét",
+      "ok": "Mật độ hợp lý"
+    },
+    "loading": "Đang tải báo cáo…",
+    "notFoundTitle": "Báo cáo không khả dụng",
+    "notFoundBody": "Link chia sẻ không hợp lệ, đã hết hạn hoặc bị chủ sở hữu thu hồi.",
+    "errorTitle": "Không tải được báo cáo",
+    "errorBody": "Vui lòng thử lại sau ít phút.",
+    "retry": "Thử lại",
+    "createdAt": "Thời điểm audit",
+    "ctaTitle": "Muốn audit website của bạn?",
+    "ctaBody": "Chạy audit SEO miễn phí cho bất kỳ URL nào.",
+    "ctaButton": "Mở SEO Analyst"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "emailPlaceholder": "ban@example.com",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Tối thiểu 8 ký tự",
+      "fullName": "Họ và tên",
+      "fullNamePlaceholder": "Nguyễn Văn A",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "orContinueWith": "Hoặc tiếp tục với",
+      "google": "Tiếp tục với Google",
+      "termsAgree": "Tôi đồng ý với điều khoản sử dụng",
+      "rule8chars": "Tối thiểu 8 ký tự",
+      "ruleUppercase": "Có ít nhất 1 chữ hoa",
+      "ruleNumber": "Có ít nhất 1 chữ số",
+      "ruleSpecial": "Có ít nhất 1 ký tự đặc biệt"
+    },
+    "login": {
+      "title": "Đăng nhập",
+      "subtitle": "Chào mừng trở lại! Vui lòng đăng nhập để tiếp tục.",
+      "submit": "Đăng nhập",
+      "submitting": "Đang đăng nhập…",
+      "forgotPassword": "Quên mật khẩu?",
+      "noAccount": "Chưa có tài khoản?",
+      "registerLink": "Đăng ký ngay"
+    },
+    "register": {
+      "title": "Tạo tài khoản",
+      "subtitle": "Đăng ký miễn phí và bắt đầu phân tích SEO ngay.",
+      "submit": "Đăng ký",
+      "submitting": "Đang tạo tài khoản…",
+      "hasAccount": "Đã có tài khoản?",
+      "loginLink": "Đăng nhập",
+      "successTitle": "Đăng ký thành công",
+      "successBody": "Chúng tôi đã gửi email xác thực đến hộp thư của bạn. Vui lòng kiểm tra và nhấn liên kết để kích hoạt tài khoản."
+    },
+    "forgot": {
+      "title": "Quên mật khẩu",
+      "subtitle": "Nhập email và chúng tôi sẽ gửi liên kết đặt lại mật khẩu.",
+      "submit": "Gửi liên kết",
+      "submitting": "Đang gửi…",
+      "successTitle": "Đã gửi email",
+      "successBody": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu trong vài phút.",
+      "backToLogin": "Quay lại đăng nhập"
+    },
+    "reset": {
+      "title": "Đặt lại mật khẩu",
+      "subtitle": "Chọn mật khẩu mới cho tài khoản của bạn.",
+      "newPassword": "Mật khẩu mới",
+      "submit": "Đổi mật khẩu",
+      "submitting": "Đang xử lý…",
+      "successTitle": "Đặt lại thành công",
+      "successBody": "Mật khẩu đã được cập nhật. Vui lòng đăng nhập với mật khẩu mới.",
+      "loginCta": "Đăng nhập",
+      "invalidTokenTitle": "Liên kết không hợp lệ",
+      "invalidTokenBody": "Liên kết đặt lại mật khẩu đã hết hạn hoặc đã được sử dụng. Vui lòng yêu cầu liên kết mới.",
+      "missingTokenTitle": "Thiếu mã đặt lại",
+      "missingTokenBody": "Vui lòng truy cập trang này qua liên kết trong email."
+    },
+    "oauth": {
+      "loadingTitle": "Đang đăng nhập…",
+      "loadingBody": "Vui lòng đợi trong khi chúng tôi xác thực tài khoản của bạn.",
+      "successTitle": "Đăng nhập thành công",
+      "successBody": "Đang chuyển hướng đến trang tổng quan…",
+      "errorTitle": "Đăng nhập thất bại",
+      "errorMissingToken": "Không nhận được mã xác thực từ Google.",
+      "errorInvalidToken": "Mã xác thực không hợp lệ hoặc đã hết hạn.",
+      "retry": "Thử lại"
+    }
+  }
+}

@@ -3,6 +3,7 @@ import {
   scoreVariant,
   scoreTextClass,
   scoreBgClass,
+  scoreFillVar,
 } from "@/lib/utils/classify";
 
 describe("scoreVariant", () => {
@@ -34,13 +35,38 @@ describe("scoreVariant", () => {
 });
 
 describe("scoreTextClass + scoreBgClass", () => {
-  it("map excellent to score-excellent token", () => {
-    expect(scoreTextClass(85)).toBe("text-score-excellent");
-    expect(scoreBgClass(85)).toBe("bg-score-excellent/10");
+  it("maps excellent score to Pencil class-excellent tokens", () => {
+    expect(scoreTextClass(85)).toBe("text-class-excellent");
+    expect(scoreBgClass(85)).toBe("bg-class-excellent/15");
+  });
+
+  it("maps good score to Pencil class-good tokens", () => {
+    expect(scoreTextClass(70)).toBe("text-class-good");
+    expect(scoreBgClass(70)).toBe("bg-class-good/15");
+  });
+
+  it("maps fair score to Pencil class-fair tokens", () => {
+    expect(scoreTextClass(50)).toBe("text-class-fair");
+    expect(scoreBgClass(50)).toBe("bg-class-fair/15");
+  });
+
+  it("maps poor score to Pencil class-poor tokens", () => {
+    expect(scoreTextClass(20)).toBe("text-class-poor");
+    expect(scoreBgClass(20)).toBe("bg-class-poor/15");
   });
 
   it("maps null to muted neutral tokens", () => {
-    expect(scoreTextClass(null)).toBe("text-on-surface-variant");
-    expect(scoreBgClass(null)).toBe("bg-surface-container-high");
+    expect(scoreTextClass(null)).toBe("text-fg-muted");
+    expect(scoreBgClass(null)).toBe("bg-bg-overlay");
+  });
+});
+
+describe("scoreFillVar", () => {
+  it("returns CSS var references for inline SVG style props", () => {
+    expect(scoreFillVar(85)).toBe("var(--color-class-excellent)");
+    expect(scoreFillVar(70)).toBe("var(--color-class-good)");
+    expect(scoreFillVar(50)).toBe("var(--color-class-fair)");
+    expect(scoreFillVar(20)).toBe("var(--color-class-poor)");
+    expect(scoreFillVar(null)).toBe("var(--color-fg-muted)");
   });
 });

@@ -4,24 +4,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-body-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        primary:
-          "bg-primary-container text-primary-foreground shadow-primary hover:brightness-110",
-        secondary:
-          "bg-surface-container-high text-on-surface hover:bg-surface-container-highest",
-        ghost: "bg-transparent text-on-surface-variant hover:bg-surface-container",
-        destructive: "bg-error text-error-foreground hover:brightness-110",
-        outline:
-          "border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container",
-        link: "text-primary underline-offset-4 hover:underline",
+        primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-bg-overlay/80",
+        outline: "border border-border bg-transparent text-fg hover:bg-bg-overlay",
+        ghost: "bg-transparent text-fg hover:bg-bg-overlay",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       },
       size: {
-        sm: "h-8 px-3 text-caption",
+        sm: "h-8 px-3 text-xs",
         md: "h-10 px-4",
-        lg: "h-12 px-6 text-body",
+        lg: "h-11 px-6 text-base",
         icon: "h-10 w-10",
       },
     },
@@ -43,8 +39,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        className={cn(buttonVariants({ variant, size }), className)}
         {...props}
       />
     );

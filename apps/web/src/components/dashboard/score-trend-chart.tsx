@@ -6,102 +6,84 @@ import {
   LineChart,
   ResponsiveContainer,
   Tooltip,
-  type TooltipProps,
   XAxis,
   YAxis,
 } from "recharts";
-import { TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/ui/card";
-import { EmptyState } from "@/components/common/empty-state";
-import { buildTrendSeries, type TrendPoint } from "@/lib/dashboard/chart-data";
+import { buildTrendSeries } from "@/lib/dashboard/chart-data";
 import type { AuditListItem } from "@/lib/api/types";
+import { cn } from "@/lib/utils/cn";
 
-/**
- * 30-day line chart of audit scores. Uses Recharts ResponsiveContainer
- * for width = 100%; fixed height 256px. Falls back to an empty-state
- * card when fewer than 2 completed audits exist.
- */
 export interface ScoreTrendChartProps {
   audits: AuditListItem[];
   className?: string;
 }
 
-function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
-  if (!active || !payload?.length) return null;
-  const point = payload[0]?.payload as TrendPoint | undefined;
-  if (!point) return null;
-  return (
-    <div className="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 shadow-md">
-      <p className="text-caption font-semibold text-on-surface">
-        {point.label}
-      </p>
-      <p className="text-micro text-on-surface-variant truncate max-w-[200px]">
-        {point.url}
-      </p>
-      <p className="text-body-sm font-bold text-primary mt-1 tabular-nums">
-        {point.score} điểm
-      </p>
-    </div>
-  );
-}
-
+/**
+ * Dashboard widget — line chart of SEO score over time (latest completed
+ * audit per day). Falls back to a muted "need ≥ 2 audits" placeholder
+ * when there aren't enough data points.
+ */
 export function ScoreTrendChart({ audits, className }: ScoreTrendChartProps) {
+  const t = useTranslations("dashboard.trend");
   const series = buildTrendSeries(audits);
+  const hasData = series.length >= 2;
 
   return (
-    <Card padding="md" className={className}>
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-headline text-h4 font-semibold text-on-surface">
-            Xu hướng điểm SEO
-          </h3>
-          <p className="text-caption text-on-surface-variant">
-            30 ngày gần nhất
-          </p>
-        </div>
+    <Card className={cn("flex flex-col gap-3 p-5", className)}>
+      <div className="flex items-baseline justify-between gap-2">
+        <h2 className="font-ui text-base font-semibold text-fg">{t("title")}</h2>
+        <span className="font-ui text-xs text-fg-muted">{t("subtitle")}</span>
       </div>
-
-      {series.length === 0 ? (
-        <EmptyState
-          icon={TrendingUp}
-          title="Chưa đủ dữ liệu"
-          body="Cần ít nhất 2 audit hoàn tất để vẽ xu hướng."
-          size="md"
-        />
-      ) : (
-        <div className="h-64 w-full" data-testid="score-trend-chart-wrapper">
+      <div className="h-56">
+        {hasData ? (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={series}
-              margin={{ top: 10, right: 8, bottom: 0, left: -16 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="var(--color-surface-container)"
-              />
+            <LineChart data={series} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
+              <CartesianGrid stroke="rgb(var(--color-border))" strokeDasharray="4 4" vertical={false} />
               <XAxis
                 dataKey="label"
-                tick={{ fontSize: 10 }}
-                stroke="rgb(var(--color-on-surface-variant))"
+                stroke="rgb(var(--color-fg-muted))"
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
               />
               <YAxis
                 domain={[0, 100]}
-                tick={{ fontSize: 10 }}
-                stroke="rgb(var(--color-on-surface-variant))"
+                stroke="rgb(var(--color-fg-muted))"
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
+                width={40}
               />
-              <Tooltip content={<ChartTooltip />} />
+              <Tooltip
+                cursor={{ stroke: "rgb(var(--color-border))" }}
+                contentStyle={{
+                  background: "rgb(var(--color-bg-elevated))",
+                  border: "1px solid rgb(var(--color-border))",
+                  borderRadius: 8,
+                  fontSize: 12,
+                }}
+                labelStyle={{ color: "rgb(var(--color-fg))" }}
+                itemStyle={{ color: "rgb(var(--color-fg))" }}
+              />
               <Line
                 type="monotone"
                 dataKey="score"
                 stroke="rgb(var(--color-primary))"
                 strokeWidth={2}
-                dot={{ r: 3, fill: "rgb(var(--color-primary))" }}
+                dot={{ r: 3, fill: "rgb(var(--color-primary))", strokeWidth: 0 }}
                 activeDot={{ r: 5 }}
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
-      )}
+        ) : (
+          <div className="flex h-full items-center justify-center text-center font-ui text-sm text-fg-muted">
+            {t("needMore")}
+          </div>
+        )}
+      </div>
     </Card>
   );
 }

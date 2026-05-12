@@ -1,15 +1,41 @@
 "use client";
 
-import { useAuthBootstrap } from "@/lib/auth/hooks";
+import * as React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { tryRefresh } from "@/lib/api/client";
+import { meFn } from "@/lib/api/auth";
+import { useAuthStore } from "@/lib/auth/store";
+import { queryKeys } from "@/lib/queries/keys";
 
 /**
- * Side-effect-only client component. Runs `useAuthBootstrap` exactly once
- * on mount to silently refresh (if there's a valid cookie) and hydrate the
- * auth store before guarded children render.
- *
- * Mounted inside QueryClientProvider in `app/providers.tsx`.
+ * Once on app mount: attempt a silent refresh using the HTTP-only
+ * `refresh_token` cookie. If successful, fetch /auth/me to hydrate the
+ * Zustand store so authenticated pages don't flash guest UI on reload.
  */
 export function AuthBootstrap() {
-  useAuthBootstrap();
+  const queryClient = useQueryClient();
+  const ran = React.useRef(false);
+
+  React.useEffect(() => {
+    if (ran.current) return;
+    ran.current = true;
+
+    (async () => {
+      try {
+        const token = await tryRefresh();
+        if (!token) return;
+        try {
+          const me = await meFn();
+          useAuthStore.getState().setAuth(me, token);
+          queryClient.setQueryData(queryKeys.auth.me, me);
+        } catch {
+          useAuthStore.getState().clearAuth();
+        }
+      } finally {
+        useAuthStore.getState().markBootstrapped();
+      }
+    })();
+  }, [queryClient]);
+
   return null;
 }

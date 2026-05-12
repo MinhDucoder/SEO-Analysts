@@ -42,6 +42,7 @@ Thumbs.db
 # Prisma (generated clients are platform-specific — regenerated via postinstall)
 apps/*/src/infra/prisma/generated/
 .worktrees/
+.claude/worktrees/
 
 # Build artifacts
 *.tsbuildinfo
@@ -58,3 +59,5 @@ learning/
 
 # Stitch mockup archive (extracted folder is committed; zip is 4.8MB duplicate)
 docs/design/stitch_d_n_m_i.zip
+# Added by code-review-graph
+.code-review-graph/

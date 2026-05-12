@@ -1,52 +1,65 @@
 "use client";
 
 import * as React from "react";
-import { useFormContext, type FieldValues, type Path } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
+import { Input, type InputProps } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils/cn";
 
-export interface AuthFormFieldProps<T extends FieldValues>
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "name" | "form"> {
-  name: Path<T>;
+interface AuthFormFieldProps extends Omit<InputProps, "id"> {
+  id: string;
   label: string;
-  hint?: string;
+  error?: string;
+  /** Whether to render eye toggle for password fields. */
+  withPasswordToggle?: boolean;
 }
 
 /**
- * RHF-wired Label + Input + error message. Must be rendered inside a
- * <FormProvider> (or a parent using useForm with its methods hoisted).
+ * Labeled input row used across auth pages. Renders error below input when
+ * provided. Password fields gain an eye-toggle to reveal/hide the value.
  */
-export function AuthFormField<T extends FieldValues>({
-  name,
-  label,
-  hint,
-  className,
-  ...rest
-}: AuthFormFieldProps<T>) {
-  const form = useFormContext<T>();
-  const error = form.formState.errors[name]?.message as string | undefined;
-  const id = `field-${String(name)}`;
+export const AuthFormField = React.forwardRef<HTMLInputElement, AuthFormFieldProps>(
+  ({ id, label, error, withPasswordToggle, className, type = "text", ...props }, ref) => {
+    const [visible, setVisible] = React.useState(false);
+    const effectiveType = withPasswordToggle ? (visible ? "text" : "password") : type;
+    const errId = error ? `${id}-error` : undefined;
 
-  return (
-    <div className={cn("space-y-2", className)}>
-      <Label htmlFor={id}>{label}</Label>
-      <Input
-        id={id}
-        error={!!error}
-        aria-describedby={error ? `${id}-error` : hint ? `${id}-hint` : undefined}
-        {...form.register(name)}
-        {...rest}
-      />
-      {error ? (
-        <p id={`${id}-error`} className="text-caption text-error">
-          {error}
-        </p>
-      ) : hint ? (
-        <p id={`${id}-hint`} className="text-caption text-on-surface-variant">
-          {hint}
-        </p>
-      ) : null}
-    </div>
-  );
-}
+    return (
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor={id}>{label}</Label>
+        <div className="relative">
+          <Input
+            id={id}
+            ref={ref}
+            type={effectiveType}
+            aria-invalid={!!error}
+            aria-describedby={errId}
+            className={cn(
+              withPasswordToggle && "pr-10",
+              error && "border-class-poor focus-visible:ring-class-poor",
+              className,
+            )}
+            {...props}
+          />
+          {withPasswordToggle && (
+            <button
+              type="button"
+              onClick={() => setVisible((v) => !v)}
+              tabIndex={-1}
+              aria-label={visible ? "Hide password" : "Show password"}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-fg-muted transition-colors hover:text-fg"
+            >
+              {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          )}
+        </div>
+        {error && (
+          <p id={errId} className="font-ui text-xs text-class-poor">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  },
+);
+AuthFormField.displayName = "AuthFormField";
