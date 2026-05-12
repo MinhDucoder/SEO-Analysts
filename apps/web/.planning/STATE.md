@@ -1,8 +1,53 @@
-# apps/web STATE — Phase 6e complete, Phase 7a pending
+# apps/web STATE — Phase 7a complete, Phase 7b pending
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `adc18a7` + Phase 6e (uncommitted at write time)
+> **Branch**: `feat/web-fresh` HEAD `828fcaa` + Phase 7a (uncommitted at write time)
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+
+---
+
+## ✅ Phase 7a — DONE
+
+| File | What |
+|---|---|
+| `lib/api/user.ts` | `updateProfile(dto)` → `PATCH /users/profile`, `changePassword(dto)` → `PATCH /users/password`. Both use the authed `api` client. |
+| `lib/auth/schemas.ts` | Added `updateProfileSchema` (fullName 2–100) + `changePasswordSchema` (current required, new ≥8, confirm matches, new ≠ current). |
+| `lib/queries/use-user.ts` | `useUpdateProfile` mirrors the new fullName into the auth store + invalidates `auth.me`. `useChangePassword` clears the auth store + flushes the entire query cache on success, since the gateway revokes every refresh token (including the current session). Vietnamese-aware `describeUserError` maps 400/401/403/429. |
+| `lib/constants.ts` | `ROUTES.settingsSecurity` → `ROUTES.settingsPassword` (path is now `/settings/password`). `PAGE_TITLE_MAP` updated. |
+| `messages/{vi,en}.json` | `settings` namespace: title/subtitle, tabs.{profile,password}, profile.* (form labels + role/createdAt callout), password.* (warning banner + 3 fields). |
+| `components/settings/settings-shell.tsx` | Header (title + subtitle) + tab nav. Tabs are Link-based (each tab is a route), styled to match the shadcn `TabsTrigger` token visually (underline on active state). |
+| `components/settings/profile-form.tsx` | RHF + zod form. Editable `fullName`, read-only `email` (mono, disabled), role badge + createdAt callout in a muted strip. Save button gated by `isDirty`; reset to the new payload on success. `useEffect` re-syncs the form when AuthBootstrap finishes after first mount. |
+| `components/settings/password-form.tsx` | Current + new + confirm fields, all with eye toggles. Live 4-rule `<PasswordRules>` reused from auth slug. Amber warning callout ("All sessions will be signed out"). On success: toast + reset + `router.push(ROUTES.login)` (the mutation already cleared the store). |
+| `app/[locale]/(app)/settings/page.tsx` | Server component that `redirect()`s `/settings` → `/settings/profile` per locale. |
+| `app/[locale]/(app)/settings/profile/page.tsx` | `<SettingsShell active="profile"><ProfileForm /></SettingsShell>`. |
+| `app/[locale]/(app)/settings/password/page.tsx` | `<SettingsShell active="password"><PasswordForm /></SettingsShell>`. |
+
+### Phase 7a routes shipped
+- `/settings`             — redirect index → `/settings/profile`
+- `/settings/profile`     — RHF form: fullName + read-only email + role/createdAt callout
+- `/settings/password`    — RHF form: current + new + confirm + live 4-rule checklist + amber callout
+
+Tabs share the same header so navigating between tabs keeps the page chrome stable. AppShellRouted breadcrumb auto-derives ("Cài đặt > Hồ sơ" / "Cài đặt > Mật khẩu") off the existing `nav.{settings,profile,password}` i18n keys.
+
+### Quality gates
+- `tsc --noEmit`: PASS
+- `eslint .`: PASS (same 2 pre-existing input.tsx warnings)
+- `vitest run`: 66/66 PASS
+- `next build`: PASS — **26 routes** total. Bundles: `/settings` 297B, `/settings/password` 1.62KB / 168KB, `/settings/profile` 5.49KB / 172KB (heavier because of the dayjs format + Badge import for the role/createdAt strip).
+
+### Browser smoke (no backend)
+- `/{vi,en}/settings`, `/settings/profile`, `/settings/password` — all three routes are wrapped by the `(app)/layout.tsx` AuthGuard and redirect unauthed visitors to `/login`. No 404s, no client crashes.
+- Forms render path verified at build time + via tsc/vitest. End-to-end happy-path (Save changes → store hydration, Update password → /login bounce) requires a live gateway and will be exercised by Phase 9 `fe-be-integration` (L4).
+
+### Outstanding gaps after Phase 7a
+1. Avatar upload not wired — the `UpdateProfileDto.avatarUrl` field is in the API surface but the form has no upload widget. Defer until Pencil ships the avatar drawer (or until S3/uploads is in scope).
+2. `/settings/password` deletes the auth state but does not call `POST /auth/logout` server-side — the gateway already revokes everything on `PATCH /users/password` so it's redundant. Keeping the note in case the contract changes.
+3. No specific success animation between Save → store hydration; the form just becomes `!isDirty` and the toast fires. Acceptable for now.
+
+### Pickup hints for Phase 7b (`/admin/{stats,users,rules}`)
+- Role-guarded: wrap inside an `AdminGuard` (or reuse `AuthGuard` + a `useAuthStore.isAdmin()` check at the route segment level).
+- New hooks: `useAdminStats`, `useAdminUsers`, `useAdminRules`, `useUpdateRule`, `useUpdateUserRole`, `useDeleteUser`.
+- Pencil frames: `AdminStats/Default`, `AdminUsers/Default`, `AdminRules/Default`.
 
 ---
 
