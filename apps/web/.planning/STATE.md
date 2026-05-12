@@ -1,8 +1,54 @@
-# apps/web STATE — Phase 6d complete, Phase 6e pending
+# apps/web STATE — Phase 6e complete, Phase 7a pending
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `340af33`
+> **Branch**: `feat/web-fresh` HEAD `adc18a7` + Phase 6e (uncommitted at write time)
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+
+---
+
+## ✅ Phase 6e — DONE
+
+| File | What |
+|---|---|
+| `lib/api/shared.ts` | New `publicApi` ky instance (no auth interceptor, no refresh hook) + `getSharedReport(token)` calling `GET /shared/audits/:token`. |
+| `lib/queries/use-shared.ts` | `useSharedReport(token)` — react-query v5 hook. `networkMode: 'always'` so the query surfaces network errors instead of pausing (default `'online'` would otherwise stick on `fetchStatus: 'paused'` whenever the gateway is unreachable, never reaching `isError`). 404 short-circuits retry. 5-minute staleTime. |
+| `lib/queries/keys.ts` | Added `queryKeys.shared.detail(token)`. |
+| `messages/{vi,en}.json` | New `sharedReport` namespace — header badge, public notice, classification labels, low-score notice, section titles, target-keyword copy, loading / not-found / error / retry, CTA card. |
+| `components/shared-report/public-header.tsx` | Slim public header — logo + product name + "Public report" badge + theme toggle + locale switcher. No user controls. |
+| `components/shared-report/shared-skeleton.tsx` | 4-card loading skeleton matching hero / categories / CWV / rules layout. |
+| `components/shared-report/shared-not-found.tsx` | `Ban` icon 96 + "Report not available" copy + CTA to `/`. Used for HTTP 404 (revoked/unknown token). |
+| `components/shared-report/shared-error.tsx` | `TriangleAlert` + generic error copy + manual `Retry` button. Used for non-404 failures including the react-query paused state. |
+| `components/shared-report/shared-report-view.tsx` | Full report renderer — hero (ScoreRing 160 + URL + domain + classification badge + `createdAt` relative), category breakdown (Bars ↔ Radar toggle), CwvCard, rule list grouped by `CATEGORY_ORDER`, target keyword card, KeywordTable. Low-score variant is data-driven from `report.classification` ∈ `{fair, poor}` (warn-coloured banner + warn badge). |
+| `app/[locale]/shared/[token]/page.tsx` | Orchestrator. **Outside `(app)` route group → no AuthGuard, no AppShell.** State branches: missing token / loading (incl. `fetchStatus === 'fetching'`) / HTTPError 404 / any other failure (incl. `paused` catchall) / success. Renders `PublicHeader` + body + persistent `Open SEO Analyst` CTA card. |
+
+### Phase 6e route shipped
+- `/shared/[token]` — public report view. `/{vi,en}/shared/:token` paths both work, locale-aware. Page is dynamic (ƒ) in the build manifest: 5.33KB / First Load 276KB (heavy because of recharts + category-bars + keyword-table).
+
+### Browser smoke (no backend)
+- `/{vi,en}/shared/{invalid-token-test, fresh-restart-token}` render the SharedError card after retries exhaust → "Couldn't load the report" / "Không tải được báo cáo" + Retry button.
+- PublicHeader shows logo + theme toggle + locale switcher in both locales.
+- Persistent CTA card "Want to audit your own site? Open SEO Analyst" survives state changes.
+- No console errors. AuthBootstrap silently fails over (gateway off) without leaking onto the public route.
+
+### Quality gates
+- `tsc --noEmit`: PASS
+- `eslint .`: PASS (same 2 pre-existing input.tsx warnings)
+- `vitest run`: 66/66 PASS
+- `next build`: PASS — **23 routes**, `/[locale]/shared/[token]` dynamic (ƒ) 5.33KB / First Load 276KB.
+
+### Trap encountered (worth remembering)
+react-query v5 defaults to `networkMode: 'online'`. On a network-level fetch failure (`CONNECTION_REFUSED`, etc.) it transitions the query to `fetchStatus: 'paused'` instead of error, even with `navigator.onLine === true`. The page must either pass `networkMode: 'always'` on the hook (we do) **AND** treat the paused fetchStatus as a non-loading state in the orchestrator (we did this too in the catchall — `query.isError || !query.data` after the loading branch). Without both, the page renders SharedNotFound forever in dev when the gateway is off.
+
+### Outstanding gaps after Phase 6e
+1. With backend off we cannot verify the SUCCESS branch end-to-end. The render path is unit-test-clean (tsc + vitest pass) and the build artifact is the same shape as the other Phase 6 pages. Will need an L4 fe-be-integration test once Phase 9 lands.
+2. The `report.targetKeyword.verdict` arrives as an English-only string from the gateway. Phase 7+ may want a translation map for the common verdicts.
+3. The CTA card sits below every state including the loading skeleton — harmless but slightly noisy. Could be hidden during initial load if it visually competes with the skeleton; deferring as polish.
+
+### Pickup hints for Phase 7a (`/settings/profile` + `/settings/password`)
+- Re-use the existing tab pattern (shadcn `Tabs`).
+- New hooks: `useMe()` (already in store via AuthBootstrap), `useUpdateProfile()`, `useChangePassword()`.
+- Pencil frames: `Settings/Profile`, `Settings/Password` (with the 4-rule live checklist already shipped in Phase 5d via `<PasswordRules>`).
+- All routes go back under `(app)/settings/...` so they're guarded.
 
 ---
 
