@@ -1,0 +1,218 @@
+"use client";
+
+import * as React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { Globe, Loader2, Network } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCreateScheduledAudit } from "@/lib/queries/use-scheduled";
+import {
+  createScheduledAuditFormSchema,
+  type CreateScheduledAuditFormInput,
+} from "@/lib/audits/schemas";
+import type { CreateScheduledAuditDto } from "@/lib/api/scheduled";
+import { cn } from "@/lib/utils/cn";
+
+export interface CreateScheduleDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function CreateScheduleDialog({
+  open,
+  onOpenChange,
+}: CreateScheduleDialogProps) {
+  const t = useTranslations("scheduled.create");
+  const tCommon = useTranslations("common");
+  const form = useForm<CreateScheduledAuditFormInput>({
+    resolver: zodResolver(createScheduledAuditFormSchema),
+    defaultValues: {
+      url: "",
+      cron: "0 9 * * MON",
+      mode: "single",
+      maxUrls: 500,
+      targetKeyword: "",
+    },
+  });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = form;
+  const mode = watch("mode");
+  const createMutation = useCreateScheduledAudit();
+
+  // Reset the form whenever the dialog opens so stale state doesn't leak
+  // back in after a previous successful submit.
+  React.useEffect(() => {
+    if (open) reset();
+  }, [open, reset]);
+
+  const onSubmit = (input: CreateScheduledAuditFormInput) => {
+    const body: CreateScheduledAuditDto = {
+      url: input.url.trim(),
+      cron: input.cron.trim(),
+      mode: input.mode,
+    };
+    const keyword = input.targetKeyword?.trim();
+    if (keyword) body.targetKeyword = keyword;
+    if (input.mode === "site" && input.maxUrls !== undefined) {
+      body.maxUrls = Number(input.maxUrls);
+    }
+    createMutation.mutate(body, {
+      onSuccess: () => {
+        toast.success(t("successToast"));
+        onOpenChange(false);
+      },
+      onError: (err) => {
+        toast.error(err instanceof Error ? err.message : "Server error");
+      },
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-xl">
+        <DialogHeader>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("subtitle")}</DialogDescription>
+        </DialogHeader>
+
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="scheduleUrl">{t("urlLabel")}</Label>
+            <Input
+              id="scheduleUrl"
+              type="url"
+              placeholder={t("urlPlaceholder")}
+              aria-invalid={errors.url ? "true" : "false"}
+              {...register("url")}
+            />
+            {errors.url && (
+              <p className="font-ui text-xs text-class-poor">{errors.url.message}</p>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="scheduleCron">{t("cronLabel")}</Label>
+            <Input
+              id="scheduleCron"
+              type="text"
+              placeholder={t("cronPlaceholder")}
+              className="font-mono"
+              aria-invalid={errors.cron ? "true" : "false"}
+              {...register("cron")}
+            />
+            <p className={cn("font-ui text-xs", errors.cron ? "text-class-poor" : "text-fg-muted")}>
+              {errors.cron?.message ?? t("cronHint")}
+            </p>
+          </div>
+
+          <fieldset className="flex flex-col gap-2">
+            <legend className="text-sm font-medium leading-none text-fg">
+              {t("modeLabel")}
+            </legend>
+            <div className="grid grid-cols-2 gap-3">
+              <ModeChip
+                checked={mode === "single"}
+                onSelect={() => setValue("mode", "single", { shouldValidate: true })}
+                icon={<Globe className="h-4 w-4" />}
+                label={t("modeSingle")}
+              />
+              <ModeChip
+                checked={mode === "site"}
+                onSelect={() => setValue("mode", "site", { shouldValidate: true })}
+                icon={<Network className="h-4 w-4" />}
+                label={t("modeSite")}
+              />
+            </div>
+          </fieldset>
+
+          {mode === "site" && (
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="scheduleMaxUrls">{t("maxUrlsLabel")}</Label>
+              <Input
+                id="scheduleMaxUrls"
+                type="number"
+                min={1}
+                max={5000}
+                {...register("maxUrls", { valueAsNumber: true })}
+              />
+              {errors.maxUrls && (
+                <p className="font-ui text-xs text-class-poor">
+                  {errors.maxUrls.message}
+                </p>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="scheduleKeyword">{t("keywordLabel")}</Label>
+            <Input id="scheduleKeyword" type="text" {...register("targetKeyword")} />
+          </div>
+
+          <DialogFooter className="pt-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+              disabled={createMutation.isPending}
+            >
+              {tCommon("cancel")}
+            </Button>
+            <Button type="submit" disabled={createMutation.isPending}>
+              {createMutation.isPending && (
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+              )}
+              {createMutation.isPending ? t("submitting") : t("submit")}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ModeChip({
+  checked,
+  onSelect,
+  icon,
+  label,
+}: {
+  checked: boolean;
+  onSelect: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-pressed={checked}
+      className={cn(
+        "flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors",
+        checked
+          ? "border-primary bg-primary/5 text-fg"
+          : "border-border bg-bg text-fg-muted hover:border-fg-muted",
+      )}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
