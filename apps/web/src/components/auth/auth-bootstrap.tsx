@@ -21,14 +21,18 @@ export function AuthBootstrap() {
     ran.current = true;
 
     (async () => {
-      const token = await tryRefresh();
-      if (!token) return;
       try {
-        const me = await meFn();
-        useAuthStore.getState().setAuth(me, token);
-        queryClient.setQueryData(queryKeys.auth.me, me);
-      } catch {
-        useAuthStore.getState().clearAuth();
+        const token = await tryRefresh();
+        if (!token) return;
+        try {
+          const me = await meFn();
+          useAuthStore.getState().setAuth(me, token);
+          queryClient.setQueryData(queryKeys.auth.me, me);
+        } catch {
+          useAuthStore.getState().clearAuth();
+        }
+      } finally {
+        useAuthStore.getState().markBootstrapped();
       }
     })();
   }, [queryClient]);

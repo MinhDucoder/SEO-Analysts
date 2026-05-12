@@ -13,9 +13,17 @@ import type { AuthenticatedUser } from "@/lib/api/types";
 export interface AuthState {
   user: AuthenticatedUser | null;
   accessToken: string | null;
+  /**
+   * True once the boot-time silent refresh attempt has completed (success or
+   * fail). Guards routing decisions that need to wait for the initial auth
+   * resolution — otherwise authenticated reloads flash a /login redirect
+   * while AuthBootstrap is still in-flight.
+   */
+  bootstrapped: boolean;
 
   setAuth: (user: AuthenticatedUser, accessToken: string) => void;
   clearAuth: () => void;
+  markBootstrapped: () => void;
   isAuthenticated: () => boolean;
   isAdmin: () => boolean;
 }
@@ -23,9 +31,11 @@ export interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   accessToken: null,
+  bootstrapped: false,
 
   setAuth: (user, accessToken) => set({ user, accessToken }),
   clearAuth: () => set({ user: null, accessToken: null }),
+  markBootstrapped: () => set({ bootstrapped: true }),
 
   isAuthenticated: () => get().accessToken !== null,
   isAdmin: () => get().user?.role === "admin",
