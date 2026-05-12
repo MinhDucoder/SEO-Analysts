@@ -1,10 +1,72 @@
-# apps/web STATE — Phase 9 complete, FE feature work landed
+# apps/web STATE — Phase 9 + L4 done, branch ready for review
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `Phase 9` (just committed)
+> **Branch**: `feat/web-fresh` HEAD `L4 integration committed`
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
-> **All Phase 1–9 features shipped.** The branch is feature-complete pending
-> the L4 `fe-be-integration` pass (requires a running gateway + DB).
+> **Backend URL**: http://localhost:3000/api/v1 (`npm run docker:up`)
+> **All Phase 1–9 features shipped + L4 integration green.**
+
+---
+
+## ✅ Phase 9 L4 — FE↔BE integration — DONE
+
+11 Playwright specs across 6 files exercising the wire-level risk slugs.
+Opt-in via `PLAYWRIGHT_INTEGRATION=true npm run test:integration` —
+requires the full docker stack up.
+
+### Suite breakdown
+
+| Spec | Count | Wire-level assertion |
+|---|---:|---|
+| `auth-login.spec.ts` | 2 | UI round-trip + AuthSession shape + refresh_token cookie HttpOnly + path `/api/v1/auth`; 401 + no cookie on bad password |
+| `auth-locked-modal.spec.ts` | 2 | 403 detail carries `lock` phrase for locked@…; 403 detail carries `verify` phrase for unverified@… (the Phase 8 disambiguation trap) |
+| `auth-session-refresh.spec.ts` | 2 | refresh cookie issues a fresh JWT; missing cookie → 401 |
+| `admin-role-gate.spec.ts` | 3 | non-admin → 403 on /admin/stats; admin sees documented AdminStats + AdminPaginated\<AdminUser\> shapes |
+| `admin-lock-toggle.spec.ts` | 1 | admin PATCH /admin/users/:id flips isLocked then restores (serial, idempotent) |
+| `rate-limit-login.spec.ts` | 1 | 12 rapid wrong-pw attempts trip the gateway throttle; assert detail carries throttle phrase + wait-seconds |
+| **Total** | **11** | all green in 15s against the live stack |
+
+### Findings (written back into source)
+
+1. **Gateway returns RFC 7807 problem-details**: `{ type, title, status, detail, instance, requestId }` — NOT `{ code, message }` as the Phase 8 interceptor originally assumed. `lib/api/client.ts` updated to read `detail`/`title` and to match Vietnamese phrases (`khoa`/`khóa`) alongside English.
+2. **Gateway throttles via 403 with the wait-seconds in `detail`** (e.g. `"Qua nhieu lan dang nhap that bai. Thu lai sau 900s"`), NOT 429 with `Retry-After`. The interceptor now extracts seconds from `detail` and opens RateLimitModal with the real countdown. 429 path is kept for forward-compat.
+3. **`refresh_token` cookie path is `/api/v1/auth`**, not `/`. Narrower scope = more secure. FE relies on `credentials: 'include'` which still ships the cookie because both `/auth/login` and `/auth/refresh` sit under that prefix.
+
+### Pre-existing BE config drift fixed for L4
+
+The docker-compose carried two stale env names that prevented the stack from coming up cleanly:
+- Prisma schemas in `apps/{gateway,seo-analyzer,report}/prisma/schema.prisma` read `<SERVICE>_DATABASE_URL` but compose only exposed generic `DATABASE_URL`. Added the service-specific aliases.
+- Gateway code reads `JWT_ACCESS_SECRET` (auth.module / token.service / jwt.strategy / websocket.gateway) but compose passed `JWT_SECRET`. Renamed.
+
+### Run instructions
+
+```bash
+# 1. Bring backend up.
+npm run docker:up
+
+# 2. (Optional but recommended) Flush Redis rate-limit counters so prior
+#    runs don't throttle admin@test.seo.local.
+docker exec seo-redis redis-cli -a redis-secret-change-in-production \
+  --no-auth-warning FLUSHALL
+
+# 3. Run L4 integration suite.
+cd apps/web && PLAYWRIGHT_INTEGRATION=true npm run test:integration
+# 11 passed in ~15s
+```
+
+### Test totals
+
+- L1/L2 (vitest): **90** (Phase 9 base, unchanged)
+- L4 (Playwright integration): **11** (new this commit)
+- **Grand total: 101 tests** between unit + integration
+
+### Pickup hints for L5 (full pipeline E2E — out of scope here)
+
+`npm run e2e:smoke` from repo root exercises the full crawl → analyze → report → audit-detail pipeline. Skipped here because L4 already covers the wire contract and L5 takes ~3 minutes and is the backend team's domain per `WORKFLOW-FRONTEND.md`.
+
+---
+
+## ✅ Phase 9 — Test harness hardening — DONE
 
 ---
 
