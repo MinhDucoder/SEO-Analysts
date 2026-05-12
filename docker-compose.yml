@@ -131,10 +131,11 @@ services:
       PORT: "3000"
       GRPC_PORT: "50051"
       DATABASE_URL: "postgresql://${GATEWAY_DB_USER}:${GATEWAY_DB_PASS}@gateway-db:5432/${GATEWAY_DB_NAME}"
+      GATEWAY_DATABASE_URL: "postgresql://${GATEWAY_DB_USER}:${GATEWAY_DB_PASS}@gateway-db:5432/${GATEWAY_DB_NAME}"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
-      JWT_SECRET: "${JWT_SECRET}"
+      JWT_ACCESS_SECRET: "${JWT_SECRET}"
       JWT_REFRESH_SECRET: "${JWT_REFRESH_SECRET}"
       FRONTEND_URL: "${FRONTEND_URL}"
       CRAWLER_GRPC_URL: "crawler:50052"
@@ -211,6 +212,7 @@ services:
       NODE_ENV: production
       GRPC_PORT: "50053"
       DATABASE_URL: "postgresql://${ANALYZER_DB_USER}:${ANALYZER_DB_PASS}@analyzer-db:5432/${ANALYZER_DB_NAME}"
+      ANALYZER_DATABASE_URL: "postgresql://${ANALYZER_DB_USER}:${ANALYZER_DB_PASS}@analyzer-db:5432/${ANALYZER_DB_NAME}"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
@@ -276,6 +278,7 @@ services:
       HTTP_PORT: "3004"
       GRPC_PORT: "50055"
       DATABASE_URL: "postgresql://${REPORT_DB_USER}:${REPORT_DB_PASS}@report-db:5432/${REPORT_DB_NAME}"
+      REPORT_DATABASE_URL: "postgresql://${REPORT_DB_USER}:${REPORT_DB_PASS}@report-db:5432/${REPORT_DB_NAME}"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
