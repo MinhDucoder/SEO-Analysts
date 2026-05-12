@@ -1,8 +1,39 @@
-# apps/web STATE — Phase 6a complete, Phase 6b pending
+# apps/web STATE — Phase 6b complete, Phase 6c pending
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `2bf710e`
+> **Branch**: `feat/web-fresh` HEAD `49dd0ce`
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+
+---
+
+## ✅ Phase 6b — DONE (3 commits)
+
+| Commit | What |
+|---|---|
+| `b5d676f` | API + hooks foundation: `api/scheduled` CRUD, `api/audits.createAudit`, `queryKeys.scheduled`, `useCreateAudit`, full `use-scheduled` hook set (list + create + pause/resume + delete with optimistic patches), zod `createAuditFormSchema` + `createScheduledAuditFormSchema`, vi/en i18n for `audits.create` + full `scheduled` namespace |
+| `1a79800` | `/audits/new` page — full form (URL + keyword + mode segmented control + max-pages when site) → POST /audits → success card with auditId mono + View detail + Create another |
+| `49dd0ce` | `/scheduled` page + 6 components — table (URL/cron mono/mode/lastRun/lastScore/status pill/actions) + create dialog (with cron 5-field validation) + skeleton + empty + error |
+
+### Phase 6b routes shipped
+- `/audits/new` — single-page form for `POST /audits`. Renders an inline success state with the new auditId (`/audits/:id` link will work once Phase 6c lands the detail page).
+- `/scheduled` — list with pause/resume toggle (optimistic) + delete + Create-schedule dialog. Empty state CTAs the dialog; error state offers retry.
+
+### Quality gates
+- `tsc --noEmit`: PASS
+- `eslint .`: PASS (same 2 pre-existing input.tsx warnings)
+- `vitest run`: **66/66 PASS** (unchanged)
+- `next build`: PASS — **21 static routes** (vi/en × 10 + dynamic reset-password + 404). New bundle sizes: `/audits/new` 5.28KB, `/scheduled` 12.6KB.
+
+### Outstanding gaps after Phase 6b
+1. `/audits/:id` detail (heaviest page) — Phase 6c. Form's "View detail" link 404s until then.
+2. Scheduled-audit detail (`GET /scheduled-audits/:id`) endpoint exists but is not yet wired — no UI consumer needs it yet.
+3. Cron preview ("next run at X") — not implemented; could enhance dialog UX later.
+
+### Pickup hints for Phase 6c (`/audits/[id]` — 9 states + WS realtime + modals)
+- Add hooks: `useAudit(id)` + `useAuditStatus(id)` + `useAuditRealtime(id)` (lib/ws/use-audit-realtime.ts) + `useCreateShareLink`/`useRevokeShareLink`.
+- Reuse `StatusPipeline` domain component for In-Progress states (Phase 5b shipped it).
+- Wire Pencil AuditDetail modal flows: Share + Delete (Pencil frames exist as overlays).
+- 9 states: Completed, Completed/AltView (radar swap), 3× InProgress (Crawling/Analyzing/Reporting), Failed, Empty (404), Modal/Share, Modal/Delete.
 
 ---
 
