@@ -1,8 +1,36 @@
-# apps/web STATE — Phase 5 complete, Phase 6 pending
+# apps/web STATE — Phase 6a complete, Phase 6b pending
 
 > **Last update**: 2026-05-12
-> **Branch**: `feat/web-fresh` HEAD `929a92e`
+> **Branch**: `feat/web-fresh` HEAD `2bf710e`
 > **Dev URL**: http://localhost:3001 (`npm run dev --workspace=@seo/web`)
+
+---
+
+## ✅ Phase 6a — DONE (4 commits)
+
+| Commit | What |
+|---|---|
+| `232f117` | app shell layout (`(app)/layout.tsx`) + auth bootstrap gating (`bootstrapped` flag on store, AuthGuard + landing wait for it) + delete /showcase smoke routes + AppShellRouted breadcrumb auto-derive |
+| `210b22b` | `useAuditsList` + `useDeleteAudit` query hooks, `api/audits.deleteAudit`, AuditStatusBadge, i18n keys (nav/auditStatus/dashboard/audits), `useDebouncedValue` |
+| `498e0b5` | `/dashboard` page + 7 components (StatCard, ScoreGaugeHero, ScoreTrendChart, RecentAuditsCard, DashboardEmpty, DashboardError, DashboardSkeleton) |
+| `2bf710e` | `/audits` list page + 7 components (AuditFilterBar, AuditTable, AuditTableSkeleton, AuditsEmpty, AuditsError, AuditsPagination) + Suspense wrap on OAuthSuccessPage so prerender works |
+
+### Quality gates
+- `tsc --noEmit`: PASS
+- `eslint .`: PASS (same 2 pre-existing input.tsx warnings)
+- `vitest run`: **66/66 PASS** (8 test files — unchanged)
+- `next build`: PASS — 17 static routes (vi/en × {landing, audits, oauth-success, dashboard, forgot-password, login, register} + dynamic reset-password + 404). Dashboard bundle: ~105KB (recharts).
+
+### Phase 6a routes shipped
+- `/dashboard` — bento grid (hero + 4 stat cards + trend chart + recent audits) with skeleton/empty/error states.
+- `/audits` — filter bar (search/status/sort/order/clear) + 7-column table + pagination + skeleton/empty/no-results/error500 states.
+- `/` → redirects to `/dashboard` (authed) or `/login` (guest); both wait for AuthBootstrap to complete.
+- `(app)/layout.tsx` wraps every authed page with `AuthGuard` + `AppShellRouted`. Breadcrumbs auto-derive from the pathname against the `nav` i18n namespace.
+
+### Pickup hints for Phase 6b
+- New routes: `/audits/new` + `/scheduled` (list + create + pause/resume/delete).
+- Add query hooks: `useCreateAudit`, `useScheduledAudits`, `useCreateScheduledAudit`, `usePauseSchedule`, `useResumeSchedule`, `useDeleteSchedule`.
+- BACKEND-API has CreateAuditDto + CreateScheduledAuditDto specs.
 
 ---
 
