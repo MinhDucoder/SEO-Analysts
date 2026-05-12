@@ -372,6 +372,21 @@
       "errorInvalidUrl": "Invalid URL."
     }
   },
+  "globalModal": {
+    "accountLocked": {
+      "title": "Your account is locked",
+      "body": "Your account has been temporarily locked. Please contact support to restore access.",
+      "contact": "Contact",
+      "signOut": "Sign out"
+    },
+    "rateLimit": {
+      "title": "Too many requests",
+      "body": "You've hit the rate limit. Please wait before trying again.",
+      "retryIn": "Retry in",
+      "seconds": "{n}s",
+      "close": "Close"
+    }
+  },
   "admin": {
     "stats": {
       "title": "Platform stats",

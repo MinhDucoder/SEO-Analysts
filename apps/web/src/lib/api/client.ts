@@ -1,6 +1,7 @@
 import ky, { type KyInstance, HTTPError } from "ky";
 import { API_URL } from "@/lib/constants";
 import { useAuthStore } from "@/lib/auth/store";
+import { useGlobalModalStore } from "@/lib/ui/global-modal-store";
 
 /**
  * HTTP client for the gateway REST API (`/api/v1`).
@@ -67,17 +68,56 @@ export const api: KyInstance = ky.create({
     ],
     afterResponse: [
       async (request, _options, response) => {
-        if (response.status !== 401) return response;
-        if (request.url.includes(REFRESH_PATH)) return response;
+        // 401 → silent refresh + replay (or clearAuth on failure)
+        if (response.status === 401) {
+          if (request.url.includes(REFRESH_PATH)) return response;
 
-        const newToken = await tryRefresh();
-        if (newToken) {
-          useAuthStore.setState({ accessToken: newToken });
-          request.headers.set("Authorization", `Bearer ${newToken}`);
-          return ky(request);
+          const newToken = await tryRefresh();
+          if (newToken) {
+            useAuthStore.setState({ accessToken: newToken });
+            request.headers.set("Authorization", `Bearer ${newToken}`);
+            return ky(request);
+          }
+
+          useAuthStore.getState().clearAuth();
+          return response;
         }
 
-        useAuthStore.getState().clearAuth();
+        // 403 → surface AccountLocked modal when the body identifies as
+        // a lock event. The gateway uses a string code "ACCOUNT_LOCKED"
+        // in the error body to disambiguate from "EMAIL_NOT_VERIFIED" /
+        // "FORBIDDEN" cases which are handled per-feature via toast.
+        if (response.status === 403) {
+          const body = await response.clone().json().catch(() => null);
+          const code =
+            typeof body === "object" && body !== null && "code" in body
+              ? String((body as { code: unknown }).code)
+              : "";
+          const message =
+            typeof body === "object" && body !== null && "message" in body
+              ? String((body as { message: unknown }).message).toLowerCase()
+              : "";
+          if (
+            code === "ACCOUNT_LOCKED" ||
+            (message.includes("locked") && !message.includes("verify"))
+          ) {
+            useGlobalModalStore.getState().open({ kind: "accountLocked" });
+          }
+          return response;
+        }
+
+        // 429 → surface RateLimit modal with the Retry-After value if
+        // the gateway provided one (else default 60s).
+        if (response.status === 429) {
+          const retryHeader = response.headers.get("Retry-After");
+          const retryAfterSec = retryHeader ? Number(retryHeader) : NaN;
+          useGlobalModalStore.getState().open({
+            kind: "rateLimit",
+            retryAfterSec: Number.isFinite(retryAfterSec) ? retryAfterSec : 60,
+          });
+          return response;
+        }
+
         return response;
       },
     ],

@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeApplier } from "@/lib/ui/theme";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthBootstrap } from "@/components/auth/auth-bootstrap";
+import { AccountLockedModal } from "@/components/global/account-locked-modal";
+import { RateLimitModal } from "@/components/global/rate-limit-modal";
 
 function makeQueryClient(): QueryClient {
   return new QueryClient({
@@ -38,6 +40,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeApplier />
       <AuthBootstrap />
       {children}
+      <AccountLockedModal />
+      <RateLimitModal />
       <Toaster />
     </QueryClientProvider>
   );

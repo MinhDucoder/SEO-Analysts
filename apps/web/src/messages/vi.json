@@ -372,6 +372,21 @@
       "errorInvalidUrl": "URL không hợp lệ."
     }
   },
+  "globalModal": {
+    "accountLocked": {
+      "title": "Tài khoản đã bị khóa",
+      "body": "Tài khoản của bạn đang tạm thời bị khóa. Vui lòng liên hệ hỗ trợ để mở khóa.",
+      "contact": "Liên hệ",
+      "signOut": "Đăng xuất"
+    },
+    "rateLimit": {
+      "title": "Quá nhiều yêu cầu",
+      "body": "Bạn đã đạt giới hạn yêu cầu. Vui lòng đợi trước khi thử lại.",
+      "retryIn": "Thử lại sau",
+      "seconds": "{n}s",
+      "close": "Đóng"
+    }
+  },
   "admin": {
     "stats": {
       "title": "Thống kê nền tảng",
