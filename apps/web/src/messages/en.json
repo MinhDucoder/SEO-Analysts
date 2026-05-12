@@ -24,9 +24,13 @@
   "nav": {
     "dashboard": "Overview",
     "audits": "Audits",
+    "auditsNew": "New audit",
+    "auditsDetail": "Audit details",
     "scheduled": "Scheduled",
     "compare": "Compare",
     "settings": "Settings",
+    "profile": "Profile",
+    "password": "Password",
     "admin": "Admin",
     "users": "Users",
     "rules": "Rules",
@@ -40,6 +44,118 @@
   "locale": {
     "vi": "Tiếng Việt",
     "en": "English"
+  },
+  "auditStatus": {
+    "pending": "Pending",
+    "crawling": "Crawling",
+    "analyzing": "Analyzing",
+    "reporting": "Reporting",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "dashboard": {
+    "title": "Overview",
+    "subtitle": "Your SEO health at a glance",
+    "newAudit": "+ New audit",
+    "heroTitle": "Latest SEO score",
+    "heroNoData": "No completed audit yet",
+    "heroVsLast": "vs. previous run",
+    "stats": {
+      "auditsThisMonth": "Audits this month",
+      "auditsThisMonthDesc": "Total audits run this month",
+      "avgScore": "Average score",
+      "avgScoreDesc": "Average SEO score for the month",
+      "criticalIssues": "Critical issues",
+      "criticalIssuesDesc": "Failed rules in your latest audit",
+      "pdfsExported": "PDFs exported",
+      "pdfsExportedDesc": "PDF report downloads",
+      "vsLastMonth": "vs. last month",
+      "noData": "—",
+      "comingSoon": "Coming soon"
+    },
+    "trend": {
+      "title": "SEO score trend",
+      "subtitle": "Last 30 days",
+      "needMore": "Need ≥ 2 completed audits to draw a trend"
+    },
+    "recent": {
+      "title": "Recent audits",
+      "viewAll": "View all",
+      "empty": "No audits yet"
+    },
+    "empty": {
+      "title": "Start auditing your SEO",
+      "description": "Run your first audit to see your SEO score, Core Web Vitals, and the issues you need to fix.",
+      "cta": "+ Create first audit"
+    },
+    "error": {
+      "title": "Couldn't load the dashboard",
+      "description": "Connection to the server failed.",
+      "retry": "Retry"
+    }
+  },
+  "audits": {
+    "title": "My audits",
+    "subtitle": "Every audit you've run",
+    "new": "+ New audit",
+    "filters": {
+      "search": "Search URL or domain",
+      "status": "Status",
+      "statusAll": "All statuses",
+      "scoreMin": "Min score",
+      "scoreMax": "Max score",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "sortBy": "Sort by",
+      "sortCreatedAt": "Created date",
+      "sortScore": "SEO score",
+      "orderDesc": "Descending",
+      "orderAsc": "Ascending",
+      "clear": "Clear filters",
+      "apply": "Apply"
+    },
+    "table": {
+      "url": "URL",
+      "score": "Score",
+      "status": "Status",
+      "createdAt": "Created",
+      "duration": "Duration",
+      "keyword": "Keyword",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View details",
+      "delete": "Delete",
+      "share": "Share",
+      "rerun": "Re-run"
+    },
+    "pagination": {
+      "showing": "Showing {from}–{to} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}"
+    },
+    "empty": {
+      "title": "No audits yet",
+      "description": "Start analysing the SEO of your first website.",
+      "cta": "+ Create first audit"
+    },
+    "noResults": {
+      "title": "No audits matched",
+      "description": "Try removing a filter or changing the search term.",
+      "cta": "Clear filters"
+    },
+    "error": {
+      "title": "Server error",
+      "description": "Couldn't load the audit list. Please try again.",
+      "retry": "Retry",
+      "requestId": "Request ID"
+    },
+    "delete": {
+      "confirm": "Delete this audit? This action cannot be undone.",
+      "success": "Audit deleted",
+      "fail": "Deletion failed"
+    }
   },
   "auth": {
     "common": {

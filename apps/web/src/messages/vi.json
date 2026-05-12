@@ -24,9 +24,13 @@
   "nav": {
     "dashboard": "Tổng quan",
     "audits": "Audit",
+    "auditsNew": "Tạo audit mới",
+    "auditsDetail": "Chi tiết audit",
     "scheduled": "Lịch chạy",
     "compare": "So sánh",
     "settings": "Cài đặt",
+    "profile": "Hồ sơ",
+    "password": "Mật khẩu",
     "admin": "Quản trị",
     "users": "Người dùng",
     "rules": "Quy tắc",
@@ -40,6 +44,118 @@
   "locale": {
     "vi": "Tiếng Việt",
     "en": "English"
+  },
+  "auditStatus": {
+    "pending": "Đang chờ",
+    "crawling": "Đang crawl",
+    "analyzing": "Đang phân tích",
+    "reporting": "Đang tổng hợp",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại"
+  },
+  "dashboard": {
+    "title": "Tổng quan",
+    "subtitle": "Sức khỏe SEO của bạn",
+    "newAudit": "+ Tạo audit mới",
+    "heroTitle": "Điểm SEO mới nhất",
+    "heroNoData": "Chưa có audit hoàn thành",
+    "heroVsLast": "so với lần trước",
+    "stats": {
+      "auditsThisMonth": "Audit tháng này",
+      "auditsThisMonthDesc": "Tổng số audit đã chạy trong tháng",
+      "avgScore": "Điểm trung bình",
+      "avgScoreDesc": "Trung bình điểm SEO trong tháng",
+      "criticalIssues": "Vấn đề nghiêm trọng",
+      "criticalIssuesDesc": "Số rule bị fail trong audit mới nhất",
+      "pdfsExported": "PDF đã xuất",
+      "pdfsExportedDesc": "Số lần tải PDF report",
+      "vsLastMonth": "so với tháng trước",
+      "noData": "—",
+      "comingSoon": "Sẽ có sớm"
+    },
+    "trend": {
+      "title": "Xu hướng điểm SEO",
+      "subtitle": "30 ngày gần nhất",
+      "needMore": "Cần ≥ 2 audit hoàn thành để vẽ xu hướng"
+    },
+    "recent": {
+      "title": "Audit gần đây",
+      "viewAll": "Xem tất cả",
+      "empty": "Chưa có audit nào"
+    },
+    "empty": {
+      "title": "Bắt đầu phân tích SEO",
+      "description": "Chạy audit đầu tiên để xem điểm SEO, Core Web Vitals và các vấn đề cần khắc phục.",
+      "cta": "+ Tạo audit đầu tiên"
+    },
+    "error": {
+      "title": "Không tải được dashboard",
+      "description": "Lỗi kết nối tới máy chủ.",
+      "retry": "Thử lại"
+    }
+  },
+  "audits": {
+    "title": "Audit của tôi",
+    "subtitle": "Quản lý mọi audit bạn đã chạy",
+    "new": "+ Tạo audit mới",
+    "filters": {
+      "search": "Tìm URL hoặc domain",
+      "status": "Trạng thái",
+      "statusAll": "Tất cả trạng thái",
+      "scoreMin": "Điểm tối thiểu",
+      "scoreMax": "Điểm tối đa",
+      "dateFrom": "Từ ngày",
+      "dateTo": "Đến ngày",
+      "sortBy": "Sắp xếp theo",
+      "sortCreatedAt": "Ngày tạo",
+      "sortScore": "Điểm SEO",
+      "orderDesc": "Giảm dần",
+      "orderAsc": "Tăng dần",
+      "clear": "Xóa bộ lọc",
+      "apply": "Áp dụng"
+    },
+    "table": {
+      "url": "URL",
+      "score": "Điểm",
+      "status": "Trạng thái",
+      "createdAt": "Ngày tạo",
+      "duration": "Thời gian",
+      "keyword": "Từ khóa",
+      "actions": "Thao tác"
+    },
+    "actions": {
+      "view": "Xem chi tiết",
+      "delete": "Xóa",
+      "share": "Chia sẻ",
+      "rerun": "Chạy lại"
+    },
+    "pagination": {
+      "showing": "Đang hiển thị {from}–{to} / {total}",
+      "previous": "Trước",
+      "next": "Sau",
+      "page": "Trang {page}"
+    },
+    "empty": {
+      "title": "Chưa có audit nào",
+      "description": "Bắt đầu phân tích SEO website đầu tiên của bạn.",
+      "cta": "+ Tạo audit đầu tiên"
+    },
+    "noResults": {
+      "title": "Không tìm thấy audit phù hợp",
+      "description": "Thử bỏ một số bộ lọc hoặc đổi từ khóa.",
+      "cta": "Xóa bộ lọc"
+    },
+    "error": {
+      "title": "Lỗi máy chủ",
+      "description": "Không tải được danh sách audit. Vui lòng thử lại.",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu"
+    },
+    "delete": {
+      "confirm": "Xóa audit này? Hành động không thể hoàn tác.",
+      "success": "Đã xóa audit",
+      "fail": "Xóa thất bại"
+    }
   },
   "auth": {
     "common": {
