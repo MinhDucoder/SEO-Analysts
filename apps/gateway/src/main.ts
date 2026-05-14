@@ -33,8 +33,22 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+  // CORS — single fronting origin (the web app) plus browser-extension
+  // schemes. `chrome-extension://...` and `moz-extension://...` are
+  // required for `@seo/extension` to call `/api/v1/public/check`. The
+  // gateway's own auth model (ApiKeyGuard for /public/*, JwtAuthGuard
+  // elsewhere) is what actually controls access — CORS only governs
+  // which origins the browser will let *send* the request.
+  const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:3001';
   app.enableCors({
-    origin: process.env.FRONTEND_URL ?? 'http://localhost:3001',
+    origin: (origin, cb) => {
+      // Same-origin or non-browser (curl, CLI, server-to-server).
+      if (!origin) return cb(null, true);
+      if (origin === frontendUrl) return cb(null, true);
+      if (origin.startsWith('chrome-extension://')) return cb(null, true);
+      if (origin.startsWith('moz-extension://')) return cb(null, true);
+      return cb(new Error(`Origin ${origin} not allowed by CORS`), false);
+    },
     credentials: true,
   });
 
