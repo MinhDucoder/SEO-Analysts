@@ -18,6 +18,7 @@ import { loadApiKey } from '@/lib/storage';
 import { check } from '@/lib/client';
 import { PublicApiError } from '@/lib/errors';
 import { API_BASE_URL } from '@/lib/api-base';
+import { cacheKey, readCache, writeCache } from '@/lib/cache';
 import type {
   ContentScrapeProbe,
   ExtensionMessage,
@@ -129,66 +130,122 @@ async function runAudit(msg: {
     };
   }
 
+  const language = msg.language ?? 'vi';
+  const keyword = msg.targetKeyword.trim();
+
+  // Local 1h cache (URL mode only). HTML mode varies with the live
+  // DOM, so caching could surface stale results after the user edits
+  // a draft — defeats the point of the extension on a CMS page.
+  if (!probe.isAuthGated) {
+    const ck = cacheKey(probe.url, keyword, language);
+    const cached = await readCache(ck);
+    if (cached) return { ok: true, result: cached };
+  }
+
   let input: PublicCheckInput;
   if (probe.isAuthGated) {
-    let full: ContentScrapeProbe;
-    try {
-      full = await askContent(tab.id, { type: 'EXTRACT_FOR_CHECK', needHtml: true });
-    } catch (e) {
-      return {
-        ok: false,
-        code: 'CLIENT_PAYLOAD_TOO_LARGE',
-        message: e instanceof Error ? e.message : 'HTML payload exceeds the 200KB cap.',
-        status: 0,
-      };
-    }
-    if (!full.html) {
-      return {
-        ok: false,
-        code: 'CLIENT_UNKNOWN',
-        message: 'Content script returned no HTML.',
-        status: 0,
-      };
-    }
+    const full = await tryFetchHtml(tab.id);
+    if (!full.ok) return full.err;
     input = { type: 'html', html: full.html };
   } else {
     input = { type: 'url', url: probe.url };
   }
 
-  try {
-    const result = await check({
+  const callApi = (body: PublicCheckInput): Promise<PublicCheckResponse> =>
+    check({
       apiKey,
       baseUrl: API_BASE_URL,
       body: {
-        input,
-        targetKeyword: msg.targetKeyword.trim(),
+        input: body,
+        targetKeyword: keyword,
         secondaryKeywords: msg.secondaryKeywords,
-        options: {
-          enrichMode: 'llm',
-          language: msg.language ?? 'vi',
-        },
+        options: { enrichMode: 'llm', language },
       },
     });
+
+  try {
+    const result = await callApi(input);
+    if (input.type === 'url') {
+      void writeCache(cacheKey(probe.url, keyword, language), result);
+    }
     return { ok: true, result };
   } catch (e) {
-    if (e instanceof PublicApiError) {
-      if (e.action === 'OPEN_OPTIONS') chrome.runtime.openOptionsPage();
-      return {
-        ok: false,
-        code: e.code,
-        message: e.message,
-        status: e.status,
-        requestId: e.requestId,
-        retryAfterSeconds: e.retryAfterSeconds,
-      };
+    // Auto-fallback URL→HTML: gateway-reported fetch failures
+    // (URL_FETCH_FAILED / URL_FETCH_TIMEOUT) are most often caused by
+    // the page requiring auth, geo-restriction, or being behind a
+    // CDN that blocks the gateway UA. Re-extract via the content
+    // script and retry once in HTML mode before surfacing the error.
+    if (
+      e instanceof PublicApiError &&
+      input.type === 'url' &&
+      (e.code === 'URL_FETCH_FAILED' || e.code === 'URL_FETCH_TIMEOUT')
+    ) {
+      const full = await tryFetchHtml(tab.id);
+      if (full.ok) {
+        try {
+          const result = await callApi({ type: 'html', html: full.html });
+          // Not cached: we only cache URL-mode results.
+          return { ok: true, result };
+        } catch (e2) {
+          return mapAuditError(e2);
+        }
+      }
+      // HTML extraction itself failed — fall through to the original
+      // gateway error so the popup explains the actual cause.
     }
+    return mapAuditError(e);
+  }
+}
+
+function mapAuditError(e: unknown): AuditErr {
+  if (e instanceof PublicApiError) {
+    if (e.action === 'OPEN_OPTIONS') chrome.runtime.openOptionsPage();
     return {
       ok: false,
-      code: 'CLIENT_UNKNOWN',
-      message: e instanceof Error ? e.message : String(e),
-      status: 0,
+      code: e.code,
+      message: e.message,
+      status: e.status,
+      requestId: e.requestId,
+      retryAfterSeconds: e.retryAfterSeconds,
     };
   }
+  return {
+    ok: false,
+    code: 'CLIENT_UNKNOWN',
+    message: e instanceof Error ? e.message : String(e),
+    status: 0,
+  };
+}
+
+async function tryFetchHtml(
+  tabId: number,
+): Promise<{ ok: true; html: string } | { ok: false; err: AuditErr }> {
+  let full: ContentScrapeProbe;
+  try {
+    full = await askContent(tabId, { type: 'EXTRACT_FOR_CHECK', needHtml: true });
+  } catch (e) {
+    return {
+      ok: false,
+      err: {
+        ok: false,
+        code: 'CLIENT_PAYLOAD_TOO_LARGE',
+        message: e instanceof Error ? e.message : 'HTML payload exceeds the 200KB cap.',
+        status: 0,
+      },
+    };
+  }
+  if (!full.html) {
+    return {
+      ok: false,
+      err: {
+        ok: false,
+        code: 'CLIENT_UNKNOWN',
+        message: 'Content script returned no HTML.',
+        status: 0,
+      },
+    };
+  }
+  return { ok: true, html: full.html };
 }
 
 async function getActiveTab(): Promise<chrome.tabs.Tab | undefined> {
