@@ -63,12 +63,18 @@ export class AuthService {
     });
 
     const verifyToken = await this.verification.createVerificationToken(user.id);
-    this.logger.log(`User ${user.email} registered. Verify token (TODO send email): ${verifyToken}`);
+    this.logger.log(`User ${user.email} registered (verifyToken issued)`);
 
+    // Plaintext token is returned in the body for non-production envs (CI,
+    // local dev, integration tests) until a real email service is wired.
+    // It is NEVER logged — anyone with log read access (Railway, log
+    // aggregator, demo screenshare) would otherwise have one-step
+    // account takeover.
+    const exposeToken = process.env.NODE_ENV !== 'production';
     return {
       user: this.toPublic(user),
       message: 'Dang ky thanh cong. Vui long kiem tra email de xac minh tai khoan.',
-      verifyToken, // TODO: remove once email service is wired
+      ...(exposeToken ? { verifyToken } : {}),
     };
   }
 
@@ -116,8 +122,12 @@ export class AuthService {
   async forgotPassword(email: string): Promise<void> {
     const user = await this.prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (!user) return; // do not leak existence
-    const token = await this.verification.createResetToken(user.id);
-    this.logger.log(`Password reset token for ${email}: ${token}`);
+    await this.verification.createResetToken(user.id);
+    // Token MUST NOT be logged — log aggregators / Railway dashboards /
+    // demos would leak it to anyone with read access, enabling one-step
+    // account takeover. Surface the token via the email channel only,
+    // or via a dev-only response (not implemented here yet).
+    this.logger.log(`Password reset requested for ${email}`);
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
