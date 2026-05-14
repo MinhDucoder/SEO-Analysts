@@ -18,7 +18,18 @@ export default defineConfig({
       mode === 'production'
         ? ['https://api.seoanalyst.app/*']
         : ['https://api.seoanalyst.app/*', 'http://localhost:3000/*'],
-    action: { default_popup: 'popup.html' },
+    icons: {
+      16: 'icons/icon-16.png',
+      48: 'icons/icon-48.png',
+      128: 'icons/icon-128.png',
+    },
+    action: {
+      default_popup: 'popup.html',
+      default_icon: {
+        16: 'icons/icon-16.png',
+        48: 'icons/icon-48.png',
+      },
+    },
     options_page: 'options.html',
     side_panel: { default_path: 'sidepanel.html' },
   }),
