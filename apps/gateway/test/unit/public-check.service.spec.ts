@@ -18,29 +18,29 @@ function makeAnalyzer(override?: unknown) {
   return {
     analyzeContent: vi.fn().mockResolvedValue(
       override ?? {
-        rule_version: '1.2.0',
+        ruleVersion: '1.2.0',
         issues: [
           {
-            rule_id: 'title_tag',
+            ruleId: 'title_tag',
             status: 'warn',
             score: 50,
             category: 'meta',
             severity: 'warning',
             audiences: ['writer'],
             message: 'Title short',
-            template_suggestion: 'Make it longer',
+            templateSuggestion: 'Make it longer',
             evidence: { currentLength: 10 },
-            doc_ref: 'https://d/r/title_tag',
+            docRef: 'https://d/r/title_tag',
           },
         ],
-        content_stats: {
-          word_count: 1,
-          character_count: 2,
-          reading_time_sec: 1,
-          paragraph_count: 0,
-          image_count: 0,
-          internal_link_count: 0,
-          external_link_count: 0,
+        contentStats: {
+          wordCount: 1,
+          characterCount: 2,
+          readingTimeSec: 1,
+          paragraphCount: 0,
+          imageCount: 0,
+          internalLinkCount: 0,
+          externalLinkCount: 0,
         },
       },
     ),
@@ -141,41 +141,41 @@ describe('PublicCheckService (with enricher)', () => {
 
   it('enrichMode=llm mixed: source="mixed", not degraded', async () => {
     const analyzer = makeAnalyzer({
-      rule_version: '1.2.0',
+      ruleVersion: '1.2.0',
       issues: [
         {
-          rule_id: 'a',
+          ruleId: 'a',
           status: 'warn',
           score: 50,
           category: 'meta',
           severity: 'warning',
           audiences: ['writer'],
           message: 'm1',
-          template_suggestion: 't1',
+          templateSuggestion: 't1',
           evidence: {},
-          doc_ref: '',
+          docRef: '',
         },
         {
-          rule_id: 'b',
+          ruleId: 'b',
           status: 'warn',
           score: 50,
           category: 'meta',
           severity: 'warning',
           audiences: ['writer'],
           message: 'm2',
-          template_suggestion: 't2',
+          templateSuggestion: 't2',
           evidence: {},
-          doc_ref: '',
+          docRef: '',
         },
       ],
-      content_stats: {
-        word_count: 1,
-        character_count: 2,
-        reading_time_sec: 1,
-        paragraph_count: 0,
-        image_count: 0,
-        internal_link_count: 0,
-        external_link_count: 0,
+      contentStats: {
+        wordCount: 1,
+        characterCount: 2,
+        readingTimeSec: 1,
+        paragraphCount: 0,
+        imageCount: 0,
+        internalLinkCount: 0,
+        externalLinkCount: 0,
       },
     });
     svc = new PublicCheckService(extractor, analyzer, makeRedis(), enricher as never);
@@ -215,29 +215,29 @@ describe('PublicCheckService (with enricher)', () => {
   });
 
   it('cache-hit re-applies the CURRENT filter, not the one cached from the previous request', async () => {
-    const mkIssue = (rule_id: string, severity: 'info' | 'warning' | 'error') => ({
-      rule_id,
+    const mkIssue = (ruleId: string, severity: 'info' | 'warning' | 'error') => ({
+      ruleId,
       status: 'warn',
       score: 50,
       category: 'meta',
       severity,
       audiences: ['writer'],
-      message: `${rule_id} msg`,
-      template_suggestion: '',
+      message: `${ruleId} msg`,
+      templateSuggestion: '',
       evidence: {},
-      doc_ref: '',
+      docRef: '',
     });
     const analyzer = makeAnalyzer({
-      rule_version: '1.2.0',
+      ruleVersion: '1.2.0',
       issues: [mkIssue('a', 'error'), mkIssue('b', 'warning'), mkIssue('c', 'info')],
-      content_stats: {
-        word_count: 1,
-        character_count: 2,
-        reading_time_sec: 1,
-        paragraph_count: 0,
-        image_count: 0,
-        internal_link_count: 0,
-        external_link_count: 0,
+      contentStats: {
+        wordCount: 1,
+        characterCount: 2,
+        readingTimeSec: 1,
+        paragraphCount: 0,
+        imageCount: 0,
+        internalLinkCount: 0,
+        externalLinkCount: 0,
       },
     });
     enricher.enrich.mockResolvedValue({
@@ -307,29 +307,29 @@ describe('PublicCheckService (with enricher)', () => {
   });
 
   it('cache-hit with no filter returns ALL issues even when first request was filtered', async () => {
-    const mkIssue = (rule_id: string, severity: 'info' | 'warning' | 'error') => ({
-      rule_id,
+    const mkIssue = (ruleId: string, severity: 'info' | 'warning' | 'error') => ({
+      ruleId,
       status: 'warn',
       score: 50,
       category: 'meta',
       severity,
       audiences: ['writer'],
       message: 'm',
-      template_suggestion: '',
+      templateSuggestion: '',
       evidence: {},
-      doc_ref: '',
+      docRef: '',
     });
     const analyzer = makeAnalyzer({
-      rule_version: '1.2.0',
+      ruleVersion: '1.2.0',
       issues: [mkIssue('a', 'error'), mkIssue('b', 'info')],
-      content_stats: {
-        word_count: 1,
-        character_count: 2,
-        reading_time_sec: 1,
-        paragraph_count: 0,
-        image_count: 0,
-        internal_link_count: 0,
-        external_link_count: 0,
+      contentStats: {
+        wordCount: 1,
+        characterCount: 2,
+        readingTimeSec: 1,
+        paragraphCount: 0,
+        imageCount: 0,
+        internalLinkCount: 0,
+        externalLinkCount: 0,
       },
     });
     enricher.enrich.mockResolvedValue({

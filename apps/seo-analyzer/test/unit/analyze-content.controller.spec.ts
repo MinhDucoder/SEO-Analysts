@@ -30,42 +30,42 @@ describe('AnalyzeContentController', () => {
     );
   });
 
-  it('returns issues with category + severity + audiences + evidence + doc_ref', async () => {
+  it('returns issues with category + severity + audiences + evidence + docRef', async () => {
     const res = await ctrl.analyzeContent({
-      request_id: 'r1',
+      requestId: 'r1',
       html: '<title>Short</title>',
-      target_keyword: 'seo',
-      secondary_keywords: [],
+      targetKeyword: 'seo',
+      secondaryKeywords: [],
       language: 'vi',
       mode: 1, // CONTENT_ONLY
-      resolved_url: '',
+      resolvedUrl: '',
     });
-    expect(res.rule_version).toBeTruthy();
+    expect(res.ruleVersion).toBeTruthy();
     expect(res.issues).toHaveLength(1);
     const issue = res.issues[0];
-    expect(issue.rule_id).toBe('title_tag');
+    expect(issue.ruleId).toBe('title_tag');
     expect(issue.category).toBe(IssueCategory.META);
     expect(issue.severity).toBe('warning');
     expect(issue.audiences).toEqual(expect.arrayContaining(['writer', 'dev']));
     expect(issue.message).toBe('Title short');
-    expect(issue.template_suggestion).toBe('Make longer');
+    expect(issue.templateSuggestion).toBe('Make longer');
     expect(issue.evidence).toEqual({ currentLength: 10 });
-    expect(issue.doc_ref).toContain('/rules/title_tag');
+    expect(issue.docRef).toContain('/rules/title_tag');
   });
 
-  it('populates content_stats from PageData', async () => {
+  it('populates contentStats from PageData', async () => {
     const res = await ctrl.analyzeContent({
-      request_id: 'r1',
+      requestId: 'r1',
       html: '<p>one two three four five six seven eight nine ten</p>',
-      target_keyword: '',
-      secondary_keywords: [],
+      targetKeyword: '',
+      secondaryKeywords: [],
       language: 'vi',
       mode: 1,
-      resolved_url: '',
+      resolvedUrl: '',
     });
-    expect(res.content_stats.word_count).toBeGreaterThanOrEqual(10);
-    expect(res.content_stats.character_count).toBeGreaterThan(0);
-    expect(res.content_stats.paragraph_count).toBe(1);
+    expect(res.contentStats.wordCount).toBeGreaterThanOrEqual(10);
+    expect(res.contentStats.characterCount).toBeGreaterThan(0);
+    expect(res.contentStats.paragraphCount).toBe(1);
   });
 
   it('passes mode=FULL through to runner', async () => {
@@ -77,15 +77,15 @@ describe('AnalyzeContentController', () => {
     });
 
     const contentOnly = await ctrl.analyzeContent({
-      request_id: 'r1', html: '<p>x</p>', target_keyword: '', secondary_keywords: [],
-      language: 'vi', mode: 1, resolved_url: '',
+      requestId: 'r1', html: '<p>x</p>', targetKeyword: '', secondaryKeywords: [],
+      language: 'vi', mode: 1, resolvedUrl: '',
     });
-    expect(contentOnly.issues.map((i) => i.rule_id).sort()).toEqual(['title_tag']);
+    expect(contentOnly.issues.map((i) => i.ruleId).sort()).toEqual(['title_tag']);
 
     const full = await ctrl.analyzeContent({
-      request_id: 'r1', html: '<p>x</p>', target_keyword: '', secondary_keywords: [],
-      language: 'vi', mode: 2, resolved_url: '',
+      requestId: 'r1', html: '<p>x</p>', targetKeyword: '', secondaryKeywords: [],
+      language: 'vi', mode: 2, resolvedUrl: '',
     });
-    expect(full.issues.map((i) => i.rule_id).sort()).toEqual(['http_only', 'title_tag']);
+    expect(full.issues.map((i) => i.ruleId).sort()).toEqual(['http_only', 'title_tag']);
   });
 });

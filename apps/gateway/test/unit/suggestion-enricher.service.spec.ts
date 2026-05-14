@@ -26,16 +26,16 @@ function makeRateLimit(acquireResult = true) {
 
 function issue(ruleId: string, extras?: Partial<AnalyzerIssue>): AnalyzerIssue {
   return {
-    rule_id: ruleId,
+    ruleId: ruleId,
     status: 'warn',
     score: 50,
     category: 'meta',
     severity: 'warning',
     audiences: ['writer'],
     message: `issue ${ruleId}`,
-    template_suggestion: `tpl for ${ruleId}`,
+    templateSuggestion: `tpl for ${ruleId}`,
     evidence: {},
-    doc_ref: '',
+    docRef: '',
     ...extras,
   };
 }
@@ -69,7 +69,7 @@ describe('SuggestionEnricherService', () => {
     expect(out.degraded).toBe(false);
   });
 
-  it('mode=template renders per-issue rewrite from template_suggestion', async () => {
+  it('mode=template renders per-issue rewrite from templateSuggestion', async () => {
     const svc = new SuggestionEnricherService(
       factory as never,
       makeRedis(),

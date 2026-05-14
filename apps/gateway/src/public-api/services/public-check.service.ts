@@ -139,14 +139,14 @@ export class PublicCheckService {
         secondaryKeywords: dto.secondaryKeywords ?? [],
         language,
         contentExcerpt: extracted.html,
-        ruleVersion: result.rule_version,
+        ruleVersion: result.ruleVersion,
         contentHash,
       },
       enrichMode,
     );
 
     const allIssues: PublicCheckIssue[] = result.issues.map((i, idx) => ({
-      ruleId: i.rule_id,
+      ruleId: i.ruleId,
       severity: this.toSeverity(i.severity),
       category: i.category,
       audience: (i.audiences ?? []).filter(
@@ -156,7 +156,7 @@ export class PublicCheckService {
       description: i.message,
       evidence: i.evidence ?? {},
       suggestion: enrichment.suggestions[idx] ?? null,
-      docRef: i.doc_ref || undefined,
+      docRef: i.docRef || undefined,
     }));
 
     const score = this.computeScore(result.issues);
@@ -170,12 +170,12 @@ export class PublicCheckService {
         inputType: dto.input.type,
         resolvedUrl: extracted.resolvedUrl,
         contentStats: {
-          words: result.content_stats.word_count,
-          characters: result.content_stats.character_count,
-          readingTimeSec: result.content_stats.reading_time_sec,
+          words: result.contentStats.wordCount,
+          characters: result.contentStats.characterCount,
+          readingTimeSec: result.contentStats.readingTimeSec,
         },
         processingTimeMs: Date.now() - t0,
-        ruleVersion: result.rule_version,
+        ruleVersion: result.ruleVersion,
         enrichMode,
         suggestionSource: enrichment.source,
         degraded: enrichment.degraded,

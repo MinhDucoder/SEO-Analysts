@@ -15,44 +15,47 @@ import { RuleRunner } from '../services/rule-runner';
 import { RuleMetadataService } from '../services/rule-metadata.service';
 import { RULE_VERSION } from '../domain/rule-version';
 
-// Proto request (snake_case per gRPC convention)
+// Proto request — JS surface is camelCase because the loader is configured
+// with `keepCase: false` (see apps/seo-analyzer/src/main.ts loader options).
+// Proto-loader converts snake_case proto fields to lowerCamelCase JS names;
+// snake_case keys on the wire are silently dropped on serialize/deserialize.
 interface AnalyzeContentRequest {
-  request_id: string;
+  requestId: string;
   html: string;
-  target_keyword: string;
-  secondary_keywords: string[];
+  targetKeyword: string;
+  secondaryKeywords: string[];
   language: string;
   mode: number; // 0=UNSPECIFIED, 1=CONTENT_ONLY, 2=FULL
-  resolved_url: string;
+  resolvedUrl: string;
 }
 
 interface RuleIssueProto {
-  rule_id: string;
+  ruleId: string;
   status: string; // "pass" | "warn" | "fail"
   score: number;
   category: string;
   severity: string;
   audiences: string[];
   message: string;
-  template_suggestion: string;
+  templateSuggestion: string;
   evidence: Record<string, unknown>;
-  doc_ref: string;
+  docRef: string;
 }
 
 interface ContentStatsProto {
-  word_count: number;
-  character_count: number;
-  reading_time_sec: number;
-  paragraph_count: number;
-  image_count: number;
-  internal_link_count: number;
-  external_link_count: number;
+  wordCount: number;
+  characterCount: number;
+  readingTimeSec: number;
+  paragraphCount: number;
+  imageCount: number;
+  internalLinkCount: number;
+  externalLinkCount: number;
 }
 
 interface AnalyzeContentResult {
-  rule_version: string;
+  ruleVersion: string;
   issues: RuleIssueProto[];
-  content_stats: ContentStatsProto;
+  contentStats: ContentStatsProto;
 }
 
 const WORDS_PER_MINUTE = 250;
@@ -69,51 +72,51 @@ export class AnalyzeContentController {
 
   @GrpcMethod('SeoAnalyzerService', 'AnalyzeContent')
   async analyzeContent(req: AnalyzeContentRequest): Promise<AnalyzeContentResult> {
-    const resolvedUrl = req.resolved_url || undefined;
+    const resolvedUrl = req.resolvedUrl || undefined;
     const pageData = this.builder.build(req.html, resolvedUrl);
     const mode = req.mode === 2 ? 'full' : 'content_only';
 
     const results = this.runner.runContent(
       pageData,
-      req.target_keyword || undefined,
+      req.targetKeyword || undefined,
       mode,
     );
 
     const issues: RuleIssueProto[] = results.map((r) => {
       const meta = this.metadata.get(r.ruleId);
       return {
-        rule_id: r.ruleId,
+        ruleId: r.ruleId,
         status: r.status,
         score: r.score,
         category: String(r.category),
         severity: meta.severity,
         audiences: meta.audiences,
         message: r.message,
-        template_suggestion: r.suggestion ?? '',
+        templateSuggestion: r.suggestion ?? '',
         evidence: (r.metadata ?? {}) as Record<string, unknown>,
-        doc_ref: meta.docRef ?? '',
+        docRef: meta.docRef ?? '',
       };
     });
 
     const words = pageData.textContent.split(/\s+/).filter(Boolean).length;
     const contentStats: ContentStatsProto = {
-      word_count: words,
-      character_count: pageData.textContent.length,
-      reading_time_sec: Math.ceil((words / WORDS_PER_MINUTE) * 60),
-      paragraph_count: (pageData.rawHtml.match(/<p\b/gi) ?? []).length,
-      image_count: pageData.images.length,
-      internal_link_count: pageData.internalLinks.length,
-      external_link_count: pageData.externalLinks.length,
+      wordCount: words,
+      characterCount: pageData.textContent.length,
+      readingTimeSec: Math.ceil((words / WORDS_PER_MINUTE) * 60),
+      paragraphCount: (pageData.rawHtml.match(/<p\b/gi) ?? []).length,
+      imageCount: pageData.images.length,
+      internalLinkCount: pageData.internalLinks.length,
+      externalLinkCount: pageData.externalLinks.length,
     };
 
     this.logger.log(
-      `AnalyzeContent req=${req.request_id} mode=${mode} words=${words} issues=${issues.length}`,
+      `AnalyzeContent req=${req.requestId} mode=${mode} words=${words} issues=${issues.length}`,
     );
 
     return {
-      rule_version: RULE_VERSION,
+      ruleVersion: RULE_VERSION,
       issues,
-      content_stats: contentStats,
+      contentStats,
     };
   }
 }

@@ -17,30 +17,33 @@ export interface SeoRuleItem {
   availableIn?: 'content_only' | 'full' | string;
 }
 
+// Wire format is camelCase: proto-loader is configured with `keepCase: false`
+// in grpc-client.factory.ts. Snake_case keys are silently dropped on both
+// serialize and deserialize, so all interfaces below MUST use camelCase.
 export interface AnalyzeContentIssue {
-  rule_id: string;
+  ruleId: string;
   status: string;
   score: number;
   category: string;
   severity: string;
   audiences: string[];
   message: string;
-  template_suggestion: string;
+  templateSuggestion: string;
   evidence: Record<string, unknown>;
-  doc_ref: string;
+  docRef: string;
 }
 
 export interface AnalyzeContentResponse {
-  rule_version: string;
+  ruleVersion: string;
   issues: AnalyzeContentIssue[];
-  content_stats: {
-    word_count: number;
-    character_count: number;
-    reading_time_sec: number;
-    paragraph_count: number;
-    image_count: number;
-    internal_link_count: number;
-    external_link_count: number;
+  contentStats: {
+    wordCount: number;
+    characterCount: number;
+    readingTimeSec: number;
+    paragraphCount: number;
+    imageCount: number;
+    internalLinkCount: number;
+    externalLinkCount: number;
   };
 }
 
@@ -53,13 +56,13 @@ interface AnalyzerService {
   UpdateRuleWeight(req: { ruleId: string; newWeight: number }, cb: (err: Error | null, res?: SeoRuleItem) => void): void;
   AnalyzeContent(
     req: {
-      request_id: string;
+      requestId: string;
       html: string;
-      target_keyword: string;
-      secondary_keywords: string[];
+      targetKeyword: string;
+      secondaryKeywords: string[];
       language: string;
       mode: number;
-      resolved_url: string;
+      resolvedUrl: string;
     },
     cb: (err: Error | null, res?: AnalyzeContentResponse) => void,
   ): void;
@@ -126,13 +129,13 @@ export class AnalyzerGrpcClient implements OnModuleInit {
     return new Promise((resolve, reject) => {
       this.client.AnalyzeContent(
         {
-          request_id: input.requestId,
+          requestId: input.requestId,
           html: input.html,
-          target_keyword: input.targetKeyword,
-          secondary_keywords: input.secondaryKeywords ?? [],
+          targetKeyword: input.targetKeyword,
+          secondaryKeywords: input.secondaryKeywords ?? [],
           language: input.language ?? 'vi',
           mode: input.mode === 'full' ? 2 : 1,
-          resolved_url: input.resolvedUrl ?? '',
+          resolvedUrl: input.resolvedUrl ?? '',
         },
         (err, res) => {
           if (err) return reject(err);

@@ -12,7 +12,7 @@
  *   - Any LLM error (network, guardrail, timeout) maps to template fallback.
  *   - Concurrency bucket full → template fallback (protects Anthropic quota).
  *   - Order preservation: output length = issues.length; a missing LLM entry
- *     is back-filled with the issue's template_suggestion.
+ *     is back-filled with the issue's templateSuggestion.
  *   - Never throws. Caller gets a response structure even when LLM explodes.
  */
 import { Injectable, Logger } from '@nestjs/common';
@@ -32,16 +32,16 @@ import {
 } from './seo-suggest-chain.factory';
 
 export interface AnalyzerIssue {
-  rule_id: string;
+  ruleId: string;
   status: string;
   score: number;
   category: string;
   severity: string;
   audiences: string[];
   message: string;
-  template_suggestion: string;
+  templateSuggestion: string;
   evidence: Record<string, unknown>;
-  doc_ref: string;
+  docRef: string;
 }
 
 export interface Suggestion {
@@ -94,8 +94,8 @@ export class SuggestionEnricherService {
     }
 
     const templateSuggestions = issues.map<Suggestion | null>((i) =>
-      i.template_suggestion
-        ? { type: 'rewrite', text: i.template_suggestion, rationale: '' }
+      i.templateSuggestion
+        ? { type: 'rewrite', text: i.templateSuggestion, rationale: '' }
         : null,
     );
 
@@ -142,11 +142,11 @@ export class SuggestionEnricherService {
         language: ctx.language,
         contentExcerpt: ctx.contentExcerpt.slice(0, EXCERPT_MAX_CHARS),
         issues: issues.map((i) => ({
-          ruleId: i.rule_id,
+          ruleId: i.ruleId,
           category: i.category,
           severity: i.severity,
           message: i.message,
-          templateSuggestion: i.template_suggestion,
+          templateSuggestion: i.templateSuggestion,
           evidence: i.evidence ?? {},
         })),
       };
@@ -190,16 +190,16 @@ export class SuggestionEnricherService {
     let templateCount = 0;
     const suggestions = issues.map<Suggestion | null>((iss, idx) => {
       const direct = out[idx];
-      if (direct && direct.ruleId === iss.rule_id) {
+      if (direct && direct.ruleId === iss.ruleId) {
         llmCount++;
         return { type: direct.type, text: direct.text, rationale: direct.rationale };
       }
-      const bucket = byRuleId.get(iss.rule_id);
+      const bucket = byRuleId.get(iss.ruleId);
       if (bucket && bucket.length > 0) {
-        const p = pointers.get(iss.rule_id) ?? 0;
+        const p = pointers.get(iss.ruleId) ?? 0;
         const pick = bucket[p];
         if (pick) {
-          pointers.set(iss.rule_id, p + 1);
+          pointers.set(iss.ruleId, p + 1);
           llmCount++;
           return { type: pick.type, text: pick.text, rationale: pick.rationale };
         }
@@ -224,7 +224,7 @@ export class SuggestionEnricherService {
     const h = createHash('sha256')
       .update(
         JSON.stringify({
-          issueIds: issues.map((i) => i.rule_id),
+          issueIds: issues.map((i) => i.ruleId),
           messages: issues.map((i) => i.message),
           evidence: issues.map((i) => i.evidence ?? {}),
           contentHash: ctx.contentHash,

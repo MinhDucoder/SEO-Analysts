@@ -23,29 +23,29 @@ import { RateLimiterService } from '../../src/infra/redis/rate-limiter.service';
 import { GrpcClientFactory } from '../../src/infra/grpc/grpc-client.factory';
 
 const analyzerResponse = {
-  rule_version: '1.2.0',
+  ruleVersion: '1.2.0',
   issues: [
     {
-      rule_id: 'title_tag',
+      ruleId: 'title_tag',
       status: 'warn',
       score: 50,
       category: 'meta',
       severity: 'warning',
       audiences: ['writer'],
       message: 'Title too short',
-      template_suggestion: 'Write a longer title',
+      templateSuggestion: 'Write a longer title',
       evidence: { currentLength: 10 },
-      doc_ref: 'https://d/r/title_tag',
+      docRef: 'https://d/r/title_tag',
     },
   ],
-  content_stats: {
-    word_count: 5,
-    character_count: 20,
-    reading_time_sec: 1,
-    paragraph_count: 1,
-    image_count: 0,
-    internal_link_count: 0,
-    external_link_count: 0,
+  contentStats: {
+    wordCount: 5,
+    characterCount: 20,
+    readingTimeSec: 1,
+    paragraphCount: 1,
+    imageCount: 0,
+    internalLinkCount: 0,
+    externalLinkCount: 0,
   },
 };
 
