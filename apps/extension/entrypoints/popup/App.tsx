@@ -1,41 +1,13 @@
 import { useEffect, useState } from 'react';
 import { loadApiKey, parseApiKeyEnvironment } from '@/lib/storage';
-import { dispatchErrorCode } from '@/lib/errors';
 import { API_BASE_URL } from '@/lib/api-base';
-import type {
-  PublicCheckIssue,
-  PublicCheckResponse,
-  IssueSeverity,
-} from '@/lib/api-types';
-import type { AuditReply, AuditErr } from '../background';
-
-function apiHostLabel(): string {
-  try {
-    return new URL(API_BASE_URL).host;
-  } catch {
-    return API_BASE_URL;
-  }
-}
-
-function CopyReqId({ requestId }: { requestId: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        void navigator.clipboard.writeText(requestId).then(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 1500);
-        });
-      }}
-      style={styles.copyBtn}
-      aria-label="Copy request ID"
-      title={copied ? 'Copied' : 'Copy request ID'}
-    >
-      {copied ? '✓' : '📋'}
-    </button>
-  );
-}
+import { getDict, loadUiLocale, type Locale } from '@/lib/i18n';
+import type { PublicCheckResponse } from '@/lib/api-types';
+import type { PublicApiLanguage } from '@/lib/types';
+import type { AuditReply, AuditErr } from '@/lib/audit-types';
+import { ResultView } from '@/lib/components/ResultView';
+import { ErrorView } from '@/lib/components/ErrorView';
+import { bg, border, btn, tag, text } from '@/lib/components/styles';
 
 type Mode =
   | { kind: 'idle' }
@@ -43,25 +15,39 @@ type Mode =
   | { kind: 'ok'; result: PublicCheckResponse }
   | { kind: 'error'; err: AuditErr };
 
+function hostLabel(): string {
+  try {
+    return new URL(API_BASE_URL).host;
+  } catch {
+    return API_BASE_URL;
+  }
+}
+
 export function App() {
   const [hasKey, setHasKey] = useState<boolean | null>(null);
   const [env, setEnv] = useState<'live' | 'test' | null>(null);
+  const [locale, setLocale] = useState<Locale>('vi');
   const [keyword, setKeyword] = useState('');
+  const [language, setLanguage] = useState<PublicApiLanguage>('vi');
   const [mode, setMode] = useState<Mode>({ kind: 'idle' });
+
+  const t = getDict(locale);
 
   useEffect(() => {
     void loadApiKey().then((k) => {
       setHasKey(!!k);
       if (k) setEnv(parseApiKeyEnvironment(k));
     });
+    void loadUiLocale().then(setLocale);
   }, []);
 
   async function runAudit() {
+    if (!keyword.trim()) return;
     setMode({ kind: 'running' });
     const reply = (await chrome.runtime.sendMessage({
       type: 'AUDIT_PAGE',
       targetKeyword: keyword,
-      language: 'vi',
+      language,
     })) as AuditReply;
     if (reply.ok) setMode({ kind: 'ok', result: reply.result });
     else setMode({ kind: 'error', err: reply });
@@ -71,393 +57,174 @@ export function App() {
     void chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS' });
   }
 
-  if (hasKey === null) return <main style={styles.main}>Loading…</main>;
+  function openSidePanel() {
+    void (async () => {
+      const tab = (await chrome.tabs.query({ active: true, currentWindow: true }))[0];
+      if (tab?.id != null) {
+        await chrome.sidePanel.open({ tabId: tab.id });
+        window.close();
+      }
+    })();
+  }
+
+  if (hasKey === null) return <main style={mainStyle}>Loading…</main>;
   if (hasKey === false) {
     return (
-      <main style={styles.main}>
-        <h1 style={styles.h1}>SEO Analyst</h1>
-        <p style={styles.warn}>No API key saved.</p>
-        <button type="button" style={styles.btnPrimary} onClick={openOptions}>
-          Set up API key
+      <main style={mainStyle}>
+        <h1 style={h1}>{t.popupHeading}</h1>
+        <p style={{ color: text.secondary, fontSize: 'var(--fs-sm)' }}>
+          {t.emptyDesc}
+        </p>
+        <button type="button" style={btn.primary} onClick={openOptions}>
+          {t.btnOpenSettings}
         </button>
       </main>
     );
   }
 
   return (
-    <main style={styles.main}>
-      <header style={styles.header}>
-        <h1 style={styles.h1}>SEO Analyst</h1>
-        <span style={env === 'live' ? styles.tagLive : styles.tagTest}>
-          {env ?? '?'}
-        </span>
+    <main style={mainStyle}>
+      <header style={headerStyle}>
+        <h1 style={h1}>{t.popupHeading}</h1>
+        {env && <span style={tag(env === 'live' ? 'live' : 'test')}>{env}</span>}
       </header>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           void runAudit();
         }}
-        style={styles.form}
+        style={{ display: 'flex', gap: 8, marginBottom: 12 }}
       >
         <input
           type="text"
-          placeholder="Target keyword (e.g. seo 2026)"
+          placeholder={t.keywordPlaceholder}
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          style={styles.input}
+          style={inputStyle}
           disabled={mode.kind === 'running'}
         />
         <button
           type="submit"
-          style={styles.btnPrimary}
-          disabled={!keyword || mode.kind === 'running'}
+          style={btn.primary}
+          disabled={!keyword.trim() || mode.kind === 'running'}
         >
-          {mode.kind === 'running' ? 'Auditing…' : 'Audit page'}
+          {mode.kind === 'running' ? t.btnAuditing : t.btnAudit}
         </button>
       </form>
-      {mode.kind === 'ok' && <ResultView result={mode.result} />}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
+        <span style={{ fontSize: 'var(--fs-xs)', color: text.secondary }}>
+          {t.languageLabel}:
+        </span>
+        <SegmentedLang value={language} onChange={setLanguage} />
+      </div>
+      {mode.kind === 'ok' && <ResultView result={mode.result} t={t} />}
       {mode.kind === 'error' && (
-        <ErrorView err={mode.err} onOpenOptions={openOptions} onRetry={runAudit} />
+        <ErrorView
+          err={mode.err}
+          onOpenOptions={openOptions}
+          onRetry={() => void runAudit()}
+          t={t}
+        />
       )}
-      <footer style={styles.footer}>
-        <span style={styles.hostLabel}>{apiHostLabel()}</span>
-        <button type="button" style={styles.linkBtn} onClick={openOptions}>
-          Manage key
-        </button>
+      <footer style={footer}>
+        <span style={hostLabelStyle}>{hostLabel()}</span>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="button" style={btn.ghost} onClick={openSidePanel}>
+            {t.btnOpenSidePanel}
+          </button>
+          <button type="button" style={btn.ghost} onClick={openOptions}>
+            {t.btnManageKey}
+          </button>
+        </div>
       </footer>
     </main>
   );
 }
 
-function ResultView({ result }: { result: PublicCheckResponse }) {
-  const scoreColor =
-    result.score >= 80 ? '#15803d' : result.score >= 60 ? '#b45309' : '#dc2626';
-  return (
-    <section style={styles.result}>
-      <div style={styles.scoreRow}>
-        <span style={styles.scoreLabel}>Score</span>
-        <span style={{ ...styles.scoreValue, color: scoreColor }}>
-          {result.score}/100
-        </span>
-        {result.meta.cached && <span style={styles.cachedTag}>cached</span>}
-        {result.meta.degraded && <span style={styles.degradedTag}>template-fallback</span>}
-      </div>
-      <p style={styles.stats}>
-        {result.meta.contentStats.words} words · {result.issues.length} issues ·{' '}
-        {result.meta.processingTimeMs}ms
-      </p>
-      <ul style={styles.issues}>
-        {result.issues.length === 0 && (
-          <li style={styles.noneFound}>No issues found 🎉</li>
-        )}
-        {result.issues.map((i, idx) => (
-          <IssueCard key={`${i.ruleId}-${idx}`} issue={i} />
-        ))}
-      </ul>
-      <p style={styles.usage}>
-        {result.meta.usage.remaining.minute} reqs left / min ·{' '}
-        {result.meta.usage.remaining.day} / day
-      </p>
-    </section>
-  );
-}
-
-function IssueCard({ issue }: { issue: PublicCheckIssue }) {
-  return (
-    <li style={{ ...styles.issue, borderLeftColor: severityColor(issue.severity) }}>
-      <div style={styles.issueHeader}>
-        <span style={styles.issueTitle}>{issue.title}</span>
-        <span style={{ ...styles.severity, color: severityColor(issue.severity) }}>
-          {issue.severity}
-        </span>
-      </div>
-      <p style={styles.issueDesc}>{issue.description}</p>
-      {issue.suggestion && (
-        <div style={styles.suggestion}>
-          <div style={styles.suggestionLabel}>
-            {issue.suggestion.type === 'rewrite'
-              ? '✏️ Rewrite'
-              : issue.suggestion.type === 'add'
-                ? '➕ Add'
-                : issue.suggestion.type === 'remove'
-                  ? '➖ Remove'
-                  : '↔️ Reorder'}
-          </div>
-          <div style={styles.suggestionText}>{issue.suggestion.text}</div>
-          {issue.suggestion.rationale && (
-            <div style={styles.suggestionRationale}>{issue.suggestion.rationale}</div>
-          )}
-        </div>
-      )}
-      {issue.docRef && (
-        <a
-          href={issue.docRef}
-          target="_blank"
-          rel="noreferrer"
-          style={styles.docLink}
-        >
-          Learn more →
-        </a>
-      )}
-    </li>
-  );
-}
-
-function ErrorView({
-  err,
-  onOpenOptions,
-  onRetry,
+function SegmentedLang({
+  value,
+  onChange,
 }: {
-  err: AuditErr;
-  onOpenOptions: () => void;
-  onRetry: () => void;
+  value: PublicApiLanguage;
+  onChange: (v: PublicApiLanguage) => void;
 }) {
-  const action = dispatchErrorCode(err.code);
+  const cell = (active: boolean) => ({
+    padding: '2px 8px',
+    cursor: 'pointer',
+    fontSize: 'var(--fs-xs)',
+    fontWeight: 600,
+    background: active ? 'var(--accent-primary)' : 'transparent',
+    color: active ? 'var(--accent-on-primary)' : text.secondary,
+    border: 'none',
+    borderRadius: 'var(--radius-xs)',
+  });
   return (
-    <section style={styles.errorBox}>
-      <p style={styles.errorMsg}>{err.message}</p>
-      <div style={styles.errorMetaRow}>
-        <p style={styles.errorMeta}>
-          {err.code}
-          {err.requestId ? ` · ${err.requestId}` : ''}
-          {err.status > 0 ? ` · HTTP ${err.status}` : ''}
-        </p>
-        {err.requestId && <CopyReqId requestId={err.requestId} />}
-      </div>
-      {action === 'OPEN_OPTIONS' && (
-        <button type="button" style={styles.btnPrimary} onClick={onOpenOptions}>
-          Open settings
-        </button>
-      )}
-      {action === 'RETRY_LATER' && err.retryAfterSeconds && (
-        <RetryCountdown seconds={err.retryAfterSeconds} onRetry={onRetry} />
-      )}
-      {(action === 'INPUT_FIX' || action === 'SHOW_SERVER_OUTAGE' || action === 'SHOW_GENERIC') && (
-        <button type="button" style={styles.btnSecondary} onClick={onRetry}>
-          Try again
-        </button>
-      )}
-    </section>
+    <div
+      style={{
+        display: 'inline-flex',
+        gap: 0,
+        background: bg.subtle,
+        border: `1px solid ${border.default}`,
+        borderRadius: 'var(--radius-xs)',
+        padding: 2,
+      }}
+    >
+      <button type="button" style={cell(value === 'vi')} onClick={() => onChange('vi')}>
+        vi
+      </button>
+      <button type="button" style={cell(value === 'en')} onClick={() => onChange('en')}>
+        en
+      </button>
+    </div>
   );
 }
 
-function RetryCountdown({
-  seconds,
-  onRetry,
-}: {
-  seconds: number;
-  onRetry: () => void;
-}) {
-  const [left, setLeft] = useState(seconds);
-  useEffect(() => {
-    if (left <= 0) return;
-    const t = setTimeout(() => setLeft((s) => s - 1), 1000);
-    return () => clearTimeout(t);
-  }, [left]);
-  if (left > 0) {
-    return <p style={styles.retryText}>Retry in {left}s…</p>;
-  }
-  return (
-    <button type="button" style={styles.btnPrimary} onClick={onRetry}>
-      Retry now
-    </button>
-  );
-}
+const mainStyle = {
+  width: 380,
+  minHeight: 120,
+  padding: 12,
+  fontFamily: 'var(--font-display)',
+  color: text.primary,
+  background: bg.surface,
+  fontSize: 'var(--fs-base)',
+};
 
-function severityColor(s: IssueSeverity): string {
-  return s === 'error' ? '#dc2626' : s === 'warning' ? '#b45309' : '#0284c7';
-}
+const headerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  marginBottom: 8,
+};
 
-const styles: Record<string, React.CSSProperties> = {
-  main: {
-    width: 380,
-    minHeight: 120,
-    padding: 12,
-    fontFamily: 'system-ui, -apple-system, sans-serif',
-    color: '#0f172a',
-    fontSize: 13,
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 8,
-  },
-  h1: { fontSize: 15, margin: 0, flex: 1 },
-  tagLive: {
-    background: '#dcfce7',
-    color: '#15803d',
-    padding: '2px 6px',
-    borderRadius: 4,
-    fontSize: 11,
-    fontWeight: 600,
-  },
-  tagTest: {
-    background: '#dbeafe',
-    color: '#1d4ed8',
-    padding: '2px 6px',
-    borderRadius: 4,
-    fontSize: 11,
-    fontWeight: 600,
-  },
-  warn: { color: '#854d0e', fontSize: 13 },
-  form: { display: 'flex', gap: 8, marginBottom: 12 },
-  input: {
-    flex: 1,
-    padding: '6px 10px',
-    border: '1px solid #cbd5e1',
-    borderRadius: 6,
-    fontSize: 13,
-  },
-  btnPrimary: {
-    padding: '6px 12px',
-    background: '#0f172a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 6,
-    fontSize: 13,
-    cursor: 'pointer',
-  },
-  btnSecondary: {
-    padding: '6px 12px',
-    background: '#f1f5f9',
-    color: '#0f172a',
-    border: '1px solid #cbd5e1',
-    borderRadius: 6,
-    fontSize: 13,
-    cursor: 'pointer',
-  },
-  linkBtn: {
-    background: 'none',
-    border: 'none',
-    color: '#1d4ed8',
-    cursor: 'pointer',
-    fontSize: 12,
-    padding: 0,
-  },
-  result: { marginTop: 8 },
-  scoreRow: {
-    display: 'flex',
-    alignItems: 'baseline',
-    gap: 8,
-    paddingBottom: 4,
-    borderBottom: '1px solid #e2e8f0',
-  },
-  scoreLabel: { fontSize: 12, color: '#64748b' },
-  scoreValue: { fontSize: 22, fontWeight: 700 },
-  cachedTag: {
-    fontSize: 10,
-    background: '#fef3c7',
-    color: '#92400e',
-    padding: '2px 6px',
-    borderRadius: 4,
-  },
-  degradedTag: {
-    fontSize: 10,
-    background: '#e0e7ff',
-    color: '#3730a3',
-    padding: '2px 6px',
-    borderRadius: 4,
-  },
-  stats: { color: '#64748b', fontSize: 12, margin: '4px 0 8px' },
-  issues: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    maxHeight: 360,
-    overflowY: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-  },
-  noneFound: { color: '#15803d', fontSize: 13, textAlign: 'center', padding: 16 },
-  issue: {
-    background: '#f8fafc',
-    border: '1px solid #e2e8f0',
-    borderLeft: '4px solid',
-    borderRadius: 6,
-    padding: 10,
-  },
-  issueHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    gap: 8,
-  },
-  issueTitle: { fontWeight: 600, fontSize: 13 },
-  severity: { fontSize: 11, fontWeight: 600, textTransform: 'uppercase' },
-  issueDesc: { color: '#475569', fontSize: 12, margin: '4px 0 0' },
-  suggestion: {
-    background: '#fff',
-    border: '1px solid #e2e8f0',
-    borderRadius: 4,
-    padding: 8,
-    marginTop: 8,
-  },
-  suggestionLabel: { fontSize: 11, fontWeight: 600, color: '#64748b' },
-  suggestionText: {
-    fontSize: 12,
-    marginTop: 4,
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-  },
-  suggestionRationale: {
-    fontSize: 11,
-    fontStyle: 'italic',
-    color: '#64748b',
-    marginTop: 4,
-  },
-  docLink: {
-    fontSize: 11,
-    color: '#1d4ed8',
-    textDecoration: 'none',
-    marginTop: 6,
-    display: 'inline-block',
-  },
-  usage: { fontSize: 11, color: '#94a3b8', marginTop: 8, textAlign: 'center' },
-  errorBox: {
-    background: '#fef2f2',
-    border: '1px solid #fecaca',
-    borderRadius: 6,
-    padding: 10,
-    marginTop: 8,
-  },
-  errorMsg: { color: '#991b1b', fontSize: 13, margin: 0 },
-  errorMeta: {
-    color: '#7f1d1d',
-    fontSize: 11,
-    margin: 0,
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-  },
-  retryText: { fontSize: 12, color: '#475569', margin: 0 },
-  footer: {
-    marginTop: 12,
-    paddingTop: 8,
-    borderTop: '1px solid #e2e8f0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
-  },
-  hostLabel: {
-    fontSize: 11,
-    color: '#94a3b8',
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-  },
-  errorMetaRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
-    margin: '4px 0 8px',
-  },
-  copyBtn: {
-    background: 'none',
-    border: '1px solid #fecaca',
-    color: '#7f1d1d',
-    cursor: 'pointer',
-    fontSize: 12,
-    padding: '2px 6px',
-    borderRadius: 4,
-    lineHeight: 1,
-  },
+const h1 = {
+  fontSize: 'var(--fs-lg)',
+  margin: 0,
+  flex: 1,
+  color: text.primary,
+};
+
+const inputStyle = {
+  flex: 1,
+  padding: '6px 10px',
+  border: `1px solid ${border.default}`,
+  borderRadius: 'var(--radius-sm)',
+  fontSize: 'var(--fs-base)',
+  background: bg.surface,
+  color: text.primary,
+};
+
+const footer = {
+  marginTop: 12,
+  paddingTop: 8,
+  borderTop: `1px solid ${border.default}`,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 8,
+};
+
+const hostLabelStyle = {
+  fontSize: 'var(--fs-xs)',
+  color: text.tertiary,
+  fontFamily: 'var(--font-mono)',
 };

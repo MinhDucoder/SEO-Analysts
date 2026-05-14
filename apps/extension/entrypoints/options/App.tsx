@@ -6,6 +6,9 @@ import {
   parseApiKeyEnvironment,
   saveApiKey,
 } from '@/lib/storage';
+import { getDict, loadUiLocale, saveUiLocale, type Locale } from '@/lib/i18n';
+import { applyTheme, type ThemeMode } from '@/lib/tokens';
+import { bg, border, btn, sev, tag, text } from '@/lib/components/styles';
 import type { ApiKeyEnvironment } from '@/lib/types';
 
 type Status =
@@ -14,13 +17,39 @@ type Status =
   | { kind: 'saved'; env: ApiKeyEnvironment }
   | { kind: 'error'; message: string };
 
+const THEME_KEY = 'theme';
+
+async function loadTheme(): Promise<ThemeMode> {
+  try {
+    const out = (await chrome.storage.local.get(THEME_KEY)) as Record<string, unknown>;
+    const v = out[THEME_KEY];
+    if (v === 'light' || v === 'dark' || v === 'system') return v;
+  } catch {
+    // fall through
+  }
+  return 'system';
+}
+
+async function persistTheme(t: ThemeMode): Promise<void> {
+  await chrome.storage.local.set({ [THEME_KEY]: t });
+}
+
 export function App() {
   const [input, setInput] = useState('');
   const [existing, setExisting] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
+  const [locale, setLocale] = useState<Locale>('vi');
+  const [theme, setTheme] = useState<ThemeMode>('system');
+
+  const t = getDict(locale);
 
   useEffect(() => {
     void loadApiKey().then(setExisting);
+    void loadUiLocale().then(setLocale);
+    void loadTheme().then((m) => {
+      setTheme(m);
+      applyTheme(m);
+    });
   }, []);
 
   async function handleSave(e: React.FormEvent) {
@@ -39,7 +68,7 @@ export function App() {
     } catch (err) {
       setStatus({
         kind: 'error',
-        message: err instanceof Error ? err.message : String(err),
+        message: err instanceof Error ? err.message : t.optionsErrFormat,
       });
     }
   }
@@ -51,6 +80,17 @@ export function App() {
     await chrome.runtime.sendMessage({ type: 'API_KEY_CLEARED' });
   }
 
+  async function changeLocale(next: Locale) {
+    setLocale(next);
+    await saveUiLocale(next);
+  }
+
+  async function changeTheme(next: ThemeMode) {
+    setTheme(next);
+    applyTheme(next);
+    await persistTheme(next);
+  }
+
   const isInputValid = input.length === 0 || isValidApiKeyFormat(input.trim());
   const env = existing ? parseApiKeyEnvironment(existing) : null;
   const maskedExisting = existing
@@ -58,157 +98,224 @@ export function App() {
     : null;
 
   return (
-    <main style={styles.main}>
-      <h1 style={styles.h1}>SEO Analyst — Settings</h1>
-      <p style={styles.muted}>
-        Paste your API key from the SEO Analyst web app to enable on-page
-        audits. Keys live only on this device — they never leave Chrome
-        unless you call the API.
-      </p>
+    <main style={main}>
+      <header style={headerRow}>
+        <h1 style={h1}>{t.optionsTitle}</h1>
+        <LangToggle locale={locale} onChange={changeLocale} />
+      </header>
+      <p style={intro}>{t.optionsIntro}</p>
 
       {maskedExisting ? (
-        <section style={styles.card}>
-          <p style={styles.row}>
-            <strong>Saved key</strong>
-            <span style={styles.kbd}>{maskedExisting}</span>
-            <span style={env === 'live' ? styles.tagLive : styles.tagTest}>
-              {env ?? '?'}
-            </span>
-          </p>
-          <button type="button" style={styles.btnDanger} onClick={handleClear}>
-            Forget this key
+        <section style={card}>
+          <div style={row}>
+            <strong style={{ color: text.primary }}>{t.optionsSavedKey}</strong>
+            <span style={kbd}>{maskedExisting}</span>
+            {env && <span style={tag(env === 'live' ? 'live' : 'test')}>{env}</span>}
+          </div>
+          <button type="button" style={btn.danger} onClick={handleClear}>
+            {t.optionsForgetKey}
           </button>
         </section>
       ) : (
-        <p style={styles.warn}>
-          No key saved yet. Get one at <code>/settings/api-keys</code> on the
-          web app.
-        </p>
+        <p style={warn}>{t.errMissingKey}</p>
       )}
 
-      <form onSubmit={handleSave} style={styles.form}>
-        <label htmlFor="apiKey" style={styles.label}>
-          {existing ? 'Replace key' : 'Add key'}
+      <form onSubmit={handleSave} style={form}>
+        <label htmlFor="apiKey" style={label}>
+          {existing ? t.optionsReplaceKey : t.optionsAddTitle}
         </label>
         <input
           id="apiKey"
           type="password"
           autoComplete="off"
           spellCheck={false}
-          placeholder="sk_live_… or sk_test_…"
+          placeholder={t.optionsKeyPlaceholder}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           style={{
-            ...styles.input,
-            borderColor: isInputValid ? '#cbd5e1' : '#dc2626',
+            ...inputStyle,
+            borderColor: isInputValid ? border.default : sev.error,
           }}
         />
-        {!isInputValid && (
-          <p style={styles.errorText}>
-            Expected <code>sk_live_</code> or <code>sk_test_</code> followed
-            by 43 alphanumeric characters.
-          </p>
-        )}
+        {!isInputValid && <p style={{ color: sev.error, fontSize: 'var(--fs-sm)', margin: 0 }}>{t.optionsErrFormat}</p>}
+        <p style={hint}>{t.optionsAddHint}</p>
         <button
           type="submit"
           disabled={!input || !isInputValid || status.kind === 'saving'}
-          style={styles.btnPrimary}
+          style={{ ...btn.primary, alignSelf: 'flex-start' }}
         >
-          {status.kind === 'saving' ? 'Saving…' : 'Save'}
+          {status.kind === 'saving' ? t.optionsSaving : t.optionsSave}
         </button>
       </form>
 
       {status.kind === 'saved' && (
-        <p style={styles.success}>
-          Key saved ({status.env} environment). You can close this tab.
+        <p style={{ color: 'var(--sev-success)', fontSize: 'var(--fs-md)', marginTop: 12 }}>
+          {t.optionsSavedToast(status.env)}
         </p>
       )}
       {status.kind === 'error' && (
-        <p style={styles.errorText}>{status.message}</p>
+        <p style={{ color: sev.error, fontSize: 'var(--fs-sm)' }}>{status.message}</p>
       )}
+
+      <section style={card}>
+        <strong style={{ color: text.primary }}>{t.optionsThemeLabel}</strong>
+        <ThemePicker value={theme} onChange={changeTheme} t={t} />
+      </section>
+
+      <section style={trustCard}>
+        <strong style={{ color: text.primary }}>{t.optionsTrustTitle}</strong>
+        <p style={{ color: text.secondary, fontSize: 'var(--fs-sm)', margin: 0, lineHeight: 1.5 }}>
+          {t.optionsTrustDesc}
+        </p>
+      </section>
     </main>
   );
 }
 
-const styles: Record<string, React.CSSProperties> = {
-  main: {
-    maxWidth: 560,
-    margin: '40px auto',
-    padding: '0 24px',
-    fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-    color: '#0f172a',
-  },
-  h1: { fontSize: 24, marginBottom: 8 },
-  muted: { color: '#475569', fontSize: 14, lineHeight: 1.5 },
-  warn: {
-    background: '#fef9c3',
-    border: '1px solid #facc15',
-    padding: 12,
-    borderRadius: 6,
-    color: '#854d0e',
-    fontSize: 14,
-  },
-  card: {
-    background: '#f8fafc',
-    border: '1px solid #e2e8f0',
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  row: { display: 'flex', alignItems: 'center', gap: 8, margin: 0 },
-  kbd: {
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-    background: '#fff',
-    border: '1px solid #cbd5e1',
-    padding: '2px 6px',
-    borderRadius: 4,
-    fontSize: 13,
-  },
-  tagLive: {
-    background: '#dcfce7',
-    color: '#15803d',
-    padding: '2px 6px',
-    borderRadius: 4,
-    fontSize: 12,
+function LangToggle({ locale, onChange }: { locale: Locale; onChange: (l: Locale) => void }) {
+  const cell = (active: boolean) => ({
+    padding: '4px 10px',
+    cursor: 'pointer',
+    fontSize: 'var(--fs-sm)',
     fontWeight: 600,
-  },
-  tagTest: {
-    background: '#dbeafe',
-    color: '#1d4ed8',
-    padding: '2px 6px',
-    borderRadius: 4,
-    fontSize: 12,
-    fontWeight: 600,
-  },
-  form: { marginTop: 24, display: 'flex', flexDirection: 'column', gap: 8 },
-  label: { fontSize: 13, fontWeight: 600 },
-  input: {
-    padding: '8px 12px',
-    border: '1px solid #cbd5e1',
-    borderRadius: 6,
-    fontSize: 14,
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-  },
-  errorText: { color: '#dc2626', fontSize: 13, margin: 0 },
-  success: { color: '#15803d', fontSize: 14, marginTop: 12 },
-  btnPrimary: {
-    alignSelf: 'flex-start',
-    padding: '8px 16px',
-    background: '#0f172a',
-    color: '#fff',
+    background: active ? 'var(--accent-primary)' : 'transparent',
+    color: active ? 'var(--accent-on-primary)' : text.secondary,
     border: 'none',
-    borderRadius: 6,
-    fontSize: 14,
-    cursor: 'pointer',
-  },
-  btnDanger: {
+    borderRadius: 'var(--radius-xs)',
+  });
+  return (
+    <div
+      style={{
+        display: 'inline-flex',
+        background: bg.subtle,
+        border: `1px solid ${border.default}`,
+        borderRadius: 'var(--radius-xs)',
+        padding: 2,
+      }}
+    >
+      <button type="button" style={cell(locale === 'vi')} onClick={() => onChange('vi')}>
+        VI
+      </button>
+      <button type="button" style={cell(locale === 'en')} onClick={() => onChange('en')}>
+        EN
+      </button>
+    </div>
+  );
+}
+
+function ThemePicker({
+  value,
+  onChange,
+  t,
+}: {
+  value: ThemeMode;
+  onChange: (m: ThemeMode) => void;
+  t: ReturnType<typeof getDict>;
+}) {
+  const cell = (active: boolean) => ({
     padding: '6px 12px',
-    background: '#fee2e2',
-    color: '#991b1b',
-    border: '1px solid #fecaca',
-    borderRadius: 6,
-    fontSize: 13,
     cursor: 'pointer',
-    marginTop: 12,
-  },
+    fontSize: 'var(--fs-sm)',
+    fontWeight: 500,
+    background: active ? 'var(--accent-primary)' : bg.subtle,
+    color: active ? 'var(--accent-on-primary)' : text.secondary,
+    border: `1px solid ${active ? 'var(--accent-primary)' : border.default}`,
+    borderRadius: 'var(--radius-xs)',
+  });
+  return (
+    <div style={{ display: 'inline-flex', gap: 6, marginTop: 8 }}>
+      <button type="button" style={cell(value === 'system')} onClick={() => onChange('system')}>
+        {t.optionsThemeSystem}
+      </button>
+      <button type="button" style={cell(value === 'light')} onClick={() => onChange('light')}>
+        {t.optionsThemeLight}
+      </button>
+      <button type="button" style={cell(value === 'dark')} onClick={() => onChange('dark')}>
+        {t.optionsThemeDark}
+      </button>
+    </div>
+  );
+}
+
+const main = {
+  maxWidth: 560,
+  margin: '40px auto',
+  padding: '0 24px',
+  fontFamily: 'var(--font-display)',
+  color: text.primary,
+  background: bg.canvas,
+  minHeight: '100vh',
+};
+
+const headerRow = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 12,
+};
+
+const h1 = { fontSize: 'var(--fs-3xl)', margin: 0, color: text.primary };
+
+const intro = {
+  color: text.secondary,
+  fontSize: 'var(--fs-md)',
+  lineHeight: 1.55,
+  marginTop: 8,
+};
+
+const card = {
+  background: bg.surface,
+  border: `1px solid ${border.default}`,
+  padding: 16,
+  borderRadius: 'var(--radius-md)',
+  marginTop: 16,
+  display: 'flex',
+  flexDirection: 'column' as const,
+  gap: 12,
+};
+
+const trustCard = {
+  ...card,
+  background: bg.subtle,
+};
+
+const row = { display: 'flex', alignItems: 'center', gap: 8, margin: 0 };
+
+const kbd = {
+  fontFamily: 'var(--font-mono)',
+  background: bg.surface,
+  border: `1px solid ${border.default}`,
+  padding: '2px 6px',
+  borderRadius: 'var(--radius-xs)',
+  fontSize: 'var(--fs-base)',
+  color: text.primary,
+};
+
+const warn = {
+  background: 'var(--sev-warning-bg)',
+  border: `1px solid var(--sev-warning)`,
+  padding: 12,
+  borderRadius: 'var(--radius-sm)',
+  color: 'var(--sev-warning)',
+  fontSize: 'var(--fs-md)',
+};
+
+const form = { marginTop: 24, display: 'flex', flexDirection: 'column' as const, gap: 8 };
+
+const label = { fontSize: 'var(--fs-sm)', fontWeight: 600, color: text.secondary };
+
+const inputStyle = {
+  padding: '8px 12px',
+  border: `1px solid ${border.default}`,
+  borderRadius: 'var(--radius-sm)',
+  fontSize: 'var(--fs-md)',
+  fontFamily: 'var(--font-mono)',
+  background: bg.surface,
+  color: text.primary,
+};
+
+const hint = {
+  color: text.tertiary,
+  fontSize: 'var(--fs-sm)',
+  margin: 0,
 };
