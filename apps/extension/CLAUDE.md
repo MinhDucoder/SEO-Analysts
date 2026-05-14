@@ -75,26 +75,27 @@ npm run check-types -w @seo/extension  # tsc --noEmit
 3. Load unpacked → select `apps/extension/.output/chrome-mv3-dev` (or
    `chrome-mv3` for production)
 
-## Known issue — Vite version conflict (Phase 1)
+## Build pipeline — npm override
 
-`wxt prepare` / `wxt build` currently fail with
-`Package subpath './internal' is not defined by "exports" in vite`.
-Root cause: WXT 0.20 expects Vite ^8 but vitest 2.1.9 pins Vite 5.4 at
-the root, and npm hoisting puts the older Vite where WXT's plugin-react
-resolves it. The bundled `wxt/node_modules/vite` (v8) is not picked up.
+The root `package.json` pins `@wxt-dev/module-react`'s nested
+`@vitejs/plugin-react` to `^4.7.0`:
 
-Workarounds (pick one in Phase 2):
-1. Add `"overrides": { "vite": "^8.0.12" }` to root package.json (will
-   break vitest in other workspaces until vitest is bumped).
-2. Pin `vite` as a direct devDep in `apps/extension/package.json` so
-   npm nests it correctly inside the extension workspace.
-3. Move the extension build to a sibling repo until the monorepo's
-   vitest/vite versions catch up.
+```json
+"overrides": {
+  "@wxt-dev/module-react": {
+    "@vitejs/plugin-react": "^4.7.0"
+  }
+}
+```
 
-Phase 1 tests (`storage.spec.ts`) and `check-types` work without any
-of these workarounds — the issue only blocks `wxt prepare` / `wxt
-build`. Validate Phase 1 by reading the code; defer the build pipeline
-fix to Phase 2 where it's needed.
+Why: the stock `module-react@1.2.x` ships `plugin-react@6`, which
+imports `vite/internal` — a Vite 8 export. The monorepo's vitest
+chain ends up hoisting Vite 7 (which has no `./internal` subpath),
+so plugin-react@6 crashes at `wxt prepare`. plugin-react@4 uses only
+public Vite API and works against any Vite 4-8.
+
+If WXT or module-react ship a fix, this override can be removed — but
+verify with `wxt build` first.
 
 ## Backend contract
 
