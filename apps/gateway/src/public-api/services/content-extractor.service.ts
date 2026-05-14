@@ -4,7 +4,7 @@
  * for SSRF and fetched via the crawler's LiteFetch RPC; markdown is
  * parsed with `marked` and wrapped in <article>; HTML passes through.
  */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { marked } from 'marked';
 import { lookup } from 'dns/promises';
 import { isIP } from 'net';
@@ -35,12 +35,35 @@ export class ContentExtractorService {
       }
       case 'url': {
         await this.validateUrlSafety(input.url);
-        const r = await this.crawler.liteFetch({
-          requestId: `pc-${Date.now()}`,
-          url: input.url,
-          timeoutMs: 10_000,
-        });
-        return { html: r.html, resolvedUrl: r.finalUrl, fromCache: r.fromCache };
+        try {
+          const r = await this.crawler.liteFetch({
+            requestId: `pc-${Date.now()}`,
+            url: input.url,
+            timeoutMs: 10_000,
+          });
+          return { html: r.html, resolvedUrl: r.finalUrl, fromCache: r.fromCache };
+        } catch (e) {
+          // The crawler's LiteFetch throws plain `Error` for HTTP failures,
+          // content-type rejections, and timeouts. Translate those to the
+          // documented public-API error codes (`docs/public-api/error-codes.md`)
+          // so clients can dispatch correctly — a Chrome extension that
+          // retries on 5xx but treats 4xx as a user error must see 424 here,
+          // not the generic 500/INTERNAL that an unwrapped Error produces.
+          const msg = e instanceof Error ? e.message : String(e);
+          if (/timeout/i.test(msg) || (e as Error)?.name === 'AbortError') {
+            throw new HttpException(
+              {
+                code: 'URL_FETCH_TIMEOUT',
+                message: `Timed out fetching ${input.url}`,
+              },
+              424,
+            );
+          }
+          throw new HttpException(
+            { code: 'URL_FETCH_FAILED', message: msg },
+            424,
+          );
+        }
       }
     }
   }
