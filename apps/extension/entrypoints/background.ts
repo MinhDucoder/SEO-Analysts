@@ -1,45 +1,209 @@
 /**
- * MV3 service worker. Phase 1 scope: open the options page on demand
- * (e.g. when the popup requests it) and forward storage events.
- * Phase 2 will add the `AUDIT_PAGE` handler that actually calls
- * `POST /api/v1/public/check`.
+ * MV3 service worker. Owns the audit pipeline:
+ *
+ *   popup → AUDIT_PAGE → background
+ *     1. loadApiKey() — bail with MISSING_API_KEY + open options if absent
+ *     2. ask content script for URL probe (cheap)
+ *     3. pick mode (URL by default; HTML if auth-gated)
+ *     4. if HTML: ask content script for serialised DOM
+ *     5. POST /public/check via client.check
+ *     6. return parsed PublicCheckResponse OR { error: PublicApiError shape }
+ *
+ * On any auth error (`OPEN_OPTIONS` action) the worker also opens the
+ * options page so the user lands where they need to be without an
+ * extra click.
  */
 import { defineBackground } from 'wxt/utils/define-background';
 import { loadApiKey } from '@/lib/storage';
-import type { ExtensionMessage } from '@/lib/types';
+import { check } from '@/lib/client';
+import { PublicApiError } from '@/lib/errors';
+import { API_BASE_URL } from '@/lib/api-base';
+import type {
+  ContentScrapeProbe,
+  ExtensionMessage,
+  PublicApiLanguage,
+} from '@/lib/types';
+import type {
+  PublicCheckInput,
+  PublicCheckResponse,
+} from '@/lib/api-types';
+
+export type AuditOk = { ok: true; result: PublicCheckResponse };
+export type AuditErr = {
+  ok: false;
+  code: string;
+  message: string;
+  status: number;
+  requestId?: string;
+  retryAfterSeconds?: number;
+};
+export type AuditReply = AuditOk | AuditErr;
 
 export default defineBackground(() => {
   chrome.runtime.onMessage.addListener((rawMsg, _sender, sendResponse) => {
     const msg = rawMsg as ExtensionMessage;
-    void handleMessage(msg).then(sendResponse).catch((e: unknown) => {
-      const message = e instanceof Error ? e.message : String(e);
-      sendResponse({ ok: false, error: message });
-    });
-    return true; // keep the channel open for the async response
+    void handleMessage(msg)
+      .then(sendResponse)
+      .catch((e: unknown) => {
+        sendResponse({
+          ok: false,
+          code: 'CLIENT_UNKNOWN',
+          message: e instanceof Error ? e.message : String(e),
+          status: 0,
+        } satisfies AuditErr);
+      });
+    return true; // keep the channel open
   });
 
-  // Open options page when the user clicks the extension action but no
-  // key has been saved yet. UX hint: surface the setup step at the first
-  // sign of trouble rather than buried under a popup error.
   chrome.runtime.onInstalled.addListener(async () => {
-    if (!(await loadApiKey())) {
-      chrome.runtime.openOptionsPage();
-    }
+    if (!(await loadApiKey())) chrome.runtime.openOptionsPage();
   });
 });
 
-async function handleMessage(
-  msg: ExtensionMessage,
-): Promise<{ ok: true } | { ok: false; error: string }> {
+async function handleMessage(msg: ExtensionMessage): Promise<unknown> {
   switch (msg.type) {
     case 'OPEN_OPTIONS':
       chrome.runtime.openOptionsPage();
       return { ok: true };
     case 'API_KEY_SAVED':
     case 'API_KEY_CLEARED':
-      // Phase 2 will use this to invalidate the popup's cached state.
       return { ok: true };
+    case 'AUDIT_PAGE':
+      return await runAudit(msg);
     default:
-      return { ok: false, error: `Unknown message: ${(msg as { type: string }).type}` };
+      return {
+        ok: false,
+        code: 'CLIENT_UNKNOWN',
+        message: `Unhandled message: ${(msg as { type: string }).type}`,
+        status: 0,
+      } satisfies AuditErr;
   }
+}
+
+async function runAudit(msg: {
+  targetKeyword: string;
+  language?: PublicApiLanguage;
+  secondaryKeywords?: string[];
+}): Promise<AuditReply> {
+  const apiKey = await loadApiKey();
+  if (!apiKey) {
+    chrome.runtime.openOptionsPage();
+    return {
+      ok: false,
+      code: 'MISSING_API_KEY',
+      message: 'Set up an API key in the extension options to enable audits.',
+      status: 401,
+    };
+  }
+  if (!msg.targetKeyword || msg.targetKeyword.trim().length === 0) {
+    return {
+      ok: false,
+      code: 'MISSING_TARGET_KEYWORD',
+      message: 'Enter a target keyword before running an audit.',
+      status: 422,
+    };
+  }
+
+  const tab = await getActiveTab();
+  if (!tab?.id || !tab.url) {
+    return {
+      ok: false,
+      code: 'CLIENT_UNKNOWN',
+      message: 'No active tab — try clicking the extension from a regular page.',
+      status: 0,
+    };
+  }
+
+  let probe: ContentScrapeProbe;
+  try {
+    probe = await askContent(tab.id, { type: 'EXTRACT_FOR_CHECK', needHtml: false });
+  } catch (e) {
+    return {
+      ok: false,
+      code: 'CLIENT_UNKNOWN',
+      message:
+        e instanceof Error
+          ? `Cannot probe page (${e.message}). Reload the tab and try again.`
+          : 'Cannot probe page.',
+      status: 0,
+    };
+  }
+
+  let input: PublicCheckInput;
+  if (probe.isAuthGated) {
+    let full: ContentScrapeProbe;
+    try {
+      full = await askContent(tab.id, { type: 'EXTRACT_FOR_CHECK', needHtml: true });
+    } catch (e) {
+      return {
+        ok: false,
+        code: 'CLIENT_PAYLOAD_TOO_LARGE',
+        message: e instanceof Error ? e.message : 'HTML payload exceeds the 200KB cap.',
+        status: 0,
+      };
+    }
+    if (!full.html) {
+      return {
+        ok: false,
+        code: 'CLIENT_UNKNOWN',
+        message: 'Content script returned no HTML.',
+        status: 0,
+      };
+    }
+    input = { type: 'html', html: full.html };
+  } else {
+    input = { type: 'url', url: probe.url };
+  }
+
+  try {
+    const result = await check({
+      apiKey,
+      baseUrl: API_BASE_URL,
+      body: {
+        input,
+        targetKeyword: msg.targetKeyword.trim(),
+        secondaryKeywords: msg.secondaryKeywords,
+        options: {
+          enrichMode: 'llm',
+          language: msg.language ?? 'vi',
+        },
+      },
+    });
+    return { ok: true, result };
+  } catch (e) {
+    if (e instanceof PublicApiError) {
+      if (e.action === 'OPEN_OPTIONS') chrome.runtime.openOptionsPage();
+      return {
+        ok: false,
+        code: e.code,
+        message: e.message,
+        status: e.status,
+        requestId: e.requestId,
+        retryAfterSeconds: e.retryAfterSeconds,
+      };
+    }
+    return {
+      ok: false,
+      code: 'CLIENT_UNKNOWN',
+      message: e instanceof Error ? e.message : String(e),
+      status: 0,
+    };
+  }
+}
+
+async function getActiveTab(): Promise<chrome.tabs.Tab | undefined> {
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  return tabs[0];
+}
+
+async function askContent(
+  tabId: number,
+  msg: ExtensionMessage,
+): Promise<ContentScrapeProbe> {
+  const reply = (await chrome.tabs.sendMessage(tabId, msg)) as
+    | { ok: true; probe: ContentScrapeProbe }
+    | { ok: false; error: string };
+  if (!reply) throw new Error('No reply from content script');
+  if ('ok' in reply && reply.ok) return reply.probe;
+  throw new Error('error' in reply ? reply.error : 'Unknown content-script error');
 }

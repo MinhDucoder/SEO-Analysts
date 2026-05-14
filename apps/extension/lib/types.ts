@@ -11,4 +11,20 @@ export type PublicApiLanguage = 'vi' | 'en';
 export type ExtensionMessage =
   | { type: 'OPEN_OPTIONS' }
   | { type: 'API_KEY_SAVED'; environment: ApiKeyEnvironment }
-  | { type: 'API_KEY_CLEARED' };
+  | { type: 'API_KEY_CLEARED' }
+  | {
+      type: 'AUDIT_PAGE';
+      targetKeyword: string;
+      language?: PublicApiLanguage;
+      secondaryKeywords?: string[];
+    }
+  /** Content-script request envelope. `needHtml=false` is a cheap probe
+   * to decide URL vs HTML mode; `needHtml=true` returns the serialised
+   * payload (capped at 200 KB per scraper.ts). */
+  | { type: 'EXTRACT_FOR_CHECK'; needHtml: boolean };
+
+export interface ContentScrapeProbe {
+  url: string;
+  isAuthGated: boolean;
+  html?: string;
+}
