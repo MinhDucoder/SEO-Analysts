@@ -7,7 +7,6 @@
 import {
   Body,
   Controller,
-  Headers,
   HttpCode,
   HttpException,
   Post,
@@ -54,7 +53,6 @@ export class PublicCheckController {
     @Body() dto: PublicCheckRequestDto,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-    @Headers('x-forwarded-for') xff?: string,
   ) {
     const authed = req as RequestWithApiKey;
     if (!authed.apiKey) {
@@ -63,7 +61,10 @@ export class PublicCheckController {
         401,
       );
     }
-    const ip = (xff?.split(',')[0]?.trim() || req.ip || '0.0.0.0') as string;
+    // `req.ip` is populated correctly because `trust proxy` is configured
+    // in main.ts. Reading the raw X-Forwarded-For header here would allow
+    // any client to spoof its IP and bypass per-IP rate limits.
+    const ip = req.ip ?? '0.0.0.0';
 
     const rlRes = await this.rl.enforce({ apiKeyId: authed.apiKey.id, ip });
     res.setHeader('X-RateLimit-Limit-Minute', '20');

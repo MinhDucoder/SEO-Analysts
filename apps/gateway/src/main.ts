@@ -10,6 +10,18 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
+  // Trust the configured number of reverse-proxy hops so that `req.ip`
+  // (and any IP-based bucket) reflects the real client IP rather than the
+  // load-balancer's. Without this, an attacker holding a single API key
+  // can bypass the per-IP rate-limit by spoofing X-Forwarded-For — the
+  // controller would otherwise have to read the raw header itself, which
+  // is exactly the bypass we're closing here.
+  // Default: 1 hop (Railway / single fronting LB). Set TRUST_PROXY_HOPS=N
+  // for multi-hop topologies, or TRUST_PROXY_HOPS=0 to disable.
+  const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? '1');
+  const expressApp = app.getHttpAdapter().getInstance() as { set: (k: string, v: unknown) => void };
+  expressApp.set('trust proxy', Number.isFinite(trustProxyHops) ? trustProxyHops : 1);
+
   app.setGlobalPrefix('api/v1');
   app.use(cookieParser());
   app.use(helmet({ contentSecurityPolicy: false }));
