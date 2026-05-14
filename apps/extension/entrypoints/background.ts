@@ -28,17 +28,9 @@ import type {
   PublicCheckInput,
   PublicCheckResponse,
 } from '@/lib/api-types';
+import type { AuditOk, AuditErr, AuditReply } from '@/lib/audit-types';
 
-export type AuditOk = { ok: true; result: PublicCheckResponse };
-export type AuditErr = {
-  ok: false;
-  code: string;
-  message: string;
-  status: number;
-  requestId?: string;
-  retryAfterSeconds?: number;
-};
-export type AuditReply = AuditOk | AuditErr;
+export type { AuditOk, AuditErr, AuditReply };
 
 export default defineBackground(() => {
   chrome.runtime.onMessage.addListener((rawMsg, _sender, sendResponse) => {
