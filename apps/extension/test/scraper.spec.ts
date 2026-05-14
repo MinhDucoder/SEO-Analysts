@@ -97,4 +97,38 @@ describe('serializeMinimalHtml', () => {
     expect(out.startsWith('<!doctype html>')).toBe(true);
     expect(out).toMatch(/<html[^>]*>[\s\S]*<\/html>/);
   });
+
+  describe('aggressive mode', () => {
+    it('strips nav, footer, aside, header[role=banner] and role=navigation/complementary', () => {
+      const doc = parse(`
+        <!doctype html><html><head><title>T</title></head><body>
+          <header role="banner">brand</header>
+          <nav>NAV_LINKS</nav>
+          <aside>ASIDE_AD</aside>
+          <div role="navigation">ROLE_NAV</div>
+          <div role="complementary">ROLE_COMP</div>
+          <main>main content kept</main>
+          <footer>FOOTER_LINKS</footer>
+        </body></html>
+      `);
+      const out = serializeMinimalHtml(doc, { aggressive: true });
+      expect(out).toContain('main content kept');
+      expect(out).toContain('<title>T</title>');
+      expect(out).not.toContain('NAV_LINKS');
+      expect(out).not.toContain('FOOTER_LINKS');
+      expect(out).not.toContain('ASIDE_AD');
+      expect(out).not.toContain('ROLE_NAV');
+      expect(out).not.toContain('ROLE_COMP');
+      expect(out).not.toContain('brand');
+    });
+
+    it('default (non-aggressive) keeps nav and footer', () => {
+      const doc = parse(
+        '<!doctype html><html><body><nav>KEEP_NAV</nav><main>m</main><footer>KEEP_FOOTER</footer></body></html>',
+      );
+      const out = serializeMinimalHtml(doc);
+      expect(out).toContain('KEEP_NAV');
+      expect(out).toContain('KEEP_FOOTER');
+    });
+  });
 });

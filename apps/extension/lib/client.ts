@@ -28,6 +28,10 @@ export interface CheckArgs {
   body: PublicCheckRequest;
   /** Optional AbortSignal — popup wires this so cancellation works. */
   signal?: AbortSignal;
+  /** Dedupe retries within the gateway's 24h window. Used by the
+   * background worker on URL→HTML fallback so the analyzer/LLM stack
+   * doesn't get billed twice for a transient client retry. */
+  idempotencyKey?: string;
   /** Allows tests to inject a stub. */
   fetchImpl?: typeof fetch;
 }
@@ -38,14 +42,17 @@ export async function check(args: CheckArgs): Promise<PublicCheckResponse> {
   const fetchImpl = args.fetchImpl ?? fetch;
   const url = trimSlash(args.baseUrl) + DEFAULT_PATH;
 
+  const headers: Record<string, string> = {
+    authorization: `Bearer ${args.apiKey}`,
+    'content-type': 'application/json',
+  };
+  if (args.idempotencyKey) headers['idempotency-key'] = args.idempotencyKey;
+
   let res: Response;
   try {
     res = await fetchImpl(url, {
       method: 'POST',
-      headers: {
-        authorization: `Bearer ${args.apiKey}`,
-        'content-type': 'application/json',
-      },
+      headers,
       body: JSON.stringify(args.body),
       signal: args.signal,
     });

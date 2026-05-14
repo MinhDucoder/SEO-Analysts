@@ -114,10 +114,11 @@ async function runAudit(msg: {
       status: 0,
     };
   }
+  const tabId = tab.id;
 
   let probe: ContentScrapeProbe;
   try {
-    probe = await askContent(tab.id, { type: 'EXTRACT_FOR_CHECK', needHtml: false });
+    probe = await askContent(tabId, { type: 'EXTRACT_FOR_CHECK', needHtml: false });
   } catch (e) {
     return {
       ok: false,
@@ -144,17 +145,23 @@ async function runAudit(msg: {
 
   let input: PublicCheckInput;
   if (probe.isAuthGated) {
-    const full = await tryFetchHtml(tab.id);
+    const full = await tryFetchHtml(tabId);
     if (!full.ok) return full.err;
     input = { type: 'html', html: full.html };
   } else {
     input = { type: 'url', url: probe.url };
   }
 
+  // One stable key per user-initiated audit, reused across the
+  // URL→HTML and 413→aggressive fallback retries so the gateway
+  // dedupes them within its 24h window.
+  const idempotencyKey = crypto.randomUUID();
+
   const callApi = (body: PublicCheckInput): Promise<PublicCheckResponse> =>
     check({
       apiKey,
       baseUrl: API_BASE_URL,
+      idempotencyKey,
       body: {
         input: body,
         targetKeyword: keyword,
@@ -163,6 +170,20 @@ async function runAudit(msg: {
       },
     });
 
+  // Re-extract DOM with aggressive strip (drops nav/footer/sidebars)
+  // and retry once. Called when the gateway returns 413 on the first
+  // HTML send, before we surface the error.
+  const retryAggressive = async (): Promise<AuditReply> => {
+    const full = await tryFetchHtml(tabId, { aggressive: true });
+    if (!full.ok) return full.err;
+    try {
+      const result = await callApi({ type: 'html', html: full.html });
+      return { ok: true, result };
+    } catch (e) {
+      return mapAuditError(e);
+    }
+  };
+
   try {
     const result = await callApi(input);
     if (input.type === 'url') {
@@ -170,6 +191,14 @@ async function runAudit(msg: {
     }
     return { ok: true, result };
   } catch (e) {
+    // HTML 413 — retry with aggressive strip before surfacing.
+    if (
+      e instanceof PublicApiError &&
+      input.type === 'html' &&
+      e.code === 'PAYLOAD_TOO_LARGE'
+    ) {
+      return retryAggressive();
+    }
     // Auto-fallback URL→HTML: gateway-reported fetch failures
     // (URL_FETCH_FAILED / URL_FETCH_TIMEOUT) are most often caused by
     // the page requiring auth, geo-restriction, or being behind a
@@ -180,13 +209,19 @@ async function runAudit(msg: {
       input.type === 'url' &&
       (e.code === 'URL_FETCH_FAILED' || e.code === 'URL_FETCH_TIMEOUT')
     ) {
-      const full = await tryFetchHtml(tab.id);
+      const full = await tryFetchHtml(tabId);
       if (full.ok) {
         try {
           const result = await callApi({ type: 'html', html: full.html });
           // Not cached: we only cache URL-mode results.
           return { ok: true, result };
         } catch (e2) {
+          if (
+            e2 instanceof PublicApiError &&
+            e2.code === 'PAYLOAD_TOO_LARGE'
+          ) {
+            return retryAggressive();
+          }
           return mapAuditError(e2);
         }
       }
@@ -219,10 +254,15 @@ function mapAuditError(e: unknown): AuditErr {
 
 async function tryFetchHtml(
   tabId: number,
+  opts: { aggressive?: boolean } = {},
 ): Promise<{ ok: true; html: string } | { ok: false; err: AuditErr }> {
   let full: ContentScrapeProbe;
   try {
-    full = await askContent(tabId, { type: 'EXTRACT_FOR_CHECK', needHtml: true });
+    full = await askContent(tabId, {
+      type: 'EXTRACT_FOR_CHECK',
+      needHtml: true,
+      aggressive: opts.aggressive === true,
+    });
   } catch (e) {
     return {
       ok: false,

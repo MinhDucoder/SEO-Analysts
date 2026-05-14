@@ -53,14 +53,29 @@ export function shouldUseHtmlMode(url: string): boolean {
  * local so the extension doesn't pull the whole package. */
 export const HTML_PAYLOAD_MAX_BYTES = 200 * 1024;
 
+export interface SerializeOptions {
+  /** Drop nav/footer/aside/banner/complementary roles too. Used as a
+   * second-attempt strip after the gateway returns PAYLOAD_TOO_LARGE
+   * on the default-stripped HTML. */
+  aggressive?: boolean;
+}
+
 /**
  * Strip noise (script, style, hidden elements, comments, inline event
  * handlers) and return a string that's safe to send to the gateway.
  * Caps the output at `HTML_PAYLOAD_MAX_BYTES` to match the gateway's
  * limit; throws if the page is still too large after stripping so the
  * popup can branch to a clearer toast than the gateway's 413.
+ *
+ * `aggressive=true` additionally drops chrome the user almost never
+ * cares about for an SEO audit: site nav, footer, sidebars, banner
+ * header. Falls back to this when the default strip still exceeds the
+ * 200 KB cap. Main/article semantic content is preserved.
  */
-export function serializeMinimalHtml(doc: Document): string {
+export function serializeMinimalHtml(
+  doc: Document,
+  opts: SerializeOptions = {},
+): string {
   const clone = doc.cloneNode(true) as Document;
 
   // Remove resource-heavy nodes that contribute nothing to SEO scoring.
@@ -69,6 +84,18 @@ export function serializeMinimalHtml(doc: Document): string {
   }
   // Remove explicitly-hidden elements (display:none / hidden attr).
   for (const el of Array.from(clone.querySelectorAll('[hidden]'))) el.remove();
+  if (opts.aggressive) {
+    for (const sel of [
+      'nav',
+      'footer',
+      'aside',
+      'header[role="banner"]',
+      '[role="navigation"]',
+      '[role="complementary"]',
+    ]) {
+      for (const el of Array.from(clone.querySelectorAll(sel))) el.remove();
+    }
+  }
   // Strip inline event handlers (`onclick`, `onerror`, etc.) — Cheerio
   // on the gateway doesn't execute them, but stripping shrinks the
   // payload and makes the request auditable.

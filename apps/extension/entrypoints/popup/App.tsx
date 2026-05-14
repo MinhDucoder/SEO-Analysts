@@ -1,12 +1,41 @@
 import { useEffect, useState } from 'react';
 import { loadApiKey, parseApiKeyEnvironment } from '@/lib/storage';
 import { dispatchErrorCode } from '@/lib/errors';
+import { API_BASE_URL } from '@/lib/api-base';
 import type {
   PublicCheckIssue,
   PublicCheckResponse,
   IssueSeverity,
 } from '@/lib/api-types';
 import type { AuditReply, AuditErr } from '../background';
+
+function apiHostLabel(): string {
+  try {
+    return new URL(API_BASE_URL).host;
+  } catch {
+    return API_BASE_URL;
+  }
+}
+
+function CopyReqId({ requestId }: { requestId: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        void navigator.clipboard.writeText(requestId).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1500);
+        });
+      }}
+      style={styles.copyBtn}
+      aria-label="Copy request ID"
+      title={copied ? 'Copied' : 'Copy request ID'}
+    >
+      {copied ? '✓' : '📋'}
+    </button>
+  );
+}
 
 type Mode =
   | { kind: 'idle' }
@@ -91,6 +120,7 @@ export function App() {
         <ErrorView err={mode.err} onOpenOptions={openOptions} onRetry={runAudit} />
       )}
       <footer style={styles.footer}>
+        <span style={styles.hostLabel}>{apiHostLabel()}</span>
         <button type="button" style={styles.linkBtn} onClick={openOptions}>
           Manage key
         </button>
@@ -186,11 +216,14 @@ function ErrorView({
   return (
     <section style={styles.errorBox}>
       <p style={styles.errorMsg}>{err.message}</p>
-      <p style={styles.errorMeta}>
-        {err.code}
-        {err.requestId ? ` · ${err.requestId}` : ''}
-        {err.status > 0 ? ` · HTTP ${err.status}` : ''}
-      </p>
+      <div style={styles.errorMetaRow}>
+        <p style={styles.errorMeta}>
+          {err.code}
+          {err.requestId ? ` · ${err.requestId}` : ''}
+          {err.status > 0 ? ` · HTTP ${err.status}` : ''}
+        </p>
+        {err.requestId && <CopyReqId requestId={err.requestId} />}
+      </div>
       {action === 'OPEN_OPTIONS' && (
         <button type="button" style={styles.btnPrimary} onClick={onOpenOptions}>
           Open settings
@@ -392,7 +425,7 @@ const styles: Record<string, React.CSSProperties> = {
   errorMeta: {
     color: '#7f1d1d',
     fontSize: 11,
-    margin: '4px 0 8px',
+    margin: 0,
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
   },
   retryText: { fontSize: 12, color: '#475569', margin: 0 },
@@ -400,6 +433,31 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: 12,
     paddingTop: 8,
     borderTop: '1px solid #e2e8f0',
-    textAlign: 'right',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  hostLabel: {
+    fontSize: 11,
+    color: '#94a3b8',
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+  },
+  errorMetaRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    margin: '4px 0 8px',
+  },
+  copyBtn: {
+    background: 'none',
+    border: '1px solid #fecaca',
+    color: '#7f1d1d',
+    cursor: 'pointer',
+    fontSize: 12,
+    padding: '2px 6px',
+    borderRadius: 4,
+    lineHeight: 1,
   },
 };

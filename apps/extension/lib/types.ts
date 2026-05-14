@@ -20,8 +20,9 @@ export type ExtensionMessage =
     }
   /** Content-script request envelope. `needHtml=false` is a cheap probe
    * to decide URL vs HTML mode; `needHtml=true` returns the serialised
-   * payload (capped at 200 KB per scraper.ts). */
-  | { type: 'EXTRACT_FOR_CHECK'; needHtml: boolean };
+   * payload (capped at 200 KB per scraper.ts). `aggressive=true` drops
+   * nav/footer/sidebars too — used after a 413 to shrink further. */
+  | { type: 'EXTRACT_FOR_CHECK'; needHtml: boolean; aggressive?: boolean };
 
 export interface ContentScrapeProbe {
   url: string;

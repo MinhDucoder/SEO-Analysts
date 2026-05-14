@@ -116,6 +116,32 @@ describe('client.check', () => {
     });
   });
 
+  it('passes Idempotency-Key header when provided', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      fakeResponse({ ok: true, status: 200, body: { score: 50 } }),
+    );
+    await check({
+      apiKey,
+      baseUrl,
+      body,
+      idempotencyKey: 'b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e',
+      fetchImpl,
+    });
+    const init = fetchImpl.mock.calls[0]![1] as RequestInit;
+    expect(init.headers).toMatchObject({
+      'idempotency-key': 'b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e',
+    });
+  });
+
+  it('omits Idempotency-Key header when not provided', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      fakeResponse({ ok: true, status: 200, body: { score: 50 } }),
+    );
+    await check({ apiKey, baseUrl, body, fetchImpl });
+    const headers = fetchImpl.mock.calls[0]![1]!.headers as Record<string, string>;
+    expect('idempotency-key' in headers).toBe(false);
+  });
+
   it('forwards AbortSignal so caller can cancel mid-flight', async () => {
     const controller = new AbortController();
     const fetchImpl = vi.fn((_url: RequestInfo, init?: RequestInit) => {

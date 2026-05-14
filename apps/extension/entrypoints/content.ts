@@ -28,7 +28,9 @@ export default defineContentScript({
           isAuthGated: shouldUseHtmlMode(window.location.href),
         };
         if (msg.needHtml) {
-          probe.html = serializeMinimalHtml(document);
+          probe.html = serializeMinimalHtml(document, {
+            aggressive: msg.aggressive === true,
+          });
         }
         sendResponse({ ok: true, probe });
       } catch (e) {
