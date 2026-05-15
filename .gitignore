@@ -58,3 +58,9 @@ learning/
 
 # Stitch mockup archive (extracted folder is committed; zip is 4.8MB duplicate)
 docs/design/stitch_d_n_m_i.zip
+# Added by code-review-graph
+.code-review-graph/
+
+# Per-developer IDE / workflow state — not for repo
+.kiro/
+.planning/
