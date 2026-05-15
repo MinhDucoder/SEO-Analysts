@@ -64,3 +64,4 @@ docs/design/stitch_d_n_m_i.zip
 # Per-developer IDE / workflow state — not for repo
 .kiro/
 .planning/
+.superpowers/
