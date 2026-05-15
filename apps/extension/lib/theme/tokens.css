@@ -106,3 +106,170 @@
       --color-primary-fg: 10 10 11;
     }
 }
+
+/* ─── END OF GENERATED CONTENT ─── */
+/* Everything below is hand-edited extension component CSS.    */
+/* When re-syncing tokens from apps/web, preserve this section. */
+
+/* ─── Extension component primitives ─── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn[disabled] { cursor: not-allowed; opacity: 0.6; }
+.btn-md { padding: 6px 12px; font-size: var(--text-sm); }
+.btn-sm { padding: 4px 10px; font-size: var(--text-xs); }
+.btn-primary {
+  background: rgb(var(--color-primary));
+  color: rgb(var(--color-primary-fg));
+}
+.btn-primary:hover:not([disabled]) { background: rgb(var(--color-fg)); }
+.btn-secondary {
+  background: rgb(var(--color-bg-overlay));
+  color: rgb(var(--color-fg));
+  border-color: rgb(var(--color-border));
+}
+.btn-secondary:hover:not([disabled]) { border-color: rgb(var(--color-border-strong)); }
+.btn-ghost {
+  background: transparent;
+  color: rgb(var(--color-fg-muted));
+}
+.btn-ghost:hover:not([disabled]) {
+  background: rgb(var(--color-bg-overlay));
+  color: rgb(var(--color-fg));
+}
+.btn-loading .btn-spinner {
+  width: 12px; height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.field { display: flex; flex-direction: column; gap: var(--space-1); }
+.field-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgb(var(--color-fg-subtle));
+}
+.field-input {
+  padding: 6px 10px;
+  border: 1px solid rgb(var(--color-border));
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: var(--text-sm);
+  background: rgb(var(--color-bg));
+  color: rgb(var(--color-fg));
+}
+.field-input:focus {
+  outline: none;
+  border-color: rgb(var(--color-border-strong));
+}
+.field-input-error { border-color: rgb(var(--color-error)); }
+.field-error { font-size: var(--text-xs); color: rgb(var(--color-error)); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.badge-env.badge-test { background: rgb(var(--color-info) / 0.15); color: rgb(var(--color-info)); }
+.badge-env.badge-live { background: rgb(var(--color-success) / 0.15); color: rgb(var(--color-success)); }
+.badge-cached, .badge-cached.badge-neutral {
+  background: rgb(var(--color-warning) / 0.15);
+  color: rgb(var(--color-warning));
+}
+.badge-severity.badge-error { background: rgb(var(--color-error) / 0.12); color: rgb(var(--color-error)); }
+.badge-severity.badge-warning { background: rgb(var(--color-warning) / 0.15); color: rgb(var(--color-warning)); }
+.badge-severity.badge-info { background: rgb(var(--color-info) / 0.12); color: rgb(var(--color-info)); }
+.badge-meta { background: rgb(var(--color-bg-overlay)); color: rgb(var(--color-fg-muted)); }
+
+.score-ring {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+.score-ring-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(var(--color-fg-subtle));
+}
+
+.issue {
+  background: rgb(var(--color-bg-elevated));
+  border: 1px solid rgb(var(--color-border));
+  border-left: 3px solid rgb(var(--color-fg-subtle));
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.issue-error   { border-left-color: rgb(var(--color-error));   }
+.issue-warning { border-left-color: rgb(var(--color-warning)); }
+.issue-info    { border-left-color: rgb(var(--color-info));    }
+.issue-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.issue-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: rgb(var(--color-fg));
+  margin: 0;
+}
+.issue-desc {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-fg-muted));
+  margin: 0;
+}
+.issue-suggestion {
+  background: rgb(var(--color-bg));
+  border: 1px solid rgb(var(--color-border));
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+}
+.issue-suggestion-label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: rgb(var(--color-fg-subtle));
+  margin-bottom: 4px;
+}
+.issue-suggestion-text {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  color: rgb(var(--color-fg));
+}
+.issue-suggestion-rationale {
+  font-size: var(--text-xs);
+  font-style: italic;
+  color: rgb(var(--color-fg-subtle));
+  margin-top: 4px;
+}
+.issue-doc {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-info));
+  text-decoration: none;
+  align-self: flex-start;
+}
+.issue-doc:hover { text-decoration: underline; }

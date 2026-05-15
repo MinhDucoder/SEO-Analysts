@@ -18,6 +18,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["entrypoints/**/*", "lib/**/*", "test/**/*", "wxt.config.ts", ".wxt/**/*"],
+  "include": ["entrypoints/**/*", "components/**/*", "lib/**/*", "test/**/*", "wxt.config.ts", ".wxt/**/*"],
   "exclude": ["node_modules", ".output"]
 }

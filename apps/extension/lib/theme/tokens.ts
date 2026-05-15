@@ -1,15 +1,9 @@
 /**
- * Subset of design tokens exposed as TypeScript constants. We avoid
- * re-declaring everything — only the values that need to be read by
- * JS/SVG code (e.g. ScoreRing strokes), not the ones consumed via
- * CSS var(). When tokens.css changes, this file must be kept in
- * sync manually (see apps/extension/CLAUDE.md → tokens sync policy).
+ * Type-only export — the ScoreClass union mirrors the keys of the
+ * --color-class-{excellent|good|fair|poor} CSS variables declared in
+ * tokens.css. Components that need to render those colors should use
+ * `rgb(var(--color-class-${cls}))` rather than hardcoding RGB strings
+ * here — that way a single source of truth (tokens.css) controls
+ * theming and re-export drift is impossible.
  */
-export const CLASS_COLORS = {
-  excellent: 'rgb(34 197 94)',  // --color-class-excellent
-  good: 'rgb(59 130 246)',      // --color-class-good
-  fair: 'rgb(245 158 11)',      // --color-class-fair
-  poor: 'rgb(239 68 68)',       // --color-class-poor
-} as const;
-
-export type ScoreClass = keyof typeof CLASS_COLORS;
+export type ScoreClass = 'excellent' | 'good' | 'fair' | 'poor';
