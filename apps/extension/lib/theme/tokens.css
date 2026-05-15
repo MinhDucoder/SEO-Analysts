@@ -1,0 +1,108 @@
+/* GENERATED — do not edit by hand. Run apps/web/.planning/phase-5/export-tokens.py */
+/* Source: design/system-tokens.pen variables ($color-*, $radius-*, $space-*, $text-*) */
+
+:root {
+    color-scheme: light dark;
+
+    /* === Non-themed semantic colors (RGB triplets) === */
+    --color-class-excellent: 34 197 94;
+    --color-class-fair: 245 158 11;
+    --color-class-good: 59 130 246;
+    --color-class-poor: 239 68 68;
+    --color-cwv-good: 34 197 94;
+    --color-cwv-needs-improvement: 245 158 11;
+    --color-cwv-poor: 239 68 68;
+    --color-error: 239 68 68;
+    --color-info: 59 130 246;
+    --color-status-active: 59 130 246;
+    --color-status-completed: 34 197 94;
+    --color-status-failed: 239 68 68;
+    --color-status-pending: 113 113 122;
+    --color-success: 34 197 94;
+    --color-warning: 245 158 11;
+
+    /* === Radius (px) === */
+    --radius-lg: 8px;
+    --radius-md: 6px;
+    --radius-none: 0px;
+    --radius-pill: 999px;
+    --radius-sm: 4px;
+    --radius-xl: 12px;
+
+    /* === Spacing (px) === */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* === Type scale (rem-based, 1rem = 16px) === */
+    --text-xs: 0.75rem; /* 12px */
+    --text-sm: 0.8125rem; /* 13px */
+    --text-base: 0.875rem; /* 14px */
+    --text-md: 0.9375rem; /* 15px */
+    --text-lg: 1.0rem; /* 16px */
+    --text-xl: 1.125rem; /* 18px */
+    --text-2xl: 1.25rem; /* 20px */
+    --text-3xl: 1.5rem; /* 24px */
+    --text-4xl: 2.0rem; /* 32px */
+    --text-5xl: 3.0rem; /* 48px */
+
+    /* === Font weight === */
+    --weight-bold: 700;
+    --weight-medium: 500;
+    --weight-regular: 400;
+    --weight-semibold: 600;
+
+    /* === Font families === */
+    --font-mono: 'JetBrains Mono';
+    --font-ui: 'Inter';
+
+    /* === Themed colors — light is default === */
+    --color-bg: 255 255 255;
+    --color-bg-elevated: 250 250 250;
+    --color-bg-overlay: 244 244 245;
+    --color-border: 228 228 231;
+    --color-border-strong: 212 212 216;
+    --color-fg: 10 10 11;
+    --color-fg-disabled: 161 161 170;
+    --color-fg-muted: 82 82 91;
+    --color-fg-subtle: 113 113 122;
+    --color-primary: 10 10 11;
+    --color-primary-fg: 250 250 250;
+}
+
+:root[data-theme='dark'] {
+    --color-bg: 10 10 11;
+    --color-bg-elevated: 17 17 19;
+    --color-bg-overlay: 26 26 29;
+    --color-border: 39 39 42;
+    --color-border-strong: 63 63 70;
+    --color-fg: 250 250 250;
+    --color-fg-disabled: 82 82 91;
+    --color-fg-muted: 161 161 170;
+    --color-fg-subtle: 113 113 122;
+    --color-primary: 250 250 250;
+    --color-primary-fg: 10 10 11;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --color-bg: 10 10 11;
+      --color-bg-elevated: 17 17 19;
+      --color-bg-overlay: 26 26 29;
+      --color-border: 39 39 42;
+      --color-border-strong: 63 63 70;
+      --color-fg: 250 250 250;
+      --color-fg-disabled: 82 82 91;
+      --color-fg-muted: 161 161 170;
+      --color-fg-subtle: 113 113 122;
+      --color-primary: 250 250 250;
+      --color-primary-fg: 10 10 11;
+    }
+}
