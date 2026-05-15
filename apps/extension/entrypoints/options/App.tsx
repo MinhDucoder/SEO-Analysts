@@ -32,10 +32,16 @@ export function App() {
       setExisting(input.trim());
       setInput('');
       setStatus({ kind: 'saved', env: env ?? 'test' });
-      await chrome.runtime.sendMessage({
-        type: 'API_KEY_SAVED',
-        environment: env ?? 'test',
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: 'API_KEY_SAVED',
+          environment: env ?? 'test',
+        });
+      } catch {
+        // Best-effort notification. SW may be inactive; the key is already
+        // saved in chrome.storage.local, so popup will pick it up on its
+        // next open regardless.
+      }
     } catch (err) {
       setStatus({
         kind: 'error',

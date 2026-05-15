@@ -39,7 +39,12 @@ export function App() {
   }
 
   function openOptions() {
-    void chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS' });
+    // Popup is an extension context → can call openOptionsPage()
+    // directly. The previous version routed through the service worker
+    // via sendMessage, which silently dropped when the SW had idled out
+    // (chrome.runtime.sendMessage on an inactive SW resolves with
+    // undefined and the user's click vanishes).
+    chrome.runtime.openOptionsPage();
   }
 
   if (hasKey === null) return <main style={styles.main}>Loading…</main>;
