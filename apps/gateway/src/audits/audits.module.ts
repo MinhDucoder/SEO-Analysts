@@ -33,6 +33,6 @@ import { AuthModule } from '../auth/auth.module';
   ],
   controllers: [AuditsController],
   providers: [AuditsService, AuditQueueProducer],
-  exports: [AuditsService],
+  exports: [AuditsService, AuditQueueProducer],
 })
 export class AuditsModule {}
