@@ -1,0 +1,746 @@
+{
+  "version": "2.11",
+  "children": [
+    {
+      "type": "frame",
+      "id": "HQMeS",
+      "x": 0,
+      "y": 0,
+      "name": "Options mockups — 4 states",
+      "width": 1100,
+      "height": 800,
+      "fill": "$color-canvas",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "gAk5S",
+          "x": 50,
+          "y": 20,
+          "name": "l1",
+          "fill": "$color-fg-subtle",
+          "content": "Empty — no key yet",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "tFbNz",
+          "x": 50,
+          "y": 50,
+          "name": "Empty",
+          "width": 460,
+          "height": 320,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-5",
+          "padding": "$space-6",
+          "children": [
+            {
+              "type": "text",
+              "id": "yZClA",
+              "name": "o1h",
+              "fill": "$color-fg",
+              "content": "SEO Analyst — Settings",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "frame",
+              "id": "T6rGaL",
+              "name": "Card",
+              "width": "fill_container",
+              "fill": "$color-bg-elevated",
+              "cornerRadius": "$radius-lg",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$color-border"
+              },
+              "layout": "vertical",
+              "gap": "$space-3",
+              "padding": "$space-4",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "gOmdD",
+                  "fill": "$color-fg-subtle",
+                  "content": "API KEY",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "AVTrb",
+                  "name": "Input",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "u239ff",
+                      "fill": "$color-fg-subtle",
+                      "content": "Paste your sk_(live|test)_…",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "JO02L",
+                  "fill": "$color-fg-subtle",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Get one at seoanalyst.app/settings/api-keys",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "rzXlO",
+                  "name": "Button/Save (disabled)",
+                  "opacity": 0.6,
+                  "width": "fill_container",
+                  "fill": "$color-primary",
+                  "cornerRadius": "$radius-md",
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "o34w1",
+                      "fill": "$color-primary-fg",
+                      "content": "Save",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "ENWos",
+          "x": 550,
+          "y": 20,
+          "name": "l2",
+          "fill": "$color-fg-subtle",
+          "content": "Typing (valid) — env preview",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "A8yU18",
+          "x": 550,
+          "y": 50,
+          "name": "Typing",
+          "width": 460,
+          "height": 320,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-5",
+          "padding": "$space-6",
+          "children": [
+            {
+              "type": "text",
+              "id": "NS64S",
+              "fill": "$color-fg",
+              "content": "SEO Analyst — Settings",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "frame",
+              "id": "d8kLab",
+              "name": "Card",
+              "width": "fill_container",
+              "fill": "$color-bg-elevated",
+              "cornerRadius": "$radius-lg",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$color-border"
+              },
+              "layout": "vertical",
+              "gap": "$space-3",
+              "padding": "$space-4",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "C578K",
+                  "fill": "$color-fg-subtle",
+                  "content": "API KEY",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "v3ahlJ",
+                  "name": "Input/Filled",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border-strong"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "XRYz8",
+                      "fill": "$color-fg",
+                      "content": "sk_test_6oxNiL0fw_d9Rm4XcPC5…",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "yPY32",
+                  "fill": "$color-success",
+                  "content": "✓ Valid test environment",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-medium"
+                },
+                {
+                  "type": "text",
+                  "id": "A1ghlM",
+                  "fill": "$color-fg-subtle",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Get one at seoanalyst.app/settings/api-keys",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "mb0Hl",
+                  "name": "Button/Save",
+                  "width": "fill_container",
+                  "fill": "$color-primary",
+                  "cornerRadius": "$radius-md",
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "G6STrP",
+                      "fill": "$color-primary-fg",
+                      "content": "Save",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "X19nk",
+          "x": 50,
+          "y": 400,
+          "name": "l3",
+          "fill": "$color-fg-subtle",
+          "content": "Saved — masked key + env badge",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "hyh5t",
+          "x": 50,
+          "y": 430,
+          "name": "Saved",
+          "width": 460,
+          "height": 280,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-5",
+          "padding": "$space-6",
+          "children": [
+            {
+              "type": "text",
+              "id": "m5lwAp",
+              "fill": "$color-fg",
+              "content": "SEO Analyst — Settings",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "frame",
+              "id": "hTjvs",
+              "name": "Card",
+              "width": "fill_container",
+              "fill": "$color-bg-elevated",
+              "cornerRadius": "$radius-lg",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$color-border"
+              },
+              "layout": "vertical",
+              "gap": "$space-3",
+              "padding": "$space-4",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Jso8u",
+                  "name": "HeaderRow",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF00",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "uuTli",
+                      "fill": "$color-fg-subtle",
+                      "content": "API KEY",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "uocfG",
+                      "name": "Badge/Test",
+                      "fill": "$color-info-soft",
+                      "cornerRadius": "$radius-pill",
+                      "padding": [
+                        "$space-2",
+                        "$space-1"
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "H8JhZk",
+                          "fill": "$color-info",
+                          "content": "TEST",
+                          "fontFamily": "$font-ui",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZuUO3",
+                  "name": "Input/ReadOnly",
+                  "width": "fill_container",
+                  "fill": "$color-bg-overlay",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DqqHZ",
+                      "fill": "$color-fg-muted",
+                      "content": "sk_test_••••••6oxN",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jCf6k",
+                  "name": "Button/Remove",
+                  "width": "fill_container",
+                  "fill": "$color-bg-overlay",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DtOwW",
+                      "fill": "$color-error",
+                      "content": "Remove",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "E7Ta7g",
+          "x": 550,
+          "y": 400,
+          "name": "l4",
+          "fill": "$color-fg-subtle",
+          "content": "Error — invalid format",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "yAoOu",
+          "x": 550,
+          "y": 430,
+          "name": "Error",
+          "width": 460,
+          "height": 320,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-5",
+          "padding": "$space-6",
+          "children": [
+            {
+              "type": "text",
+              "id": "J69fe",
+              "fill": "$color-fg",
+              "content": "SEO Analyst — Settings",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xl",
+              "fontWeight": "$weight-semibold"
+            },
+            {
+              "type": "frame",
+              "id": "wJhkG",
+              "name": "Card",
+              "width": "fill_container",
+              "fill": "$color-bg-elevated",
+              "cornerRadius": "$radius-lg",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$color-border"
+              },
+              "layout": "vertical",
+              "gap": "$space-3",
+              "padding": "$space-4",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ka5rL",
+                  "fill": "$color-fg-subtle",
+                  "content": "API KEY",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "DQWJP",
+                  "name": "Input/Error",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-error"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "RkCdi",
+                      "fill": "$color-error",
+                      "content": "sk_test_bad",
+                      "fontFamily": "$font-mono",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "IBdhI",
+                  "fill": "$color-error",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "⚠️ Key must match sk_(live|test)_ followed by 43 chars",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-medium"
+                },
+                {
+                  "type": "text",
+                  "id": "c50Mkj",
+                  "fill": "$color-fg-subtle",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Get one at seoanalyst.app/settings/api-keys",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "xeosL",
+                  "name": "Button/Save (disabled)",
+                  "opacity": 0.6,
+                  "width": "fill_container",
+                  "fill": "$color-primary",
+                  "cornerRadius": "$radius-md",
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vW7Z1",
+                      "fill": "$color-primary-fg",
+                      "content": "Save",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "color-bg": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "color-bg-elevated": {
+      "type": "color",
+      "value": "#FAFAFA"
+    },
+    "color-bg-overlay": {
+      "type": "color",
+      "value": "#F4F4F5"
+    },
+    "color-border": {
+      "type": "color",
+      "value": "#E4E4E7"
+    },
+    "color-border-strong": {
+      "type": "color",
+      "value": "#D4D4D8"
+    },
+    "color-canvas": {
+      "type": "color",
+      "value": "#F4F4F5"
+    },
+    "color-error": {
+      "type": "color",
+      "value": "#EF4444"
+    },
+    "color-fg": {
+      "type": "color",
+      "value": "#0A0A0B"
+    },
+    "color-fg-disabled": {
+      "type": "color",
+      "value": "#A1A1AA"
+    },
+    "color-fg-muted": {
+      "type": "color",
+      "value": "#52525B"
+    },
+    "color-fg-subtle": {
+      "type": "color",
+      "value": "#71717A"
+    },
+    "color-info": {
+      "type": "color",
+      "value": "#3B82F6"
+    },
+    "color-info-soft": {
+      "type": "color",
+      "value": "#3B82F626"
+    },
+    "color-primary": {
+      "type": "color",
+      "value": "#0A0A0B"
+    },
+    "color-primary-fg": {
+      "type": "color",
+      "value": "#FAFAFA"
+    },
+    "color-success": {
+      "type": "color",
+      "value": "#22C55E"
+    },
+    "color-warning": {
+      "type": "color",
+      "value": "#F59E0B"
+    },
+    "font-mono": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "font-ui": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 8
+    },
+    "radius-md": {
+      "type": "number",
+      "value": 6
+    },
+    "radius-pill": {
+      "type": "number",
+      "value": 999
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 4
+    },
+    "radius-xl": {
+      "type": "number",
+      "value": 12
+    },
+    "space-1": {
+      "type": "number",
+      "value": 4
+    },
+    "space-2": {
+      "type": "number",
+      "value": 8
+    },
+    "space-3": {
+      "type": "number",
+      "value": 12
+    },
+    "space-4": {
+      "type": "number",
+      "value": 16
+    },
+    "space-5": {
+      "type": "number",
+      "value": 20
+    },
+    "space-6": {
+      "type": "number",
+      "value": 24
+    },
+    "text-md": {
+      "type": "number",
+      "value": 15
+    },
+    "text-sm": {
+      "type": "number",
+      "value": 13
+    },
+    "text-xl": {
+      "type": "number",
+      "value": 18
+    },
+    "text-xs": {
+      "type": "number",
+      "value": 12
+    },
+    "weight-medium": {
+      "type": "string",
+      "value": "500"
+    },
+    "weight-semibold": {
+      "type": "string",
+      "value": "600"
+    }
+  }
+}

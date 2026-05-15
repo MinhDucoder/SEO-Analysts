@@ -1,0 +1,1111 @@
+{
+  "version": "2.11",
+  "children": [
+    {
+      "type": "frame",
+      "id": "SVKV4",
+      "x": 0,
+      "y": 0,
+      "name": "Popup mockups — 4 states",
+      "width": 1600,
+      "height": 1500,
+      "fill": "$color-canvas",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "Zdhxb",
+          "x": 50,
+          "y": 20,
+          "name": "label1",
+          "fill": "$color-fg-subtle",
+          "content": "1. Empty — no API key",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "nInOy",
+          "x": 50,
+          "y": 50,
+          "name": "1. Empty",
+          "width": 360,
+          "height": 520,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-3",
+          "padding": "$space-3",
+          "children": [
+            {
+              "type": "frame",
+              "id": "QSkk8",
+              "name": "Header",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "G6TIM",
+                  "fill": "$color-fg",
+                  "content": "SEO Analyst",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-md",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "D58Q2",
+              "name": "EmptyState",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "layout": "vertical",
+              "gap": "$space-2",
+              "padding": [
+                "$space-3",
+                "$space-6"
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Mjby6",
+                  "fill": "$color-fg",
+                  "content": "🔑",
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "qAaU1",
+                  "fill": "$color-fg",
+                  "content": "Connect your API key",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-md",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "fYTC0",
+                  "fill": "$color-fg-subtle",
+                  "content": "to start auditing pages",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "uWDPI",
+              "name": "Button/Primary",
+              "width": "fill_container",
+              "fill": "$color-primary",
+              "cornerRadius": "$radius-md",
+              "padding": [
+                "$space-3",
+                "$space-2"
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xQYkX",
+                  "fill": "$color-primary-fg",
+                  "content": "Open settings",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "vXbe5",
+          "x": 450,
+          "y": 20,
+          "name": "label2",
+          "fill": "$color-fg-subtle",
+          "content": "2. Idle — key saved",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "u2CDU",
+          "x": 450,
+          "y": 50,
+          "name": "2. Idle",
+          "width": 360,
+          "height": 520,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-3",
+          "padding": "$space-3",
+          "children": [
+            {
+              "type": "frame",
+              "id": "GZeoz",
+              "name": "Header",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "WjTS4",
+                  "fill": "$color-fg",
+                  "content": "SEO Analyst",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-md",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "HW09R",
+                  "name": "Badge/Test",
+                  "fill": "$color-info-soft",
+                  "cornerRadius": "$radius-pill",
+                  "padding": [
+                    "$space-2",
+                    "$space-1"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "OPn8K",
+                      "fill": "$color-info",
+                      "content": "TEST",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "o99xv",
+              "name": "Field/Keyword",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "layout": "vertical",
+              "gap": "$space-1",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kfAqx",
+                  "fill": "$color-fg-subtle",
+                  "content": "TARGET KEYWORD",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "QkaFe",
+                  "name": "Input",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZJNZo",
+                      "fill": "$color-fg-subtle",
+                      "content": "e.g. seo 2026",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "YK1Fx",
+              "name": "Button/Audit",
+              "width": "fill_container",
+              "fill": "$color-primary",
+              "cornerRadius": "$radius-md",
+              "padding": [
+                "$space-3",
+                "$space-2"
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "N7dXqJ",
+                  "fill": "$color-primary-fg",
+                  "content": "Audit page",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ERdtv",
+              "name": "Spacer",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#FFFFFF00"
+            },
+            {
+              "type": "frame",
+              "id": "TxpDP",
+              "name": "Footer",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "justifyContent": "end",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YZqLO",
+                  "fill": "$color-info",
+                  "content": "Manage key",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "VlVLH",
+          "x": 850,
+          "y": 20,
+          "name": "label3",
+          "fill": "$color-fg-subtle",
+          "content": "3. Loading — audit in flight",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "ygefb",
+          "x": 850,
+          "y": 50,
+          "name": "3. Loading",
+          "width": 360,
+          "height": 520,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-3",
+          "padding": "$space-3",
+          "children": [
+            {
+              "type": "frame",
+              "id": "xW62s",
+              "name": "Header",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Zcss8",
+                  "fill": "$color-fg",
+                  "content": "SEO Analyst",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-md",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "S7TV8R",
+                  "name": "Badge/Test",
+                  "fill": "$color-info-soft",
+                  "cornerRadius": "$radius-pill",
+                  "padding": [
+                    "$space-2",
+                    "$space-1"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pIyME",
+                      "fill": "$color-info",
+                      "content": "TEST",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "a7xph",
+              "name": "Field",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "layout": "vertical",
+              "gap": "$space-1",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rPsG9",
+                  "fill": "$color-fg-subtle",
+                  "content": "TARGET KEYWORD",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "JwtCQ",
+                  "name": "Input/Disabled",
+                  "opacity": 0.7,
+                  "width": "fill_container",
+                  "fill": "$color-bg-overlay",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LO1dA",
+                      "fill": "$color-fg-disabled",
+                      "content": "seo 2026",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TknRV",
+              "name": "Button/Loading",
+              "opacity": 0.85,
+              "width": "fill_container",
+              "fill": "$color-primary",
+              "cornerRadius": "$radius-md",
+              "gap": "$space-2",
+              "padding": [
+                "$space-3",
+                "$space-2"
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "z8kLXw",
+                  "name": "Spinner",
+                  "innerRadius": 0.5,
+                  "sweepAngle": 270,
+                  "fill": "$color-primary-fg",
+                  "width": 12,
+                  "height": 12
+                },
+                {
+                  "type": "text",
+                  "id": "xLAf5",
+                  "fill": "$color-primary-fg",
+                  "content": "Auditing…",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                }
+              ]
+            },
+            {
+              "type": "ellipse",
+              "id": "fBkmG",
+              "name": "SkeletonRing",
+              "fill": "$color-bg-overlay",
+              "width": 96,
+              "height": 96
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": "$radius-md",
+              "id": "QMEz8",
+              "name": "SkeletonIssue1",
+              "fill": "$color-bg-overlay",
+              "width": "fill_container",
+              "height": 64
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": "$radius-md",
+              "id": "NIGhM",
+              "name": "SkeletonIssue2",
+              "fill": "$color-bg-overlay",
+              "width": "fill_container",
+              "height": 64
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "uFt4w",
+          "x": 50,
+          "y": 570,
+          "name": "label4",
+          "fill": "$color-fg-subtle",
+          "content": "4. Result — score + issues",
+          "fontFamily": "$font-ui",
+          "fontSize": "$text-sm",
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "hmlv7",
+          "x": 50,
+          "y": 600,
+          "name": "4. Result",
+          "width": 360,
+          "height": 800,
+          "fill": "$color-bg",
+          "cornerRadius": "$radius-xl",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$color-border"
+          },
+          "layout": "vertical",
+          "gap": "$space-3",
+          "padding": "$space-3",
+          "children": [
+            {
+              "type": "frame",
+              "id": "m9uQrQ",
+              "name": "Header",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q2Z8z",
+                  "fill": "$color-fg",
+                  "content": "SEO Analyst",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-md",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "J1UcKg",
+                  "name": "Badge/Test",
+                  "fill": "$color-info-soft",
+                  "cornerRadius": "$radius-pill",
+                  "padding": [
+                    "$space-2",
+                    "$space-1"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Qyhcr",
+                      "fill": "$color-info",
+                      "content": "TEST",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UtFds",
+              "name": "Field",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "layout": "vertical",
+              "gap": "$space-1",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nNQaf",
+                  "fill": "$color-fg-subtle",
+                  "content": "TARGET KEYWORD",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "B2iYt",
+                  "name": "Input",
+                  "width": "fill_container",
+                  "fill": "$color-bg",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$color-border"
+                  },
+                  "padding": [
+                    "$space-3",
+                    "$space-2"
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MwVna",
+                      "fill": "$color-fg",
+                      "content": "seo 2026",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UoMk8",
+              "name": "Button/Audit",
+              "width": "fill_container",
+              "fill": "$color-primary",
+              "cornerRadius": "$radius-md",
+              "padding": [
+                "$space-3",
+                "$space-2"
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "F0hpMR",
+                  "fill": "$color-primary-fg",
+                  "content": "Audit page",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-sm",
+                  "fontWeight": "$weight-medium"
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "adAOQ",
+              "name": "Divider",
+              "fill": "$color-border",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "zGHXv",
+              "name": "ScoreSection",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "layout": "vertical",
+              "gap": "$space-2",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "FkW2U",
+                  "name": "ScoreRing",
+                  "innerRadius": 0.7,
+                  "startAngle": 90,
+                  "sweepAngle": -245,
+                  "fill": "$color-class-fair",
+                  "width": 96,
+                  "height": 96,
+                  "stroke": {
+                    "thickness": 0,
+                    "fill": "#00000000"
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "R56AM",
+                  "name": "ringLabel",
+                  "fill": "$color-fg",
+                  "content": "68",
+                  "fontFamily": "$font-ui",
+                  "fontSize": 24,
+                  "fontWeight": "$weight-bold"
+                },
+                {
+                  "type": "text",
+                  "id": "KPhOU",
+                  "fill": "$color-fg-subtle",
+                  "content": "SEO SCORE",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "S1eQh",
+              "name": "f4_stats",
+              "fill": "$color-fg-muted",
+              "content": "5 issues · 19 words · cached",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "Duxl2",
+              "name": "Banner/AI",
+              "width": "fill_container",
+              "fill": "$color-info-faint",
+              "cornerRadius": "$radius-md",
+              "padding": "$space-2",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nn9SN",
+                  "fill": "$color-info",
+                  "content": "✨ AI suggestions",
+                  "fontFamily": "$font-ui",
+                  "fontSize": "$text-xs",
+                  "fontWeight": "$weight-medium"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Z9io3",
+              "name": "Issues",
+              "width": "fill_container",
+              "fill": "#FFFFFF00",
+              "layout": "vertical",
+              "gap": "$space-2",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YPGjx",
+                  "name": "Issue/Error",
+                  "width": "fill_container",
+                  "fill": "$color-bg-elevated",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "top": 1,
+                      "right": 1,
+                      "bottom": 1,
+                      "left": 3
+                    },
+                    "fill": "$color-error"
+                  },
+                  "layout": "vertical",
+                  "gap": "$space-1",
+                  "padding": "$space-3",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QjjtG",
+                      "fill": "$color-fg",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Title tag too short",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vhreN",
+                      "fill": "$color-fg-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Current 12 chars. Aim 50-60.",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "SuC1i",
+                      "name": "Suggestion",
+                      "width": "fill_container",
+                      "fill": "$color-bg",
+                      "cornerRadius": "$radius-sm",
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$color-border"
+                      },
+                      "layout": "vertical",
+                      "padding": "$space-2",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "z1Nb3h",
+                          "fill": "$color-fg",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "✏️ Rewrite — 'SEO Trends 2026: Complete Guide'",
+                          "fontFamily": "$font-mono",
+                          "fontSize": "$text-xs",
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "pxZ5M",
+                  "name": "Issue/Warning",
+                  "width": "fill_container",
+                  "fill": "$color-bg-elevated",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "top": 1,
+                      "right": 1,
+                      "bottom": 1,
+                      "left": 3
+                    },
+                    "fill": "$color-warning"
+                  },
+                  "layout": "vertical",
+                  "gap": "$space-1",
+                  "padding": "$space-3",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "b9Evzw",
+                      "fill": "$color-fg",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Meta description missing",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "u2RZ9S",
+                      "fill": "$color-fg-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Add 120-160 char summary.",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "P3592K",
+                  "name": "Issue/Info",
+                  "width": "fill_container",
+                  "fill": "$color-bg-elevated",
+                  "cornerRadius": "$radius-md",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "top": 1,
+                      "right": 1,
+                      "bottom": 1,
+                      "left": 3
+                    },
+                    "fill": "$color-info"
+                  },
+                  "layout": "vertical",
+                  "gap": "$space-1",
+                  "padding": "$space-3",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "OSKxM",
+                      "fill": "$color-fg",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "H1 OK",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-sm",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "sTCBe",
+                      "fill": "$color-fg-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Single H1 contains keyword.",
+                      "fontFamily": "$font-ui",
+                      "fontSize": "$text-xs",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "KB8S3",
+              "name": "f4_footer",
+              "fill": "$color-fg-subtle",
+              "content": "19 reqs left / min · 499 / day",
+              "textAlign": "center",
+              "fontFamily": "$font-ui",
+              "fontSize": "$text-xs",
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "color-bg": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "color-bg-elevated": {
+      "type": "color",
+      "value": "#FAFAFA"
+    },
+    "color-bg-overlay": {
+      "type": "color",
+      "value": "#F4F4F5"
+    },
+    "color-border": {
+      "type": "color",
+      "value": "#E4E4E7"
+    },
+    "color-border-strong": {
+      "type": "color",
+      "value": "#D4D4D8"
+    },
+    "color-canvas": {
+      "type": "color",
+      "value": "#F4F4F5"
+    },
+    "color-class-fair": {
+      "type": "color",
+      "value": "#F59E0B"
+    },
+    "color-error": {
+      "type": "color",
+      "value": "#EF4444"
+    },
+    "color-error-soft": {
+      "type": "color",
+      "value": "#EF44441F"
+    },
+    "color-fg": {
+      "type": "color",
+      "value": "#0A0A0B"
+    },
+    "color-fg-disabled": {
+      "type": "color",
+      "value": "#A1A1AA"
+    },
+    "color-fg-muted": {
+      "type": "color",
+      "value": "#52525B"
+    },
+    "color-fg-subtle": {
+      "type": "color",
+      "value": "#71717A"
+    },
+    "color-info": {
+      "type": "color",
+      "value": "#3B82F6"
+    },
+    "color-info-faint": {
+      "type": "color",
+      "value": "#3B82F61A"
+    },
+    "color-info-soft": {
+      "type": "color",
+      "value": "#3B82F626"
+    },
+    "color-primary": {
+      "type": "color",
+      "value": "#0A0A0B"
+    },
+    "color-primary-fg": {
+      "type": "color",
+      "value": "#FAFAFA"
+    },
+    "color-success": {
+      "type": "color",
+      "value": "#22C55E"
+    },
+    "color-warning": {
+      "type": "color",
+      "value": "#F59E0B"
+    },
+    "color-warning-soft": {
+      "type": "color",
+      "value": "#F59E0B26"
+    },
+    "font-mono": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "font-ui": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 8
+    },
+    "radius-md": {
+      "type": "number",
+      "value": 6
+    },
+    "radius-pill": {
+      "type": "number",
+      "value": 999
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 4
+    },
+    "radius-xl": {
+      "type": "number",
+      "value": 12
+    },
+    "space-1": {
+      "type": "number",
+      "value": 4
+    },
+    "space-2": {
+      "type": "number",
+      "value": 8
+    },
+    "space-3": {
+      "type": "number",
+      "value": 12
+    },
+    "space-4": {
+      "type": "number",
+      "value": 16
+    },
+    "space-5": {
+      "type": "number",
+      "value": 20
+    },
+    "space-6": {
+      "type": "number",
+      "value": 24
+    },
+    "space-8": {
+      "type": "number",
+      "value": 32
+    },
+    "text-2xl": {
+      "type": "number",
+      "value": 20
+    },
+    "text-3xl": {
+      "type": "number",
+      "value": 24
+    },
+    "text-base": {
+      "type": "number",
+      "value": 14
+    },
+    "text-lg": {
+      "type": "number",
+      "value": 16
+    },
+    "text-md": {
+      "type": "number",
+      "value": 15
+    },
+    "text-sm": {
+      "type": "number",
+      "value": 13
+    },
+    "text-xl": {
+      "type": "number",
+      "value": 18
+    },
+    "text-xs": {
+      "type": "number",
+      "value": 12
+    },
+    "weight-bold": {
+      "type": "string",
+      "value": "700"
+    },
+    "weight-medium": {
+      "type": "string",
+      "value": "500"
+    },
+    "weight-regular": {
+      "type": "string",
+      "value": "400"
+    },
+    "weight-semibold": {
+      "type": "string",
+      "value": "600"
+    }
+  }
+}
