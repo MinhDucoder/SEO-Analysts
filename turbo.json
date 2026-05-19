@@ -5,7 +5,8 @@
     "CI",
     "NODE_ENV",
     "PLAYWRIGHT_BASE_URL",
-    "NEXT_PUBLIC_*"
+    "NEXT_PUBLIC_*",
+    "ANTHROPIC_API_KEY"
   ],
   "tasks": {
     "build": {

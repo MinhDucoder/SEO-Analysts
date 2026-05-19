@@ -21,7 +21,6 @@ import {
   AuditStatus,
   AuditMode,
   UserRole,
-  REDIS_KEYS,
   SITE_CRAWL_LIMITS,
 } from '@repo/shared';
 import { AuditQueueProducer } from './audit-queue.producer';
@@ -184,7 +183,6 @@ export class AuditsService {
     if (!audit) throw new NotFoundException('Audit khong ton tai');
     if (audit.userId !== userId) throw new ForbiddenException('Khong co quyen');
 
-    const _stepsKey = REDIS_KEYS.auditCompletedSteps(auditId);
     const progressRaw = await this.redis.client.get(`audit:${auditId}:progress`);
     const stage = await this.redis.client.get(`audit:${auditId}:stage`);
     const progress = progressRaw ? Number(progressRaw) : audit.status === AuditStatus.COMPLETED ? 100 : 0;

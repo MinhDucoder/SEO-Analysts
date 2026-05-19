@@ -133,7 +133,6 @@ So sanh 2 lan audit google.com: \`audit1=b0000001-...01\` vs \`audit2=b0000001-.
 }
 
 bootstrap().catch((e) => {
-  // eslint-disable-next-line no-console
   console.error(e);
   process.exit(1);
 });
