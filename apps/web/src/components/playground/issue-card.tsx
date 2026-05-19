@@ -6,10 +6,10 @@ import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { PublicCheckIssue, IssueSeverity } from '@/types/api';
 
-const SEVERITY_VARIANT: Record<IssueSeverity, 'destructive' | 'warning' | 'secondary'> = {
-  error: 'destructive',
-  warning: 'warning',
-  info: 'secondary',
+const SEVERITY_VARIANT: Record<IssueSeverity, 'error' | 'warn' | 'info'> = {
+  error: 'error',
+  warning: 'warn',
+  info: 'info',
 };
 
 export interface IssueCardProps {
@@ -25,9 +25,9 @@ export function IssueCard({ issue, canApply, onApply, onCopy }: IssueCardProps) 
       <CardHeader className="space-y-2">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant={SEVERITY_VARIANT[issue.severity]}>{issue.severity}</Badge>
-          <Badge variant="outline">{issue.category}</Badge>
+          <Badge variant="muted">{issue.category}</Badge>
           {issue.audience.map((a) => (
-            <Badge key={a} variant="secondary">
+            <Badge key={a} variant="muted">
               {a}
             </Badge>
           ))}
@@ -68,7 +68,7 @@ export function IssueCard({ issue, canApply, onApply, onCopy }: IssueCardProps) 
             href={issue.docRef}
             target="_blank"
             rel="noreferrer"
-            className={`${badgeVariants({ variant: 'outline' })} w-fit`}
+            className={`${badgeVariants({ variant: 'muted' })} w-fit`}
           >
             Rule docs →
           </a>
