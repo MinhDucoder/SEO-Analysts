@@ -1,6 +1,19 @@
 import type { ZodTypeAny, infer as ZodInfer } from 'zod';
 import { GuardrailError } from '../errors/index.js';
 
+/**
+ * Class wrapper around `parseStructured` for consumers that prefer an
+ * instance API (e.g. wiring into a NestJS provider). Behaviour is identical
+ * to the function — same fence strip, JSON repair, schema validation.
+ */
+export class ZodOutputParser<S extends ZodTypeAny> {
+  constructor(private readonly schema: S) {}
+
+  parse(raw: string): ZodInfer<S> {
+    return parseStructured(raw, this.schema);
+  }
+}
+
 export function parseStructured<S extends ZodTypeAny>(raw: string, schema: S): ZodInfer<S> {
   if (!raw || raw.trim().length === 0) {
     throw new GuardrailError('parseStructured: empty input', { raw });

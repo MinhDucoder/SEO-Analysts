@@ -5,6 +5,8 @@ export interface Logger {
   info(msg: string, ctx?: LogContext): void;
   warn(msg: string, ctx?: LogContext): void;
   error(msg: string, ctx?: LogContext): void;
+  /** Returns a Logger that prepends the given ctx to every log line. Optional. */
+  child?(ctx: LogContext): Logger;
 }
 
 export const noopLogger: Logger = {
