@@ -1,29 +1,26 @@
-import { defineConfig, devices } from '@playwright/test';
-
-const WEB_BASE = process.env.WEB_BASE ?? 'http://localhost:3001';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './tests',
-  fullyParallel: false,
+  testDir: "./tests/e2e",
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 1 : 0,
-  reporter: [['list']],
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [
+    ["list"],
+    ["html", { open: "never", outputFolder: "playwright-report" }],
+  ],
   use: {
-    baseURL: WEB_BASE,
-    trace: 'retain-on-failure',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3001",
+    trace: "on-first-retry",
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
   ],
-  webServer: process.env.PLAYWRIGHT_ASSUME_SERVERS
-    ? undefined
-    : {
-        command: 'npm run dev',
-        url: WEB_BASE,
-        timeout: 120_000,
-        reuseExistingServer: !process.env.CI,
-        env: {
-          NEXT_PUBLIC_API_BASE: process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:3000/api/v1',
-        },
-      },
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:3001",
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
 });

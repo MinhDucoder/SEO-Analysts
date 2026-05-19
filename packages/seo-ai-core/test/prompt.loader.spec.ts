@@ -1,73 +1,110 @@
-import { describe, it, expect } from 'vitest';
-import { resolve } from 'node:path';
-import { FileSystemPromptLoader } from '../src/prompt/loader';
-import { PromptError } from '../src/errors';
+import { describe, it, expect, vi } from 'vitest';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { FileSystemPromptLoader } from '../src/prompt/loader.js';
+import { PromptError } from '../src/errors/index.js';
 
-const BASE = resolve(__dirname, 'fixtures/prompts');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const FIXTURES = path.join(__dirname, '_fixtures', 'prompts');
 
 describe('FileSystemPromptLoader', () => {
-  it('load() resolves ^1.0.0 to highest matching version (1.2.0)', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    const p = await loader.load('greeting', { version: '^1.0.0' });
-    expect(p.version).toBe('1.2.0');
-    expect(p.id).toBe('greeting');
-    expect(p.user).toContain('warmly');
+  const loader = new FileSystemPromptLoader({ baseDir: FIXTURES });
+
+  it('loads the latest version when no range is provided', async () => {
+    const tpl = await loader.load('sample');
+    expect(tpl.version).toBe('2.0.0');
+    expect(tpl.id).toBe('sample');
   });
 
-  it('load() resolves exact version when range matches one', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    const p = await loader.load('greeting', { version: '1.0.0' });
-    expect(p.version).toBe('1.0.0');
+  it('resolves a semver range to the highest matching version', async () => {
+    const tpl = await loader.load('sample', '^1.0.0');
+    expect(tpl.version).toBe('1.1.0');
   });
 
-  it('load() throws PromptError when no version matches', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    await expect(loader.load('greeting', { version: '^2.0.0' })).rejects.toThrow(PromptError);
+  it('loads an exact version', async () => {
+    const tpl = await loader.load('sample', '1.0.0');
+    expect(tpl.version).toBe('1.0.0');
   });
 
-  it('load() throws PromptError when prompt id does not exist', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    await expect(loader.load('missing', { version: '^1.0.0' })).rejects.toThrow(PromptError);
+  it('throws PromptError when no version satisfies the range', async () => {
+    await expect(loader.load('sample', '^3.0.0')).rejects.toThrow(PromptError);
   });
 
-  it('render() returns messages + stable sha256 hash', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    const r1 = await loader.render(
-      'greeting',
-      { language: 'vi', name: 'Bob' },
-      { version: '^1.0.0' },
-    );
-    expect(r1.messages).toHaveLength(2);
-    expect(r1.messages[0].role).toBe('system');
-    expect(r1.messages[1].content).toContain('Bob');
-    expect(r1.hash).toMatch(/^[0-9a-f]{16}$/);
-    const r2 = await loader.render(
-      'greeting',
-      { language: 'vi', name: 'Bob' },
-      { version: '^1.0.0' },
-    );
-    expect(r2.hash).toBe(r1.hash);
+  it('throws PromptError when prompt id does not exist', async () => {
+    await expect(loader.load('nonexistent')).rejects.toThrow(PromptError);
   });
 
-  it('render() hash changes when variables differ', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    const a = await loader.render(
-      'greeting',
-      { language: 'vi', name: 'A' },
-      { version: '^1.0.0' },
-    );
-    const b = await loader.render(
-      'greeting',
-      { language: 'vi', name: 'B' },
-      { version: '^1.0.0' },
-    );
+  it('renders all declared variables and produces system + user messages', async () => {
+    const out = await loader.render('sample', { name: 'Alice' }, { version: '1.1.0' });
+    expect(out.id).toBe('sample');
+    expect(out.version).toBe('1.1.0');
+    expect(out.messages).toHaveLength(2);
+    expect(out.messages[0]).toEqual({ role: 'system', content: 'Be brief.' });
+    expect(out.messages[1]).toEqual({ role: 'user', content: 'Hi Alice!' });
+    expect(out.hash).toMatch(/^[a-f0-9]{16}$/);
+  });
+
+  it('hash is stable across renders with same inputs', async () => {
+    const a = await loader.render('sample', { name: 'X' }, { version: '1.0.0' });
+    const b = await loader.render('sample', { name: 'X' }, { version: '1.0.0' });
+    expect(a.hash).toBe(b.hash);
+  });
+
+  it('hash differs when variables differ', async () => {
+    const a = await loader.render('sample', { name: 'X' }, { version: '1.0.0' });
+    const b = await loader.render('sample', { name: 'Y' }, { version: '1.0.0' });
     expect(a.hash).not.toBe(b.hash);
   });
 
-  it('load() caches in-memory (second call hits no fs)', async () => {
-    const loader = new FileSystemPromptLoader({ baseDir: BASE });
-    const p1 = await loader.load('greeting', { version: '^1.0.0' });
-    const p2 = await loader.load('greeting', { version: '^1.0.0' });
-    expect(p1).toBe(p2);
+  it('throws PromptError when a declared variable is missing', async () => {
+    await expect(loader.render('sample', {}, { version: '2.0.0' })).rejects.toThrow(PromptError);
+  });
+
+  it('list() returns latest version per id with metadata', async () => {
+    const list = await loader.list();
+    expect(list).toContainEqual(
+      expect.objectContaining({ id: 'sample', version: '2.0.0' }),
+    );
+  });
+
+  it('non-deprecated load does not emit warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const fresh = new FileSystemPromptLoader({ baseDir: FIXTURES, cache: false });
+    await fresh.load('sample');
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('render() rejects vars from prototype (non-own-property) as missing', async () => {
+    class VarBag {
+      get name() { return 'proto-value'; }
+    }
+    const proto = new VarBag();
+    await expect(loader.render('sample', proto as unknown as Record<string, unknown>, { version: '1.0.0' })).rejects.toThrow(PromptError);
+  });
+
+  it('list() warns when a prompt subdir is malformed', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    // Create a malformed prompt file temporarily
+    const malformedDir = path.join(FIXTURES, 'malformed');
+    const malformedFile = path.join(malformedDir, 'v1.0.0.prompt.yaml');
+    const { mkdir, writeFile, rm } = await import('node:fs/promises');
+    await mkdir(malformedDir, { recursive: true });
+    await writeFile(malformedFile, 'id: WRONG_ID\nversion: 1.0.0\nvariables: []\nmetadata: {owner: test}\nuser: "x"\n');
+
+    try {
+      const fresh = new FileSystemPromptLoader({ baseDir: FIXTURES, cache: false });
+      const list = await fresh.list();
+      // sample should still be present
+      expect(list.find((e) => e.id === 'sample')).toBeDefined();
+      // malformed must NOT be present
+      expect(list.find((e) => e.id === 'malformed')).toBeUndefined();
+      // warning must be emitted
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('malformed'));
+    } finally {
+      await rm(malformedDir, { recursive: true, force: true });
+      warn.mockRestore();
+    }
   });
 });

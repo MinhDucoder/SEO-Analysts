@@ -5,13 +5,15 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["node", "@testing-library/jest-dom"]
+    "plugins": [{ "name": "next" }]
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", ".next", "dist", "playwright-report", "test-results"]
+  "exclude": ["node_modules", ".next", "dist", "playwright-report"]
 }

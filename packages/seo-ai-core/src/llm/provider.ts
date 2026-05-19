@@ -1,49 +1,42 @@
-/**
- * @file Factory for provider-neutral LLM construction. Keeps
- * consumers from importing adapters directly — they name a
- * provider, pass options, get an ILLM back.
- */
-import type { ILLM } from './types';
-import { AnthropicAdapter } from './adapters/anthropic.adapter';
+import type { ILLMProvider } from './types.js';
+import { AnthropicAdapter } from './adapters/anthropic.adapter.js';
+import { LLMError } from '../errors/index.js';
 
-export type LLMProviderId = 'anthropic';
+export type LLMProviderName = 'openai' | 'anthropic' | 'ollama';
 
-export interface CreateLLMOptions {
-  provider: LLMProviderId;
-  apiKey?: string;
+export interface LLMConfig {
+  provider: LLMProviderName;
   model: string;
-  defaultMaxTokens?: number;
+  apiKey?: string;
+  baseUrl?: string;
   defaultTemperature?: number;
-  baseURL?: string;
+  defaultMaxTokens?: number;
+  maxRetries?: number;
+  /** AbortSignal/timeout etc. handled at invoke-call-site, not at construction. */
 }
 
-type Builder = (opts: CreateLLMOptions) => ILLM;
+type AdapterCtor = new (cfg: LLMConfig) => ILLMProvider;
 
-const REGISTRY = new Map<LLMProviderId, Builder>([
-  [
-    'anthropic',
-    (opts) => {
-      const apiKey = opts.apiKey ?? process.env.ANTHROPIC_API_KEY;
-      if (!apiKey) {
-        throw new Error('createLLM(anthropic): apiKey option or ANTHROPIC_API_KEY env required');
-      }
-      return new AnthropicAdapter({
-        apiKey,
-        model: opts.model,
-        defaultMaxTokens: opts.defaultMaxTokens,
-        defaultTemperature: opts.defaultTemperature,
-        baseURL: opts.baseURL,
-      });
-    },
-  ],
+/**
+ * Module-level mutable registry of provider name → adapter constructor.
+ * Mutated by `registerLLMProvider` (intended for tests and plugins).
+ * Not thread-safe across Node worker_threads, but Vitest uses per-file fork
+ * isolation so tests don't collide.
+ */
+const REGISTRY = new Map<string, AdapterCtor>([
+  ['anthropic', AnthropicAdapter],
 ]);
 
-export function registerLLMProvider(id: LLMProviderId, builder: Builder): void {
-  REGISTRY.set(id, builder);
+export function createLLM(cfg: LLMConfig): ILLMProvider {
+  const Ctor = REGISTRY.get(cfg.provider);
+  if (!Ctor) {
+    throw new LLMError(
+      `Unknown LLM provider: "${cfg.provider}". Registered: ${Array.from(REGISTRY.keys()).join(', ')}`,
+    );
+  }
+  return new Ctor(cfg);
 }
 
-export function createLLM(opts: CreateLLMOptions): ILLM {
-  const builder = REGISTRY.get(opts.provider);
-  if (!builder) throw new Error(`createLLM: unknown provider "${opts.provider}"`);
-  return builder(opts);
+export function registerLLMProvider(name: LLMProviderName, ctor: AdapterCtor): void {
+  REGISTRY.set(name, ctor);
 }

@@ -2,14 +2,17 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    globals: true,
+    include: ['test/**/*.spec.ts', 'examples/**/*.smoke.spec.ts'],
     environment: 'node',
-    include: ['test/**/*.spec.ts', 'src/**/*.spec.ts'],
+    globals: false,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'html'],
       include: ['src/**/*.ts'],
-      exclude: ['**/*.spec.ts', '**/index.ts', 'src/llm/adapters/_mappers.ts'],
+      exclude: ['src/**/types.ts'],
+      thresholds: {
+        'src/guardrails/**': { branches: 80, functions: 80 },
+        'src/chains/rag.chain.ts': { branches: 80, functions: 80 },
+      },
     },
   },
 });

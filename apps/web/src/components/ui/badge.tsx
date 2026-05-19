@@ -1,32 +1,27 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils/cn";
 
 const badgeVariants = cva(
-  'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+  "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80',
-        secondary:
-          'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        destructive:
-          'border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80',
-        warning:
-          'border-transparent bg-yellow-500 text-white shadow hover:bg-yellow-500/80',
-        outline: 'text-foreground',
+        success: "border-transparent bg-class-excellent/15 text-class-excellent",
+        warn: "border-transparent bg-class-fair/15 text-class-fair",
+        error: "border-transparent bg-class-poor/15 text-class-poor",
+        info: "border-transparent bg-status-active/15 text-status-active",
+        muted: "border-border bg-bg-overlay text-fg-muted",
       },
     },
-    defaultVariants: { variant: 'default' },
+    defaultVariants: { variant: "muted" },
   },
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
 export function Badge({ className, variant, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
+  return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
 }
-
-export { badgeVariants };

@@ -1,0 +1,624 @@
+{
+  "app": {
+    "name": "SEO Analyst",
+    "tagline": "SEO insights for Vietnamese websites"
+  },
+  "common": {
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "retry": "Retry",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "refresh": "Refresh",
+    "errorTitle": "Something went wrong",
+    "errorDescription": "Please try again in a moment.",
+    "reportIssue": "Report issue"
+  },
+  "nav": {
+    "dashboard": "Overview",
+    "audits": "Audits",
+    "auditsNew": "New audit",
+    "auditsDetail": "Audit details",
+    "scheduled": "Scheduled",
+    "compare": "Compare",
+    "settings": "Settings",
+    "profile": "Profile",
+    "password": "Password",
+    "admin": "Admin",
+    "users": "Users",
+    "rules": "Rules",
+    "stats": "Stats"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "vi": "Tiếng Việt",
+    "en": "English"
+  },
+  "auditStatus": {
+    "pending": "Pending",
+    "crawling": "Crawling",
+    "analyzing": "Analyzing",
+    "reporting": "Reporting",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "dashboard": {
+    "title": "Overview",
+    "subtitle": "Your SEO health at a glance",
+    "newAudit": "+ New audit",
+    "heroTitle": "Latest SEO score",
+    "heroNoData": "No completed audit yet",
+    "heroVsLast": "vs. previous run",
+    "stats": {
+      "auditsThisMonth": "Audits this month",
+      "auditsThisMonthDesc": "Total audits run this month",
+      "avgScore": "Average score",
+      "avgScoreDesc": "Average SEO score for the month",
+      "criticalIssues": "Critical issues",
+      "criticalIssuesDesc": "Failed rules in your latest audit",
+      "pdfsExported": "PDFs exported",
+      "pdfsExportedDesc": "PDF report downloads",
+      "vsLastMonth": "vs. last month",
+      "noData": "—",
+      "comingSoon": "Coming soon"
+    },
+    "trend": {
+      "title": "SEO score trend",
+      "subtitle": "Last 30 days",
+      "needMore": "Need ≥ 2 completed audits to draw a trend"
+    },
+    "recent": {
+      "title": "Recent audits",
+      "viewAll": "View all",
+      "empty": "No audits yet"
+    },
+    "empty": {
+      "title": "Start auditing your SEO",
+      "description": "Run your first audit to see your SEO score, Core Web Vitals, and the issues you need to fix.",
+      "cta": "+ Create first audit"
+    },
+    "error": {
+      "title": "Couldn't load the dashboard",
+      "description": "Connection to the server failed.",
+      "retry": "Retry"
+    }
+  },
+  "audits": {
+    "title": "My audits",
+    "subtitle": "Every audit you've run",
+    "new": "+ New audit",
+    "create": {
+      "title": "Run a new audit",
+      "subtitle": "Enter a URL and configure the scope to start an SEO scan.",
+      "urlLabel": "Website URL",
+      "urlPlaceholder": "https://example.com",
+      "urlHint": "Must start with http or https.",
+      "keywordLabel": "Target keyword (optional)",
+      "keywordPlaceholder": "e.g. seo services",
+      "keywordHint": "Used to score keyword density + placement.",
+      "modeLabel": "Scope",
+      "modeSingle": "Single page",
+      "modeSingleDesc": "Only analyse the URL you provided.",
+      "modeSite": "Whole site",
+      "modeSiteDesc": "Crawl internal pages up to the maxUrls limit.",
+      "maxUrlsLabel": "Max pages",
+      "maxUrlsHint": "Range 1–5000. More pages → longer audit.",
+      "submit": "Start audit",
+      "submitting": "Creating audit…",
+      "successTitle": "Audit created",
+      "successBody": "We're analysing {url}. You can follow live progress on the detail page.",
+      "viewDetail": "Open detail",
+      "errorInvalidUrl": "Invalid URL.",
+      "errorMaxUrlsRange": "Max pages must be between 1 and 5000."
+    },
+    "filters": {
+      "search": "Search URL or domain",
+      "status": "Status",
+      "statusAll": "All statuses",
+      "scoreMin": "Min score",
+      "scoreMax": "Max score",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "sortBy": "Sort by",
+      "sortCreatedAt": "Created date",
+      "sortScore": "SEO score",
+      "orderDesc": "Descending",
+      "orderAsc": "Ascending",
+      "clear": "Clear filters",
+      "apply": "Apply"
+    },
+    "table": {
+      "url": "URL",
+      "score": "Score",
+      "status": "Status",
+      "createdAt": "Created",
+      "duration": "Duration",
+      "keyword": "Keyword",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View details",
+      "delete": "Delete",
+      "share": "Share",
+      "rerun": "Re-run"
+    },
+    "pagination": {
+      "showing": "Showing {from}–{to} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}"
+    },
+    "empty": {
+      "title": "No audits yet",
+      "description": "Start analysing the SEO of your first website.",
+      "cta": "+ Create first audit"
+    },
+    "noResults": {
+      "title": "No audits matched",
+      "description": "Try removing a filter or changing the search term.",
+      "cta": "Clear filters"
+    },
+    "error": {
+      "title": "Server error",
+      "description": "Couldn't load the audit list. Please try again.",
+      "retry": "Retry",
+      "requestId": "Request ID"
+    },
+    "delete": {
+      "confirm": "Delete this audit? This action cannot be undone.",
+      "success": "Audit deleted",
+      "fail": "Deletion failed"
+    }
+  },
+  "auditCompare": {
+    "title": "Compare audits",
+    "subtitle": "Pick two audits to see the score delta, rule changes, and issue diff.",
+    "pickerA": "Audit A (before)",
+    "pickerB": "Audit B (after)",
+    "pickerCta": "Pick audit",
+    "pickerSearch": "Search URL or domain",
+    "pickerEmpty": "No matching audits",
+    "pickerOnlyCompleted": "Only completed audits are shown",
+    "pickerChange": "Change",
+    "pickerClear": "Clear",
+    "instructions": "Choose two audits to view their comparison.",
+    "summaryTitle": "Summary",
+    "scoreDeltaLabel": "Score delta",
+    "rulesTitle": "Rule changes",
+    "rulesEmpty": "Both audits scored identically on every rule",
+    "fixedTitle": "Fixed issues",
+    "newTitle": "New issues",
+    "fixedEmpty": "No rules were fixed",
+    "newEmpty": "No rules newly failed",
+    "errorTitle": "Couldn't load comparison",
+    "errorBody": "Make sure both audits are completed.",
+    "retry": "Retry",
+    "statusBeforeLabel": "Before",
+    "statusAfterLabel": "After"
+  },
+  "auditDetail": {
+    "loading": "Loading report…",
+    "notFoundTitle": "Audit not found",
+    "notFoundBody": "This audit was deleted or you don't have access.",
+    "backToList": "Back to audits",
+    "actions": {
+      "export": "Export PDF",
+      "share": "Share",
+      "delete": "Delete audit",
+      "rerun": "Re-run",
+      "toggleView": "Toggle view"
+    },
+    "meta": {
+      "url": "URL",
+      "createdAt": "Created at",
+      "completedAt": "Completed",
+      "duration": "Duration",
+      "crawler": "Crawler"
+    },
+    "sections": {
+      "categoryBreakdown": "Category scores",
+      "cwv": "Core Web Vitals",
+      "rules": "Rule results",
+      "keywords": "Content keywords",
+      "targetKeyword": "Target keyword"
+    },
+    "rules": {
+      "empty": "No rules in this report",
+      "weightLabel": "Weight",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Other"
+      }
+    },
+    "keywords": {
+      "empty": "No keyword data",
+      "rank": "#",
+      "frequency": "Count",
+      "density": "Density"
+    },
+    "targetKeyword": {
+      "verdict": "Verdict",
+      "stuffing": "Keyword stuffing detected",
+      "ok": "Density is healthy"
+    },
+    "inProgress": {
+      "title": "Audit in progress",
+      "subtitle": "Feel free to close this tab — we'll keep running in the background.",
+      "stage": {
+        "pending": "Queued",
+        "crawling": "Crawl HTML",
+        "analyzing": "Run 20 SEO rules",
+        "reporting": "Aggregate report",
+        "completed": "Done"
+      },
+      "messages": {
+        "crawling": "Fetching HTML and assets…",
+        "analyzing": "Scoring 20 SEO rules…",
+        "reporting": "Aggregating the final report…",
+        "pending": "Audit is queued and will start shortly."
+      }
+    },
+    "failed": {
+      "title": "Audit failed",
+      "fallbackMessage": "The pipeline hit an unknown error.",
+      "rerun": "Re-run audit",
+      "reportIssue": "Report issue"
+    },
+    "share": {
+      "title": "Share audit report",
+      "subtitle": "Anyone with the link can view the report (read-only, no login).",
+      "helper": "Link expires automatically after 30 days. You can revoke it anytime.",
+      "createCta": "Generate share link",
+      "creating": "Generating…",
+      "linkLabel": "Share link",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "revoke": "Revoke link",
+      "revoking": "Revoking…",
+      "revokeConfirm": "Revoke this share link?",
+      "revokeSuccess": "Link revoked",
+      "noLink": "No share link yet.",
+      "close": "Close",
+      "errorCreate": "Failed to create link",
+      "errorRevoke": "Failed to revoke"
+    },
+    "delete": {
+      "title": "Delete this audit?",
+      "subtitle": "This action cannot be undone.",
+      "body": "The audit and its report will be permanently removed. Active share links will be revoked.",
+      "auditIdLabel": "Audit ID",
+      "cancel": "Cancel",
+      "confirm": "Delete audit",
+      "submitting": "Deleting…",
+      "success": "Audit deleted",
+      "fail": "Deletion failed"
+    }
+  },
+  "scheduled": {
+    "title": "Scheduled audits",
+    "subtitle": "Automate recurring SEO audits via cron schedule.",
+    "new": "+ New schedule",
+    "table": {
+      "url": "URL",
+      "cron": "Cron",
+      "mode": "Scope",
+      "lastRun": "Last run",
+      "lastScore": "Last score",
+      "active": "Status",
+      "actions": "Actions"
+    },
+    "active": {
+      "on": "Running",
+      "off": "Paused"
+    },
+    "actions": {
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "No scheduled audits",
+      "description": "Create a schedule to run audits automatically on a cron timer.",
+      "cta": "+ Create first schedule"
+    },
+    "error": {
+      "title": "Couldn't load schedules",
+      "description": "Connection to the server failed.",
+      "retry": "Retry"
+    },
+    "delete": {
+      "confirm": "Delete this schedule? Recurring audits will stop.",
+      "success": "Schedule deleted",
+      "fail": "Deletion failed"
+    },
+    "toggle": {
+      "pauseSuccess": "Schedule paused",
+      "resumeSuccess": "Schedule resumed",
+      "fail": "Toggle failed"
+    },
+    "create": {
+      "title": "Create schedule",
+      "subtitle": "Run an audit repeatedly on a cron schedule.",
+      "urlLabel": "Website URL",
+      "urlPlaceholder": "https://example.com",
+      "cronLabel": "Cron",
+      "cronPlaceholder": "0 9 * * MON",
+      "cronHint": "5 fields: minute hour dom month dow. Example \"0 9 * * MON\" = 9 AM every Monday.",
+      "modeLabel": "Scope",
+      "modeSingle": "Single page",
+      "modeSite": "Whole site",
+      "maxUrlsLabel": "Max pages",
+      "keywordLabel": "Target keyword (optional)",
+      "submit": "Create schedule",
+      "submitting": "Creating…",
+      "successToast": "Schedule created",
+      "errorCron": "Invalid cron (5 fields required).",
+      "errorInvalidUrl": "Invalid URL."
+    }
+  },
+  "globalModal": {
+    "accountLocked": {
+      "title": "Your account is locked",
+      "body": "Your account has been temporarily locked. Please contact support to restore access.",
+      "contact": "Contact",
+      "signOut": "Sign out"
+    },
+    "rateLimit": {
+      "title": "Too many requests",
+      "body": "You've hit the rate limit. Please wait before trying again.",
+      "retryIn": "Retry in",
+      "seconds": "{n}s",
+      "close": "Close"
+    }
+  },
+  "admin": {
+    "stats": {
+      "title": "Platform stats",
+      "subtitle": "Aggregate activity across the last {period} days.",
+      "period": "Period",
+      "period7": "Last 7 days",
+      "period30": "Last 30 days",
+      "period90": "Last 90 days",
+      "loading": "Loading stats…",
+      "error": "Couldn't load stats",
+      "overview": {
+        "totalUsers": "Total users",
+        "totalAudits": "Total audits",
+        "successRate": "Success rate",
+        "avgCrawlTime": "Avg crawl time",
+        "avgSeoScore": "Avg SEO score"
+      },
+      "today": "Today",
+      "newUsersToday": "New users today",
+      "auditsToday": "Audits today",
+      "topDomains": "Top domains",
+      "topDomainsEmpty": "No domain activity yet"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage user accounts.",
+      "filters": {
+        "search": "Search email or name",
+        "role": "Role",
+        "roleAll": "All roles",
+        "roleUser": "User",
+        "roleAdmin": "Admin",
+        "lock": "Lock status",
+        "lockAll": "All",
+        "lockLocked": "Locked",
+        "lockActive": "Active",
+        "clear": "Clear"
+      },
+      "table": {
+        "email": "Email",
+        "fullName": "Name",
+        "role": "Role",
+        "audits": "Audits",
+        "status": "Status",
+        "createdAt": "Joined",
+        "actions": "Actions"
+      },
+      "status": {
+        "verified": "Verified",
+        "unverified": "Unverified",
+        "locked": "Locked"
+      },
+      "actions": {
+        "lock": "Lock",
+        "unlock": "Unlock"
+      },
+      "lockSuccess": "{email} has been locked",
+      "unlockSuccess": "{email} has been unlocked",
+      "empty": "No users match the filter.",
+      "error": "Couldn't load users",
+      "loading": "Loading users…"
+    },
+    "rules": {
+      "title": "SEO rules",
+      "subtitle": "Adjust the weight of each rule (1–10). Higher weight = stronger impact on the final SEO score.",
+      "table": {
+        "name": "Rule",
+        "category": "Category",
+        "weight": "Weight",
+        "enabled": "Enabled"
+      },
+      "save": "Save changes",
+      "saving": "Saving…",
+      "noChanges": "Nothing to save yet.",
+      "success": "Rules updated",
+      "rangeError": "Weight must be between 1 and 10",
+      "loading": "Loading rules…",
+      "error": "Couldn't load rules"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your profile and security.",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password"
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "These details appear on your reports and account email.",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "Jane Doe",
+      "emailLabel": "Email",
+      "emailHelper": "Email cannot be changed.",
+      "roleLabel": "Role",
+      "createdAtLabel": "Account created",
+      "submit": "Save changes",
+      "submitting": "Saving…",
+      "noChanges": "Nothing to save yet.",
+      "success": "Profile updated",
+      "loading": "Loading your profile…"
+    },
+    "password": {
+      "title": "Change password",
+      "subtitle": "Pick a strong new password.",
+      "currentLabel": "Current password",
+      "currentPlaceholder": "Enter your current password",
+      "newLabel": "New password",
+      "newPlaceholder": "At least 8 characters",
+      "confirmLabel": "Confirm new password",
+      "confirmPlaceholder": "Re-enter the new password",
+      "warningTitle": "All other sessions will be signed out",
+      "warningBody": "Changing your password revokes every active session, including this one. You will be redirected to the sign-in page after a successful update.",
+      "submit": "Update password",
+      "submitting": "Updating…",
+      "success": "Password updated — please sign in again"
+    }
+  },
+  "sharedReport": {
+    "headerBadge": "Public report",
+    "publicNotice": "You are viewing a read-only shared SEO report. Anyone with the link can see this.",
+    "classification": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "fair": "Fair",
+      "poor": "Needs attention"
+    },
+    "lowScoreNotice": "This site has significant SEO issues. Below is the audit summary.",
+    "sections": {
+      "categoryBreakdown": "Category scores",
+      "cwv": "Core Web Vitals",
+      "rules": "Rule results",
+      "keywords": "Content keywords",
+      "targetKeyword": "Target keyword"
+    },
+    "rules": {
+      "empty": "No rules in this report",
+      "categories": {
+        "meta": "Meta",
+        "headings": "Headings",
+        "images": "Images",
+        "links": "Links",
+        "performance": "Performance",
+        "technical": "Technical",
+        "other": "Other"
+      }
+    },
+    "targetKeyword": {
+      "verdict": "Verdict",
+      "stuffing": "Keyword stuffing detected",
+      "ok": "Density is healthy"
+    },
+    "loading": "Loading shared report…",
+    "notFoundTitle": "Report not available",
+    "notFoundBody": "This share link is invalid, expired, or has been revoked by the owner.",
+    "errorTitle": "Couldn't load the report",
+    "errorBody": "Please try again in a moment.",
+    "retry": "Retry",
+    "createdAt": "Audited",
+    "ctaTitle": "Want to audit your own site?",
+    "ctaBody": "Run a free SEO audit on any URL.",
+    "ctaButton": "Open SEO Analyst"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Jane Doe",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "orContinueWith": "Or continue with",
+      "google": "Continue with Google",
+      "termsAgree": "I agree to the terms of service",
+      "rule8chars": "At least 8 characters",
+      "ruleUppercase": "At least 1 uppercase letter",
+      "ruleNumber": "At least 1 number",
+      "ruleSpecial": "At least 1 special character"
+    },
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Welcome back. Please sign in to continue.",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Create one"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Sign up free and start analyzing your SEO today.",
+      "submit": "Sign up",
+      "submitting": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "successTitle": "Account created",
+      "successBody": "We've sent a verification email. Please check your inbox and click the link to activate your account."
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "subtitle": "Enter your email and we'll send you a reset link.",
+      "submit": "Send link",
+      "submitting": "Sending…",
+      "successTitle": "Email sent",
+      "successBody": "If an account exists for that email, you'll receive a reset link shortly.",
+      "backToLogin": "Back to sign in"
+    },
+    "reset": {
+      "title": "Reset password",
+      "subtitle": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "submitting": "Working…",
+      "successTitle": "Password updated",
+      "successBody": "Your password has been changed. Please sign in with the new password.",
+      "loginCta": "Sign in",
+      "invalidTokenTitle": "Invalid link",
+      "invalidTokenBody": "This reset link has expired or already been used. Please request a new one.",
+      "missingTokenTitle": "Missing reset token",
+      "missingTokenBody": "Please open this page via the link in your email."
+    },
+    "oauth": {
+      "loadingTitle": "Signing in…",
+      "loadingBody": "Please wait while we verify your account.",
+      "successTitle": "Signed in",
+      "successBody": "Redirecting to your dashboard…",
+      "errorTitle": "Sign-in failed",
+      "errorMissingToken": "No authentication token was received from Google.",
+      "errorInvalidToken": "The authentication token is invalid or has expired.",
+      "retry": "Try again"
+    }
+  }
+}

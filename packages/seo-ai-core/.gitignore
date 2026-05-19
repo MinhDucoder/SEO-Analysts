@@ -1,4 +1,4 @@
-dist
-.turbo
-coverage
+dist/
+coverage/
+node_modules/
 *.tsbuildinfo

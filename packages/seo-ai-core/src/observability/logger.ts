@@ -1,32 +1,35 @@
-/**
- * @file Minimal structured-logger interface consumers pass into chains.
- * Default `noopLogger` lets consumers opt out. Consumers can adapt
- * pino/winston/console behind this interface without pulling the
- * library into our deps.
- */
-
-export type LogFields = Record<string, unknown>;
+export type LogContext = Record<string, unknown>;
 
 export interface Logger {
-  debug(fields: LogFields, msg?: string): void;
-  info(fields: LogFields, msg?: string): void;
-  warn(fields: LogFields, msg?: string): void;
-  error(fields: LogFields, msg?: string): void;
-  child?(fields: LogFields): Logger;
+  debug(msg: string, ctx?: LogContext): void;
+  info(msg: string, ctx?: LogContext): void;
+  warn(msg: string, ctx?: LogContext): void;
+  error(msg: string, ctx?: LogContext): void;
 }
 
 export const noopLogger: Logger = {
-  debug() {},
-  info() {},
-  warn() {},
-  error() {},
+  debug: () => undefined,
+  info: () => undefined,
+  warn: () => undefined,
+  error: () => undefined,
 };
 
-export function consoleLogger(): Logger {
+/**
+ * Minimal subset of pino's Logger interface that we depend on. Avoids importing
+ * pino's types directly so consumers without pino installed still type-check.
+ */
+export interface PinoLike {
+  debug(obj: object, msg?: string): void;
+  info(obj: object, msg?: string): void;
+  warn(obj: object, msg?: string): void;
+  error(obj: object, msg?: string): void;
+}
+
+export function createPinoLogger(pino: PinoLike): Logger {
   return {
-    debug: (f, m) => console.debug(m ?? '', f),
-    info: (f, m) => console.info(m ?? '', f),
-    warn: (f, m) => console.warn(m ?? '', f),
-    error: (f, m) => console.error(m ?? '', f),
+    debug: (msg, ctx) => pino.debug(ctx ?? {}, msg),
+    info: (msg, ctx) => pino.info(ctx ?? {}, msg),
+    warn: (msg, ctx) => pino.warn(ctx ?? {}, msg),
+    error: (msg, ctx) => pino.error(ctx ?? {}, msg),
   };
 }

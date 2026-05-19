@@ -1,50 +1,53 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
-import { ZodOutputParser } from '../src/guardrails/output-parser';
-import { GuardrailError } from '../src/errors';
+import { parseStructured } from '../src/guardrails/output-parser.js';
+import { GuardrailError } from '../src/errors/index.js';
 
-const Schema = z.object({ ok: z.boolean(), n: z.number().int() });
+const Schema = z.object({
+  summary: z.string(),
+  count: z.number().int().nonnegative(),
+});
 
-describe('ZodOutputParser', () => {
-  it('parses clean JSON', () => {
-    const p = new ZodOutputParser(Schema);
-    expect(p.parse('{"ok":true,"n":42}')).toEqual({ ok: true, n: 42 });
+describe('parseStructured', () => {
+  it('parses clean JSON matching the schema', () => {
+    const r = parseStructured('{"summary":"ok","count":3}', Schema);
+    expect(r).toEqual({ summary: 'ok', count: 3 });
   });
 
-  it('strips ```json fences', () => {
-    const p = new ZodOutputParser(Schema);
-    const raw = '```json\n{"ok":false,"n":1}\n```';
-    expect(p.parse(raw)).toEqual({ ok: false, n: 1 });
+  it('strips ```json ... ``` fence', () => {
+    const raw = '```json\n{"summary":"ok","count":1}\n```';
+    expect(parseStructured(raw, Schema)).toEqual({ summary: 'ok', count: 1 });
   });
 
-  it('strips ``` fences without lang', () => {
-    const p = new ZodOutputParser(Schema);
-    expect(p.parse('```\n{"ok":true,"n":1}\n```')).toEqual({ ok: true, n: 1 });
+  it('strips bare ``` fence', () => {
+    const raw = '```\n{"summary":"x","count":0}\n```';
+    expect(parseStructured(raw, Schema)).toEqual({ summary: 'x', count: 0 });
   });
 
-  it('throws GuardrailError on invalid JSON', () => {
-    const p = new ZodOutputParser(Schema);
-    expect(() => p.parse('{not json')).toThrow(GuardrailError);
+  it('repairs trailing comma in object', () => {
+    expect(parseStructured('{"summary":"x","count":0,}', Schema)).toEqual({ summary: 'x', count: 0 });
   });
 
-  it('throws GuardrailError on schema violation', () => {
-    const p = new ZodOutputParser(Schema);
-    expect(() => p.parse('{"ok":"yes","n":"x"}')).toThrow(GuardrailError);
+  it('repairs trailing comma in array (when nested in matching schema)', () => {
+    const ArraySchema = z.object({ items: z.array(z.number()) });
+    expect(parseStructured('{"items":[1,2,3,]}', ArraySchema)).toEqual({ items: [1, 2, 3] });
   });
 
-  it('preserves raw payload on failure for debugging', () => {
-    const p = new ZodOutputParser(Schema);
+  it('throws GuardrailError when JSON is unrecoverable', () => {
+    expect(() => parseStructured('not json at all', Schema)).toThrow(GuardrailError);
     try {
-      p.parse('{"ok":"no"}');
-      throw new Error('should have thrown');
-    } catch (e) {
-      expect(e).toBeInstanceOf(GuardrailError);
-      expect((e as GuardrailError).raw).toBe('{"ok":"no"}');
+      parseStructured('not json at all', Schema);
+    } catch (err) {
+      expect(err).toBeInstanceOf(GuardrailError);
+      expect((err as GuardrailError).raw).toBe('not json at all');
     }
   });
 
-  it('repairs trailing commas as fallback', () => {
-    const p = new ZodOutputParser(Schema);
-    expect(p.parse('{"ok":true, "n":2,}')).toEqual({ ok: true, n: 2 });
+  it('throws GuardrailError when JSON parses but fails Zod validation', () => {
+    expect(() => parseStructured('{"summary":"x","count":-1}', Schema)).toThrow(GuardrailError);
+  });
+
+  it('throws GuardrailError on empty / whitespace-only input', () => {
+    expect(() => parseStructured('   ', Schema)).toThrow(GuardrailError);
   });
 });

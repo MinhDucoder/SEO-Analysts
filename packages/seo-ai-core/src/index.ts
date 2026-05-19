@@ -1,29 +1,39 @@
-/**
- * @file Public API of @repo/seo-ai-core.
- * Consumers MUST only import from this barrel — never deep paths.
- */
+// Public type surface — locked for MVP per spec § 3.
+
+export type {
+  ILLMProvider, LLMRequest, LLMResponse, Message, TokenUsage, LLMChunk, FinishReason, Role,
+} from './llm/types.js';
+export type {
+  IPromptLoader, PromptTemplate, RenderedPrompt, PromptListEntry, PromptMetadata, PromptExample,
+} from './prompt/types.js';
+export type { IChain, ChainContext, ChainCallbacks } from './chains/types.js';
+export type { IRetriever, RetrievedDoc, RetrieverSearchOptions } from './retrievers/types.js';
+export type { Policy, PolicyResult, OutputParseResult } from './guardrails/types.js';
+export type { Logger, LogContext, PinoLike } from './observability/logger.js';
+
+export { noopLogger, createPinoLogger } from './observability/logger.js';
 
 export {
-  AiCoreError,
-  LLMError,
-  PromptError,
-  GuardrailError,
-  ChainError,
-  isTransientLLMError,
-} from './errors';
+  AiCoreError, LLMError, PromptError, ChainError, GuardrailError, RetrieverError,
+  type AiCoreErrorOptions,
+} from './errors/index.js';
 
-export { noopLogger, consoleLogger } from './observability/logger';
-export type { Logger, LogFields } from './observability/logger';
+// Factories + classes appended in T4-T9.
 
-export { createLLM, registerLLMProvider } from './llm/provider';
-export type { LLMProviderId, CreateLLMOptions } from './llm/provider';
-export type { ILLM, LLMRequest, LLMResponse, Message, Role } from './llm/types';
+// LLM
+export { createLLM, registerLLMProvider, type LLMConfig, type LLMProviderName } from './llm/provider.js';
 
-export { FileSystemPromptLoader } from './prompt/loader';
-export type { IPromptLoader, PromptTemplate, RenderedPrompt } from './prompt/types';
+// Prompt
+export { FileSystemPromptLoader, type PromptLoaderOptions } from './prompt/loader.js';
+export { renderTemplate } from './prompt/renderer.js';
 
-export { ZodOutputParser } from './guardrails/output-parser';
+// Retrievers
+export { MemoryRetriever, type MemoryDoc } from './retrievers/memory.retriever.js';
 
-export { BaseChain } from './chains/base.chain';
-export type { IChain, ChainContext, RetryPolicy } from './chains/types';
-export type { BaseChainOptions } from './chains/base.chain';
+// Guardrails
+export { parseStructured } from './guardrails/output-parser.js';
+export { applyPolicy, type ApplyPolicyOutput } from './guardrails/policy.js';
+
+// Chains
+export { createBaseChain, type BaseChainConfig } from './chains/base.chain.js';
+export { createRagChain, type RagChainConfig } from './chains/rag.chain.js';

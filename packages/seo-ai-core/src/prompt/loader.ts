@@ -1,128 +1,154 @@
-/**
- * @file File-system prompt loader. Convention: prompts live under
- * `<baseDir>/<id>/v<semver>.prompt.yaml`. `load({version})` accepts a
- * semver range and resolves to the highest satisfying version.
- * `render()` materializes system/user strings through the Handlebars
- * renderer and returns a stable sha256 hash used for trace logs.
- *
- * In-memory cache is keyed by `<id>@<resolvedVersion>` and is not
- * invalidated on disk change — dev workflow must restart process.
- */
-import { readFile, readdir } from 'node:fs/promises';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { join } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import semver from 'semver';
-import { renderTemplate } from './renderer';
-import { PromptError } from '../errors';
-import type { IPromptLoader, PromptTemplate, RenderedPrompt } from './types';
-import type { Message } from '../llm/types';
+import type {
+  IPromptLoader, PromptTemplate, RenderedPrompt, PromptListEntry,
+} from './types.js';
+import type { Message } from '../llm/types.js';
+import { renderTemplate } from './renderer.js';
+import { PromptError } from '../errors/index.js';
 
-const FILE_RE = /^v(\d+\.\d+\.\d+)\.prompt\.ya?ml$/;
-
-export interface FileSystemPromptLoaderOptions {
+export interface PromptLoaderOptions {
   baseDir: string;
+  cache?: boolean;
 }
 
 export class FileSystemPromptLoader implements IPromptLoader {
-  private readonly cache = new Map<string, PromptTemplate>();
+  private readonly baseDir: string;
+  private readonly cacheEnabled: boolean;
+  private readonly _cache = new Map<string, PromptTemplate>();
 
-  constructor(private readonly opts: FileSystemPromptLoaderOptions) {}
+  constructor(opts: PromptLoaderOptions) {
+    this.baseDir = opts.baseDir;
+    this.cacheEnabled = opts.cache ?? true;
+  }
 
-  async load(id: string, opts: { version: string }): Promise<PromptTemplate> {
-    const resolved = await this.resolveVersion(id, opts.version);
+  async load(id: string, range?: string): Promise<PromptTemplate> {
+    const resolved = await this.resolveVersion(id, range);
     const cacheKey = `${id}@${resolved}`;
-    const hit = this.cache.get(cacheKey);
-    if (hit) return hit;
+    const cached = this.cacheEnabled ? this._cache.get(cacheKey) : undefined;
+    if (cached) return cached;
 
-    const path = join(this.opts.baseDir, id, `v${resolved}.prompt.yaml`);
-    let raw: string;
-    try {
-      raw = await readFile(path, 'utf8');
-    } catch (err) {
-      throw new PromptError(`prompt file not readable: ${path}`, { cause: err });
+    const file = path.join(this.baseDir, id, `v${resolved}.prompt.yaml`);
+    const raw = await fs.readFile(file, 'utf-8').catch((err) => {
+      throw new PromptError(`Failed to read prompt file ${file}: ${(err as Error).message}`, { cause: err });
+    });
+    const parsed: unknown = parseYaml(raw);
+    this.assertTemplateShape(parsed, id, resolved);
+    const tpl = parsed as PromptTemplate;
+
+    if (tpl.metadata?.deprecated) {
+      console.warn(`[seo-ai-core] prompt ${id}@${resolved} is marked deprecated`);
     }
-    let parsed: unknown;
-    try {
-      parsed = parseYaml(raw);
-    } catch (err) {
-      throw new PromptError(`prompt YAML parse error: ${path}`, { cause: err });
-    }
-    const tpl = this.validateShape(parsed, id, resolved, path);
-    this.cache.set(cacheKey, tpl);
+
+    if (this.cacheEnabled) this._cache.set(cacheKey, tpl);
     return tpl;
   }
 
   async render(
     id: string,
     vars: Record<string, unknown>,
-    opts: { version: string },
+    opts: { version?: string } = {},
   ): Promise<RenderedPrompt> {
-    const tpl = await this.load(id, opts);
+    const tpl = await this.load(id, opts.version);
+
+    const missing = tpl.variables.filter((v) => !Object.prototype.hasOwnProperty.call(vars, v));
+    if (missing.length) {
+      throw new PromptError(
+        `Missing variables for ${tpl.id}@${tpl.version}: ${missing.join(', ')}`,
+      );
+    }
+
     const messages: Message[] = [];
-    if (tpl.system) messages.push({ role: 'system', content: renderTemplate(tpl.system, vars) });
+    if (tpl.system) {
+      messages.push({ role: 'system', content: renderTemplate(tpl.system, vars) });
+    }
     messages.push({ role: 'user', content: renderTemplate(tpl.user, vars) });
+
     const hash = createHash('sha256')
-      .update(JSON.stringify({ id: tpl.id, version: tpl.version, messages }))
+      .update(`${tpl.id}@${tpl.version}::${JSON.stringify(messages)}`)
       .digest('hex')
       .slice(0, 16);
-    return { messages, hash };
+
+    return { id: tpl.id, version: tpl.version, messages, hash };
   }
 
-  private async resolveVersion(id: string, range: string): Promise<string> {
-    let entries: string[];
-    try {
-      entries = await readdir(join(this.opts.baseDir, id));
-    } catch (err) {
-      throw new PromptError(`prompt dir missing: ${id}`, { cause: err });
+  async list(): Promise<PromptListEntry[]> {
+    const ids = await fs.readdir(this.baseDir).catch(() => [] as string[]);
+    const out: PromptListEntry[] = [];
+    for (const id of ids) {
+      const stat = await fs.stat(path.join(this.baseDir, id)).catch(() => null);
+      if (!stat?.isDirectory()) continue;
+      try {
+        const latest = await this.load(id);
+        out.push({ id: latest.id, version: latest.version, metadata: latest.metadata });
+      } catch (err) {
+        console.warn(
+          `[seo-ai-core] list(): skipping prompt "${id}": ${(err as Error).message}`,
+        );
+      }
     }
-    const versions: string[] = [];
-    for (const e of entries) {
-      const m = FILE_RE.exec(e);
-      if (m && m[1]) versions.push(m[1]);
-    }
+    return out;
+  }
+
+  private async resolveVersion(id: string, range?: string): Promise<string> {
+    const dir = path.join(this.baseDir, id);
+    const files = await fs.readdir(dir).catch(() => {
+      throw new PromptError(`Prompt id not found: ${id} (looked in ${dir})`);
+    });
+
+    const candidates = files
+      .filter((f) => f.startsWith('v') && f.endsWith('.prompt.yaml'))
+      .map((f) => f.slice(1, -'.prompt.yaml'.length));
+
+    const versions = candidates
+      .filter((v) => {
+        if (semver.valid(v) === null) {
+          console.warn(
+            `[seo-ai-core] resolveVersion("${id}"): skipping unparseable version "${v}" — must be strict semver (e.g. 1.0.0).`,
+          );
+          return false;
+        }
+        return true;
+      })
+      .sort(semver.rcompare);
+
     if (versions.length === 0) {
-      throw new PromptError(`no versioned prompts for "${id}"`);
+      throw new PromptError(`No valid prompt versions found for ${id} in ${dir}`);
     }
-    const match = semver.maxSatisfying(versions, range);
-    if (!match) {
-      throw new PromptError(
-        `no version satisfies "${range}" for "${id}" (have: ${versions.join(', ')})`,
-      );
+
+    if (!range) {
+      return versions[0]!;
     }
-    return match;
+
+    const matched = semver.maxSatisfying(versions, range);
+    if (!matched) {
+      throw new PromptError(`No version of "${id}" satisfies range "${range}". Available: ${versions.join(', ')}`);
+    }
+    return matched;
   }
 
-  private validateShape(
-    raw: unknown,
-    id: string,
-    version: string,
-    path: string,
-  ): PromptTemplate {
-    if (!raw || typeof raw !== 'object') {
-      throw new PromptError(`prompt not an object: ${path}`);
+  private assertTemplateShape(parsed: unknown, id: string, version: string): void {
+    if (typeof parsed !== 'object' || parsed === null) {
+      throw new PromptError(`Prompt ${id}@${version}: not a YAML object`);
     }
-    const r = raw as Record<string, unknown>;
-    if (r.id !== id) {
-      throw new PromptError(`prompt id mismatch: expected ${id} got ${String(r.id)}`);
+    const obj = parsed as Record<string, unknown>;
+    if (obj['id'] !== id) {
+      throw new PromptError(`Prompt id mismatch in file: expected "${id}", got "${String(obj['id'])}"`);
     }
-    if (r.version !== version) {
-      throw new PromptError(
-        `prompt version mismatch: file ${version} but content ${String(r.version)}`,
-      );
+    if (obj['version'] !== version) {
+      throw new PromptError(`Prompt version mismatch in file: expected "${version}", got "${String(obj['version'])}"`);
     }
-    if (typeof r.user !== 'string') {
-      throw new PromptError(`prompt missing user string: ${path}`);
+    if (typeof obj['user'] !== 'string') {
+      throw new PromptError(`Prompt ${id}@${version}: missing required "user" field`);
     }
-    if (r.system !== undefined && typeof r.system !== 'string') {
-      throw new PromptError(`prompt system must be string: ${path}`);
+    if (!Array.isArray(obj['variables'])) {
+      throw new PromptError(`Prompt ${id}@${version}: "variables" must be an array`);
     }
-    return {
-      id,
-      version,
-      user: r.user,
-      system: r.system as string | undefined,
-      metadata: (r.metadata ?? {}) as Record<string, unknown>,
-    };
+    if (typeof obj['metadata'] !== 'object' || obj['metadata'] === null) {
+      throw new PromptError(`Prompt ${id}@${version}: missing required "metadata" object`);
+    }
   }
 }

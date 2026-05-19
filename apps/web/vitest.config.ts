@@ -1,15 +1,20 @@
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'node:path';
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
 
 export default defineConfig({
+  plugins: [react()],
   test: {
+    environment: "jsdom",
     globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./test/setup.ts'],
-    include: ['test/**/*.spec.ts', 'test/**/*.spec.tsx'],
-    alias: { '@': resolve(__dirname, 'src') },
-    env: {
-      NEXT_PUBLIC_API_BASE: 'http://api.test/v1',
+    setupFiles: ["./tests/setup.ts"],
+    include: ["tests/unit/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["tests/e2e/**", "node_modules/**", ".next/**"],
+    css: true,
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

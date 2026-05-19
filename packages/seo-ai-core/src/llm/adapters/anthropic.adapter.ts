@@ -1,57 +1,71 @@
-/**
- * @file SINGLE file in this package allowed to import @langchain/*.
- * Wrap `ChatAnthropic` behind the neutral `ILLM` interface.
- *
- * Security: API key comes from constructor only — never read from
- * process.env here. That keeps the adapter unit-testable without
- * leaking env access. The consumer's factory (gateway side) is
- * responsible for sourcing the key.
- */
 import { ChatAnthropic } from '@langchain/anthropic';
-import type { ILLM, LLMRequest, LLMResponse } from '../types';
-import { toBaseMessages, toLLMResponse } from './_mappers';
-import { LLMError } from '../../errors';
+import type { AIMessage } from '@langchain/core/messages';
+import type { ILLMProvider, LLMRequest, LLMResponse, LLMChunk, TokenUsage } from '../types.js';
+import type { LLMConfig } from '../provider.js';
+import { LLMError } from '../../errors/index.js';
+import { toLangChainMessages, toLLMResponse } from './_mappers.js';
 
-export interface AnthropicAdapterOptions {
-  apiKey: string;
-  model: string;
-  defaultMaxTokens?: number;
-  defaultTemperature?: number;
-  baseURL?: string;
-}
-
-export class AnthropicAdapter implements ILLM {
-  readonly providerId = 'anthropic';
-  readonly modelId: string;
+export class AnthropicAdapter implements ILLMProvider {
+  readonly name = 'anthropic';
+  readonly model: string;
   private readonly client: ChatAnthropic;
 
-  constructor(private readonly opts: AnthropicAdapterOptions) {
-    this.modelId = opts.model;
+  constructor(cfg: LLMConfig) {
+    const resolvedKey = cfg.apiKey || process.env['ANTHROPIC_API_KEY'];
+    if (!resolvedKey) {
+      throw new LLMError(
+        'AnthropicAdapter: missing apiKey (pass cfg.apiKey or set ANTHROPIC_API_KEY env)',
+      );
+    }
+    this.model = cfg.model;
     this.client = new ChatAnthropic({
-      apiKey: opts.apiKey,
-      model: opts.model,
-      maxTokens: opts.defaultMaxTokens ?? 2048,
-      temperature: opts.defaultTemperature ?? 0.2,
-      clientOptions: opts.baseURL ? { baseURL: opts.baseURL } : undefined,
+      apiKey: resolvedKey,
+      model: cfg.model,
+      temperature: cfg.defaultTemperature ?? 0.2,
+      maxTokens: cfg.defaultMaxTokens ?? 4096,
+      maxRetries: cfg.maxRetries ?? 2,
+      anthropicApiUrl: cfg.baseUrl,
     });
   }
 
   async invoke(req: LLMRequest, signal?: AbortSignal): Promise<LLMResponse> {
     try {
-      const msg = await this.client.invoke(toBaseMessages(req.messages), {
+      const result = (await this.client.invoke(toLangChainMessages(req.messages), {
         signal,
-        metadata: req.metadata,
-        configurable: {
-          maxTokens: req.maxTokens ?? this.opts.defaultMaxTokens ?? 2048,
-          temperature: req.temperature ?? this.opts.defaultTemperature ?? 0.2,
-        },
-      });
-      return toLLMResponse(msg as never);
+        stop: req.stopSequences,
+      })) as AIMessage;
+      return toLLMResponse(result, this.model);
     } catch (err) {
-      throw new LLMError(
-        err instanceof Error ? err.message : 'anthropic invoke failed',
-        { cause: err, retriable: true },
-      );
+      throw new LLMError(`Anthropic invoke failed: ${(err as Error).message}`, { cause: err });
     }
+  }
+
+  async *stream(req: LLMRequest, signal?: AbortSignal): AsyncIterable<LLMChunk> {
+    try {
+      const stream = await this.client.stream(toLangChainMessages(req.messages), {
+        signal,
+        stop: req.stopSequences,
+      });
+      for await (const chunk of stream) {
+        const delta = typeof chunk.content === 'string' ? chunk.content : '';
+        const meta = chunk.usage_metadata;
+        const usage: TokenUsage | undefined = meta
+          ? {
+              prompt: meta.input_tokens ?? 0,
+              completion: meta.output_tokens ?? 0,
+              total: meta.total_tokens ?? (meta.input_tokens ?? 0) + (meta.output_tokens ?? 0),
+            }
+          : undefined;
+        if (delta || usage) {
+          yield usage ? { delta, usage } : { delta };
+        }
+      }
+    } catch (err) {
+      throw new LLMError(`Anthropic stream failed: ${(err as Error).message}`, { cause: err });
+    }
+  }
+
+  async countTokens(text: string): Promise<number> {
+    return this.client.getNumTokens(text);
   }
 }

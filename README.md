@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-14-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)](https://redis.io/)
-[![Tests](https://img.shields.io/badge/tests-448%20passing-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-BE%20%2B%20FE%20%2B%20L4%20integration-brightgreen)](#testing)
 [![Cost](https://img.shields.io/badge/infra%20cost-<%20%2440%2Fmo-success)](#deployment)
 
 [![Monorepo](https://img.shields.io/badge/monorepo-Turborepo-EF4444?logo=turborepo&logoColor=white)](https://turborepo.com/)
@@ -88,14 +88,16 @@ Công cụ SEO thương mại (Ahrefs, SEMrush, Moz) giá **$99–$499/tháng** 
 
 ## 🏗 Architecture
 
-**5 microservices** giao tiếp qua gRPC (sync) + BullMQ (async) + Redis pub/sub (events):
+**6 services**: 1 Next.js frontend + 5 NestJS backend services, giao tiếp qua gRPC (sync) + BullMQ (async) + Redis pub/sub (events):
 
 ```
-                     ┌──────────────────────────────┐
-                     │        Client (Next.js)      │
-                     │   REST / Socket.IO / Share   │
-                     └──────────────┬───────────────┘
-                                    │ HTTPS
+                     ┌──────────────────────────────────┐
+                     │   apps/web (Next.js 14, :3001)   │
+                     │  App Router · i18n (vi/en)       │
+                     │  TanStack Query · Zustand · ky   │
+                     │  shadcn/ui · Socket.IO client    │
+                     └──────────────┬───────────────────┘
+                                    │ HTTPS · /api/v1 + /ws
                                     ▼
 ┌──────────────────────────────────────────────────────────────────┐
 │                    gateway  (NestJS, :3000)                      │
@@ -132,13 +134,43 @@ Công cụ SEO thương mại (Ahrefs, SEMrush, Moz) giá **$99–$499/tháng** 
 
 ---
 
+## 🖥️ Frontend (`apps/web`)
+
+Next.js 14 App Router, chạy ở `:3001`, gọi Gateway qua `NEXT_PUBLIC_API_URL=http://localhost:3000`. Route được nhóm theo `[locale]/(app|auth)`:
+
+| Route group | Pages | Mục đích |
+|---|---|---|
+| `(auth)` | `/login`, `/register`, `/forgot-password`, `/reset-password` | Public auth flow |
+| `(app)` | `/dashboard` | Tổng quan + last audits |
+| `(app)` | `/audits`, `/audits/[id]`, `/audits/compare` | Tạo audit, xem kết quả, so sánh 2 lần |
+| `(app)` | `/scheduled` | CRUD scheduled audits (F2) + regression timeline |
+| `(app)` | `/settings/{profile,password}` | User self-service |
+| `(app)` | `/admin/{stats,users,rules}` | Admin panel — guard bằng `AdminGuard` |
+| public | `/shared/[token]` | Public share link cho 1 audit (no auth) |
+
+**Realtime:** Socket.IO client subscribe room `audit:<id>`, nhận `audit:progress` / `audit:completed` / `audit:failed`. Global modals: 401 (silent refresh), 403 AccountLocked, 429 RateLimit.
+
+**Test layers:**
+- **L1-L2** Vitest + Testing Library (component + hook + i18n)
+- **L3** Playwright E2E với MSW handlers (FE-only hermetic)
+- **L4** Playwright integration với **real gateway + real DB** (`playwright.integration.config.ts`) — chạy `npm --workspace @seo/web run test:integration` sau khi `docker:up`
+
+> Dev FE không cần BE: xem `apps/web/CLAUDE.md` (mock harness mode trên branch `dev/mock-harness`).
+
+---
+
 ## 🛠 Tech stack
 
 | Layer | Tech | Why |
 |---|---|---|
-| **Language** | TypeScript 5.9 | Type-safe xuyên 5 service, giảm bug boundary |
+| **Language** | TypeScript 5.9 | Type-safe xuyên 6 service, giảm bug boundary |
 | **Backend** | NestJS 10.4 | DDD-friendly modules, DI rõ ràng |
-| **Frontend** | Next.js 14 (App Router) | SSR + streaming + RSC |
+| **Frontend** | Next.js 14 (App Router) | SSR + streaming + RSC, port `:3001` |
+| **FE data** | TanStack Query 5 + ky | Cache server state, retry/dedup tự động |
+| **FE state** | Zustand 5 | Client state nhẹ (auth, UI toggles) |
+| **FE forms** | react-hook-form + zod | Validate đồng nhất schema với BE DTO |
+| **FE UI kit** | shadcn/ui (Radix) + Tailwind + Recharts | Primitive accessible + chart score |
+| **i18n** | next-intl 4 | vi + en, route-based `[locale]` |
 | **Monorepo** | Turborepo + npm workspaces | Cache build, task song song |
 | **Database** | PostgreSQL 16 (3 schemas) | Service boundary = DB boundary |
 | **ORM** | Prisma 5.22 | Migration + type gen + pooling |
@@ -176,11 +208,14 @@ Sau khi container ready (~60s, lần đầu ~5 phút):
 
 | Endpoint | URL |
 |---|---|
+| **Web UI** (Next.js) | http://localhost:3001 |
 | Gateway REST API | http://localhost:3000/api/v1 |
 | Swagger / OpenAPI | http://localhost:3000/api/docs |
 | Report service (PDF) | http://localhost:3004 |
 | Postgres (gateway / analyzer / report) | 5432 / 5433 / 5434 |
 | Redis | 6379 |
+
+> **Chạy FE tách BE:** `npm --workspace @seo/web run dev` (BE phải `docker:up` trước, hoặc dùng mock harness — xem `apps/web/CLAUDE.md`).
 
 ### Seed dữ liệu test
 
@@ -333,7 +368,16 @@ curl -L http://localhost:3000/api/v1/audits/$AUDIT_ID/export \
 
 ```
 DO_AN/
-├── apps/                       # 5 microservices (NestJS)
+├── apps/                       # 5 NestJS services + 1 Next.js frontend
+│   ├── web/                    # Next.js 14 App Router (:3001)
+│   │   ├── src/
+│   │   │   ├── app/[locale]/   # (auth) + (app) route groups + /shared/[token]
+│   │   │   ├── components/     # shadcn primitives + feature components
+│   │   │   ├── lib/            # ky client, query keys, hooks, schemas
+│   │   │   ├── i18n/           # next-intl config (vi, en)
+│   │   │   └── messages/       # i18n catalogs
+│   │   ├── tests/              # Vitest unit + Playwright E2E + L4 integration
+│   │   └── playwright.integration.config.ts  # L4 real gateway + real DB
 │   ├── gateway/                # REST + WebSocket + gRPC client (:3000)
 │   │   ├── src/
 │   │   │   ├── auth/           # JWT + Google OAuth + refresh rotation
@@ -361,6 +405,9 @@ DO_AN/
 ├── packages/
 │   ├── shared/                 # Enums + interfaces + constants xuyên service
 │   ├── proto/                  # gRPC proto definitions (5 services)
+│   ├── ui/                     # Component primitives chia sẻ (shadcn-style)
+│   ├── seo-ai-core/            # Logic AI helpers (issue → fix suggestion)
+│   ├── seo-check-cli/          # Standalone CLI runner cho rule engine
 │   ├── eslint-config/
 │   └── typescript-config/
 ├── docs/
@@ -418,21 +465,25 @@ npx prisma studio                               # GUI query DB
 ### Testing
 
 ```bash
-npx turbo run test                              # Chạy tất cả (448 tests)
+npx turbo run test                              # Chạy tất cả unit + integration
 npx turbo run test --filter=@seo/crawler        # 1 service
 cd apps/crawler && npx vitest --watch           # Watch mode
+
+# Frontend
+npm --workspace @seo/web run test               # Vitest L1-L2
+npm --workspace @seo/web run e2e                # Playwright L3 (MSW)
+npm --workspace @seo/web run test:integration   # Playwright L4 (real gateway + DB)
 ```
 
-**Test coverage hiện tại:**
+**Test layers:**
 
-| Service | Tests | Files |
-|---|---:|---:|
-| crawler | 183 | 20 |
-| gateway | 87 | 14 |
-| seo-analyzer | 100 | 12 |
-| keyword-analyzer | 47 | 8 |
-| report | 31 | 8 |
-| **Total** | **448** | **62** |
+| Layer | Scope | Stack |
+|---|---|---|
+| **L1-L2** BE unit/integration | 5 NestJS services | Vitest + supertest |
+| **L1-L2** FE unit/component | `apps/web` hooks + components | Vitest + Testing Library |
+| **L3** FE E2E (hermetic) | Page flows với MSW mocks | Playwright |
+| **L4** FE↔BE integration | Real gateway + real Postgres | Playwright + docker-compose |
+| **E2E smoke** | Full pipeline `crawl → analyze → report` | `scripts/e2e-smoke-test.sh` |
 
 ---
 
@@ -479,7 +530,9 @@ cd apps/crawler && npx vitest --watch           # Watch mode
 
 - [x] **v1.0** (2026-04-17) — MVP: 20 rules, 1 URL, mobile Lighthouse
 - [x] **v1.1** (2026-04-18) — **Tier 1**: site-wide + scheduled + broken links + dual Lighthouse + readability
-- [ ] **v1.2** — Alert delivery (email/webhook/Slack), UI for scheduled audits + regression timeline
+- [x] **v1.2 FE** — Next.js frontend đầy đủ: dashboard, audits, compare, scheduled, settings, admin, public share, i18n vi/en
+- [x] **v1.2 QA** — L4 FE↔BE integration harness (real gateway + real DB) + mock harness cho FE-only dev
+- [ ] **v1.3** — Alert delivery (email/webhook/Slack) + regression timeline visualization
 - [ ] **v2.0** — Backlink analysis, rank tracking, multi-tenant, white-label
 
 ---

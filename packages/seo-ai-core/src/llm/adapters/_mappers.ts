@@ -1,74 +1,66 @@
-/**
- * @file Mapper between provider-neutral Message[] and LangChain
- * BaseMessage[]. Isolating this prevents LangChain's AIMessage from
- * leaking into `LLMResponse.raw` path naturally consumed by callers.
- */
 import {
-  HumanMessage,
-  SystemMessage,
-  AIMessage,
+  AIMessage, HumanMessage, SystemMessage, ToolMessage,
   type BaseMessage,
-  type AIMessageChunk,
 } from '@langchain/core/messages';
-import type { Message, LLMResponse } from '../types';
+import type { Message, LLMResponse, FinishReason, TokenUsage } from '../types.js';
 
-export function toBaseMessages(messages: Message[]): BaseMessage[] {
+export function toLangChainMessages(messages: Message[]): BaseMessage[] {
   return messages.map((m) => {
     switch (m.role) {
       case 'system':
-        return new SystemMessage(m.content);
+        return new SystemMessage({ content: m.content });
       case 'user':
-        return new HumanMessage(m.content);
+        return new HumanMessage({ content: m.content, name: m.name });
       case 'assistant':
-        return new AIMessage(m.content);
+        return new AIMessage({ content: m.content, name: m.name });
+      case 'tool':
+        return new ToolMessage({
+          content: m.content,
+          tool_call_id: m.toolCallId ?? '',
+          name: m.name,
+        });
     }
   });
 }
 
-export function toLLMResponse(msg: AIMessageChunk | AIMessage): LLMResponse {
-  const c = msg.content;
-  const text =
-    typeof c === 'string'
-      ? c
-      : Array.isArray(c)
-        ? c
-            .map((block: unknown) =>
-              typeof block === 'object' && block !== null && 'text' in block
-                ? (block as { text: string }).text
-                : '',
-            )
-            .join('')
-        : '';
+export function toLLMResponse(ai: AIMessage, model: string): LLMResponse {
+  const usage = ai.usage_metadata;
+  const tokenUsage: TokenUsage = {
+    prompt: usage?.input_tokens ?? 0,
+    completion: usage?.output_tokens ?? 0,
+    total: usage?.total_tokens ?? (usage?.input_tokens ?? 0) + (usage?.output_tokens ?? 0),
+  };
+  // For array content (multi-block responses), keep only text blocks.
+  // Image, tool-use, and other non-text blocks are intentionally omitted —
+  // this adapter targets text-only workflows. When finishReason === 'tool_call',
+  // callers should handle tool-use blocks via the `raw` AIMessage payload.
+  const content = typeof ai.content === 'string'
+    ? ai.content
+    : ai.content.map((c) => (typeof c === 'string' ? c : 'text' in c ? c.text : '')).join('');
 
-  const metadata =
-    (msg as { response_metadata?: Record<string, unknown> }).response_metadata ?? {};
-  const usageMeta =
-    (msg as { usage_metadata?: { input_tokens?: number; output_tokens?: number } }).usage_metadata ?? {};
-
-  const stopReason = (metadata['stop_reason'] as string | undefined) ?? 'unknown';
-  const finishReason: LLMResponse['finishReason'] = ((): LLMResponse['finishReason'] => {
-    switch (stopReason) {
-      case 'end_turn':
-      case 'stop_sequence':
-        return 'stop';
-      case 'max_tokens':
-        return 'length';
-      case 'tool_use':
-        return 'tool_call';
-      case 'content_filtered':
-        return 'content_filter';
-      default:
-        return 'unknown';
-    }
-  })();
+  const finishReason: FinishReason = mapFinishReason(
+    ai.response_metadata?.['stop_reason'] as string | undefined,
+  );
 
   return {
-    content: text,
+    content,
+    usage: tokenUsage,
+    model,
     finishReason,
-    usage: {
-      inputTokens: usageMeta.input_tokens ?? 0,
-      outputTokens: usageMeta.output_tokens ?? 0,
-    },
-    raw: msg,
+    raw: ai,
   };
+}
+
+function mapFinishReason(s: string | undefined): FinishReason {
+  switch (s) {
+    case 'end_turn':
+    case 'stop_sequence':
+      return 'stop';
+    case 'max_tokens':
+      return 'length';
+    case 'tool_use':
+      return 'tool_call';
+    default:
+      return 'unknown';
+  }
 }

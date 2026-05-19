@@ -1,26 +1,25 @@
 import { describe, it, expect } from 'vitest';
-import { renderTemplate } from '../src/prompt/renderer';
-import { PromptError } from '../src/errors';
+import { renderTemplate } from '../src/prompt/renderer.js';
+import { PromptError } from '../src/errors/index.js';
 
-describe('renderTemplate (Handlebars strict)', () => {
-  it('renders simple variables', () => {
-    expect(renderTemplate('Hello {{name}}', { name: 'Bob' })).toBe('Hello Bob');
+describe('renderTemplate', () => {
+  it('substitutes declared variables', () => {
+    expect(renderTemplate('Hello {{name}}', { name: 'world' })).toBe('Hello world');
   });
 
-  it('renders #each blocks', () => {
-    const out = renderTemplate('{{#each xs}}- {{this}}\n{{/each}}', { xs: ['a', 'b'] });
-    expect(out).toBe('- a\n- b\n');
-  });
-
-  it('throws PromptError on unknown variable (strict mode)', () => {
-    expect(() => renderTemplate('Hi {{missing}}', {})).toThrow(PromptError);
-  });
-
-  it('HTML-escapes user content by default', () => {
+  it('escapes HTML by default to neutralize injection from LLM-bound payloads', () => {
     expect(renderTemplate('{{x}}', { x: '<script>' })).toBe('&lt;script&gt;');
   });
 
-  it('supports triple-brace for literal output when needed', () => {
-    expect(renderTemplate('{{{x}}}', { x: '<b>' })).toBe('<b>');
+  it('triple-stash {{{x}}} preserves raw output for code blocks', () => {
+    expect(renderTemplate('{{{x}}}', { x: '<code>' })).toBe('<code>');
+  });
+
+  it('throws PromptError when an unknown variable is referenced (strict mode)', () => {
+    expect(() => renderTemplate('Hi {{missing}}', {})).toThrow(PromptError);
+  });
+
+  it('throws PromptError on syntax errors', () => {
+    expect(() => renderTemplate('Hi {{name', { name: 'x' })).toThrow(PromptError);
   });
 });
