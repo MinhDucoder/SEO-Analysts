@@ -8,7 +8,13 @@ interface ReportService {
   CreateShareLink(req: { auditId: string; userId: string }, cb: (err: Error | null, res?: { shareToken: string; shareUrl: string }) => void): void;
   RevokeShareLink(req: { auditId: string; userId: string }, cb: (err: Error | null, res?: { revoked: boolean }) => void): void;
   GetSharedReport(req: { token: string }, cb: (err: Error | null, res?: unknown) => void): void;
-  GeneratePdf(req: { auditId: string }, cb: (err: Error | null, res?: { pdfUrl: string }) => void): void;
+  GeneratePdf(
+    req: { auditId: string },
+    cb: (
+      err: Error | null,
+      res?: { pdfContent: Buffer; filename: string; sizeBytes: string | number },
+    ) => void,
+  ): void;
   HealthCheck(req: object, cb: (err: Error | null, res?: { healthy: boolean }) => void): void;
 }
 
@@ -68,7 +74,10 @@ export class ReportGrpcClient implements OnModuleInit {
     return this.call<{ token: string }, unknown>('GetSharedReport', { token });
   }
   generatePdf(auditId: string) {
-    return this.call<{ auditId: string }, { pdfUrl: string }>('GeneratePdf', { auditId });
+    return this.call<
+      { auditId: string },
+      { pdfContent: Buffer; filename: string; sizeBytes: string | number }
+    >('GeneratePdf', { auditId });
   }
 
   async isHealthy(): Promise<boolean> {

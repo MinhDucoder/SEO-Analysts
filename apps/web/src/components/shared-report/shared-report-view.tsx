@@ -179,9 +179,9 @@ export function SharedReportView({ report }: SharedReportViewProps) {
 
       <CwvCard
         metrics={{
-          lcp: report.cwvMetrics.lcpMs,
-          cls: report.cwvMetrics.cls,
-          inp: report.cwvMetrics.inpMs,
+          lcp: report.cwvMetrics?.lcpMs ?? null,
+          cls: report.cwvMetrics?.cls ?? null,
+          inp: report.cwvMetrics?.inpMs ?? null,
         }}
       />
 

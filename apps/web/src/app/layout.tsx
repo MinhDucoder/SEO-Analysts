@@ -1,18 +1,7 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Providers } from './providers';
-
-export const metadata: Metadata = {
-  title: 'SEO Analyst',
-  description: 'Public SEO content-check API and playground.',
-};
-
+// Root layout is intentionally minimal — html/body, providers, fonts, and
+// NextIntlClientProvider all live in [locale]/layout.tsx so locale-aware
+// components (i18n hooks, locale-specific fonts) have proper context.
+// This file exists only because Next.js App Router requires a root layout.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  );
+  return children;
 }

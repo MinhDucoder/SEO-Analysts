@@ -104,4 +104,11 @@ export class AnalyzerService implements OnModuleInit {
       data: { weight: newWeight },
     });
   }
+
+  async updateRuleEnabled(ruleId: string, isEnabled: boolean) {
+    return this.prisma.seoRule.update({
+      where: { id: ruleId },
+      data: { isEnabled },
+    });
+  }
 }

@@ -451,7 +451,7 @@
     },
     "rules": {
       "title": "SEO rules",
-      "subtitle": "Adjust the weight of each rule (1–10). Higher weight = stronger impact on the final SEO score.",
+      "subtitle": "Toggle and adjust the weight of each rule (1–10). Higher weight = stronger impact on the final SEO score. Disabled rules are skipped during audits.",
       "table": {
         "name": "Rule",
         "category": "Category",

@@ -19,17 +19,19 @@ export class WaitForBothService {
     @InjectQueue(BULLMQ_QUEUES.REPORT_START) private readonly reportQueue: Queue,
   ) {}
 
-  async recordAnalyzeDone(auditId: string, payload: unknown): Promise<void> {
-    await this.redis
-      .client()
-      .setex(REDIS_KEYS.auditAnalyzeResult(auditId), CACHE_TTL.AUDIT_RESULT_SECONDS, JSON.stringify(payload));
+  // The analyze.done / keyword.done pub/sub events carry only progress
+  // metadata (auditId, status, stage, progress, message) — the FULL result
+  // payload is already written by the worker (analyzer.worker.ts /
+  // event.publisher.ts) to the same key. These listener handlers must NOT
+  // overwrite that key, or report.start fires against a slim payload that
+  // is missing ruleResults / topKeywords, and ReportAggregator throws
+  // "analyze.ruleResults is not iterable". The `payload` arg is kept for
+  // logging/observability hooks even though we no longer persist it here.
+  async recordAnalyzeDone(auditId: string, _payload: unknown): Promise<void> {
     await this.maybeTrigger(auditId);
   }
 
-  async recordKeywordDone(auditId: string, payload: unknown): Promise<void> {
-    await this.redis
-      .client()
-      .setex(REDIS_KEYS.auditKeywordResult(auditId), CACHE_TTL.AUDIT_RESULT_SECONDS, JSON.stringify(payload));
+  async recordKeywordDone(auditId: string, _payload: unknown): Promise<void> {
     await this.maybeTrigger(auditId);
   }
 

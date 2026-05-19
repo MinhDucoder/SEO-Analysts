@@ -16,6 +16,7 @@ enum RuleCategory {
   links
   performance
   technical
+  content
 }
 
 enum CheckStatus {

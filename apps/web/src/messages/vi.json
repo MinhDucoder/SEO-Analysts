@@ -451,7 +451,7 @@
     },
     "rules": {
       "title": "Quy tắc SEO",
-      "subtitle": "Điều chỉnh trọng số mỗi rule (1–10). Trọng số cao = tác động lớn hơn đến điểm SEO cuối cùng.",
+      "subtitle": "Bật/tắt và điều chỉnh trọng số mỗi rule (1–10). Trọng số cao = tác động lớn hơn đến điểm SEO cuối cùng. Rule tắt sẽ bị loại khỏi audit.",
       "table": {
         "name": "Rule",
         "category": "Nhóm",

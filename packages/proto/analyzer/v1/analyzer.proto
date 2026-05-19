@@ -10,6 +10,7 @@ service SeoAnalyzerService {
   rpc AnalyzeContent(AnalyzeContentRequest) returns (AnalyzeContentResult);
   rpc ListRules(ListRulesRequest) returns (ListRulesResponse);
   rpc UpdateRuleWeight(UpdateRuleWeightRequest) returns (UpdateRuleWeightResponse);
+  rpc UpdateRuleEnabled(UpdateRuleEnabledRequest) returns (UpdateRuleWeightResponse);
   rpc GetRulesByCategory(GetRulesByCategoryRequest) returns (ListRulesResponse);
   rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
 }
@@ -67,6 +68,7 @@ message SeoRule {
 message ListRulesRequest {}
 message ListRulesResponse { repeated SeoRule rules = 1; }
 message UpdateRuleWeightRequest { string rule_id = 1; int32 new_weight = 2; }
+message UpdateRuleEnabledRequest { string rule_id = 1; bool is_enabled = 2; }
 message UpdateRuleWeightResponse { SeoRule rule = 1; }
 message GetRulesByCategoryRequest { common.v1.IssueCategory category = 1; }
 message HealthCheckRequest {}

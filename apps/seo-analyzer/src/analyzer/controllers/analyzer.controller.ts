@@ -89,6 +89,14 @@ export class AnalyzerController {
     return { rule: this.mapRuleToProto(row) };
   }
 
+  @GrpcMethod('SeoAnalyzerService', 'UpdateRuleEnabled')
+  async updateRuleEnabled(req: { ruleId: string; isEnabled: boolean }) {
+    const id = req.ruleId ?? (req as any).rule_id;
+    const isEnabled = Boolean(req.isEnabled ?? (req as any).is_enabled);
+    const row = await this.analyzer.updateRuleEnabled(id, isEnabled);
+    return { rule: this.mapRuleToProto(row) };
+  }
+
   @GrpcMethod('SeoAnalyzerService', 'HealthCheck')
   healthCheck() {
     return { healthy: true, version: process.env.npm_package_version ?? '0.0.1' };
@@ -110,16 +118,21 @@ export class AnalyzerController {
     return {
       id: row.id,
       name: row.name,
-      display_name: row.displayName,
+      // Wire format is camelCase — proto-loader runs with `keepCase: false`
+      // on both ends (apps/seo-analyzer/src/main.ts + packages/proto/src/index.ts),
+      // so snake_case keys are silently dropped during serialization.
+      displayName: row.displayName,
       description: row.description,
-      category: row.category,
+      // Prisma stores enum as lowercase ("meta", "headings", …); proto
+      // IssueCategory uses ISSUE_CATEGORY_* form. Loader's `enums: String`
+      // expects the proto symbol name.
+      category: `ISSUE_CATEGORY_${row.category.toUpperCase()}`,
       weight: row.weight,
-      is_enabled: row.isEnabled,
-      // Public-API metadata (extends proto SeoRule fields 10-13)
+      isEnabled: row.isEnabled,
       severity: meta.severity,
       audiences: meta.audiences,
-      doc_ref: meta.docRef ?? '',
-      available_in: availableIn,
+      docRef: meta.docRef ?? '',
+      availableIn,
     };
   };
 

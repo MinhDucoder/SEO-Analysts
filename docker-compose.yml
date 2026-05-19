@@ -93,7 +93,14 @@ services:
   redis:
     image: redis:7-alpine
     container_name: seo-redis
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    # --maxmemory + allkeys-lru lets Redis evict old keys gracefully
+    # BEFORE docker hits the hard memory limit and SIGKILLs the container
+    # (exit 137). Site-mode audits + BullMQ + AOF can otherwise blow past
+    # the 256M default in minutes. Keep maxmemory below the docker limit
+    # to leave headroom for AOF rewrite peaks.
+    command: >
+      redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+      --maxmemory 768mb --maxmemory-policy allkeys-lru
     ports:
       - "127.0.0.1:6379:6379"
     volumes:
@@ -108,8 +115,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
-          cpus: '0.25'
+          memory: 1G
+          cpus: '0.5'
     logging:
       driver: json-file
       options:

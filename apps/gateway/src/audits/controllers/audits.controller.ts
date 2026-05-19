@@ -90,9 +90,14 @@ export class AuditsController {
   ) {
     await this.audits.getAuditDetail(user.id, user.role, id);
     await this.audits.ensureCompleted(id);
-    const { pdfUrl } = await this.reportClient.generatePdf(id);
-    // pdfUrl is the Report service HTTP endpoint that streams the PDF
-    res.redirect(302, pdfUrl);
+    const { pdfContent, filename } = await this.reportClient.generatePdf(id);
+    // gRPC returns the PDF as `bytes` (Buffer); stream it through so the
+    // gateway stays the single JWT-checked entry point for downloads.
+    const buf = Buffer.isBuffer(pdfContent) ? pdfContent : Buffer.from(pdfContent);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', String(buf.length));
+    res.end(buf);
     return undefined;
   }
 

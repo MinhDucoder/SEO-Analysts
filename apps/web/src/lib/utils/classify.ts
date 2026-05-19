@@ -43,12 +43,17 @@ const BG_CLASS: Record<ScoreVariant, string> = {
   muted: "bg-bg-overlay",
 };
 
+// tokens.css stores these as bare RGB triplets (e.g. `34 197 94`) so
+// Tailwind utilities compose alpha via `rgb(var(--foo) / <alpha-value>)`.
+// Inline-style consumers (SVG stroke, plain `backgroundColor`) need the
+// `rgb()` wrapper or the browser drops the value as invalid CSS — that
+// was making ScoreRing + CategoryBars render flat grey regardless of score.
 const FILL_CSS_VAR: Record<ScoreVariant, string> = {
-  excellent: "var(--color-class-excellent)",
-  good: "var(--color-class-good)",
-  fair: "var(--color-class-fair)",
-  poor: "var(--color-class-poor)",
-  muted: "var(--color-fg-muted)",
+  excellent: "rgb(var(--color-class-excellent))",
+  good: "rgb(var(--color-class-good))",
+  fair: "rgb(var(--color-class-fair))",
+  poor: "rgb(var(--color-class-poor))",
+  muted: "rgb(var(--color-fg-muted))",
 };
 
 export function scoreTextClass(score: number | null | undefined): string {

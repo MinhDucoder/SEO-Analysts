@@ -23,10 +23,10 @@ function classifyCwv(metric: CwvMetricKey, value: number | null): "good" | "need
 }
 
 const COLOR_VAR: Record<"good" | "needs" | "poor" | "muted", string> = {
-  good: "var(--color-cwv-good)",
-  needs: "var(--color-cwv-needs-improvement)",
-  poor: "var(--color-cwv-poor)",
-  muted: "var(--color-fg-muted)",
+  good: "rgb(var(--color-cwv-good))",
+  needs: "rgb(var(--color-cwv-needs-improvement))",
+  poor: "rgb(var(--color-cwv-poor))",
+  muted: "rgb(var(--color-fg-muted))",
 };
 
 const LABELS: Record<CwvMetricKey, string> = {

@@ -181,8 +181,8 @@ export interface ReportDetail {
   ruleResults: ReportRuleResult[];
   categoryScores: ReportCategoryScore[];
   keywords: ReportKeyword[];
-  cwvMetrics: ReportCwvMetrics;
-  targetKeyword?: ReportTargetKeyword;
+  cwvMetrics: ReportCwvMetrics | null;
+  targetKeyword?: ReportTargetKeyword | null;
   createdAt: string;
 }
 
@@ -282,7 +282,7 @@ export interface SeoRule {
 }
 
 export interface UpdateRulesDto {
-  rules: Array<{ name: string; weight: number }>;
+  rules: Array<{ name: string; weight?: number; isEnabled?: boolean }>;
 }
 
 export interface ListAdminUsersQuery {

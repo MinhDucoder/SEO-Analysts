@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   compareAudits,
@@ -139,7 +140,8 @@ export function useAuditStatus(
 ) {
   const { enabled = true } = opts;
   const accessToken = useAuthStore((s) => s.accessToken);
-  return useQuery<AuditStatusResponse>({
+  const queryClient = useQueryClient();
+  const query = useQuery<AuditStatusResponse>({
     queryKey: id ? queryKeys.audits.status(id) : ["audits", "status", "noop"],
     queryFn: () => getAuditStatus(id as string),
     enabled: enabled && accessToken !== null && Boolean(id),
@@ -149,6 +151,23 @@ export function useAuditStatus(
       return 3_000;
     },
   });
+
+  // Defense-in-depth: if WS missed `audit:completed`/`audit:failed`, the
+  // polling path still needs to refresh the detail query when status flips
+  // to a terminal state — otherwise the page stays stuck on cached
+  // pre-completion data.
+  const prevStatus = useRef<AuditStatus | null>(null);
+  useEffect(() => {
+    if (!id || !query.data) return;
+    const wasTerminal = prevStatus.current && TERMINAL_STATUSES.has(prevStatus.current);
+    const isTerminal = TERMINAL_STATUSES.has(query.data.status);
+    if (isTerminal && !wasTerminal) {
+      queryClient.invalidateQueries({ queryKey: queryKeys.audits.detail(id) });
+    }
+    prevStatus.current = query.data.status;
+  }, [id, query.data, queryClient]);
+
+  return query;
 }
 
 export function useCreateShareLink(auditId: string) {
