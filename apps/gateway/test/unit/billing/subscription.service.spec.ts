@@ -71,4 +71,51 @@ describe('SubscriptionService', () => {
     const arg = prismaMock.subscription.upsert.mock.calls[0][0];
     expect(arg.create.grantedBy).toBe('admin-id');
   });
+
+  it('cancel sets status=canceled + canceledAt without touching planCode', async () => {
+    prismaMock.subscription.update.mockResolvedValue({});
+    const before = Date.now();
+    await svc.cancel('u1');
+    const callArg = prismaMock.subscription.update.mock.calls[0][0];
+    expect(callArg.where).toEqual({ userId: 'u1' });
+    expect(callArg.data.status).toBe('canceled');
+    expect(callArg.data.canceledAt.getTime()).toBeGreaterThanOrEqual(before);
+    expect(callArg.data).not.toHaveProperty('planCode');
+  });
+
+  it('downgradeExpiredToFree returns 0 and skips transaction when no expired subs', async () => {
+    prismaMock.subscription.findMany = vi.fn().mockResolvedValue([]);
+    prismaMock.$transaction = vi.fn();
+    const n = await svc.downgradeExpiredToFree();
+    expect(n).toBe(0);
+    expect(prismaMock.$transaction).not.toHaveBeenCalled();
+  });
+
+  it('downgradeExpiredToFree marks expired, upserts Free, returns count', async () => {
+    const now = new Date('2026-06-15T00:00:00Z');
+    const expired = [
+      { id: 's1', userId: 'u1' },
+      { id: 's2', userId: 'u2' },
+    ];
+    prismaMock.subscription.findMany = vi.fn().mockResolvedValue(expired);
+    const tx = {
+      subscription: {
+        updateMany: vi.fn().mockResolvedValue({ count: 2 }),
+        upsert: vi.fn().mockResolvedValue({}),
+      },
+    };
+    prismaMock.$transaction = vi.fn(async (cb: (t: typeof tx) => Promise<void>) => cb(tx));
+
+    const n = await svc.downgradeExpiredToFree(now);
+    expect(n).toBe(2);
+    expect(tx.subscription.updateMany).toHaveBeenCalledWith({
+      where: { id: { in: ['s1', 's2'] } },
+      data: { status: 'expired' },
+    });
+    expect(tx.subscription.upsert).toHaveBeenCalledTimes(2);
+    const firstUpsert = tx.subscription.upsert.mock.calls[0][0];
+    expect(firstUpsert.create.planCode).toBe('free');
+    expect(firstUpsert.create.expiresAt).toBeNull();
+    expect(firstUpsert.update.grantedBy).toBeNull();
+  });
 });
