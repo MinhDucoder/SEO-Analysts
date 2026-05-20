@@ -39,6 +39,25 @@ enum ApiKeyEnvironment {
   test
 }
 
+enum PlanCode {
+  free
+  pro
+  business
+}
+
+enum SubscriptionStatus {
+  active
+  expired
+  canceled
+}
+
+enum PaymentIntentStatus {
+  pending
+  paid
+  expired
+  failed
+}
+
 model User {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email         String   @unique @db.VarChar(255)
@@ -56,6 +75,8 @@ model User {
   audits          Audit[]
   scheduledAudits ScheduledAudit[]
   apiKeys         ApiKey[]
+  subscription    Subscription?
+  paymentIntents  PaymentIntent[]
 
   @@map("users")
 }
@@ -217,4 +238,72 @@ model UsageDaily {
   @@unique([apiKeyId, date], name: "usage_daily_key_date_uniq")
   @@index([date], name: "idx_usage_daily_date")
   @@map("usage_daily")
+}
+
+model Plan {
+  code          PlanCode @id
+  displayName   String   @map("display_name") @db.VarChar(50)
+  priceVnd      Int      @map("price_vnd")
+  sortOrder     Int      @default(0) @map("sort_order")
+  isPublic      Boolean  @default(true) @map("is_public")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Subscription {
+  id          String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String              @unique @map("user_id") @db.Uuid
+  planCode    PlanCode            @map("plan_code")
+  status      SubscriptionStatus  @default(active)
+  startedAt   DateTime            @default(now()) @map("started_at") @db.Timestamptz
+  expiresAt   DateTime?           @map("expires_at") @db.Timestamptz
+  canceledAt  DateTime?           @map("canceled_at") @db.Timestamptz
+  grantedBy   String?             @map("granted_by") @db.Uuid
+  createdAt   DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan           Plan            @relation(fields: [planCode], references: [code])
+  paymentIntents PaymentIntent[]
+
+  @@index([expiresAt, status], name: "idx_sub_expiry")
+  @@map("subscriptions")
+}
+
+model PaymentIntent {
+  id             String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String              @map("user_id") @db.Uuid
+  subscriptionId String?             @map("subscription_id") @db.Uuid
+  planCode       PlanCode            @map("plan_code")
+  amountVnd      Int                 @map("amount_vnd")
+  refCode        String              @unique @map("ref_code") @db.VarChar(40)
+  status         PaymentIntentStatus @default(pending)
+  vietqrUrl      String              @map("vietqr_url") @db.Text
+  cassoTxnId     String?             @map("casso_txn_id") @db.VarChar(64)
+  paidAt         DateTime?           @map("paid_at") @db.Timestamptz
+  expiresAt      DateTime            @map("expires_at") @db.Timestamptz
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  @@index([refCode], name: "idx_pi_ref")
+  @@index([userId, status], name: "idx_pi_user_status")
+  @@map("payment_intents")
+}
+
+model CassoEvent {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cassoTxnId      String   @unique @map("casso_txn_id") @db.VarChar(64)
+  payload         Json     @db.JsonB
+  matched         Boolean  @default(false)
+  matchedIntentId String?  @map("matched_intent_id") @db.Uuid
+  receivedAt      DateTime @default(now()) @map("received_at") @db.Timestamptz
+
+  @@index([receivedAt], name: "idx_casso_recv")
+  @@map("casso_events")
 }

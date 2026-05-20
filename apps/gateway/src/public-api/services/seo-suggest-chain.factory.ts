@@ -1,19 +1,20 @@
 /**
  * @file Lazy factory for the batched SEO-suggest chain. Returns null
  * when the Anthropic API key is absent so the caller can degrade
- * gracefully. Otherwise builds `BaseChain` once and caches it.
+ * gracefully. Otherwise builds the chain once and caches it.
  *
- * Test-only: accept an `llmOverride` to inject a stub `ILLM` without
- * requiring a live key in unit tests.
+ * Test-only: accept an `llmOverride` to inject a stub ILLMProvider
+ * without requiring a live key in unit tests.
  */
 import { Injectable, Logger } from '@nestjs/common';
 import { z } from 'zod';
 import {
-  BaseChain,
+  createBaseChain,
   FileSystemPromptLoader,
-  ZodOutputParser,
+  parseStructured,
   createLLM,
-  type ILLM,
+  type ILLMProvider,
+  type IChain,
 } from '@repo/seo-ai-core';
 
 export interface SuggestIssueInput {
@@ -55,18 +56,18 @@ export interface SeoSuggestChainFactoryOptions {
   apiKey: string | undefined;
   model: string;
   defaultMaxTokens?: number;
-  /** Test seam — inject a stub ILLM to avoid real API calls in unit tests. */
-  llmOverride?: ILLM;
+  /** Test seam — inject a stub ILLMProvider to avoid real API calls in unit tests. */
+  llmOverride?: ILLMProvider;
 }
 
 @Injectable()
 export class SeoSuggestChainFactory {
   private readonly logger = new Logger(SeoSuggestChainFactory.name);
-  private chainCache: BaseChain<SuggestInput, SuggestOutput> | null | undefined;
+  private chainCache: IChain<SuggestInput, SuggestOutput> | null | undefined;
 
   constructor(private readonly opts: SeoSuggestChainFactoryOptions) {}
 
-  async getOrNull(): Promise<BaseChain<SuggestInput, SuggestOutput> | null> {
+  async getOrNull(): Promise<IChain<SuggestInput, SuggestOutput> | null> {
     if (this.chainCache !== undefined) return this.chainCache;
     if (!this.opts.apiKey && !this.opts.llmOverride) {
       this.logger.warn(
@@ -85,12 +86,13 @@ export class SeoSuggestChainFactory {
         defaultTemperature: 0.2,
       });
     const loader = new FileSystemPromptLoader({ baseDir: this.opts.promptsDir });
-    const parser = new ZodOutputParser(OutputSchema);
 
-    this.chainCache = new BaseChain<SuggestInput, SuggestOutput>({
+    this.chainCache = createBaseChain<SuggestInput, SuggestOutput>({
       name: 'seo-suggest',
-      retry: { maxAttempts: 2, backoffMs: 500 },
-      run: async (input, { signal }) => {
+      promptId: 'suggest-fix-seo',
+      promptVersion: '1.0.0',
+      retries: 2,
+      run: async (input: SuggestInput, ctx) => {
         const { messages, hash } = await loader.render(
           'suggest-fix-seo',
           {
@@ -99,7 +101,7 @@ export class SeoSuggestChainFactory {
             language: input.language,
             contentExcerpt: input.contentExcerpt,
             issueCount: input.issues.length,
-            issues: input.issues.map((i) => ({
+            issues: input.issues.map((i: SuggestIssueInput) => ({
               ruleId: i.ruleId,
               category: i.category,
               severity: i.severity,
@@ -113,8 +115,8 @@ export class SeoSuggestChainFactory {
         this.logger.debug(
           `suggest render promptHash=${hash} issueCount=${input.issues.length}`,
         );
-        const res = await llm.invoke({ messages, metadata: { promptHash: hash } }, signal);
-        return parser.parse(res.content);
+        const res = await llm.invoke({ messages, metadata: { promptHash: hash } }, ctx.signal);
+        return parseStructured(res.content, OutputSchema);
       },
     });
     return this.chainCache;
