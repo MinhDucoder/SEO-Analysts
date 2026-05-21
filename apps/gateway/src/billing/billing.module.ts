@@ -10,11 +10,12 @@ import { PlansService } from './services/plans.service';
 import { SubscriptionService } from './services/subscription.service';
 import { EntitlementService } from './services/entitlement.service';
 import { PaymentIntentService } from './services/payment-intent.service';
+import { CassoReconcilerService } from './services/casso-reconciler.service';
 
 @Module({
   imports: [ConfigModule, PrismaModule, RedisModule, AuthModule],
   controllers: [PlansController, SubscriptionsController, PaymentIntentsController],
-  providers: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService],
-  exports: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService],
+  providers: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService, CassoReconcilerService],
+  exports: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService, CassoReconcilerService],
 })
 export class BillingModule {}
