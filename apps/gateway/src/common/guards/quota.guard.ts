@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { EntitlementService } from '../../billing/services/entitlement.service';
 import { QuotaCounterService } from '../../billing/services/quota-counter.service';
 import { PLAN_FEATURES, QuotaDimension } from '@repo/shared';
@@ -12,6 +13,7 @@ export class QuotaGuard implements CanActivate {
     private readonly reflector: Reflector,
     private readonly entitlement: EntitlementService,
     private readonly counter: QuotaCounterService,
+    private readonly config: ConfigService,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -21,9 +23,19 @@ export class QuotaGuard implements CanActivate {
     );
     if (!meta) return true;
 
+    const enabled = this.config.get<string>('BILLING_FEATURE_ENABLED') === 'true';
     const req = ctx.switchToHttp().getRequest();
-    const res = ctx.switchToHttp().getResponse();
     const userId = req.user?.id;
+
+    if (!enabled) {
+      if (userId) {
+        // would-block log for observability before enforcement is flipped on
+        console.debug(`[billing-flag-off] would-enforce quota:${meta.dimension} for user ${userId}`);
+      }
+      return true;
+    }
+
+    const res = ctx.switchToHttp().getResponse();
     if (!userId) throw new QuotaExceededError(meta.dimension, 0, new Date());
 
     const plan = await this.entitlement.getEffectivePlan(userId);

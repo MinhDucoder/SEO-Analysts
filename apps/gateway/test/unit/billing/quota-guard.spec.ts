@@ -17,11 +17,13 @@ describe('QuotaGuard', () => {
   const reflector = { getAllAndOverride: vi.fn() } as unknown as Reflector;
   const ent = { getEffectivePlan: vi.fn() } as any;
   const counter = { consume: vi.fn() } as any;
+  // config mock with BILLING_FEATURE_ENABLED=true so enforcement path is exercised
+  const configMock = { get: vi.fn().mockReturnValue('true') } as any;
   let guard: QuotaGuard;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    guard = new QuotaGuard(reflector as any, ent, counter);
+    guard = new QuotaGuard(reflector as any, ent, counter, configMock);
   });
 
   it('passes through when no @RequireQuota metadata', async () => {
@@ -46,5 +48,14 @@ describe('QuotaGuard', () => {
     const res = (c as any).switchToHttp().getResponse();
     expect(res.setHeader).toHaveBeenCalledWith('X-RateLimit-Remaining', '199');
     expect(res.setHeader).toHaveBeenCalledWith('X-Quota-Reset', reset.toISOString());
+  });
+
+  it('allows everything when BILLING_FEATURE_ENABLED=false regardless of quota', async () => {
+    const disabledConfig = { get: vi.fn().mockReturnValue('false') } as any;
+    const disabledGuard = new QuotaGuard(reflector as any, ent, counter, disabledConfig);
+    (reflector.getAllAndOverride as any).mockReturnValue({ dimension: 'audits_monthly', increment: 1 });
+    // counter.consume is never called when flag is off
+    expect(await disabledGuard.canActivate(ctx())).toBe(true);
+    expect(counter.consume).not.toHaveBeenCalled();
   });
 });

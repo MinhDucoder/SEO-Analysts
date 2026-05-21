@@ -17,11 +17,13 @@ function ctx(user: any): ExecutionContext {
 describe('PlanGuard', () => {
   const reflector = { getAllAndOverride: vi.fn() } as unknown as Reflector;
   const ent = { hasFeature: vi.fn(), getEffectivePlan: vi.fn() } as any;
+  // config mock with BILLING_FEATURE_ENABLED=true so enforcement path is exercised
+  const configMock = { get: vi.fn().mockReturnValue('true') } as any;
   let guard: PlanGuard;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    guard = new PlanGuard(reflector as any, ent);
+    guard = new PlanGuard(reflector as any, ent, configMock);
   });
 
   it('allows when no @RequireFeature metadata', async () => {
@@ -40,5 +42,14 @@ describe('PlanGuard', () => {
     (reflector.getAllAndOverride as any).mockReturnValue(FeatureFlag.SITE_AUDIT);
     ent.hasFeature.mockResolvedValue({ allowed: true });
     expect(await guard.canActivate(ctx({ id: 'u1' }))).toBe(true);
+  });
+
+  it('allows everything when BILLING_FEATURE_ENABLED=false regardless of entitlement', async () => {
+    const disabledConfig = { get: vi.fn().mockReturnValue('false') } as any;
+    const disabledGuard = new PlanGuard(reflector as any, ent, disabledConfig);
+    (reflector.getAllAndOverride as any).mockReturnValue(FeatureFlag.SITE_AUDIT);
+    // hasFeature is never called when flag is off
+    expect(await disabledGuard.canActivate(ctx({ id: 'u1' }))).toBe(true);
+    expect(ent.hasFeature).not.toHaveBeenCalled();
   });
 });
