@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuotaDialog } from "@/lib/billing/quota-dialog.store";
 import { Button } from "@/components/ui/button";
 

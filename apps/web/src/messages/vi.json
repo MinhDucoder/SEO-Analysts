@@ -120,7 +120,8 @@
       "successBody": "Chúng tôi đang phân tích {url}. Bạn có thể theo dõi tiến trình real-time tại trang chi tiết.",
       "viewDetail": "Xem chi tiết",
       "errorInvalidUrl": "URL không hợp lệ.",
-      "errorMaxUrlsRange": "Số trang phải từ 1 đến 5000."
+      "errorMaxUrlsRange": "Số trang phải từ 1 đến 5000.",
+      "errorGeneric": "Không tạo được audit. Vui lòng thử lại."
     },
     "filters": {
       "search": "Tìm URL hoặc domain",

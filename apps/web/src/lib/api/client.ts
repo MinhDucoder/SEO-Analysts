@@ -75,7 +75,7 @@ export const api: KyInstance = ky.create({
             typeof body === "object" && body !== null && "code" in body
               ? String((body as { code: unknown }).code)
               : undefined;
-          if (code === "QUOTA_EXCEEDED") {
+          if (code === "QUOTA_EXCEEDED" || code === "AI_QUOTA_EXCEEDED") {
             const { useQuotaDialog } = await import("@/lib/billing/quota-dialog.store");
             const b = body as { message?: string; resetAt?: string };
             useQuotaDialog.getState().show({
@@ -158,9 +158,20 @@ export const api: KyInstance = ky.create({
           return response;
         }
 
-        // 429 → surface RateLimit modal with the Retry-After value if
-        // the gateway provided one (else default 60s).
+        // 429 → could be a transport rate limit OR a billing quota
+        // (`QuotaExceededError` is emitted as 429). Disambiguate via the
+        // `code` field: billing quota routes to the upgrade dialog (opened in
+        // `beforeError`), everything else opens the RateLimit modal with the
+        // Retry-After value if the gateway provided one (else default 60s).
         if (response.status === 429) {
+          const body = await response.clone().json().catch(() => null);
+          const code =
+            typeof body === "object" && body !== null && "code" in body
+              ? String((body as { code: unknown }).code)
+              : "";
+          if (code === "QUOTA_EXCEEDED" || code === "AI_QUOTA_EXCEEDED") {
+            return response;
+          }
           const retryHeader = response.headers.get("Retry-After");
           const retryAfterSec = retryHeader ? Number(retryHeader) : NaN;
           useGlobalModalStore.getState().open({

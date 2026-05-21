@@ -120,7 +120,8 @@
       "successBody": "We're analysing {url}. You can follow live progress on the detail page.",
       "viewDetail": "Open detail",
       "errorInvalidUrl": "Invalid URL.",
-      "errorMaxUrlsRange": "Max pages must be between 1 and 5000."
+      "errorMaxUrlsRange": "Max pages must be between 1 and 5000.",
+      "errorGeneric": "Couldn't create the audit. Please try again."
     },
     "filters": {
       "search": "Search URL or domain",
