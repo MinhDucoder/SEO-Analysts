@@ -22,6 +22,8 @@ export {
 
 // LLM
 export { createLLM, registerLLMProvider, type LLMConfig, type LLMProviderName } from './llm/provider.js';
+export { AnthropicAdapter } from './llm/adapters/anthropic.adapter.js';
+export { GeminiAdapter } from './llm/adapters/gemini.adapter.js';
 
 // Prompt
 export { FileSystemPromptLoader, type PromptLoaderOptions } from './prompt/loader.js';

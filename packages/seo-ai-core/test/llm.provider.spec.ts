@@ -10,15 +10,21 @@ describe('createLLM', () => {
     expect(llm.model).toBe('claude-sonnet-4-6');
   });
 
+  it('routes provider:"gemini" to GeminiAdapter (smoke — no real call)', () => {
+    const llm = createLLM({ provider: 'gemini', model: 'gemini-2.0-flash', apiKey: 'k' });
+    expect(llm.name).toBe('gemini');
+    expect(llm.model).toBe('gemini-2.0-flash');
+  });
+
   it('throws LLMError on unknown provider with a helpful message', () => {
     expect(() =>
-      createLLM({ provider: 'gemini' as unknown as 'openai', model: 'x' }),
+      createLLM({ provider: 'bogus' as unknown as 'openai', model: 'x' }),
     ).toThrow(LLMError);
     expect(() =>
-      createLLM({ provider: 'gemini' as unknown as 'openai', model: 'x' }),
-    ).toThrow(/gemini/);
+      createLLM({ provider: 'bogus' as unknown as 'openai', model: 'x' }),
+    ).toThrow(/bogus/);
     expect(() =>
-      createLLM({ provider: 'gemini' as unknown as 'openai', model: 'x' }),
+      createLLM({ provider: 'bogus' as unknown as 'openai', model: 'x' }),
     ).toThrow(/anthropic/);
   });
 

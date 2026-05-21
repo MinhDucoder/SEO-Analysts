@@ -6,7 +6,11 @@
     "NODE_ENV",
     "PLAYWRIGHT_BASE_URL",
     "NEXT_PUBLIC_*",
-    "ANTHROPIC_API_KEY"
+    "ANTHROPIC_API_KEY",
+    "GEMINI_API_KEY",
+    "SEO_AI_ENABLED",
+    "SEO_AI_PROVIDER",
+    "SEO_AI_MODEL"
   ],
   "tasks": {
     "build": {

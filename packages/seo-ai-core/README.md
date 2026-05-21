@@ -35,7 +35,8 @@ consumer's `package.json`:
 
 | Env var | Used by | Required |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | `AnthropicAdapter` | Yes (or pass `cfg.apiKey`) |
+| `ANTHROPIC_API_KEY` | `AnthropicAdapter` | Conditional (or pass `cfg.apiKey`) |
+| `GEMINI_API_KEY` | `GeminiAdapter` | Conditional (or pass `cfg.apiKey`) |
 
 ## Examples
 
