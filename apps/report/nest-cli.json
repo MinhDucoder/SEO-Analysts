@@ -6,7 +6,8 @@
     "deleteOutDir": false,
     "assets": [
       { "include": "infra/prisma/generated/**/*", "watchAssets": true },
-      { "include": "infra/pdf/templates/**/*", "watchAssets": true }
+      { "include": "infra/pdf/templates/**/*", "watchAssets": true },
+      { "include": "report/ai-suggest/prompts/**/*", "watchAssets": true }
     ]
   }
 }

@@ -289,6 +289,11 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      SEO_AI_ENABLED: ${SEO_AI_ENABLED:-false}
+      SEO_AI_PROVIDER: ${SEO_AI_PROVIDER:-anthropic}
+      SEO_AI_MODEL: ${SEO_AI_MODEL:-claude-haiku-4-5}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     depends_on:
       report-db:
         condition: service_healthy

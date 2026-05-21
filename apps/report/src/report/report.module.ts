@@ -16,6 +16,7 @@ import { AnalyzeDoneListener } from './controllers/analyze-done.listener';
 import { KeywordDoneListener } from './controllers/keyword-done.listener';
 import { CrawlDoneListener } from './controllers/crawl-done.listener';
 import { ReportWorker } from './controllers/report.worker';
+import { AiSuggestModule } from './ai-suggest/ai-suggest.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ReportWorker } from './controllers/report.worker';
       },
     }),
     BullModule.registerQueue({ name: BULLMQ_QUEUES.REPORT_START }),
+    AiSuggestModule,
   ],
   controllers: [ReportGrpcController, ReportHttpController],
   providers: [
