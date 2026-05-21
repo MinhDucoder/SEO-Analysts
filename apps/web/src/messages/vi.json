@@ -370,7 +370,8 @@
       "submitting": "Đang tạo…",
       "successToast": "Đã tạo lịch mới",
       "errorCron": "Cron không hợp lệ (cần 5 trường).",
-      "errorInvalidUrl": "URL không hợp lệ."
+      "errorInvalidUrl": "URL không hợp lệ.",
+      "errorToast": "Không tạo được lịch. Vui lòng thử lại."
     }
   },
   "globalModal": {

@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateScheduledAudit } from "@/lib/queries/use-scheduled";
+import { getFriendlyMessage, isHandledByModal } from "@/lib/api/errors";
 import {
   createScheduledAuditFormSchema,
   type CreateScheduledAuditFormInput,
@@ -80,7 +81,14 @@ export function CreateScheduleDialog({
         onOpenChange(false);
       },
       onError: (err) => {
-        toast.error(err instanceof Error ? err.message : "Server error");
+        // 403 FEATURE_NOT_AVAILABLE (free plan can't schedule) / 429 quota are
+        // surfaced by the global upgrade dialog. Close this form dialog so that
+        // modal is visible, and skip the redundant raw toast.
+        if (isHandledByModal(err)) {
+          onOpenChange(false);
+          return;
+        }
+        toast.error(getFriendlyMessage(err, t("errorToast")));
       },
     });
   };

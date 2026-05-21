@@ -370,7 +370,8 @@
       "submitting": "Creating…",
       "successToast": "Schedule created",
       "errorCron": "Invalid cron (5 fields required).",
-      "errorInvalidUrl": "Invalid URL."
+      "errorInvalidUrl": "Invalid URL.",
+      "errorToast": "Couldn't create the schedule. Please try again."
     }
   },
   "globalModal": {
