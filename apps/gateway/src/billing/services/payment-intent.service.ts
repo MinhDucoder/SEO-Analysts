@@ -44,6 +44,11 @@ export class PaymentIntentService {
     return row ? this.toDto(row) : null;
   }
 
+  async findByIdForUser(id: string, userId: string): Promise<PaymentIntentResponseDto | null> {
+    const row = await this.prisma.paymentIntent.findFirst({ where: { id, userId } });
+    return row ? this.toDto(row) : null;
+  }
+
   async findByRefCode(refCode: string) {
     return this.prisma.paymentIntent.findUnique({ where: { refCode } });
   }
@@ -78,6 +83,9 @@ export class PaymentIntentService {
   private buildVietQrUrl(amountVnd: number, addInfo: string): string {
     const bin = this.config.get<string>('VIETQR_BANK_BIN');
     const account = this.config.get<string>('VIETQR_ACCOUNT_NO');
+    if (!bin || !account) {
+      throw new Error('VIETQR_BANK_BIN and VIETQR_ACCOUNT_NO must be configured to create a payment intent');
+    }
     const name = this.config.get<string>('VIETQR_ACCOUNT_NAME');
     const enc = encodeURIComponent(name ?? '');
     return `https://img.vietqr.io/image/${bin}-${account}-compact2.jpg?amount=${amountVnd}&addInfo=${addInfo}&accountName=${enc}`;

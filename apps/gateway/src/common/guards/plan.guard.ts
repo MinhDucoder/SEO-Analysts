@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { EntitlementService } from '../../billing/services/entitlement.service';
@@ -8,6 +8,8 @@ import { FeatureNotAvailableError } from '../../billing/domain/billing.errors';
 
 @Injectable()
 export class PlanGuard implements CanActivate {
+  private readonly logger = new Logger(PlanGuard.name);
+
   constructor(
     private readonly reflector: Reflector,
     private readonly entitlement: EntitlementService,
@@ -28,7 +30,7 @@ export class PlanGuard implements CanActivate {
     if (!enabled) {
       if (userId) {
         // would-block log for observability before enforcement is flipped on
-        console.debug(`[billing-flag-off] would-enforce ${flag} for user ${userId}`);
+        this.logger.debug(`[billing-flag-off] would-enforce ${flag} for user ${userId}`);
       }
       return true;
     }

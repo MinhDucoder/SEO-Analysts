@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PlanCode, BILLING_DEFAULTS } from '../domain/plan-features';
 import { SubscriptionResponseDto } from '../dto/subscription-response.dto';
@@ -57,10 +57,17 @@ export class SubscriptionService {
   }
 
   async cancel(userId: string): Promise<void> {
-    await this.prisma.subscription.update({
-      where: { userId },
-      data: { status: 'canceled', canceledAt: new Date() },
-    });
+    try {
+      await this.prisma.subscription.update({
+        where: { userId },
+        data: { status: 'canceled', canceledAt: new Date() },
+      });
+    } catch (e: any) {
+      if (e?.code === 'P2025') {
+        throw new NotFoundException('Không tìm thấy subscription để hủy');
+      }
+      throw e;
+    }
   }
 
   async downgradeExpiredToFree(now: Date = new Date()): Promise<number> {

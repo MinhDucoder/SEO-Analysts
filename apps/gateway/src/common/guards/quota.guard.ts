@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { EntitlementService } from '../../billing/services/entitlement.service';
@@ -9,6 +9,8 @@ import { QuotaExceededError } from '../../billing/domain/billing.errors';
 
 @Injectable()
 export class QuotaGuard implements CanActivate {
+  private readonly logger = new Logger(QuotaGuard.name);
+
   constructor(
     private readonly reflector: Reflector,
     private readonly entitlement: EntitlementService,
@@ -30,7 +32,7 @@ export class QuotaGuard implements CanActivate {
     if (!enabled) {
       if (userId) {
         // would-block log for observability before enforcement is flipped on
-        console.debug(`[billing-flag-off] would-enforce quota:${meta.dimension} for user ${userId}`);
+        this.logger.debug(`[billing-flag-off] would-enforce quota:${meta.dimension} for user ${userId}`);
       }
       return true;
     }

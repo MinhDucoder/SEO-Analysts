@@ -22,10 +22,8 @@ export class PaymentIntentsController {
 
   @Get(':id')
   async get(@CurrentUser('id') userId: string, @Param('id') id: string) {
-    const intent = await this.intents.findById(id);
+    const intent = await this.intents.findByIdForUser(id, userId);
     if (!intent) throw new NotFoundException();
-    const list = await this.intents.listForUser(userId, 50);
-    if (!list.some((p) => p.id === id)) throw new NotFoundException();
     return intent;
   }
 
