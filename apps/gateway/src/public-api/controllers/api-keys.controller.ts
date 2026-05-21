@@ -13,9 +13,14 @@ import {
   Param,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request } from 'express';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { PlanGuard } from '../../common/guards/plan.guard';
+import { RequireFeature } from '../../common/decorators/require-feature.decorator';
+import { FeatureFlag } from '@repo/shared';
 import { ApiKeyService } from '../services/api-key.service';
 import {
   ApiKeyDto,
@@ -29,11 +34,14 @@ interface AuthedRequest extends Request {
 
 @ApiTags('API Keys')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users/me/api-keys')
 export class ApiKeysController {
   constructor(private readonly svc: ApiKeyService) {}
 
   @Post()
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.API_KEY)
   @ApiOperation({
     summary: 'Create API key. Plaintext is returned ONCE — save it immediately.',
   })

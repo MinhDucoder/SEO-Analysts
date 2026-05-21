@@ -10,12 +10,14 @@ import { RegressionDetectorService } from './services/regression-detector.servic
 import { PrismaModule } from '../infra/prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
 import { AuditsModule } from '../audits/audits.module';
+import { BillingModule } from '../billing/billing.module';
 
 @Module({
   imports: [
     PrismaModule,
     AuthModule,
     AuditsModule,
+    BillingModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

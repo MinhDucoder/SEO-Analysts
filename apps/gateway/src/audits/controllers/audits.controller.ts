@@ -23,7 +23,10 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { QuotaGuard } from '../../common/guards/quota.guard';
+import { PlanGuard } from '../../common/guards/plan.guard';
 import { RequireQuota } from '../../common/decorators/require-quota.decorator';
+import { RequireFeature } from '../../common/decorators/require-feature.decorator';
+import { FeatureFlag } from '@repo/shared';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { AuthenticatedUser } from '../../common/interfaces/authenticated-request.interface';
 import { AuditsService } from '../services/audits.service';
@@ -88,6 +91,8 @@ export class AuditsController {
   }
 
   @Get(':id/export')
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.PDF_EXPORT)
   @ApiOperation({ summary: 'Tai PDF report' })
   async export(
     @CurrentUser() user: AuthenticatedUser,
@@ -104,6 +109,8 @@ export class AuditsController {
 
   @Post(':id/share')
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.SHARE_LINK)
   @ApiOperation({ summary: 'Tao share link' })
   async share(@CurrentUser() user: AuthenticatedUser, @Param('id', ParseUUIDPipe) id: string) {
     await this.audits.getAuditDetail(user.id, user.role, id);

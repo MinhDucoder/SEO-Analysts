@@ -12,6 +12,7 @@ import { join } from 'node:path';
 import { PrismaModule } from '../infra/prisma/prisma.module';
 import { RedisModule } from '../infra/redis/redis.module';
 import { GrpcModule } from '../infra/grpc/grpc.module';
+import { BillingModule } from '../billing/billing.module';
 import { ApiKeyService } from './services/api-key.service';
 import { ApiKeyGuard } from './guards/api-key.guard';
 import { ContentExtractorService } from './services/content-extractor.service';
@@ -25,7 +26,7 @@ import { PublicRulesController } from './controllers/public-rules.controller';
 import { PublicHealthController } from './controllers/public-health.controller';
 
 @Module({
-  imports: [PrismaModule, RedisModule, GrpcModule, ConfigModule],
+  imports: [PrismaModule, RedisModule, GrpcModule, ConfigModule, BillingModule],
   providers: [
     ApiKeyService,
     ApiKeyGuard,
