@@ -13,6 +13,12 @@ interface ProgressPayload {
   error?: string;
 }
 
+interface BillingConfirmedPayload {
+  userId: string;
+  intentId: string;
+  planCode: string;
+}
+
 @Injectable()
 export class ProgressSubscriberService implements OnModuleInit {
   private readonly logger = new Logger(ProgressSubscriberService.name);
@@ -28,7 +34,8 @@ export class ProgressSubscriberService implements OnModuleInit {
     await this.redis.subscribe('audit.completed', (data) => this.handleCompleted(data as ProgressPayload));
     await this.redis.subscribe('audit.failed', (data) => this.handleFailed(data as ProgressPayload));
     await this.redis.subscribe('report.done', (data) => this.handleReportDone(data as ProgressPayload));
-    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / report.done channels');
+    await this.redis.subscribe('billing.confirmed', (data) => this.handleBillingConfirmed(data as BillingConfirmedPayload));
+    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / report.done / billing.confirmed channels');
   }
 
   private async handleReportDone(p: ProgressPayload) {
@@ -78,5 +85,10 @@ export class ProgressSubscriberService implements OnModuleInit {
       },
     });
     this.gateway.emitFailed(p.auditId, p);
+  }
+
+  private handleBillingConfirmed(p: BillingConfirmedPayload) {
+    if (!p?.userId || !p?.intentId) return;
+    this.gateway.emitBillingConfirmed(p);
   }
 }
