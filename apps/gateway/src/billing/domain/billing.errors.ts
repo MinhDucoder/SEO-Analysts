@@ -5,7 +5,7 @@ export class FeatureNotAvailableError extends HttpException {
     super(
       {
         code: 'FEATURE_NOT_AVAILABLE',
-        message: `Tính năng "${featureFlag}" không có trong gói "${currentPlan}". Nâng cấp để sử dụng.`,
+        message: `FEATURE_NOT_AVAILABLE: Tính năng "${featureFlag}" không có trong gói "${currentPlan}". Nâng cấp để sử dụng.`,
         featureFlag,
         currentPlan,
       },
@@ -19,7 +19,7 @@ export class QuotaExceededError extends HttpException {
     super(
       {
         code: 'QUOTA_EXCEEDED',
-        message: `Đã đạt giới hạn ${limit} cho "${dimension}". Reset vào ${resetAt.toISOString()}.`,
+        message: `QUOTA_EXCEEDED: Đã đạt giới hạn ${limit} cho "${dimension}". Reset vào ${resetAt.toISOString()}.`,
         dimension,
         limit,
         resetAt: resetAt.toISOString(),

@@ -13,11 +13,13 @@ import { EntitlementService } from './services/entitlement.service';
 import { PaymentIntentService } from './services/payment-intent.service';
 import { CassoReconcilerService } from './services/casso-reconciler.service';
 import { QuotaCounterService } from './services/quota-counter.service';
+import { PlanGuard } from '../common/guards/plan.guard';
+import { QuotaGuard } from '../common/guards/quota.guard';
 
 @Module({
   imports: [ConfigModule, PrismaModule, RedisModule, AuthModule],
   controllers: [PlansController, SubscriptionsController, PaymentIntentsController, CassoWebhookController],
-  providers: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService, CassoReconcilerService, QuotaCounterService],
-  exports: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService, CassoReconcilerService, QuotaCounterService],
+  providers: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService, CassoReconcilerService, QuotaCounterService, PlanGuard, QuotaGuard],
+  exports: [PlansService, SubscriptionService, EntitlementService, PaymentIntentService, CassoReconcilerService, QuotaCounterService, PlanGuard, QuotaGuard],
 })
 export class BillingModule {}
