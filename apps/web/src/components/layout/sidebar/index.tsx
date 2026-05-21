@@ -16,6 +16,7 @@ import { SidebarFooter } from "./footer";
 import { NavItem } from "./nav-item";
 import { useUiPrefs } from "@/lib/ui/prefs";
 import { useAuthStore } from "@/lib/auth/store";
+import { useLogout } from "@/lib/auth/hooks";
 import { cn } from "@/lib/utils/cn";
 import { ROUTES } from "@/lib/constants";
 
@@ -28,6 +29,7 @@ export function Sidebar() {
   const user = useAuthStore((s) => s.user);
   const isAdmin = useAuthStore((s) => s.isAdmin)();
   const tNav = useTranslations("nav");
+  const logout = useLogout();
 
   return (
     <aside
@@ -106,6 +108,7 @@ export function Sidebar() {
       <SidebarFooter
         collapsed={collapsed}
         user={user ? { fullName: user.fullName, email: user.email } : null}
+        onLogout={() => logout.mutate()}
       />
     </aside>
   );
