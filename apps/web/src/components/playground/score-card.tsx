@@ -11,11 +11,11 @@ export function ScoreCard({ response }: { response: PublicCheckResponse }) {
       <CardHeader className="flex flex-row items-baseline justify-between">
         <CardTitle className="text-3xl">{response.score} / 100</CardTitle>
         <div className="flex gap-2 text-xs text-muted-foreground">
-          <Badge variant={response.meta.degraded ? 'warning' : 'secondary'}>
+          <Badge variant={response.meta.degraded ? 'warn' : 'muted'}>
             source: {response.meta.suggestionSource}
           </Badge>
-          {response.meta.degraded ? <Badge variant="warning">degraded</Badge> : null}
-          {response.meta.cached ? <Badge variant="outline">cached</Badge> : null}
+          {response.meta.degraded ? <Badge variant="warn">degraded</Badge> : null}
+          {response.meta.cached ? <Badge variant="muted">cached</Badge> : null}
           <span>{response.meta.processingTimeMs}ms · rule v{response.meta.ruleVersion}</span>
         </div>
       </CardHeader>

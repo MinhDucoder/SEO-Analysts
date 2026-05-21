@@ -151,8 +151,7 @@ export class SuggestionEnricherService {
         })),
       };
 
-      const out = await chain.run(input, {
-        timeoutMs: PUBLIC_API_RATE_LIMITS.LLM_TIMEOUT_MS,
+      const out = await chain.invoke(input, {
         traceId: cacheKey.slice(-16),
       });
 

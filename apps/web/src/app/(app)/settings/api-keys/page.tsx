@@ -182,7 +182,7 @@ export default function ApiKeysPage() {
                       <td className="px-4 py-2">{k.name}</td>
                       <td className="px-4 py-2 font-mono text-xs">{k.prefix}…</td>
                       <td className="px-4 py-2">
-                        <Badge variant={k.environment === 'live' ? 'default' : 'secondary'}>
+                        <Badge variant={k.environment === 'live' ? 'info' : 'muted'}>
                           {k.environment}
                         </Badge>
                       </td>
@@ -191,7 +191,7 @@ export default function ApiKeysPage() {
                       </td>
                       <td className="px-4 py-2">
                         {revoked ? (
-                          <Badge variant="outline">revoked</Badge>
+                          <Badge variant="muted">revoked</Badge>
                         ) : (
                           <Button
                             variant="destructive"

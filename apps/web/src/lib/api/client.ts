@@ -66,6 +66,37 @@ export const api: KyInstance = ky.create({
         }
       },
     ],
+    beforeError: [
+      async (error) => {
+        try {
+          // ky's HTTPError has .response; read JSON safely via clone()
+          const body: unknown = await error.response?.clone().json().catch(() => null);
+          const code =
+            typeof body === "object" && body !== null && "code" in body
+              ? String((body as { code: unknown }).code)
+              : undefined;
+          if (code === "QUOTA_EXCEEDED") {
+            const { useQuotaDialog } = await import("@/lib/billing/quota-dialog.store");
+            const b = body as { message?: string; resetAt?: string };
+            useQuotaDialog.getState().show({
+              title: "Đã hết quota",
+              message: b?.message ?? "Bạn đã đạt giới hạn cho tháng này.",
+              resetAt: b?.resetAt ?? null,
+            });
+          } else if (code === "FEATURE_NOT_AVAILABLE") {
+            const { useQuotaDialog } = await import("@/lib/billing/quota-dialog.store");
+            const b = body as { message?: string };
+            useQuotaDialog.getState().show({
+              title: "Tính năng không có trong gói",
+              message: b?.message ?? "Tính năng này yêu cầu nâng cấp gói.",
+            });
+          }
+        } catch {
+          // never let the interceptor itself throw
+        }
+        return error;
+      },
+    ],
     afterResponse: [
       async (request, _options, response) => {
         // 401 → silent refresh + replay (or clearAuth on failure)

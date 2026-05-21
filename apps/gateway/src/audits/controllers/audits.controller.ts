@@ -2,6 +2,8 @@
  * @file REST endpoints under `/audits` — CRUD + status + export (PDF) +
  * share-link management + audit-vs-audit comparison.
  * All routes require a valid JWT (JwtAuthGuard applied at class level).
+ * POST /audits is additionally gated by QuotaGuard (audits_monthly dimension).
+ * Site-mode audits are gated by EntitlementService inline check (SITE_AUDIT feature).
  */
 import {
   Body,
@@ -20,6 +22,11 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { QuotaGuard } from '../../common/guards/quota.guard';
+import { PlanGuard } from '../../common/guards/plan.guard';
+import { RequireQuota } from '../../common/decorators/require-quota.decorator';
+import { RequireFeature } from '../../common/decorators/require-feature.decorator';
+import { FeatureFlag } from '@repo/shared';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { AuthenticatedUser } from '../../common/interfaces/authenticated-request.interface';
 import { AuditsService } from '../services/audits.service';
@@ -40,6 +47,8 @@ export class AuditsController {
 
   @Post()
   @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(QuotaGuard)
+  @RequireQuota('audits_monthly', { increment: 1 })
   @ApiOperation({ summary: 'Tao audit moi' })
   create(@CurrentUser() user: AuthenticatedUser, @Body() dto: CreateAuditDto) {
     return this.audits.createAudit(user.id, dto);
@@ -82,6 +91,8 @@ export class AuditsController {
   }
 
   @Get(':id/export')
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.PDF_EXPORT)
   @ApiOperation({ summary: 'Tai PDF report' })
   async export(
     @CurrentUser() user: AuthenticatedUser,
@@ -98,6 +109,8 @@ export class AuditsController {
 
   @Post(':id/share')
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.SHARE_LINK)
   @ApiOperation({ summary: 'Tao share link' })
   async share(@CurrentUser() user: AuthenticatedUser, @Param('id', ParseUUIDPipe) id: string) {
     await this.audits.getAuditDetail(user.id, user.role, id);

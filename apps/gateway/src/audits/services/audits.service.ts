@@ -23,9 +23,12 @@ import {
   UserRole,
   REDIS_KEYS,
   SITE_CRAWL_LIMITS,
+  FeatureFlag,
 } from '@repo/shared';
 import { AuditQueueProducer } from './audit-queue.producer';
 import { ReportGrpcClient } from '../../infra/grpc/report.client';
+import { EntitlementService } from '../../billing/services/entitlement.service';
+import { FeatureNotAvailableError } from '../../billing/domain/billing.errors';
 import { clampPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
 import { Prisma } from '../../infra/prisma/generated';
 
@@ -39,10 +42,28 @@ export class AuditsService {
     private readonly redis: RedisService,
     private readonly producer: AuditQueueProducer,
     private readonly reportClient: ReportGrpcClient,
+    private readonly entitlement: EntitlementService,
   ) {}
 
   async createAudit(userId: string, dto: CreateAuditDto) {
     const mode = dto.mode === AuditModeDto.SITE ? AuditMode.SITE : AuditMode.SINGLE;
+
+    // Gate site-mode behind SITE_AUDIT feature entitlement
+    if (mode === AuditMode.SITE) {
+      const featureDecision = await this.entitlement.hasFeature(userId, FeatureFlag.SITE_AUDIT);
+      if (!featureDecision.allowed) {
+        const plan = await this.entitlement.getEffectivePlan(userId);
+        throw new FeatureNotAvailableError(FeatureFlag.SITE_AUDIT, plan);
+      }
+      if (dto.maxUrls !== undefined) {
+        const pageDecision = await this.entitlement.checkSiteAuditPageCount(userId, dto.maxUrls);
+        if (!pageDecision.allowed) {
+          const plan = await this.entitlement.getEffectivePlan(userId);
+          throw new FeatureNotAvailableError('site_audit_max_pages', plan);
+        }
+      }
+    }
+
     if (mode === AuditMode.SITE && dto.maxUrls !== undefined) {
       if (dto.maxUrls > SITE_CRAWL_LIMITS.HARD_CAP_MAX_URLS_PER_AUDIT) {
         throw new BadRequestException(
