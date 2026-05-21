@@ -3,14 +3,14 @@
  * a BullMQ `ai-suggest.start` job (when SEO_AI_ENABLED). Gated here so the
  * worker (and its LLM provider) never runs when the feature is off.
  */
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { BULLMQ_QUEUES } from '@repo/shared';
 import { RedisService } from '../../../infra/redis/redis.service';
 
 @Injectable()
-export class AiSuggestListener implements OnModuleInit, OnModuleDestroy {
+export class AiSuggestListener implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly logger = new Logger(AiSuggestListener.name);
   private readonly CHANNEL = 'report.done';
 
@@ -20,7 +20,10 @@ export class AiSuggestListener implements OnModuleInit, OnModuleDestroy {
     private readonly queue: Queue,
   ) {}
 
-  async onModuleInit(): Promise<void> {
+  // Subscribe after ALL modules initialized — this module is nested under
+  // ReportModule and would otherwise run before RedisService.onModuleInit
+  // populates the subscriber client.
+  async onApplicationBootstrap(): Promise<void> {
     const sub = this.redis.subscriber();
     await sub.subscribe(this.CHANNEL);
     sub.on('message', async (channel, raw) => {
