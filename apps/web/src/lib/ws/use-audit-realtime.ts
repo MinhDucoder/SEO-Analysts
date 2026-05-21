@@ -79,9 +79,17 @@ export function useAuditRealtime(auditId: string | null | undefined): AuditRealt
       queryClient.invalidateQueries({ queryKey: queryKeys.audits.status(auditId) });
     };
 
+    // AI suggestions are generated async after report.done — refetch the
+    // detail so the freshly persisted suggestions render under failing rules.
+    const handleSuggestionsDone = (event: { auditId: string }) => {
+      if (!active || event.auditId !== auditId) return;
+      queryClient.invalidateQueries({ queryKey: queryKeys.audits.detail(auditId) });
+    };
+
     socket.on("audit:progress", handleProgress);
     socket.on("audit:completed", handleCompleted);
     socket.on("audit:failed", handleFailed);
+    socket.on("audit:suggestions-done", handleSuggestionsDone);
 
     socket.emit("audit:subscribe", { auditId }, (ack: { joined?: string; error?: string }) => {
       if (active && ack?.joined) {
@@ -94,6 +102,7 @@ export function useAuditRealtime(auditId: string | null | undefined): AuditRealt
       socket.off("audit:progress", handleProgress);
       socket.off("audit:completed", handleCompleted);
       socket.off("audit:failed", handleFailed);
+      socket.off("audit:suggestions-done", handleSuggestionsDone);
       socket.emit("audit:unsubscribe", { auditId });
     };
   }, [auditId, queryClient]);
