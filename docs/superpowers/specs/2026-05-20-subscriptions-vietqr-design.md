@@ -642,3 +642,15 @@ Target: coverage ≥80% cho `apps/gateway/src/billing/`.
 - `docs/seo-tool-strategy.md` (lines 1820-1828) — draft pricing ban đầu (đã được hoàn thiện trong spec này)
 - Casso docs: https://docs.casso.vn/
 - VietQR generator: https://vietqr.io/
+
+---
+
+## Rollout log
+
+| Date | Action | Notes |
+|---|---|---|
+| 2026-05-20 | Spec written, plan written | Branch `feat/subscriptions-vietqr` |
+| 2026-05-20→21 | Implementation complete | 29 tasks across 7 phases — BE + FE, tests pass. Behind `BILLING_FEATURE_ENABLED=false`. |
+| TODO | Smoke test on staging with real Casso sandbox account | Manual: set `CASSO_WEBHOOK_SECRET`, register bank account in Casso, send 1.000đ test transfer with ref code, observe sub activation. |
+| TODO | Flip `BILLING_FEATURE_ENABLED=true` in production | Coordinate with `/canary` if available. |
+| TODO | First real payment received | Verify end-to-end cleanly: webhook arrives, sub activates, FE redirects. |
