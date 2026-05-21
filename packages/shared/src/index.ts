@@ -137,6 +137,7 @@ export const BULLMQ_QUEUES = {
   ANALYZE_START: 'analyze.start',
   KEYWORD_START: 'keyword.start',
   REPORT_START: 'report.start',
+  AI_SUGGEST_START: 'ai-suggest.start',
   SITE_CRAWL_START: 'site-crawl.start',
   SITE_CRAWL_URL_AUDIT: 'site-crawl.url-audit',
   SITE_CRAWL_AGGREGATE: 'site-crawl.aggregate',
