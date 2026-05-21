@@ -28,7 +28,15 @@ export class ProgressSubscriberService implements OnModuleInit {
     await this.redis.subscribe('audit.completed', (data) => this.handleCompleted(data as ProgressPayload));
     await this.redis.subscribe('audit.failed', (data) => this.handleFailed(data as ProgressPayload));
     await this.redis.subscribe('report.done', (data) => this.handleReportDone(data as ProgressPayload));
-    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / report.done channels');
+    await this.redis.subscribe('audit.suggestions.done', (data) =>
+      this.handleSuggestionsDone(data as { auditId?: string; count?: number }),
+    );
+    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / report.done / audit.suggestions.done channels');
+  }
+
+  private handleSuggestionsDone(p: { auditId?: string; count?: number }) {
+    if (!p?.auditId) return;
+    this.gateway.emitSuggestionsDone(p.auditId, { auditId: p.auditId, count: p.count ?? 0 });
   }
 
   private async handleReportDone(p: ProgressPayload) {

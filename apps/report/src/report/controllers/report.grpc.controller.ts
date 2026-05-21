@@ -177,6 +177,9 @@ export class ReportGrpcController {
   private toReportResponse(report: any) {
     const snapshot = report.analysisSnapshot as AnalyzeResult;
     const cwv = report.cwvSnapshot as any;
+    const ai = report.aiSuggestions as
+      | { items?: Array<{ ruleId: string; explanation: string; actionable_fix: string }>; generatedAt?: string }
+      | null;
     return {
       reportId: report.id,
       auditId: report.auditId,
@@ -197,6 +200,12 @@ export class ReportGrpcController {
       cwvMetrics: cwv,
       targetKeyword: undefined,
       createdAt: report.createdAt?.toISOString?.() ?? new Date().toISOString(),
+      aiSuggestions: (ai?.items ?? []).map((it) => ({
+        ruleId: it.ruleId,
+        explanation: it.explanation,
+        actionableFix: it.actionable_fix,
+      })),
+      aiSuggestionsGeneratedAt: ai?.generatedAt ?? '',
     };
   }
 }

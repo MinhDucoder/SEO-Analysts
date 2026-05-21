@@ -90,4 +90,8 @@ export class AuditGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   emitFailed(auditId: string, data: unknown) {
     this.server.to(`audit:${auditId}`).emit('audit:failed', data);
   }
+
+  emitSuggestionsDone(auditId: string, data: { auditId: string; count: number }) {
+    this.server.to(`audit:${auditId}`).emit('audit:suggestions-done', data);
+  }
 }
