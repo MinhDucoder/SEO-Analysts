@@ -35,8 +35,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     dumb-init curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 1001 nodejs && \
-    useradd -m -u 1001 -g nodejs nestjs
+# GID/UID 1001 may already exist in the base image (Playwright noble drifted to
+# claim it) — fall back to auto-assigned ids; downstream --chown uses names.
+RUN (groupadd -g 1001 nodejs 2>/dev/null || groupadd nodejs) && \
+    (useradd -m -u 1001 -g nodejs nestjs 2>/dev/null || useradd -m -g nodejs nestjs)
 
 WORKDIR /app
 

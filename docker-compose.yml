@@ -190,6 +190,7 @@ services:
       GRPC_PORT: "50052"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
     depends_on:
       redis:
@@ -222,6 +223,7 @@ services:
       ANALYZER_DATABASE_URL: "postgresql://${ANALYZER_DB_USER}:${ANALYZER_DB_PASS}@analyzer-db:5432/${ANALYZER_DB_NAME}"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
     depends_on:
       analyzer-db:
@@ -253,6 +255,7 @@ services:
       GRPC_PORT: "50054"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
     depends_on:
       redis:
