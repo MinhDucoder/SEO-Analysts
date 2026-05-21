@@ -58,8 +58,8 @@ export class ReportGrpcController {
       ruleDeltas: result.ruleDeltas.map((d) => ({
         ruleId: d.ruleId,
         ruleName: d.ruleName,
-        statusBefore: d.statusBefore ?? 'UNSPECIFIED',
-        statusAfter: d.statusAfter ?? 'UNSPECIFIED',
+        statusBefore: toProtoCheckStatus(d.statusBefore),
+        statusAfter: toProtoCheckStatus(d.statusAfter),
         scoreDelta: d.scoreDelta,
       })),
       issuesFixed: result.issuesFixed,

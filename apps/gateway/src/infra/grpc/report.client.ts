@@ -4,7 +4,7 @@ import { GrpcClientFactory } from './grpc-client.factory';
 
 interface ReportService {
   GetReport(req: { auditId: string }, cb: (err: Error | null, res?: unknown) => void): void;
-  CompareReports(req: { audit1: string; audit2: string }, cb: (err: Error | null, res?: unknown) => void): void;
+  CompareReports(req: { auditId1: string; auditId2: string }, cb: (err: Error | null, res?: unknown) => void): void;
   CreateShareLink(req: { auditId: string; userId: string }, cb: (err: Error | null, res?: { shareToken: string; shareUrl: string }) => void): void;
   RevokeShareLink(req: { auditId: string; userId: string }, cb: (err: Error | null, res?: { revoked: boolean }) => void): void;
   GetSharedReport(req: { token: string }, cb: (err: Error | null, res?: unknown) => void): void;
@@ -56,7 +56,10 @@ export class ReportGrpcClient implements OnModuleInit {
     return this.call<{ auditId: string }, unknown>('GetReport', { auditId });
   }
   compareReports(audit1: string, audit2: string) {
-    return this.call<{ audit1: string; audit2: string }, unknown>('CompareReports', { audit1, audit2 });
+    return this.call<{ auditId1: string; auditId2: string }, unknown>('CompareReports', {
+      auditId1: audit1,
+      auditId2: audit2,
+    });
   }
   createShareLink(auditId: string, userId: string) {
     return this.call<{ auditId: string; userId: string }, { shareToken: string; shareUrl: string }>(
