@@ -41,7 +41,15 @@ export class LighthouseRunner {
 
     const start = Date.now();
     const { launch } = await import('chrome-launcher');
+    // chrome-launcher cannot auto-discover Chrome inside the Playwright base
+    // image — browsers live under /ms-playwright (PLAYWRIGHT_BROWSERS_PATH),
+    // not on PATH — so it throws "CHROME_PATH must be set" and CWV silently
+    // zero out. Point it at Playwright's bundled Chromium (version-independent,
+    // no hardcoded revision dir). An explicit CHROME_PATH still wins so ops
+    // can override with a system Chrome.
+    const { chromium } = await import('playwright');
     const chrome = await launch({
+      chromePath: process.env.CHROME_PATH || chromium.executablePath(),
       chromeFlags: ['--headless', '--no-sandbox', '--disable-gpu'],
     });
 
