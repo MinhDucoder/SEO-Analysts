@@ -257,6 +257,60 @@ else
   fi
 fi
 
+# ─── Test 9: Free quota enforcement (11th audit → 429) ───────────────────────
+# To run this test section manually against a live stack:
+#
+#   for i in {1..11}; do curl -sS -o /dev/null -w "%{http_code}\n" \
+#     -X POST -H "Authorization: Bearer $FREE_USER_JWT" \
+#     -H "Content-Type: application/json" \
+#     -d '{"url":"https://example.com"}' http://localhost:3000/api/v1/audits; done
+#
+# Expected: 201 (or 202) ten times, then 429.
+#
+# The automated version below is intentionally skipped in CI unless the env var
+# SMOKE_TEST_FREE_QUOTA=1 is set, because it requires a second fresh user whose
+# monthly counter is at zero and it creates 10 real audit jobs.
+#
+if [ "${SMOKE_TEST_FREE_QUOTA:-0}" = "1" ]; then
+  log_info "Test 9: Free quota enforcement (requires FREE_USER_JWT env var)"
+  if [ -z "${FREE_USER_JWT:-}" ]; then
+    log_fail "Test 9 skipped: FREE_USER_JWT not set (export FREE_USER_JWT=<token>)"
+  else
+    FREE_AUTH="Authorization: Bearer ${FREE_USER_JWT}"
+    quota_responses=()
+    for i in $(seq 1 11); do
+      code=$(curl -sf -o /dev/null -w "%{http_code}" \
+        -X POST "${BASE_URL}/audits" \
+        -H "Content-Type: application/json" \
+        -H "${FREE_AUTH}" \
+        -d '{"url":"https://example.com"}' 2>/dev/null || echo "000")
+      quota_responses+=("$code")
+    done
+
+    # First 10 must not be 429 (201 / 202 accepted)
+    bad_early=0
+    for i in "${!quota_responses[@]}"; do
+      if [ "$i" -lt 10 ] && [ "${quota_responses[$i]}" = "429" ]; then
+        bad_early=1
+      fi
+    done
+    if [ "$bad_early" -eq 0 ]; then
+      log_pass "Free quota: first 10 audits accepted (codes: ${quota_responses[*]:0:10})"
+    else
+      log_fail "Free quota: unexpected 429 in first 10 (codes: ${quota_responses[*]:0:10})"
+    fi
+
+    last="${quota_responses[10]}"
+    if [ "$last" = "429" ]; then
+      log_pass "Free quota: 11th audit returned 429 QUOTA_EXCEEDED"
+    else
+      log_fail "Free quota: 11th audit expected 429 got ${last}"
+    fi
+  fi
+else
+  log_info "Test 9: Free quota enforcement — skipped (set SMOKE_TEST_FREE_QUOTA=1 to enable)"
+fi
+
 echo ""
 echo "========================================"
 echo "  Smoke Test Summary"
