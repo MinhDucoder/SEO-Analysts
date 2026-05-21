@@ -5,6 +5,7 @@ import { AuthGuard } from "@/lib/auth/guard";
 import { AppShellRouted } from "@/components/layout/app-shell-routed";
 import { ExpiryBanner } from "@/components/billing/ExpiryBanner";
 import { PlanStatusBadge } from "@/components/billing/PlanStatusBadge";
+import { QuotaExceededDialog } from "@/components/billing/QuotaExceededDialog";
 
 /**
  * Authenticated app shell. Composes:
@@ -21,6 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <AuthGuard>
       <AppShellRouted topbarActions={<PlanStatusBadge />}>
         <ExpiryBanner />
+        <QuotaExceededDialog />
         {children}
       </AppShellRouted>
     </AuthGuard>
