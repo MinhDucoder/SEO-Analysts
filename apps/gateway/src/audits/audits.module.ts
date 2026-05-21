@@ -7,11 +7,13 @@ import { AuditsService } from './services/audits.service';
 import { AuditQueueProducer } from './services/audit-queue.producer';
 import { PrismaModule } from '../infra/prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
+import { BillingModule } from '../billing/billing.module';
 
 @Module({
   imports: [
     PrismaModule,
     AuthModule,
+    BillingModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
