@@ -34,7 +34,9 @@
     "admin": "Admin",
     "users": "Users",
     "rules": "Rules",
-    "stats": "Stats"
+    "stats": "Stats",
+    "pricing": "Pricing",
+    "policy": "Policy"
   },
   "theme": {
     "light": "Light",
@@ -551,6 +553,35 @@
     "ctaTitle": "Want to audit your own site?",
     "ctaBody": "Run a free SEO audit on any URL.",
     "ctaButton": "Open SEO Analyst"
+  },
+  "pricing": {
+    "heroTitle": "Choose the plan that fits you",
+    "heroSubtitle": "Start free, upgrade when you need more audits, AI and API.",
+    "perMonth": "/ month",
+    "free": "Free",
+    "current": "Current",
+    "popular": "Popular",
+    "upgrade": "Upgrade",
+    "processing": "Processing...",
+    "compareTitle": "Detailed comparison",
+    "faqTitle": "Frequently asked questions",
+    "faqMore": "See full policy →",
+    "features": {
+      "auditsMonthly": "Audits / month",
+      "siteMode": "Site-mode (pages)",
+      "scheduled": "Scheduled",
+      "aiCalls": "AI suggestions / month",
+      "apiCalls": "API / day",
+      "apiKeys": "API keys",
+      "history": "History retention"
+    }
+  },
+  "policy": {
+    "title": "Policy",
+    "subtitle": "Terms of use, privacy and payment policy for SEO Analyst.",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "payment": "Payment & refund policy"
   },
   "auth": {
     "common": {

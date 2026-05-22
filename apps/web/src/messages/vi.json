@@ -34,7 +34,9 @@
     "admin": "Quản trị",
     "users": "Người dùng",
     "rules": "Quy tắc",
-    "stats": "Thống kê"
+    "stats": "Thống kê",
+    "pricing": "Bảng giá",
+    "policy": "Chính sách"
   },
   "theme": {
     "light": "Sáng",
@@ -551,6 +553,35 @@
     "ctaTitle": "Muốn audit website của bạn?",
     "ctaBody": "Chạy audit SEO miễn phí cho bất kỳ URL nào.",
     "ctaButton": "Mở SEO Analyst"
+  },
+  "pricing": {
+    "heroTitle": "Chọn gói phù hợp với bạn",
+    "heroSubtitle": "Bắt đầu miễn phí, nâng cấp khi cần thêm audit, AI và API.",
+    "perMonth": "/ tháng",
+    "free": "Miễn phí",
+    "current": "Đang dùng",
+    "popular": "Phổ biến",
+    "upgrade": "Nâng cấp",
+    "processing": "Đang xử lý...",
+    "compareTitle": "So sánh chi tiết",
+    "faqTitle": "Câu hỏi thường gặp",
+    "faqMore": "Xem chính sách đầy đủ →",
+    "features": {
+      "auditsMonthly": "Audits / tháng",
+      "siteMode": "Site-mode (trang)",
+      "scheduled": "Lịch định kỳ",
+      "aiCalls": "AI gợi ý / tháng",
+      "apiCalls": "API / ngày",
+      "apiKeys": "API keys",
+      "history": "Lưu lịch sử"
+    }
+  },
+  "policy": {
+    "title": "Chính sách",
+    "subtitle": "Điều khoản sử dụng, bảo mật và thanh toán của SEO Analyst.",
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách bảo mật",
+    "payment": "Chính sách thanh toán & hoàn tiền"
   },
   "auth": {
     "common": {

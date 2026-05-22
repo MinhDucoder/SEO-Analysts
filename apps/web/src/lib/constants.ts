@@ -10,6 +10,10 @@ export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001
 export const ROUTES = {
   home: "/",
 
+  // Marketing (public)
+  pricing: "/pricing",
+  policy: "/policy",
+
   // Auth (slug 2)
   login: "/login",
   register: "/register",
