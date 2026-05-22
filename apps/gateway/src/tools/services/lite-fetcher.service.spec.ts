@@ -327,3 +327,82 @@ describe('LiteFetcherService — caching', () => {
     expect(Buffer.compare(cached.bodyBuffer, binary)).toBe(0);
   });
 });
+
+describe('LiteFetcherService — head()', () => {
+  const emptyBody = () => ({
+    async *[Symbol.asyncIterator]() {
+      /* no body */
+    },
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns status + contentLength + contentType from HEAD', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 200,
+            headers: { 'content-type': 'image/png', 'content-length': '1234' },
+            body: emptyBody(),
+          }),
+        }) as any,
+    });
+    const r = await svc.head('http://example.com/icon.png');
+    expect(r.status).toBe(200);
+    expect(r.contentLength).toBe(1234);
+    expect(r.contentType).toContain('image/png');
+  });
+
+  it('falls back to a ranged GET when HEAD returns 405', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    let call = 0;
+    let secondMethod: string | undefined;
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async (o: any) => {
+            call++;
+            if (call === 1) return { statusCode: 405, headers: {}, body: emptyBody() };
+            secondMethod = o.method;
+            return {
+              statusCode: 206,
+              headers: { 'content-type': 'image/x-icon', 'content-length': '48' },
+              body: emptyBody(),
+            };
+          },
+        }) as any,
+    });
+    const r = await svc.head('http://example.com/favicon.ico');
+    expect(r.status).toBe(206);
+    expect(call).toBe(2);
+    expect(secondMethod).toBe('GET');
+  });
+
+  it('re-checks IP on redirect and blocks private targets', async () => {
+    vi.mocked(dns.lookup)
+      .mockResolvedValueOnce([{ address: '8.8.8.8', family: 4 }] as any)
+      .mockResolvedValueOnce([{ address: '10.0.0.5', family: 4 }] as any);
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 301,
+            headers: { location: 'http://internal.example.com/' },
+            body: emptyBody(),
+          }),
+        }) as any,
+    });
+    await expect(svc.head('http://example.com/x')).rejects.toMatchObject({ code: 'SSRF_BLOCKED' });
+  });
+
+  it('reuses the SSRF protocol gate', async () => {
+    const svc = new LiteFetcherService();
+    await expect(svc.head('file:///etc/passwd')).rejects.toMatchObject({
+      code: 'INVALID_PROTOCOL',
+    });
+  });
+});

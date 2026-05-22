@@ -22,6 +22,14 @@ export interface LiteFetchOptions {
   maxRedirects?: number;
 }
 
+export interface LiteHeadResult {
+  url: string; // final URL after redirects
+  status: number;
+  headers: Record<string, string>;
+  contentType: string;
+  contentLength?: number;
+}
+
 @Injectable()
 export class LiteFetcherService {
   private readonly logger = new Logger(LiteFetcherService.name);
@@ -170,6 +178,84 @@ export class LiteFetcherService {
     }
 
     throw new FetchError('TOO_MANY_REDIRECTS', `Exceeded ${maxRedirects} redirects`);
+  }
+
+  /**
+   * HTTP HEAD with the same SSRF + redirect gates as get(). Falls back to a
+   * ranged GET (bytes=0-2047) if the upstream rejects HEAD with 405.
+   */
+  async head(rawUrl: string, opts: LiteFetchOptions = {}): Promise<LiteHeadResult> {
+    const timeoutMs = opts.timeoutMs ?? this.DEFAULTS.timeoutMs;
+    const maxRedirects = opts.maxRedirects ?? this.DEFAULTS.maxRedirects;
+
+    let currentUrl = rawUrl;
+    for (let hop = 0; hop <= maxRedirects; hop++) {
+      const { url, ip } = await this.validateAndResolve(currentUrl);
+      const dispatcher = this.opts.dispatcherFactory?.() ?? this.buildAgent(ip);
+      const ownsDispatcher = !this.opts.dispatcherFactory;
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        let res: Dispatcher.ResponseData;
+        try {
+          res = await this.requestOnce(dispatcher, url, 'HEAD', controller.signal);
+          if (res.statusCode === 405) {
+            await this.drain(res.body);
+            res = await this.requestOnce(dispatcher, url, 'GET', controller.signal, 'bytes=0-2047');
+          }
+        } catch (e: any) {
+          if (e?.name === 'AbortError') throw new FetchError('TIMEOUT', `Timeout after ${timeoutMs}ms`);
+          throw new FetchError('BAD_STATUS', e?.message ?? 'Fetch failed');
+        }
+
+        const status = res.statusCode;
+        const location = this.headerValue(res.headers, 'location');
+        if (status >= 300 && status < 400 && location) {
+          await this.drain(res.body);
+          currentUrl = new URL(location, url).toString();
+          continue;
+        }
+
+        await this.drain(res.body);
+        const headers = this.flattenHeaders(res.headers);
+        const cl = headers['content-length'];
+        return {
+          url: url.toString(),
+          status,
+          headers,
+          contentType: headers['content-type'] ?? '',
+          contentLength: cl ? Number(cl) : undefined,
+        };
+      } finally {
+        clearTimeout(timer);
+        if (ownsDispatcher && typeof (dispatcher as any).close === 'function') {
+          await (dispatcher as any).close().catch(() => undefined);
+        }
+      }
+    }
+
+    throw new FetchError('TOO_MANY_REDIRECTS', `Exceeded ${maxRedirects} redirects`);
+  }
+
+  private requestOnce(
+    dispatcher: Dispatcher,
+    url: URL,
+    method: 'GET' | 'HEAD',
+    signal: AbortSignal,
+    range?: string,
+  ): Promise<Dispatcher.ResponseData> {
+    return dispatcher.request({
+      origin: url.origin,
+      path: `${url.pathname}${url.search}`,
+      method,
+      headers: {
+        'user-agent': this.DEFAULTS.userAgent,
+        accept: 'text/html,application/xml,application/json;q=0.9,*/*;q=0.8',
+        ...(range ? { range } : {}),
+      },
+      signal,
+    });
   }
 
   private async validateAndResolve(rawUrl: string): Promise<{ url: URL; ip: string }> {
