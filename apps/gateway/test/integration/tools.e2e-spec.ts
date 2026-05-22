@@ -9,6 +9,8 @@ import { SocialPreviewController } from '../../src/tools/controllers/social-prev
 import { SocialPreviewService } from '../../src/tools/services/social-preview.service';
 import { FaviconCheckerController } from '../../src/tools/controllers/favicon-checker.controller';
 import { FaviconCheckerService } from '../../src/tools/services/favicon-checker.service';
+import { SchemaPreviewController } from '../../src/tools/controllers/schema-preview.controller';
+import { SchemaPreviewService } from '../../src/tools/services/schema-preview.service';
 import { LiteFetcherService } from '../../src/tools/services/lite-fetcher.service';
 import { ToolsQuotaService } from '../../src/tools/services/tools-quota.service';
 
@@ -171,6 +173,49 @@ describe('Tools — Favicon checker (E2E)', () => {
 
   it('rejects invalid DTO (400)', async () => {
     const r = await request(app.getHttpServer()).post('/tools/favicon-checker').send({ url: 'not-a-url' });
+    expect(r.status).toBe(400);
+  });
+});
+
+describe('Tools — Schema preview (E2E)', () => {
+  let app: INestApplication;
+  const fetcher = { get: vi.fn() };
+  const quota = { checkAndIncrement: vi.fn() };
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [SchemaPreviewController],
+      providers: [
+        SchemaPreviewService,
+        { provide: LiteFetcherService, useValue: fetcher },
+        { provide: ToolsQuotaService, useValue: quota },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('paste mode — validates JSON-LD without charging quota (200)', async () => {
+    const r = await request(app.getHttpServer())
+      .post('/tools/schema-preview')
+      .send({
+        mode: 'paste',
+        raw: JSON.stringify({ '@type': 'Organization', name: 'Org', url: 'u', logo: 'l' }),
+      });
+    expect(r.status).toBe(200);
+    expect(r.body.data.summary.totalBlocks).toBe(1);
+    expect(quota.checkAndIncrement).not.toHaveBeenCalled();
+  });
+
+  it('rejects invalid DTO (400)', async () => {
+    const r = await request(app.getHttpServer())
+      .post('/tools/schema-preview')
+      .send({ mode: 'banana' });
     expect(r.status).toBe(400);
   });
 });
