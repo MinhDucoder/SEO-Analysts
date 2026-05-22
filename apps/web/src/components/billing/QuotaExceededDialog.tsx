@@ -22,9 +22,11 @@ export function QuotaExceededDialog() {
           <Button variant="outline" onClick={close}>
             Đóng
           </Button>
-          <Link href={ROUTES.pricing} onClick={close}>
-            <Button>Nâng cấp</Button>
-          </Link>
+          <Button asChild>
+            <Link href={ROUTES.pricing} onClick={close}>
+              Nâng cấp
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
