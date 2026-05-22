@@ -7,10 +7,12 @@ import { LiteFetcherService } from './services/lite-fetcher.service';
 import { ToolsQuotaService } from './services/tools-quota.service';
 import { GooglePreviewService } from './services/google-preview.service';
 import { GooglePreviewController } from './controllers/google-preview.controller';
+import { SocialPreviewService } from './services/social-preview.service';
+import { SocialPreviewController } from './controllers/social-preview.controller';
 
 @Module({
   imports: [ConfigModule, RedisModule, BillingModule],
-  controllers: [GooglePreviewController],
+  controllers: [GooglePreviewController, SocialPreviewController],
   providers: [
     // Factory wiring so LiteFetcher gets the real Redis client (10-min cache).
     {
@@ -20,6 +22,7 @@ import { GooglePreviewController } from './controllers/google-preview.controller
     },
     ToolsQuotaService,
     GooglePreviewService,
+    SocialPreviewService,
   ],
   exports: [LiteFetcherService, ToolsQuotaService],
 })

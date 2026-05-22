@@ -5,6 +5,8 @@ import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { GooglePreviewController } from '../../src/tools/controllers/google-preview.controller';
 import { GooglePreviewService } from '../../src/tools/services/google-preview.service';
+import { SocialPreviewController } from '../../src/tools/controllers/social-preview.controller';
+import { SocialPreviewService } from '../../src/tools/services/social-preview.service';
 import { LiteFetcherService } from '../../src/tools/services/lite-fetcher.service';
 import { ToolsQuotaService } from '../../src/tools/services/tools-quota.service';
 
@@ -72,6 +74,47 @@ describe('Tools — Google preview (E2E)', () => {
   it('rejects invalid DTO (400)', async () => {
     const r = await request(app.getHttpServer())
       .post('/tools/google-preview')
+      .send({ mode: 'banana' });
+    expect(r.status).toBe(400);
+  });
+});
+
+describe('Tools — Social preview (E2E)', () => {
+  let app: INestApplication;
+  const fetcher = { get: vi.fn() };
+  const quota = { checkAndIncrement: vi.fn() };
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [SocialPreviewController],
+      providers: [
+        SocialPreviewService,
+        { provide: LiteFetcherService, useValue: fetcher },
+        { provide: ToolsQuotaService, useValue: quota },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('manual mode — returns warnings without charging quota (200)', async () => {
+    const r = await request(app.getHttpServer())
+      .post('/tools/social-preview')
+      .send({ mode: 'manual', ogTitle: 'Hi', ogImage: 'https://cdn.example.com/og.png' });
+    expect(r.status).toBe(200);
+    expect(r.body.data.ogTitle).toBe('Hi');
+    expect(r.body.warnings).toBeInstanceOf(Array);
+    expect(quota.checkAndIncrement).not.toHaveBeenCalled();
+  });
+
+  it('rejects invalid DTO (400)', async () => {
+    const r = await request(app.getHttpServer())
+      .post('/tools/social-preview')
       .send({ mode: 'banana' });
     expect(r.status).toBe(400);
   });
