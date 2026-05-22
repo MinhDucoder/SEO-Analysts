@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { useQuotaDialog } from "@/lib/billing/quota-dialog.store";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/constants";
 
 export function QuotaExceededDialog() {
   const { open, title, message, resetAt, close } = useQuotaDialog();
@@ -21,7 +22,7 @@ export function QuotaExceededDialog() {
           <Button variant="outline" onClick={close}>
             Đóng
           </Button>
-          <Link href="/billing/upgrade" onClick={close}>
+          <Link href={ROUTES.pricing} onClick={close}>
             <Button>Nâng cấp</Button>
           </Link>
         </div>
