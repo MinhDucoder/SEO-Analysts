@@ -7,6 +7,8 @@ import { GooglePreviewController } from '../../src/tools/controllers/google-prev
 import { GooglePreviewService } from '../../src/tools/services/google-preview.service';
 import { SocialPreviewController } from '../../src/tools/controllers/social-preview.controller';
 import { SocialPreviewService } from '../../src/tools/services/social-preview.service';
+import { FaviconCheckerController } from '../../src/tools/controllers/favicon-checker.controller';
+import { FaviconCheckerService } from '../../src/tools/services/favicon-checker.service';
 import { LiteFetcherService } from '../../src/tools/services/lite-fetcher.service';
 import { ToolsQuotaService } from '../../src/tools/services/tools-quota.service';
 
@@ -116,6 +118,59 @@ describe('Tools — Social preview (E2E)', () => {
     const r = await request(app.getHttpServer())
       .post('/tools/social-preview')
       .send({ mode: 'banana' });
+    expect(r.status).toBe(400);
+  });
+});
+
+describe('Tools — Favicon checker (E2E)', () => {
+  let app: INestApplication;
+  const fetcher = { get: vi.fn(), head: vi.fn() };
+  const quota = { checkAndIncrement: vi.fn() };
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [FaviconCheckerController],
+      providers: [
+        FaviconCheckerService,
+        { provide: LiteFetcherService, useValue: fetcher },
+        { provide: ToolsQuotaService, useValue: quota },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('charges quota and returns coverage (200)', async () => {
+    quota.checkAndIncrement.mockResolvedValue({ used: 1, remaining: 9 });
+    fetcher.get.mockResolvedValue({
+      url: 'https://example.com/',
+      body: '<html><head><link rel="icon" href="/favicon.ico"></head></html>',
+      status: 200,
+      headers: {},
+      bodyBuffer: Buffer.from([]),
+    });
+    fetcher.head.mockResolvedValue({
+      url: 'https://example.com/favicon.ico',
+      status: 200,
+      headers: {},
+      contentType: 'image/x-icon',
+      contentLength: 0,
+    });
+    const r = await request(app.getHttpServer())
+      .post('/tools/favicon-checker')
+      .send({ url: 'https://example.com/' });
+    expect(r.status).toBe(200);
+    expect(r.body.data.coverage).toBeDefined();
+    expect(quota.checkAndIncrement).toHaveBeenCalled();
+  });
+
+  it('rejects invalid DTO (400)', async () => {
+    const r = await request(app.getHttpServer()).post('/tools/favicon-checker').send({ url: 'not-a-url' });
     expect(r.status).toBe(400);
   });
 });
