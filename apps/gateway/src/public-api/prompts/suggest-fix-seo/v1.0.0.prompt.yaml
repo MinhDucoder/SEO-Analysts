@@ -1,5 +1,12 @@
 id: suggest-fix-seo
 version: 1.0.0
+variables:
+  - targetKeyword
+  - secondaryKeywords
+  - language
+  - contentExcerpt
+  - issueCount
+  - issues
 metadata:
   owner: public-api
   language: multi

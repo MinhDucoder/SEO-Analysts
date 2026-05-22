@@ -19,7 +19,10 @@
     "refresh": "Refresh",
     "errorTitle": "Something went wrong",
     "errorDescription": "Please try again in a moment.",
-    "reportIssue": "Report issue"
+    "reportIssue": "Report issue",
+    "login": "Log in",
+    "register": "Register",
+    "enterApp": "Enter app"
   },
   "nav": {
     "dashboard": "Overview",
@@ -34,7 +37,9 @@
     "admin": "Admin",
     "users": "Users",
     "rules": "Rules",
-    "stats": "Stats"
+    "stats": "Stats",
+    "pricing": "Pricing",
+    "policy": "Policy"
   },
   "theme": {
     "light": "Light",
@@ -120,7 +125,8 @@
       "successBody": "We're analysing {url}. You can follow live progress on the detail page.",
       "viewDetail": "Open detail",
       "errorInvalidUrl": "Invalid URL.",
-      "errorMaxUrlsRange": "Max pages must be between 1 and 5000."
+      "errorMaxUrlsRange": "Max pages must be between 1 and 5000.",
+      "errorGeneric": "Couldn't create the audit. Please try again."
     },
     "filters": {
       "search": "Search URL or domain",
@@ -369,7 +375,8 @@
       "submitting": "Creating…",
       "successToast": "Schedule created",
       "errorCron": "Invalid cron (5 fields required).",
-      "errorInvalidUrl": "Invalid URL."
+      "errorInvalidUrl": "Invalid URL.",
+      "errorToast": "Couldn't create the schedule. Please try again."
     }
   },
   "globalModal": {
@@ -472,7 +479,9 @@
     "subtitle": "Manage your profile and security.",
     "tabs": {
       "profile": "Profile",
-      "password": "Password"
+      "password": "Password",
+      "apiKeys": "API keys",
+      "billing": "Plan & Billing"
     },
     "profile": {
       "title": "Profile",
@@ -503,6 +512,21 @@
       "submit": "Update password",
       "submitting": "Updating…",
       "success": "Password updated — please sign in again"
+    },
+    "billing": {
+      "currentTitle": "Current plan",
+      "planLabel": "Plan",
+      "statusLabel": "Status",
+      "expiresLabel": "Expires",
+      "upgrade": "Upgrade / Renew",
+      "adminGranted": "Granted by admin (no payment)",
+      "paidBanner": "Payment successful! 🎉",
+      "historyTitle": "Payment history",
+      "historyEmpty": "No transactions yet.",
+      "colTime": "Time",
+      "colPlan": "Plan",
+      "colAmount": "Amount",
+      "colStatus": "Status"
     }
   },
   "sharedReport": {
@@ -549,6 +573,45 @@
     "ctaTitle": "Want to audit your own site?",
     "ctaBody": "Run a free SEO audit on any URL.",
     "ctaButton": "Open SEO Analyst"
+  },
+  "pricing": {
+    "heroTitle": "Choose the plan that fits you",
+    "heroSubtitle": "Start free, upgrade when you need more audits, AI and API.",
+    "perMonth": "/ month",
+    "free": "Free",
+    "current": "Current",
+    "popular": "Popular",
+    "upgrade": "Upgrade",
+    "processing": "Processing...",
+    "compareTitle": "Detailed comparison",
+    "faqTitle": "Frequently asked questions",
+    "faqMore": "See full policy →",
+    "features": {
+      "auditsMonthly": "Audits / month",
+      "siteMode": "Site-mode (pages)",
+      "scheduled": "Scheduled",
+      "aiCalls": "AI suggestions / month",
+      "apiCalls": "API / day",
+      "apiKeys": "API keys",
+      "history": "History retention"
+    }
+  },
+  "policy": {
+    "title": "Policy",
+    "subtitle": "Terms of use, privacy and payment policy for SEO Analyst.",
+    "eyebrow": "Legal center",
+    "lastUpdated": "Last updated",
+    "readTime": "{minutes} min read",
+    "tocTitle": "On this page",
+    "contactTitle": "Still have questions?",
+    "contactBody": "If you have any questions about our terms, privacy or payments, our support team is happy to help.",
+    "contactCta": "Contact support",
+    "contactSubject": "Support request — SEO Analyst",
+    "printPage": "Print page",
+    "backToTop": "Back to top",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "payment": "Payment & refund policy"
   },
   "auth": {
     "common": {

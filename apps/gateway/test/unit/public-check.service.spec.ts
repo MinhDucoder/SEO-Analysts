@@ -51,6 +51,19 @@ const extractor = {
   extract: vi.fn().mockResolvedValue({ html: '<p>hi</p>', fromCache: false }),
 } as never;
 
+// AI-entitlement gate deps (LLM path only): default to "allowed + quota left".
+function makeEntitlement() {
+  return {
+    hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+    getEffectivePlan: vi.fn().mockResolvedValue('pro'),
+  } as never;
+}
+function makeCounter() {
+  return {
+    consume: vi.fn().mockResolvedValue({ allowed: true, remaining: 99 }),
+  } as never;
+}
+
 const ctx = { apiKeyId: 'k1', userId: 'u1', ip: '1.2.3.4' };
 const baseReq = {
   input: { type: 'html' as const, html: '<p>hi</p>' },
@@ -64,7 +77,7 @@ describe('PublicCheckService (with enricher)', () => {
 
   beforeEach(() => {
     enricher = { enrich: vi.fn() };
-    svc = new PublicCheckService(extractor, makeAnalyzer(), makeRedis(), enricher as never);
+    svc = new PublicCheckService(extractor, makeAnalyzer(), makeRedis(), enricher as never, makeEntitlement(), makeCounter());
   });
 
   it('enrichMode=off: enricher called with "off", suggestionSource="none"', async () => {
@@ -178,7 +191,7 @@ describe('PublicCheckService (with enricher)', () => {
         externalLinkCount: 0,
       },
     });
-    svc = new PublicCheckService(extractor, analyzer, makeRedis(), enricher as never);
+    svc = new PublicCheckService(extractor, analyzer, makeRedis(), enricher as never, makeEntitlement(), makeCounter());
     enricher.enrich.mockResolvedValue({
       suggestions: [
         { type: 'rewrite', text: 'LLM A', rationale: 'r' },
@@ -202,7 +215,7 @@ describe('PublicCheckService (with enricher)', () => {
       degraded: false,
     });
     const redis = makeRedis();
-    svc = new PublicCheckService(extractor, makeAnalyzer(), redis, enricher as never);
+    svc = new PublicCheckService(extractor, makeAnalyzer(), redis, enricher as never, makeEntitlement(), makeCounter());
     const req = {
       ...baseReq,
       options: { ...baseReq.options, enrichMode: 'template' as const },
@@ -246,7 +259,7 @@ describe('PublicCheckService (with enricher)', () => {
       degraded: false,
     });
     const redis = makeRedis();
-    svc = new PublicCheckService(extractor, analyzer, redis, enricher as never);
+    svc = new PublicCheckService(extractor, analyzer, redis, enricher as never, makeEntitlement(), makeCounter());
 
     const r1 = await svc.execute(
       {
@@ -286,7 +299,7 @@ describe('PublicCheckService (with enricher)', () => {
       degraded: false,
     });
     const redis1 = makeRedis();
-    const svc1 = new PublicCheckService(extractor, makeAnalyzer(), redis1, enricher as never);
+    const svc1 = new PublicCheckService(extractor, makeAnalyzer(), redis1, enricher as never, makeEntitlement(), makeCounter());
     const req = {
       ...baseReq,
       options: { ...baseReq.options, enrichMode: 'template' as const },
@@ -297,7 +310,7 @@ describe('PublicCheckService (with enricher)', () => {
     process.env.PUBLIC_API_CACHE_SCHEMA_VERSION = '99.99.99';
     try {
       const redis2 = makeRedis();
-      const svc2 = new PublicCheckService(extractor, makeAnalyzer(), redis2, enricher as never);
+      const svc2 = new PublicCheckService(extractor, makeAnalyzer(), redis2, enricher as never, makeEntitlement(), makeCounter());
       await svc2.execute(req, ctx);
       const key2 = (redis2.client.setex as ReturnType<typeof vi.fn>).mock.calls[0]![0];
       expect(key2).not.toBe(key1);
@@ -338,7 +351,7 @@ describe('PublicCheckService (with enricher)', () => {
       degraded: false,
     });
     const redis = makeRedis();
-    svc = new PublicCheckService(extractor, analyzer, redis, enricher as never);
+    svc = new PublicCheckService(extractor, analyzer, redis, enricher as never, makeEntitlement(), makeCounter());
 
     await svc.execute(
       {

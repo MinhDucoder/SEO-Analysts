@@ -16,10 +16,17 @@ describe('POST /webhooks/casso', () => {
   const handleWebhook = vi.fn().mockResolvedValue(undefined);
 
   beforeAll(async () => {
+    // process.env wins over ConfigModule `load`, so pin the secret here to make
+    // the assertion deterministic regardless of any ambient/.env value.
+    process.env.CASSO_WEBHOOK_SECRET = 'test-secret';
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
           isGlobal: true,
+          // Don't load apps/gateway/.env — its real CASSO_WEBHOOK_SECRET would
+          // land in process.env and take precedence over this `load` value,
+          // making the "correct token" assertion fail.
+          ignoreEnvFile: true,
           load: [() => ({ CASSO_WEBHOOK_SECRET: 'test-secret', JWT_ACCESS_SECRET: 'test-jwt' })],
         }),
         BillingModule,

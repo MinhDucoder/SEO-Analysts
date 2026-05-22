@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils/cn";
 
-type SettingsTab = "profile" | "password";
+type SettingsTab = "profile" | "password" | "api-keys" | "billing";
 
 interface SettingsShellProps {
   active: SettingsTab;
@@ -27,6 +27,8 @@ export function SettingsShell({ active, children }: SettingsShellProps) {
   const tabs: { key: SettingsTab; href: string }[] = [
     { key: "profile", href: ROUTES.settingsProfile },
     { key: "password", href: ROUTES.settingsPassword },
+    { key: "api-keys", href: ROUTES.settingsApiKeys },
+    { key: "billing", href: ROUTES.settingsBilling },
   ];
 
   return (
@@ -56,7 +58,7 @@ export function SettingsShell({ active, children }: SettingsShellProps) {
                   : "hover:text-fg",
               )}
             >
-              {t(`tabs.${key}`)}
+              {t(`tabs.${key === "api-keys" ? "apiKeys" : key}`)}
             </Link>
           );
         })}

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { usePaymentIntent } from "@/lib/queries/use-billing";
 import { queryKeys } from "@/lib/queries/keys";
@@ -23,7 +24,7 @@ export default function CheckoutPage() {
     if (query.data?.status === "paid" && !redirected) {
       setRedirected(true);
       qc.invalidateQueries({ queryKey: queryKeys.billing.subscription() });
-      router.push("/billing?paid=1");
+      router.push(`${ROUTES.settingsBilling}?paid=1`);
     }
   }, [query.data, redirected, qc, router]);
 
@@ -49,7 +50,7 @@ export default function CheckoutPage() {
       if (evt.intentId === intentId && !redirected) {
         setRedirected(true);
         qc.invalidateQueries({ queryKey: queryKeys.billing.subscription() });
-        router.push("/billing?paid=1");
+        router.push(`${ROUTES.settingsBilling}?paid=1`);
       }
     };
     sock.on("billing:confirmed", onConfirmed);
@@ -67,7 +68,7 @@ export default function CheckoutPage() {
     return (
       <div className="container mx-auto py-12 text-center">
         <p className="mb-4">Không tìm thấy đơn thanh toán.</p>
-        <Link href="/billing/upgrade">
+        <Link href={ROUTES.pricing}>
           <Button>Quay lại</Button>
         </Link>
       </div>
@@ -77,7 +78,7 @@ export default function CheckoutPage() {
     return (
       <div className="container mx-auto py-12 space-y-4 text-center">
         <p>Mã thanh toán đã hết hạn hoặc thất bại.</p>
-        <Link href="/billing/upgrade">
+        <Link href={ROUTES.pricing}>
           <Button>Tạo mã mới</Button>
         </Link>
       </div>

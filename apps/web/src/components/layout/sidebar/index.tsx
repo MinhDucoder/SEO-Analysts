@@ -8,6 +8,7 @@ import {
   List,
   Settings,
   ShieldCheck,
+  Sparkles,
   Users,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -62,6 +63,12 @@ export function Sidebar() {
           href="/audits/compare"
           icon={GitCompare}
           label={tNav("compare")}
+          collapsed={collapsed}
+        />
+        <NavItem
+          href={ROUTES.pricing}
+          icon={Sparkles}
+          label={tNav("pricing")}
           collapsed={collapsed}
         />
         <NavItem

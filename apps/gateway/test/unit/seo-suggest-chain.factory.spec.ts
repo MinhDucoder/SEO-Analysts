@@ -5,7 +5,6 @@ import {
   type SuggestInput,
   type SuggestOutput,
 } from '../../src/public-api/services/seo-suggest-chain.factory';
-import { BaseChain } from '@repo/seo-ai-core';
 
 describe('SeoSuggestChainFactory', () => {
   const promptsDir = resolve(__dirname, '../../src/public-api/prompts');
@@ -19,7 +18,7 @@ describe('SeoSuggestChainFactory', () => {
     await expect(f.getOrNull()).resolves.toBeNull();
   });
 
-  it('constructs a BaseChain when API key present', async () => {
+  it('constructs an IChain when API key present', async () => {
     const llmStub = {
       providerId: 'anthropic',
       modelId: 'stub',
@@ -32,11 +31,12 @@ describe('SeoSuggestChainFactory', () => {
       llmOverride: llmStub,
     });
     const chain = await f.getOrNull();
-    expect(chain).toBeInstanceOf(BaseChain);
+    expect(chain).not.toBeNull();
+    expect(typeof chain!.invoke).toBe('function');
     expect(chain!.name).toBe('seo-suggest');
   });
 
-  it('chain.run() invokes ILLM.invoke with rendered messages and parses output', async () => {
+  it('chain.invoke() invokes ILLM.invoke with rendered messages and parses output', async () => {
     const invokeMock = vi.fn().mockResolvedValue({
       content:
         '[{"ruleId":"title_tag","type":"rewrite","text":"SEO 2026: hướng dẫn chi tiết cho beginner","rationale":"thêm từ khóa + năm"}]',
@@ -66,13 +66,13 @@ describe('SeoSuggestChainFactory', () => {
         },
       ],
     };
-    const out: SuggestOutput = await chain.run(input, { timeoutMs: 8000, traceId: 't1' });
+    const out: SuggestOutput = await chain.invoke(input, { traceId: 't1' });
     expect(out).toHaveLength(1);
     expect(out[0]).toMatchObject({ ruleId: 'title_tag', type: 'rewrite' });
     expect(invokeMock).toHaveBeenCalledOnce();
   });
 
-  it('chain.run() wraps GuardrailError in ChainError when LLM returns invalid JSON', async () => {
+  it('chain.invoke() surfaces GuardrailError when LLM returns invalid JSON', async () => {
     const llmStub = {
       providerId: 'anthropic',
       modelId: 'stub',
@@ -106,10 +106,12 @@ describe('SeoSuggestChainFactory', () => {
     };
     let caught: unknown;
     try {
-      await chain.run(input);
+      await chain.invoke(input);
     } catch (e) {
       caught = e;
     }
-    expect((caught as Error).name).toBe('ChainError');
+    // createBaseChain rethrows AiCoreError subclasses (GuardrailError) as-is;
+    // only unexpected errors get wrapped in ChainError.
+    expect((caught as Error).name).toBe('GuardrailError');
   });
 });

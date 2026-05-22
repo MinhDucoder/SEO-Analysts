@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useCreateAudit } from "@/lib/queries/use-audits";
+import { getFriendlyMessage, isHandledByModal } from "@/lib/api/errors";
 import {
   createAuditFormSchema,
   type CreateAuditFormInput,
@@ -65,7 +66,11 @@ export default function AuditCreatePage() {
         setSuccess({ auditId: res.auditId, url: input.url });
       },
       onError: (err) => {
-        toast.error(err instanceof Error ? err.message : "Server error");
+        // 401/403/429 (quota, feature-not-available, rate limit, account
+        // lock) are already surfaced by a global modal — a toast would just
+        // stack raw "status code 429" noise on top of it.
+        if (isHandledByModal(err)) return;
+        toast.error(getFriendlyMessage(err, t("errorGeneric")));
       },
     });
   };

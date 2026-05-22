@@ -1,6 +1,8 @@
 import * as React from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NextIntlClientProvider } from "next-intl";
+import viMessages from "@/messages/vi.json";
 
 /**
  * Build a fresh QueryClient per test so cache state never leaks between
@@ -45,5 +47,26 @@ export function renderWithProviders(
     ...rest,
   });
 
+  return { ...result, queryClient: client };
+}
+
+/**
+ * Like `renderWithProviders` but also wraps in NextIntlClientProvider (vi
+ * messages) so components calling `useTranslations` render in tests.
+ */
+export function renderWithIntl(
+  ui: React.ReactElement,
+  options: Omit<RenderOptions, "wrapper"> & { queryClient?: QueryClient } = {},
+) {
+  const { queryClient, ...rest } = options;
+  const client = queryClient ?? makeTestQueryClient();
+  const result = render(ui, {
+    wrapper: ({ children }) => (
+      <NextIntlClientProvider locale="vi" messages={viMessages}>
+        <TestProviders queryClient={client}>{children}</TestProviders>
+      </NextIntlClientProvider>
+    ),
+    ...rest,
+  });
   return { ...result, queryClient: client };
 }
