@@ -238,3 +238,92 @@ describe('LiteFetcherService — fetch behavior', () => {
     });
   });
 });
+
+describe('LiteFetcherService — caching', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('on second call within TTL, returns cached body without re-fetching', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    let fetchCalls = 0;
+    const store = new Map<string, string>();
+    const fakeRedis = {
+      client: {
+        get: vi.fn(async (k: string) => store.get(k) ?? null),
+        set: vi.fn(async (k: string, v: string) => {
+          store.set(k, v);
+          return 'OK';
+        }),
+        expire: vi.fn(async () => 1),
+      },
+    };
+
+    const svc = new LiteFetcherService(
+      {
+        dispatcherFactory: () =>
+          ({
+            request: async () => {
+              fetchCalls++;
+              return {
+                statusCode: 200,
+                headers: { 'content-type': 'text/html' },
+                body: {
+                  async *[Symbol.asyncIterator]() {
+                    yield Buffer.from('cached!');
+                  },
+                },
+              };
+            },
+          }) as any,
+      },
+      fakeRedis as any,
+    );
+
+    const a = await svc.get('http://example.com/');
+    const b = await svc.get('http://example.com/');
+    expect(a.body).toBe('cached!');
+    expect(b.body).toBe('cached!');
+    expect(b.cached).toBe(true);
+    expect(fetchCalls).toBe(1);
+    expect(fakeRedis.client.expire).toHaveBeenCalledWith(expect.any(String), 10 * 60);
+  });
+
+  it('preserves binary bodies through the cache (base64 round-trip)', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    const store = new Map<string, string>();
+    const fakeRedis = {
+      client: {
+        get: vi.fn(async (k: string) => store.get(k) ?? null),
+        set: vi.fn(async (k: string, v: string) => {
+          store.set(k, v);
+          return 'OK';
+        }),
+        expire: vi.fn(async () => 1),
+      },
+    };
+    const binary = Buffer.from([0x00, 0x01, 0x89, 0x50, 0x4e, 0x47, 0xff, 0xfe]);
+    const svc = new LiteFetcherService(
+      {
+        dispatcherFactory: () =>
+          ({
+            request: async () => ({
+              statusCode: 200,
+              headers: { 'content-type': 'image/png' },
+              body: {
+                async *[Symbol.asyncIterator]() {
+                  yield binary;
+                },
+              },
+            }),
+          }) as any,
+      },
+      fakeRedis as any,
+    );
+
+    await svc.get('http://example.com/icon.png');
+    const cached = await svc.get('http://example.com/icon.png');
+    expect(cached.cached).toBe(true);
+    expect(Buffer.compare(cached.bodyBuffer, binary)).toBe(0);
+  });
+});

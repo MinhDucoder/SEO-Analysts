@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import dns from 'node:dns/promises';
+import { createHash } from 'node:crypto';
 import { Agent, type Dispatcher } from 'undici';
 import { isAllowedPort, isAllowedProtocol, isBlockedIp } from '../domain/ssrf-policy';
 import { FetchError } from '../domain/fetch-error';
@@ -32,9 +33,71 @@ export class LiteFetcherService {
     userAgent: 'SEOAnalystsBot/1.0 (+https://seoanalysts.io/tools/bot)',
   };
 
-  constructor(private readonly opts: { dispatcherFactory?: () => Dispatcher } = {}) {}
+  private readonly CACHE_TTL = 10 * 60; // 10 minutes
+
+  constructor(
+    private readonly opts: { dispatcherFactory?: () => Dispatcher } = {},
+    private readonly redis?: {
+      client: {
+        get: (k: string) => Promise<string | null>;
+        set: (k: string, v: string) => Promise<unknown>;
+        expire: (k: string, ttl: number) => Promise<unknown>;
+      };
+    },
+  ) {}
 
   async get(rawUrl: string, opts: LiteFetchOptions = {}): Promise<LiteFetchResult> {
+    const cacheKey = this.redis ? this.cacheKey(rawUrl) : null;
+    if (this.redis && cacheKey) {
+      const hit = await this.redis.client.get(cacheKey);
+      if (hit) return this.fromCache(hit);
+    }
+
+    const result = await this.doFetch(rawUrl, opts);
+
+    if (this.redis && cacheKey) {
+      const buf = result.bodyBuffer;
+      const toCache = {
+        url: result.url,
+        status: result.status,
+        headers: result.headers,
+        bodyBase64: buf.toString('base64'),
+        contentType: result.contentType,
+        durationMs: result.durationMs,
+      };
+      await this.redis.client.set(cacheKey, JSON.stringify(toCache));
+      await this.redis.client.expire(cacheKey, this.CACHE_TTL);
+    }
+    return result;
+  }
+
+  private cacheKey(url: string): string {
+    return `tools:fetch:${createHash('sha256').update(url).digest('hex')}`;
+  }
+
+  private fromCache(raw: string): LiteFetchResult {
+    const c = JSON.parse(raw) as {
+      url: string;
+      status: number;
+      headers: Record<string, string>;
+      bodyBase64: string;
+      contentType: string;
+      durationMs: number;
+    };
+    const bodyBuffer = Buffer.from(c.bodyBase64, 'base64');
+    return {
+      url: c.url,
+      status: c.status,
+      headers: c.headers,
+      body: bodyBuffer.toString('utf-8'),
+      bodyBuffer,
+      contentType: c.contentType,
+      durationMs: c.durationMs,
+      cached: true,
+    };
+  }
+
+  private async doFetch(rawUrl: string, opts: LiteFetchOptions = {}): Promise<LiteFetchResult> {
     const timeoutMs = opts.timeoutMs ?? this.DEFAULTS.timeoutMs;
     const maxBytes = opts.maxBytes ?? this.DEFAULTS.maxBytes;
     const maxRedirects = opts.maxRedirects ?? this.DEFAULTS.maxRedirects;
