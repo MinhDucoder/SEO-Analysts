@@ -19,6 +19,7 @@ import {
 import { Select } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/toast';
+import { SettingsShell } from "@/components/settings/settings-shell";
 import { useAuth } from '@/lib/auth';
 import { listApiKeys, createApiKey, revokeApiKey } from '@/lib/api-keys';
 import { ApiError } from '@/lib/api';
@@ -67,7 +68,8 @@ export default function ApiKeysPage() {
   const rows = keysQuery.data ?? [];
 
   return (
-    <main className="space-y-6">
+    <SettingsShell active="api-keys">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">API keys</h1>
@@ -215,6 +217,7 @@ export default function ApiKeysPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+      </div>
+    </SettingsShell>
   );
 }
