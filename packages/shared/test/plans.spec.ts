@@ -4,6 +4,7 @@ import {
   PLAN_PRICES_VND,
   PLAN_DISPLAY_NAMES_VI,
   FeatureFlag,
+  type QuotaDimension,
 } from '../src/plans';
 
 describe('PLAN_FEATURES', () => {
@@ -52,5 +53,24 @@ describe('PLAN_FEATURES', () => {
       pro: 'Chuyên nghiệp',
       business: 'Doanh nghiệp',
     });
+  });
+});
+
+describe('tools_fetches_daily', () => {
+  it('free plan grants 10 daily tool fetches', () => {
+    expect(PLAN_FEATURES.free.tools_fetches_daily).toBe(10);
+  });
+
+  it('pro plan grants unlimited (-1) daily tool fetches', () => {
+    expect(PLAN_FEATURES.pro.tools_fetches_daily).toBe(-1);
+  });
+
+  it('business plan grants unlimited (-1) daily tool fetches', () => {
+    expect(PLAN_FEATURES.business.tools_fetches_daily).toBe(-1);
+  });
+
+  it('tools_fetches_daily is a valid QuotaDimension', () => {
+    const dimension: QuotaDimension = 'tools_fetches_daily';
+    expect(dimension).toBe('tools_fetches_daily');
   });
 });

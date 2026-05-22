@@ -683,5 +683,78 @@
       "errorInvalidToken": "Mã xác thực không hợp lệ hoặc đã hết hạn.",
       "retry": "Thử lại"
     }
+  },
+  "tools": {
+    "common": {
+      "manual": "Thủ công",
+      "fromUrl": "Từ URL",
+      "paste": "Dán JSON-LD",
+      "generate": "Tạo bản xem trước",
+      "analyze": "Phân tích",
+      "working": "Đang xử lý…",
+      "desktop": "Máy tính",
+      "mobile": "Điện thoại",
+      "empty": "Điền vào biểu mẫu để xem bản xem trước.",
+      "urlPlaceholder": "https://example.com/page",
+      "error": "Đã có lỗi xảy ra. Vui lòng thử lại."
+    },
+    "quota": {
+      "remaining": "Còn {left}/{total} lượt hôm nay",
+      "cached": "(đã lưu cache)",
+      "upgrade": "Nâng cấp",
+      "login": "Đăng nhập để dùng thêm"
+    },
+    "index": {
+      "title": "Công cụ SEO",
+      "subtitle": "Tiện ích miễn phí cho chủ website — xem trước trước khi xuất bản.",
+      "google": { "name": "Xem trước Google SERP", "desc": "Xem trang của bạn hiển thị thế nào trên Google." },
+      "social": { "name": "Xem trước thẻ mạng xã hội", "desc": "Thẻ Facebook, Twitter/X và LinkedIn từ thẻ OG." },
+      "schema": { "name": "Kiểm tra Schema.org", "desc": "Soi JSON-LD và kiểm tra các trường bắt buộc." },
+      "sitemap": { "name": "Sitemap + Robots", "desc": "Kiểm tra sitemap.xml và robots.txt." },
+      "favicon": { "name": "Kiểm tra Favicon", "desc": "Phát hiện favicon cho trình duyệt, iOS và Android." }
+    },
+    "googlePreview": {
+      "title": "Xem trước Google SERP",
+      "description": "Xem trang của bạn hiển thị thế nào trong kết quả tìm kiếm Google.",
+      "fieldUrl": "URL",
+      "fieldTitle": "Tiêu đề",
+      "fieldDescription": "Mô tả",
+      "fieldFavicon": "URL favicon (tùy chọn)"
+    },
+    "socialPreview": {
+      "title": "Xem trước thẻ mạng xã hội",
+      "description": "Xem trước thẻ Facebook, X/Twitter và LinkedIn từ thẻ OG và Twitter của bạn.",
+      "fieldOgTitle": "og:title",
+      "fieldOgDescription": "og:description",
+      "fieldOgImage": "URL og:image",
+      "fieldOgSiteName": "og:site_name",
+      "fieldTwitterCard": "twitter:card",
+      "fieldTwitterImage": "URL twitter:image"
+    },
+    "schemaPreview": {
+      "title": "Kiểm tra Schema.org",
+      "description": "Dán JSON-LD hoặc nhập URL để soi dữ liệu có cấu trúc và các trường bắt buộc.",
+      "rawPlaceholder": "Dán JSON-LD của bạn vào đây…",
+      "richResults": "Kiểm tra trên Google Rich Results",
+      "valid": "Hợp lệ",
+      "invalid": "Không hợp lệ"
+    },
+    "sitemapValidator": {
+      "title": "Kiểm tra Sitemap + Robots",
+      "description": "Kiểm tra sitemap.xml và robots.txt của bạn.",
+      "fieldSiteUrl": "URL website",
+      "followIndex": "Theo sitemap index (tải các sitemap con)",
+      "robotsHeading": "robots.txt",
+      "sitemapHeading": "Sitemap"
+    },
+    "faviconChecker": {
+      "title": "Kiểm tra Favicon",
+      "description": "Phát hiện favicon cho trình duyệt, iOS và Android.",
+      "fieldUrl": "URL website",
+      "coverage": "Mức độ bao phủ"
+    },
+    "bot": {
+      "title": "Về SEOAnalystsBot"
+    }
   }
 }

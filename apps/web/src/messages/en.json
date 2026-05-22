@@ -683,5 +683,78 @@
       "errorInvalidToken": "The authentication token is invalid or has expired.",
       "retry": "Try again"
     }
+  },
+  "tools": {
+    "common": {
+      "manual": "Manual",
+      "fromUrl": "From URL",
+      "paste": "Paste JSON-LD",
+      "generate": "Generate preview",
+      "analyze": "Analyze",
+      "working": "Working…",
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "empty": "Fill in the form to see the preview.",
+      "urlPlaceholder": "https://example.com/page",
+      "error": "Something went wrong. Please try again."
+    },
+    "quota": {
+      "remaining": "{left}/{total} left today",
+      "cached": "(cached)",
+      "upgrade": "Upgrade",
+      "login": "Sign in for more"
+    },
+    "index": {
+      "title": "SEO Tools",
+      "subtitle": "Free utilities for site owners — preview before you publish.",
+      "google": { "name": "Google SERP Preview", "desc": "Preview how your page appears in Google search." },
+      "social": { "name": "Social Card Preview", "desc": "Facebook, Twitter/X and LinkedIn cards from OG meta." },
+      "schema": { "name": "Schema.org Validator", "desc": "Inspect JSON-LD and check required fields." },
+      "sitemap": { "name": "Sitemap + Robots", "desc": "Validate sitemap.xml and robots.txt." },
+      "favicon": { "name": "Favicon Checker", "desc": "Detect favicons across browser, iOS and Android paths." }
+    },
+    "googlePreview": {
+      "title": "Google SERP Preview",
+      "description": "Preview how your page renders in Google search results.",
+      "fieldUrl": "URL",
+      "fieldTitle": "Title",
+      "fieldDescription": "Description",
+      "fieldFavicon": "Favicon URL (optional)"
+    },
+    "socialPreview": {
+      "title": "Social Card Preview",
+      "description": "Preview Facebook, X/Twitter and LinkedIn cards from your OG and Twitter meta tags.",
+      "fieldOgTitle": "og:title",
+      "fieldOgDescription": "og:description",
+      "fieldOgImage": "og:image URL",
+      "fieldOgSiteName": "og:site_name",
+      "fieldTwitterCard": "twitter:card",
+      "fieldTwitterImage": "twitter:image URL"
+    },
+    "schemaPreview": {
+      "title": "Schema.org Validator",
+      "description": "Paste JSON-LD or fetch a URL to inspect structured data and required fields.",
+      "rawPlaceholder": "Paste your JSON-LD here…",
+      "richResults": "Test in Google Rich Results",
+      "valid": "Valid",
+      "invalid": "Invalid"
+    },
+    "sitemapValidator": {
+      "title": "Sitemap + Robots Validator",
+      "description": "Validate your sitemap.xml and robots.txt.",
+      "fieldSiteUrl": "Site URL",
+      "followIndex": "Follow sitemap index (fetch nested sitemaps)",
+      "robotsHeading": "robots.txt",
+      "sitemapHeading": "Sitemap"
+    },
+    "faviconChecker": {
+      "title": "Favicon Checker",
+      "description": "Detect favicons across browser, iOS and Android paths.",
+      "fieldUrl": "Site URL",
+      "coverage": "Coverage"
+    },
+    "bot": {
+      "title": "About SEOAnalystsBot"
+    }
   }
 }

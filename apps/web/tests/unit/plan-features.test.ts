@@ -10,6 +10,7 @@ const free: PlanDefinition = {
   api_keys_max: 0,
   api_calls_daily: 0,
   ai_calls_monthly: 0,
+  tools_fetches_daily: 10,
   history_retention_days: 7,
   features: [],
 };
