@@ -36,12 +36,24 @@ describe('LiteFetcherService — SSRF gates', () => {
     });
   });
 
-  it('accepts implicit port (80, 443)', async () => {
+  it('accepts implicit port (80) — reaches fetch successfully', async () => {
     vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
-    // We don't care about response here — only that the port gate didn't throw early.
-    await expect(svc.get('http://example.com/')).rejects.not.toMatchObject({
-      code: 'INVALID_PORT',
+    const svc2 = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 200,
+            headers: { 'content-type': 'text/html' },
+            body: {
+              async *[Symbol.asyncIterator]() {
+                yield Buffer.from('ok');
+              },
+            },
+          }),
+        }) as any,
     });
+    const res = await svc2.get('http://example.com/');
+    expect(res.status).toBe(200);
   });
 
   it('rejects when DNS resolves to private IPv4', async () => {
@@ -71,6 +83,158 @@ describe('LiteFetcherService — SSRF gates', () => {
     vi.mocked(dns.lookup).mockRejectedValue(new Error('ENOTFOUND'));
     await expect(svc.get('http://does-not-exist.example.com/')).rejects.toMatchObject({
       code: 'DNS_FAIL',
+    });
+  });
+});
+
+describe('LiteFetcherService — fetch behavior', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('happy path — fetches public URL and returns body string', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 200,
+            headers: { 'content-type': 'text/html; charset=utf-8' },
+            body: {
+              async *[Symbol.asyncIterator]() {
+                yield Buffer.from('hello');
+              },
+            },
+          }),
+        }) as any,
+    });
+
+    const res = await svc.get('http://example.com/');
+    expect(res.status).toBe(200);
+    expect(res.body).toBe('hello');
+    expect(res.contentType).toContain('text/html');
+  });
+
+  it('aborts when response exceeds maxBytes', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    const big = Buffer.alloc(6 * 1024 * 1024, 0x41);
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 200,
+            headers: { 'content-type': 'text/html' },
+            body: {
+              async *[Symbol.asyncIterator]() {
+                yield big;
+              },
+            },
+          }),
+        }) as any,
+    });
+    await expect(svc.get('http://example.com/', { maxBytes: 5 * 1024 * 1024 })).rejects.toMatchObject(
+      { code: 'TOO_LARGE' },
+    );
+  });
+
+  it('rejects on non-2xx', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 500,
+            headers: {},
+            body: {
+              async *[Symbol.asyncIterator]() {
+                yield Buffer.from('');
+              },
+            },
+          }),
+        }) as any,
+    });
+    await expect(svc.get('http://example.com/')).rejects.toMatchObject({ code: 'BAD_STATUS' });
+  });
+
+  it('follows redirect within limit and re-checks IP', async () => {
+    vi.mocked(dns.lookup)
+      .mockResolvedValueOnce([{ address: '8.8.8.8', family: 4 }] as any) // initial
+      .mockResolvedValueOnce([{ address: '8.8.4.4', family: 4 }] as any); // after redirect
+
+    let call = 0;
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => {
+            call++;
+            if (call === 1) {
+              return {
+                statusCode: 302,
+                headers: { location: 'http://example.org/' },
+                body: {
+                  async *[Symbol.asyncIterator]() {
+                    yield Buffer.from('');
+                  },
+                },
+              };
+            }
+            return {
+              statusCode: 200,
+              headers: { 'content-type': 'text/html' },
+              body: {
+                async *[Symbol.asyncIterator]() {
+                  yield Buffer.from('final');
+                },
+              },
+            };
+          },
+        }) as any,
+    });
+    const res = await svc.get('http://example.com/');
+    expect(res.body).toBe('final');
+    expect(res.url).toBe('http://example.org/');
+  });
+
+  it('rejects redirect to private IP', async () => {
+    vi.mocked(dns.lookup)
+      .mockResolvedValueOnce([{ address: '8.8.8.8', family: 4 }] as any) // initial public
+      .mockResolvedValueOnce([{ address: '10.0.0.5', family: 4 }] as any); // redirect to private
+
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 302,
+            headers: { location: 'http://internal.example.com/' },
+            body: {
+              async *[Symbol.asyncIterator]() {
+                yield Buffer.from('');
+              },
+            },
+          }),
+        }) as any,
+    });
+    await expect(svc.get('http://example.com/')).rejects.toMatchObject({ code: 'SSRF_BLOCKED' });
+  });
+
+  it('rejects after exceeding maxRedirects', async () => {
+    vi.mocked(dns.lookup).mockResolvedValue([{ address: '8.8.8.8', family: 4 }] as any);
+    const svc = new LiteFetcherService({
+      dispatcherFactory: () =>
+        ({
+          request: async () => ({
+            statusCode: 302,
+            headers: { location: 'http://a.example.com/' },
+            body: {
+              async *[Symbol.asyncIterator]() {
+                yield Buffer.from('');
+              },
+            },
+          }),
+        }) as any,
+    });
+    await expect(svc.get('http://example.com/', { maxRedirects: 2 })).rejects.toMatchObject({
+      code: 'TOO_MANY_REDIRECTS',
     });
   });
 });
