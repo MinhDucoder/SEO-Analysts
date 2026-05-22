@@ -53,6 +53,14 @@ export class PaymentIntentService {
     return this.prisma.paymentIntent.findUnique({ where: { refCode } });
   }
 
+  /** All pending intents still within their TTL — used by the dev auto-confirm cron. */
+  async findActivePending(): Promise<{ refCode: string; amountVnd: number }[]> {
+    return this.prisma.paymentIntent.findMany({
+      where: { status: 'pending', expiresAt: { gt: new Date() } },
+      select: { refCode: true, amountVnd: true },
+    });
+  }
+
   async markPaid(id: string, cassoTxnId: string, subscriptionId: string): Promise<void> {
     await this.prisma.paymentIntent.update({
       where: { id },
