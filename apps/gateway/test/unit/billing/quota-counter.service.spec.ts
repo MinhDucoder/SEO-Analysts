@@ -71,4 +71,44 @@ describe('QuotaCounterService', () => {
     expect(r.remaining).toBe(5);
     expect(r.allowed).toBe(true);
   });
+
+  describe('daily dimension (*_daily)', () => {
+    it('uses YYYY-MM-DD key for *_daily dimensions', async () => {
+      await svc.consume('u1', 'tools_fetches_daily', 10, 1);
+      const calls = redisMock.client.incrby.mock.calls;
+      expect(calls[0][0]).toMatch(/^quota:u1:tools_fetches_daily:\d{4}-\d{2}-\d{2}$/);
+    });
+
+    it('sets TTL to 26h on first consume for daily dimension', async () => {
+      await svc.consume('u1', 'tools_fetches_daily', 10, 1);
+      expect(redisMock.client.expire).toHaveBeenCalledWith(
+        expect.stringMatching(/^quota:u1:tools_fetches_daily:\d{4}-\d{2}-\d{2}$/),
+        26 * 3600,
+      );
+    });
+
+    it('still uses YYYY-MM key + 32d TTL for non-daily dimensions', async () => {
+      await svc.consume('u1', 'audits_monthly', 100, 1);
+      const calls = redisMock.client.incrby.mock.calls;
+      expect(calls[0][0]).toMatch(/^quota:u1:audits_monthly:\d{4}-\d{2}$/);
+      expect(redisMock.client.expire).toHaveBeenCalledWith(
+        expect.stringMatching(/^quota:u1:audits_monthly:\d{4}-\d{2}$/),
+        32 * 86400,
+      );
+    });
+
+    it('resetAt for daily dimension is start of next UTC day', async () => {
+      const res = await svc.consume('u1', 'tools_fetches_daily', 10, 1);
+      const now = new Date();
+      const expectedReset = Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1,
+        0,
+        0,
+        0,
+      );
+      expect(res.resetAt.getTime()).toBe(expectedReset);
+    });
+  });
 });
