@@ -20,18 +20,16 @@ import { Select } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/toast';
 import { SettingsShell } from "@/components/settings/settings-shell";
-import { useAuth } from '@/lib/auth';
 import { listApiKeys, createApiKey, revokeApiKey } from '@/lib/api-keys';
-import { ApiError } from '@/lib/api';
+import { getFriendlyMessage } from '@/lib/api/errors';
 import type { ApiKeyDto, ApiKeyEnvironment, CreateApiKeyResponse } from '@/types/api';
 
 export default function ApiKeysPage() {
-  const { client } = useAuth();
   const qc = useQueryClient();
 
   const keysQuery = useQuery<ApiKeyDto[]>({
     queryKey: ['api-keys'],
-    queryFn: () => listApiKeys(client),
+    queryFn: () => listApiKeys(),
   });
 
   const [showCreate, setShowCreate] = React.useState(false);
@@ -44,25 +42,23 @@ export default function ApiKeysPage() {
     Error,
     { name: string; environment: ApiKeyEnvironment }
   >({
-    mutationFn: (input) => createApiKey(client, input),
+    mutationFn: (input) => createApiKey(input),
     onSuccess: (res) => {
       setPlaintext(res.plaintext);
       setNewKeyName('');
       setShowCreate(false);
       void qc.invalidateQueries({ queryKey: ['api-keys'] });
     },
-    onError: (err) =>
-      toast.error(err instanceof ApiError ? err.message : 'Create failed'),
+    onError: (err) => toast.error(getFriendlyMessage(err, 'Create failed')),
   });
 
   const revokeMut = useMutation<void, Error, string>({
-    mutationFn: (id) => revokeApiKey(client, id),
+    mutationFn: (id) => revokeApiKey(id),
     onSuccess: () => {
       toast.success('Key revoked');
       void qc.invalidateQueries({ queryKey: ['api-keys'] });
     },
-    onError: (err) =>
-      toast.error(err instanceof ApiError ? err.message : 'Revoke failed'),
+    onError: (err) => toast.error(getFriendlyMessage(err, 'Revoke failed')),
   });
 
   const rows = keysQuery.data ?? [];

@@ -1,22 +1,21 @@
 /**
- * @file Typed wrappers around ApiClient for /users/me/api-keys.
- * Thin layer — each function is 3-4 lines — but centralizing the URL
- * path + return type avoids drift between consumers.
+ * @file Typed wrappers around the gateway `/users/me/api-keys` endpoints.
+ * Thin layer over the shared `api` ky client (current auth stack) — each
+ * function centralizes the URL + return type so consumers never drift.
  */
-import type { ApiClient } from './api';
-import type { ApiKeyDto, CreateApiKeyInput, CreateApiKeyResponse } from '@/types/api';
+import { api } from "@/lib/api/client";
+import type { ApiKeyDto, CreateApiKeyInput, CreateApiKeyResponse } from "@/types/api";
 
-export async function listApiKeys(client: ApiClient): Promise<ApiKeyDto[]> {
-  return client.get<ApiKeyDto[]>('/users/me/api-keys');
+export async function listApiKeys(): Promise<ApiKeyDto[]> {
+  return api.get("users/me/api-keys").json<ApiKeyDto[]>();
 }
 
 export async function createApiKey(
-  client: ApiClient,
   input: CreateApiKeyInput,
 ): Promise<CreateApiKeyResponse> {
-  return client.post<CreateApiKeyResponse>('/users/me/api-keys', input);
+  return api.post("users/me/api-keys", { json: input }).json<CreateApiKeyResponse>();
 }
 
-export async function revokeApiKey(client: ApiClient, id: string): Promise<void> {
-  await client.delete<void>(`/users/me/api-keys/${id}`);
+export async function revokeApiKey(id: string): Promise<void> {
+  await api.delete(`users/me/api-keys/${id}`);
 }
