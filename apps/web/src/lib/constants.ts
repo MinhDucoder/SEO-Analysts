@@ -6,6 +6,8 @@
 export const APP_NAME = "SEO Analyst";
 export const APP_TAGLINE = "Phân tích SEO cho website Việt";
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001";
+/** Support inbox surfaced in legal/policy pages and error CTAs. */
+export const SUPPORT_EMAIL = "support@seoanalyst.vn";
 
 export const ROUTES = {
   home: "/",
@@ -32,6 +34,8 @@ export const ROUTES = {
   // Settings (slug 8)
   settingsProfile: "/settings/profile",
   settingsPassword: "/settings/password",
+  settingsApiKeys: "/settings/api-keys",
+  settingsBilling: "/settings/billing",
 
   // Admin (slug 7)
   adminUsers: "/admin/users",

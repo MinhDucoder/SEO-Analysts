@@ -479,7 +479,9 @@
     "subtitle": "Quản lý hồ sơ và bảo mật tài khoản.",
     "tabs": {
       "profile": "Hồ sơ",
-      "password": "Mật khẩu"
+      "password": "Mật khẩu",
+      "apiKeys": "API keys",
+      "billing": "Gói & Thanh toán"
     },
     "profile": {
       "title": "Hồ sơ",
@@ -510,6 +512,21 @@
       "submit": "Cập nhật mật khẩu",
       "submitting": "Đang cập nhật…",
       "success": "Đã cập nhật mật khẩu — vui lòng đăng nhập lại"
+    },
+    "billing": {
+      "currentTitle": "Gói hiện tại",
+      "planLabel": "Gói",
+      "statusLabel": "Trạng thái",
+      "expiresLabel": "Hết hạn",
+      "upgrade": "Nâng cấp / Gia hạn",
+      "adminGranted": "Được cấp bởi admin (không qua thanh toán)",
+      "paidBanner": "Thanh toán thành công! 🎉",
+      "historyTitle": "Lịch sử thanh toán",
+      "historyEmpty": "Chưa có giao dịch.",
+      "colTime": "Thời gian",
+      "colPlan": "Gói",
+      "colAmount": "Số tiền",
+      "colStatus": "Trạng thái"
     }
   },
   "sharedReport": {
@@ -582,6 +599,16 @@
   "policy": {
     "title": "Chính sách",
     "subtitle": "Điều khoản sử dụng, bảo mật và thanh toán của SEO Analyst.",
+    "eyebrow": "Trung tâm pháp lý",
+    "lastUpdated": "Cập nhật lần cuối",
+    "readTime": "{minutes} phút đọc",
+    "tocTitle": "Nội dung trang",
+    "contactTitle": "Vẫn còn thắc mắc?",
+    "contactBody": "Nếu bạn có câu hỏi về điều khoản, quyền riêng tư hay thanh toán, đội ngũ hỗ trợ luôn sẵn sàng giúp bạn.",
+    "contactCta": "Liên hệ hỗ trợ",
+    "contactSubject": "Yêu cầu hỗ trợ — SEO Analyst",
+    "printPage": "In trang",
+    "backToTop": "Lên đầu trang",
     "terms": "Điều khoản sử dụng",
     "privacy": "Chính sách bảo mật",
     "payment": "Chính sách thanh toán & hoàn tiền"

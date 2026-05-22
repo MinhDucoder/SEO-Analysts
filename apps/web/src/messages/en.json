@@ -479,7 +479,9 @@
     "subtitle": "Manage your profile and security.",
     "tabs": {
       "profile": "Profile",
-      "password": "Password"
+      "password": "Password",
+      "apiKeys": "API keys",
+      "billing": "Plan & Billing"
     },
     "profile": {
       "title": "Profile",
@@ -510,6 +512,21 @@
       "submit": "Update password",
       "submitting": "Updating…",
       "success": "Password updated — please sign in again"
+    },
+    "billing": {
+      "currentTitle": "Current plan",
+      "planLabel": "Plan",
+      "statusLabel": "Status",
+      "expiresLabel": "Expires",
+      "upgrade": "Upgrade / Renew",
+      "adminGranted": "Granted by admin (no payment)",
+      "paidBanner": "Payment successful! 🎉",
+      "historyTitle": "Payment history",
+      "historyEmpty": "No transactions yet.",
+      "colTime": "Time",
+      "colPlan": "Plan",
+      "colAmount": "Amount",
+      "colStatus": "Status"
     }
   },
   "sharedReport": {
@@ -582,6 +599,16 @@
   "policy": {
     "title": "Policy",
     "subtitle": "Terms of use, privacy and payment policy for SEO Analyst.",
+    "eyebrow": "Legal center",
+    "lastUpdated": "Last updated",
+    "readTime": "{minutes} min read",
+    "tocTitle": "On this page",
+    "contactTitle": "Still have questions?",
+    "contactBody": "If you have any questions about our terms, privacy or payments, our support team is happy to help.",
+    "contactCta": "Contact support",
+    "contactSubject": "Support request — SEO Analyst",
+    "printPage": "Print page",
+    "backToTop": "Back to top",
     "terms": "Terms of use",
     "privacy": "Privacy policy",
     "payment": "Payment & refund policy"
