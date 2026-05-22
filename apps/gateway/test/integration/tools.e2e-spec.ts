@@ -11,6 +11,8 @@ import { FaviconCheckerController } from '../../src/tools/controllers/favicon-ch
 import { FaviconCheckerService } from '../../src/tools/services/favicon-checker.service';
 import { SchemaPreviewController } from '../../src/tools/controllers/schema-preview.controller';
 import { SchemaPreviewService } from '../../src/tools/services/schema-preview.service';
+import { SitemapValidatorController } from '../../src/tools/controllers/sitemap-validator.controller';
+import { SitemapValidatorService } from '../../src/tools/services/sitemap-validator.service';
 import { LiteFetcherService } from '../../src/tools/services/lite-fetcher.service';
 import { ToolsQuotaService } from '../../src/tools/services/tools-quota.service';
 
@@ -216,6 +218,58 @@ describe('Tools — Schema preview (E2E)', () => {
     const r = await request(app.getHttpServer())
       .post('/tools/schema-preview')
       .send({ mode: 'banana' });
+    expect(r.status).toBe(400);
+  });
+});
+
+describe('Tools — Sitemap validator (E2E)', () => {
+  let app: INestApplication;
+  const fetcher = { get: vi.fn() };
+  const quota = { checkAndIncrement: vi.fn() };
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [SitemapValidatorController],
+      providers: [
+        SitemapValidatorService,
+        { provide: LiteFetcherService, useValue: fetcher },
+        { provide: ToolsQuotaService, useValue: quota },
+      ],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('charges quota and returns robots + sitemap data (200)', async () => {
+    quota.checkAndIncrement.mockResolvedValue({ used: 1, remaining: 9 });
+    fetcher.get.mockImplementation(async (url: string) => {
+      if (url.endsWith('/robots.txt')) {
+        return { url, body: 'Sitemap: https://example.com/sitemap.xml', status: 200, headers: {} };
+      }
+      return {
+        url,
+        body: '<urlset><url><loc>https://example.com/a</loc></url></urlset>',
+        status: 200,
+        headers: {},
+      };
+    });
+    const r = await request(app.getHttpServer())
+      .post('/tools/sitemap-validator')
+      .send({ siteUrl: 'https://example.com' });
+    expect(r.status).toBe(200);
+    expect(r.body.data.sitemap.type).toBe('urlset');
+    expect(quota.checkAndIncrement).toHaveBeenCalled();
+  });
+
+  it('rejects invalid DTO (400)', async () => {
+    const r = await request(app.getHttpServer())
+      .post('/tools/sitemap-validator')
+      .send({ siteUrl: 'not-a-url' });
     expect(r.status).toBe(400);
   });
 });

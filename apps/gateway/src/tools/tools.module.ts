@@ -13,6 +13,8 @@ import { FaviconCheckerService } from './services/favicon-checker.service';
 import { FaviconCheckerController } from './controllers/favicon-checker.controller';
 import { SchemaPreviewService } from './services/schema-preview.service';
 import { SchemaPreviewController } from './controllers/schema-preview.controller';
+import { SitemapValidatorService } from './services/sitemap-validator.service';
+import { SitemapValidatorController } from './controllers/sitemap-validator.controller';
 
 @Module({
   imports: [ConfigModule, RedisModule, BillingModule],
@@ -21,6 +23,7 @@ import { SchemaPreviewController } from './controllers/schema-preview.controller
     SocialPreviewController,
     FaviconCheckerController,
     SchemaPreviewController,
+    SitemapValidatorController,
   ],
   providers: [
     // Factory wiring so LiteFetcher gets the real Redis client (10-min cache).
@@ -34,6 +37,7 @@ import { SchemaPreviewController } from './controllers/schema-preview.controller
     SocialPreviewService,
     FaviconCheckerService,
     SchemaPreviewService,
+    SitemapValidatorService,
   ],
   exports: [LiteFetcherService, ToolsQuotaService],
 })
