@@ -19,6 +19,7 @@ export type QuotaDimension =
   | 'api_keys_max'
   | 'api_calls_daily'
   | 'ai_calls_monthly'
+  | 'tools_fetches_daily'
   | 'history_retention_days';
 
 export interface PlanDefinition {
@@ -29,6 +30,7 @@ export interface PlanDefinition {
   api_keys_max: number;
   api_calls_daily: number;
   ai_calls_monthly: number;
+  tools_fetches_daily: number; // -1 = unlimited (soft cap 1000)
   history_retention_days: number; // -1 = unlimited
   features: FeatureFlag[];
 }
@@ -52,6 +54,7 @@ export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
     api_keys_max: 0,
     api_calls_daily: 0,
     ai_calls_monthly: 0,
+    tools_fetches_daily: 10,
     history_retention_days: 7,
     features: [],
   },
@@ -63,6 +66,7 @@ export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
     api_keys_max: 1,
     api_calls_daily: 1000,
     ai_calls_monthly: 100,
+    tools_fetches_daily: -1,
     history_retention_days: 90,
     features: PRO_FEATURES,
   },
@@ -74,6 +78,7 @@ export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
     api_keys_max: 5,
     api_calls_daily: 20_000,
     ai_calls_monthly: 1000,
+    tools_fetches_daily: -1,
     history_retention_days: -1,
     features: [...PRO_FEATURES, FeatureFlag.PRIORITY_QUEUE],
   },

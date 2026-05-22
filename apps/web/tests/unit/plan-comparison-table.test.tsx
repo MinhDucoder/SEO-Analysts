@@ -9,7 +9,7 @@ const mk = (code: "free" | "pro" | "business", over: Partial<PlanResponse["featu
   features: {
     audits_monthly: 10, site_audit_max_pages: 0, scheduled_audits_max: 0,
     scheduled_audit_min_interval_min: 0, api_keys_max: 0, api_calls_daily: 0,
-    ai_calls_monthly: 0, history_retention_days: 7, features: [], ...over,
+    ai_calls_monthly: 0, tools_fetches_daily: 10, history_retention_days: 7, features: [], ...over,
   },
 });
 
