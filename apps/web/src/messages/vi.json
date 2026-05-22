@@ -19,7 +19,10 @@
     "refresh": "Tải lại",
     "errorTitle": "Đã có lỗi xảy ra",
     "errorDescription": "Vui lòng thử lại sau ít phút.",
-    "reportIssue": "Báo lỗi"
+    "reportIssue": "Báo lỗi",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "enterApp": "Vào ứng dụng"
   },
   "nav": {
     "dashboard": "Tổng quan",
