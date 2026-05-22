@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
+import enMessages from "@/messages/en.json";
 
 // next-intl's createNavigation pulls in next/navigation, which jsdom can't
 // resolve under vitest — stub the locale-aware Link with a plain anchor.
@@ -16,10 +17,10 @@ vi.mock("@/i18n/navigation", () => ({
 import { ToolShell } from "@/components/tools/tool-shell";
 import { QuotaBanner } from "@/components/tools/quota-banner";
 
-// QuotaBanner uses the locale-aware <Link>, which needs an intl provider.
+// QuotaBanner uses next-intl + the locale-aware <Link>, so provide real messages.
 function withIntl(ui: ReactNode) {
   return (
-    <NextIntlClientProvider locale="en" messages={{}}>
+    <NextIntlClientProvider locale="en" messages={enMessages}>
       {ui}
     </NextIntlClientProvider>
   );
@@ -59,8 +60,8 @@ describe("QuotaBanner", () => {
         <QuotaBanner meta={{ quotaUsed: 1, quotaLeft: 2, cached: false }} authenticated={false} />,
       ),
     );
-    expect(screen.getByText(/Còn 2\/3 lượt/)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Đăng nhập/ })).toBeInTheDocument();
+    expect(screen.getByText(/2\/3 left today/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Sign in for more/ })).toBeInTheDocument();
   });
 
   it("shows an upgrade CTA when authenticated", () => {
@@ -70,6 +71,6 @@ describe("QuotaBanner", () => {
       ),
     );
     expect(screen.getByText(/cached/)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Nâng cấp/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Upgrade/ })).toBeInTheDocument();
   });
 });

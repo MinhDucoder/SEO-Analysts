@@ -698,6 +698,12 @@
       "urlPlaceholder": "https://example.com/page",
       "error": "Đã có lỗi xảy ra. Vui lòng thử lại."
     },
+    "quota": {
+      "remaining": "Còn {left}/{total} lượt hôm nay",
+      "cached": "(đã lưu cache)",
+      "upgrade": "Nâng cấp",
+      "login": "Đăng nhập để dùng thêm"
+    },
     "index": {
       "title": "Công cụ SEO",
       "subtitle": "Tiện ích miễn phí cho chủ website — xem trước trước khi xuất bản.",

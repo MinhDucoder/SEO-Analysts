@@ -698,6 +698,12 @@
       "urlPlaceholder": "https://example.com/page",
       "error": "Something went wrong. Please try again."
     },
+    "quota": {
+      "remaining": "{left}/{total} left today",
+      "cached": "(cached)",
+      "upgrade": "Upgrade",
+      "login": "Sign in for more"
+    },
     "index": {
       "title": "SEO Tools",
       "subtitle": "Free utilities for site owners — preview before you publish.",
