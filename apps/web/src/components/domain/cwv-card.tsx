@@ -16,6 +16,11 @@ export type CwvMetricKey = keyof typeof CWV_THRESHOLDS;
 
 function classifyCwv(metric: CwvMetricKey, value: number | null): "good" | "needs" | "poor" | "muted" {
   if (value === null || Number.isNaN(value)) return "muted";
+  // A real timing metric can never be exactly 0ms — when the pipeline fails to
+  // measure CWV (e.g. Lighthouse couldn't launch Chrome) it falls back to all
+  // zeros. Treat a 0 timing value as "no data" so it doesn't render as "Good".
+  // CLS is exempt: 0 is a legitimate perfect score.
+  if (value === 0 && metric !== "cls") return "muted";
   const t = CWV_THRESHOLDS[metric];
   if (value <= t.good) return "good";
   if (value <= t.poor) return "needs";
@@ -39,9 +44,22 @@ const LABELS: Record<CwvMetricKey, string> = {
 
 function format(metric: CwvMetricKey, value: number | null): string {
   if (value === null || Number.isNaN(value)) return "—";
+  if (value === 0 && metric !== "cls") return "—";
   if (metric === "cls") return value.toFixed(3);
   if (value >= 1000) return `${(value / 1000).toFixed(2)}s`;
   return `${Math.round(value)}ms`;
+}
+
+/**
+ * True when at least one timing metric carries a real value. A failed/absent
+ * Lighthouse run comes through as all-zero, so without this the card would show
+ * a misleading "0.000 Good" for CLS even though nothing was measured.
+ */
+function hasRealMeasurement(metrics: Partial<Record<CwvMetricKey, number | null>>): boolean {
+  return (["lcp", "inp", "fcp", "ttfb"] as const).some((k) => {
+    const v = metrics[k];
+    return v != null && !Number.isNaN(v) && v > 0;
+  });
 }
 
 export interface CwvCardProps {
@@ -56,6 +74,7 @@ export interface CwvCardProps {
  * each colored by Google threshold (good/needs-improvement/poor).
  */
 export function CwvCard({ metrics, show = ["lcp", "cls", "inp"], className }: CwvCardProps) {
+  const measured = hasRealMeasurement(metrics);
   return (
     <div
       className={cn(
@@ -67,7 +86,7 @@ export function CwvCard({ metrics, show = ["lcp", "cls", "inp"], className }: Cw
       <div className="flex flex-wrap gap-6">
         {show.map((key) => {
           const v = metrics[key] ?? null;
-          const variant = classifyCwv(key, v);
+          const variant = measured ? classifyCwv(key, v) : "muted";
           const color = COLOR_VAR[variant];
           return (
             <div key={key} className="flex flex-col gap-1">
@@ -78,7 +97,7 @@ export function CwvCard({ metrics, show = ["lcp", "cls", "inp"], className }: Cw
                 className="font-mono text-2xl font-semibold tabular-nums"
                 style={{ color: variant === "muted" ? "rgb(var(--color-fg))" : color }}
               >
-                {format(key, v)}
+                {measured ? format(key, v) : "—"}
               </span>
               <span
                 className="font-ui text-xs"
