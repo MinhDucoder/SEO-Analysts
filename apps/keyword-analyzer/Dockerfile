@@ -37,6 +37,9 @@ WORKDIR /app
 
 COPY --from=builder --chown=nestjs:nodejs /app/apps/keyword-analyzer/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/keyword-analyzer/package.json ./
+# npm hoists workspace deps to the ROOT node_modules, so that must be copied
+# first; the app-local node_modules (non-hoisted packages only) overlays on top.
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/keyword-analyzer/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/packages/proto ./packages/proto
 COPY --from=builder --chown=nestjs:nodejs /app/packages/shared ./packages/shared

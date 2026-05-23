@@ -45,8 +45,10 @@ WORKDIR /app
 COPY --from=builder --chown=nestjs:nodejs /app/apps/report/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/report/package.json ./
 COPY --from=builder --chown=nestjs:nodejs /app/apps/report/prisma ./prisma
+# npm hoists workspace deps to the ROOT node_modules, so that must be copied
+# first; the app-local node_modules (non-hoisted packages only) overlays on top.
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/report/node_modules ./node_modules
-COPY --from=builder --chown=nestjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nestjs:nodejs /app/packages/proto ./packages/proto
 COPY --from=builder --chown=nestjs:nodejs /app/packages/shared ./packages/shared
 COPY --from=builder --chown=nestjs:nodejs /app/packages/seo-ai-core ./packages/seo-ai-core
