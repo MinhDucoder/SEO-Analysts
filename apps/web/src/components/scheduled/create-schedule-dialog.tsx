@@ -4,7 +4,7 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Globe, Loader2, Network } from "lucide-react";
+import { ChevronRight, Globe, Loader2, Network } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +23,11 @@ import {
   type CreateScheduledAuditFormInput,
 } from "@/lib/audits/schemas";
 import type { CreateScheduledAuditDto } from "@/lib/api/scheduled";
+import {
+  SCHEDULE_PRESETS,
+  DEFAULT_SCHEDULE_CRON,
+  findSchedulePreset,
+} from "@/lib/audits/cron-presets";
 import { cn } from "@/lib/utils/cn";
 
 export interface CreateScheduleDialogProps {
@@ -40,7 +45,7 @@ export function CreateScheduleDialog({
     resolver: zodResolver(createScheduledAuditFormSchema),
     defaultValues: {
       url: "",
-      cron: "0 9 * * MON",
+      cron: DEFAULT_SCHEDULE_CRON,
       mode: "single",
       maxUrls: 500,
       targetKeyword: "",
@@ -55,12 +60,20 @@ export function CreateScheduleDialog({
     formState: { errors },
   } = form;
   const mode = watch("mode");
+  const cron = watch("cron");
+  const activePreset = findSchedulePreset(cron);
   const createMutation = useCreateScheduledAudit();
+
+  // The advanced cron field stays hidden while a preset chip is selected.
+  const [showAdvanced, setShowAdvanced] = React.useState(false);
 
   // Reset the form whenever the dialog opens so stale state doesn't leak
   // back in after a previous successful submit.
   React.useEffect(() => {
-    if (open) reset();
+    if (open) {
+      reset();
+      setShowAdvanced(false);
+    }
   }, [open, reset]);
 
   const onSubmit = (input: CreateScheduledAuditFormInput) => {
@@ -108,33 +121,83 @@ export function CreateScheduleDialog({
             )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="scheduleCron">{t("cronLabel")}</Label>
-            <Input
-              id="scheduleCron"
-              type="text"
-              placeholder={t("cronPlaceholder")}
-              className="font-mono"
-              aria-invalid={errors.cron ? "true" : "false"}
-              {...register("cron")}
-            />
-            <p className={cn("font-ui text-xs", errors.cron ? "text-class-poor" : "text-fg-muted")}>
-              {errors.cron?.message ?? t("cronHint")}
+          <fieldset className="flex flex-col gap-2">
+            <legend className="text-sm font-medium leading-none text-fg">
+              {t("frequencyLabel")}
+            </legend>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {SCHEDULE_PRESETS.map((preset) => (
+                <Chip
+                  key={preset.id}
+                  checked={activePreset?.id === preset.id}
+                  onSelect={() =>
+                    setValue("cron", preset.cron, { shouldValidate: true })
+                  }
+                  label={t(`presets.${preset.id}`)}
+                />
+              ))}
+            </div>
+            <p className="font-ui text-xs text-fg-muted">
+              {activePreset
+                ? t("frequencyHint", {
+                    schedule: t(`presetDesc.${activePreset.id}`),
+                  })
+                : t("frequencyCustom")}
             </p>
-          </div>
+
+            <button
+              type="button"
+              onClick={() => setShowAdvanced((v) => !v)}
+              aria-expanded={showAdvanced}
+              className="flex w-fit items-center gap-1 font-ui text-xs font-medium text-fg-muted transition-colors hover:text-fg"
+            >
+              <ChevronRight
+                className={cn(
+                  "h-3.5 w-3.5 transition-transform",
+                  showAdvanced && "rotate-90",
+                )}
+                aria-hidden
+              />
+              {t("advancedToggle")}
+            </button>
+
+            {showAdvanced && (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="scheduleCron" className="sr-only">
+                  {t("cronLabel")}
+                </Label>
+                <Input
+                  id="scheduleCron"
+                  type="text"
+                  placeholder={t("cronPlaceholder")}
+                  className="font-mono"
+                  aria-invalid={errors.cron ? "true" : "false"}
+                  {...register("cron")}
+                />
+                <p
+                  className={cn(
+                    "font-ui text-xs",
+                    errors.cron ? "text-class-poor" : "text-fg-muted",
+                  )}
+                >
+                  {errors.cron?.message ?? t("cronHint")}
+                </p>
+              </div>
+            )}
+          </fieldset>
 
           <fieldset className="flex flex-col gap-2">
             <legend className="text-sm font-medium leading-none text-fg">
               {t("modeLabel")}
             </legend>
             <div className="grid grid-cols-2 gap-3">
-              <ModeChip
+              <Chip
                 checked={mode === "single"}
                 onSelect={() => setValue("mode", "single", { shouldValidate: true })}
                 icon={<Globe className="h-4 w-4" />}
                 label={t("modeSingle")}
               />
-              <ModeChip
+              <Chip
                 checked={mode === "site"}
                 onSelect={() => setValue("mode", "site", { shouldValidate: true })}
                 icon={<Network className="h-4 w-4" />}
@@ -188,7 +251,7 @@ export function CreateScheduleDialog({
   );
 }
 
-function ModeChip({
+function Chip({
   checked,
   onSelect,
   icon,
@@ -196,7 +259,7 @@ function ModeChip({
 }: {
   checked: boolean;
   onSelect: () => void;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label: string;
 }) {
   return (
@@ -206,6 +269,7 @@ function ModeChip({
       aria-pressed={checked}
       className={cn(
         "flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors",
+        icon ? "" : "justify-center",
         checked
           ? "border-primary bg-primary/5 text-fg"
           : "border-border bg-bg text-fg-muted hover:border-fg-muted",
