@@ -47,6 +47,7 @@ export class AuditGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         secret: this.config.getOrThrow<string>('JWT_ACCESS_SECRET'),
       });
       client.userId = payload.sub;
+      client.join(`user:${payload.sub}`);
       this.logger.log(`Socket ${client.id} connected (user ${payload.sub})`);
     } catch (e) {
       this.logger.warn(`Rejecting socket ${client.id}: ${(e as Error).message}`);
@@ -93,5 +94,20 @@ export class AuditGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
 
   emitSuggestionsDone(auditId: string, data: { auditId: string; count: number }) {
     this.server.to(`audit:${auditId}`).emit('audit:suggestions-done', data);
+  }
+
+  emitBillingConfirmed(evt: { userId: string; intentId: string; planCode: string }): void {
+    this.server.to(`user:${evt.userId}`).emit('billing:confirmed', evt);
+    this.server.to(`billing:${evt.intentId}`).emit('billing:confirmed', evt);
+  }
+
+  @SubscribeMessage('billing:subscribe')
+  handleBillingSubscribe(
+    @ConnectedSocket() client: AuthSocket,
+    @MessageBody() data: { intentId: string },
+  ) {
+    if (!client.userId) return { error: 'Unauthorized' };
+    if (data?.intentId) client.join(`billing:${data.intentId}`);
+    return { joined: `billing:${data.intentId}` };
   }
 }

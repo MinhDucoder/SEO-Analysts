@@ -66,6 +66,37 @@ export const api: KyInstance = ky.create({
         }
       },
     ],
+    beforeError: [
+      async (error) => {
+        try {
+          // ky's HTTPError has .response; read JSON safely via clone()
+          const body: unknown = await error.response?.clone().json().catch(() => null);
+          const code =
+            typeof body === "object" && body !== null && "code" in body
+              ? String((body as { code: unknown }).code)
+              : undefined;
+          if (code === "QUOTA_EXCEEDED" || code === "AI_QUOTA_EXCEEDED") {
+            const { useQuotaDialog } = await import("@/lib/billing/quota-dialog.store");
+            const b = body as { message?: string; resetAt?: string };
+            useQuotaDialog.getState().show({
+              title: "Đã hết quota",
+              message: b?.message ?? "Bạn đã đạt giới hạn cho tháng này.",
+              resetAt: b?.resetAt ?? null,
+            });
+          } else if (code === "FEATURE_NOT_AVAILABLE") {
+            const { useQuotaDialog } = await import("@/lib/billing/quota-dialog.store");
+            const b = body as { message?: string };
+            useQuotaDialog.getState().show({
+              title: "Tính năng không có trong gói",
+              message: b?.message ?? "Tính năng này yêu cầu nâng cấp gói.",
+            });
+          }
+        } catch {
+          // never let the interceptor itself throw
+        }
+        return error;
+      },
+    ],
     afterResponse: [
       async (request, _options, response) => {
         // 401 → silent refresh + replay (or clearAuth on failure)
@@ -127,9 +158,20 @@ export const api: KyInstance = ky.create({
           return response;
         }
 
-        // 429 → surface RateLimit modal with the Retry-After value if
-        // the gateway provided one (else default 60s).
+        // 429 → could be a transport rate limit OR a billing quota
+        // (`QuotaExceededError` is emitted as 429). Disambiguate via the
+        // `code` field: billing quota routes to the upgrade dialog (opened in
+        // `beforeError`), everything else opens the RateLimit modal with the
+        // Retry-After value if the gateway provided one (else default 60s).
         if (response.status === 429) {
+          const body = await response.clone().json().catch(() => null);
+          const code =
+            typeof body === "object" && body !== null && "code" in body
+              ? String((body as { code: unknown }).code)
+              : "";
+          if (code === "QUOTA_EXCEEDED" || code === "AI_QUOTA_EXCEEDED") {
+            return response;
+          }
           const retryHeader = response.headers.get("Retry-After");
           const retryAfterSec = retryHeader ? Number(retryHeader) : NaN;
           useGlobalModalStore.getState().open({

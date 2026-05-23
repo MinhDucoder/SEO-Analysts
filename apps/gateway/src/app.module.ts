@@ -10,6 +10,8 @@ import { AuditsModule } from './audits/audits.module';
 import { ScheduledAuditsModule } from './scheduled-audits/scheduled-audits.module';
 import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
+import { BillingModule } from './billing/billing.module';
+import { ToolsModule } from './tools/tools.module';
 import { WebsocketModule } from './infra/websocket/websocket.module';
 import { HealthModule } from './health/health.module';
 import { PublicApiModule } from './public-api/public-api.module';
@@ -29,6 +31,8 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     ScheduledAuditsModule,
     SharedModule,
     AdminModule,
+    BillingModule,
+    ToolsModule,
     WebsocketModule,
     HealthModule,
     PublicApiModule,

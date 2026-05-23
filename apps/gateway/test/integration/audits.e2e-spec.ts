@@ -22,6 +22,8 @@ import { ReportGrpcClient } from '../../src/infra/grpc/report.client';
 import { CrawlerGrpcClient } from '../../src/infra/grpc/crawler.client';
 import { AnalyzerGrpcClient } from '../../src/infra/grpc/analyzer.client';
 import { AuditQueueProducer } from '../../src/audits/services/audit-queue.producer';
+import { EntitlementService } from '../../src/billing/services/entitlement.service';
+import { QuotaCounterService } from '../../src/billing/services/quota-counter.service';
 import { AuditStatus, UserRole } from '@repo/shared';
 
 vi.mock('../../src/common/utils/url-validator', () => ({
@@ -111,6 +113,17 @@ describe('Audits E2E', () => {
       .overrideProvider(AuditQueueProducer).useValue({
         enqueueCrawlStart: vi.fn(),
         enqueueSiteCrawlStart: vi.fn(),
+      })
+      // Billing entitlement/quota deps were added to the audits flow; the
+      // prisma/redis mocks here don't model the subscription/quota tables, so
+      // stub the services to a permissive "allowed" decision.
+      .overrideProvider(EntitlementService).useValue({
+        hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+        checkSiteAuditPageCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+        getEffectivePlan: vi.fn().mockResolvedValue('business'),
+      })
+      .overrideProvider(QuotaCounterService).useValue({
+        consume: vi.fn().mockResolvedValue({ allowed: true, remaining: 99, limit: 100, resetAt: new Date() }),
       })
       .overrideGuard(JwtAuthGuard).useClass(FakeJwtGuard)
       .compile();

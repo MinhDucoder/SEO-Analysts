@@ -5,11 +5,12 @@
  * short TTL (60s) so revoke propagates quickly. Cache-null for missing
  * keys blocks timing-based brute force on nonexistent tokens.
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { createHash, randomBytes } from 'node:crypto';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { RedisService } from '../../infra/redis/redis.service';
-import { ApiKeyEnvironment, PUBLIC_API_REDIS_KEYS, PUBLIC_API_CACHE_TTL } from '@repo/shared';
+import { ApiKeyEnvironment, PUBLIC_API_REDIS_KEYS, PUBLIC_API_CACHE_TTL, PLAN_FEATURES } from '@repo/shared';
+import { EntitlementService } from '../../billing/services/entitlement.service';
 
 export type ApiKeyVerifyResult =
   | { valid: true; apiKeyId: string; userId: string; environment: ApiKeyEnvironment }
@@ -25,9 +26,17 @@ export class ApiKeyService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly redis: RedisService,
+    private readonly entitlement: EntitlementService,
   ) {}
 
   async create(userId: string, name: string, environment: ApiKeyEnvironment) {
+    const current = await this.prisma.apiKey.count({ where: { userId, revokedAt: null } });
+    const plan = await this.entitlement.getEffectivePlan(userId);
+    const max = PLAN_FEATURES[plan].api_keys_max;
+    if (current >= max) {
+      throw new ForbiddenException({ code: 'API_KEY_LIMIT_EXCEEDED', message: `Plan "${plan}" cho phép tối đa ${max} API keys` });
+    }
+
     const randomPart = randomBytes(32).toString('base64url');
     const plaintext = `sk_${environment}_${randomPart}`;
     const hashedKey = this.hash(plaintext);

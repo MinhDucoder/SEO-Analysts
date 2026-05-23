@@ -96,7 +96,7 @@ describe('SuggestionEnricherService', () => {
   });
 
   it('mode=llm: concurrency bucket full → degrade to template, degraded=true', async () => {
-    factory.getOrNull.mockResolvedValue({ run: vi.fn() });
+    factory.getOrNull.mockResolvedValue({ invoke: vi.fn() });
     const rl = makeRateLimit(false);
     const svc = new SuggestionEnricherService(factory as never, makeRedis(), rl);
     const out = await svc.enrich([issue('a')], ctx, 'llm');
@@ -106,10 +106,10 @@ describe('SuggestionEnricherService', () => {
   });
 
   it('mode=llm happy path: chain runs, suggestions come from LLM, source=llm', async () => {
-    const chainRun = vi.fn().mockResolvedValue([
+    const chainInvoke = vi.fn().mockResolvedValue([
       { ruleId: 'a', type: 'rewrite', text: 'LLM rewrite A', rationale: 'A reason' },
     ]);
-    factory.getOrNull.mockResolvedValue({ run: chainRun });
+    factory.getOrNull.mockResolvedValue({ invoke: chainInvoke });
     const rl = makeRateLimit(true);
     const svc = new SuggestionEnricherService(factory as never, makeRedis(), rl);
     const out = await svc.enrich([issue('a')], ctx, 'llm');
@@ -120,13 +120,13 @@ describe('SuggestionEnricherService', () => {
       text: 'LLM rewrite A',
       rationale: 'A reason',
     });
-    expect(chainRun).toHaveBeenCalledOnce();
+    expect(chainInvoke).toHaveBeenCalledOnce();
     expect(rl.releaseConcurrency).toHaveBeenCalledWith('k1');
   });
 
   it('mode=llm: chain throws → degrade to template, release concurrency', async () => {
-    const chainRun = vi.fn().mockRejectedValue(new Error('boom'));
-    factory.getOrNull.mockResolvedValue({ run: chainRun });
+    const chainInvoke = vi.fn().mockRejectedValue(new Error('boom'));
+    factory.getOrNull.mockResolvedValue({ invoke: chainInvoke });
     const rl = makeRateLimit(true);
     const svc = new SuggestionEnricherService(factory as never, makeRedis(), rl);
     const out = await svc.enrich([issue('a')], ctx, 'llm');
@@ -136,10 +136,10 @@ describe('SuggestionEnricherService', () => {
   });
 
   it('mode=llm: order-preservation — output re-aligned by input index, missing filled by template', async () => {
-    const chainRun = vi.fn().mockResolvedValue([
+    const chainInvoke = vi.fn().mockResolvedValue([
       { ruleId: 'a', type: 'rewrite', text: 'LLM A', rationale: 'r' },
     ]);
-    factory.getOrNull.mockResolvedValue({ run: chainRun });
+    factory.getOrNull.mockResolvedValue({ invoke: chainInvoke });
     const svc = new SuggestionEnricherService(
       factory as never,
       makeRedis(),
@@ -155,14 +155,14 @@ describe('SuggestionEnricherService', () => {
   it('mode=llm: cache hit short-circuits LLM call', async () => {
     const store = new Map<string, string>();
     const redis = makeRedis(store);
-    const chainRun = vi.fn().mockResolvedValue([
+    const chainInvoke = vi.fn().mockResolvedValue([
       { ruleId: 'a', type: 'rewrite', text: 'LLM A', rationale: 'r' },
     ]);
-    factory.getOrNull.mockResolvedValue({ run: chainRun });
+    factory.getOrNull.mockResolvedValue({ invoke: chainInvoke });
     const svc = new SuggestionEnricherService(factory as never, redis, makeRateLimit());
     await svc.enrich([issue('a')], ctx, 'llm');
-    expect(chainRun).toHaveBeenCalledTimes(1);
+    expect(chainInvoke).toHaveBeenCalledTimes(1);
     await svc.enrich([issue('a')], ctx, 'llm');
-    expect(chainRun).toHaveBeenCalledTimes(1);
+    expect(chainInvoke).toHaveBeenCalledTimes(1);
   });
 });

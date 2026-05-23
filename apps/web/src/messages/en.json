@@ -19,7 +19,10 @@
     "refresh": "Refresh",
     "errorTitle": "Something went wrong",
     "errorDescription": "Please try again in a moment.",
-    "reportIssue": "Report issue"
+    "reportIssue": "Report issue",
+    "login": "Log in",
+    "register": "Register",
+    "enterApp": "Enter app"
   },
   "nav": {
     "dashboard": "Overview",
@@ -34,7 +37,9 @@
     "admin": "Admin",
     "users": "Users",
     "rules": "Rules",
-    "stats": "Stats"
+    "stats": "Stats",
+    "pricing": "Pricing",
+    "policy": "Policy"
   },
   "theme": {
     "light": "Light",
@@ -120,7 +125,8 @@
       "successBody": "We're analysing {url}. You can follow live progress on the detail page.",
       "viewDetail": "Open detail",
       "errorInvalidUrl": "Invalid URL.",
-      "errorMaxUrlsRange": "Max pages must be between 1 and 5000."
+      "errorMaxUrlsRange": "Max pages must be between 1 and 5000.",
+      "errorGeneric": "Couldn't create the audit. Please try again."
     },
     "filters": {
       "search": "Search URL or domain",
@@ -393,7 +399,8 @@
       "submitting": "Creating…",
       "successToast": "Schedule created",
       "errorCron": "Invalid cron (5 fields required).",
-      "errorInvalidUrl": "Invalid URL."
+      "errorInvalidUrl": "Invalid URL.",
+      "errorToast": "Couldn't create the schedule. Please try again."
     }
   },
   "globalModal": {
@@ -496,7 +503,9 @@
     "subtitle": "Manage your profile and security.",
     "tabs": {
       "profile": "Profile",
-      "password": "Password"
+      "password": "Password",
+      "apiKeys": "API keys",
+      "billing": "Plan & Billing"
     },
     "profile": {
       "title": "Profile",
@@ -527,6 +536,21 @@
       "submit": "Update password",
       "submitting": "Updating…",
       "success": "Password updated — please sign in again"
+    },
+    "billing": {
+      "currentTitle": "Current plan",
+      "planLabel": "Plan",
+      "statusLabel": "Status",
+      "expiresLabel": "Expires",
+      "upgrade": "Upgrade / Renew",
+      "adminGranted": "Granted by admin (no payment)",
+      "paidBanner": "Payment successful! 🎉",
+      "historyTitle": "Payment history",
+      "historyEmpty": "No transactions yet.",
+      "colTime": "Time",
+      "colPlan": "Plan",
+      "colAmount": "Amount",
+      "colStatus": "Status"
     }
   },
   "sharedReport": {
@@ -573,6 +597,45 @@
     "ctaTitle": "Want to audit your own site?",
     "ctaBody": "Run a free SEO audit on any URL.",
     "ctaButton": "Open SEO Analyst"
+  },
+  "pricing": {
+    "heroTitle": "Choose the plan that fits you",
+    "heroSubtitle": "Start free, upgrade when you need more audits, AI and API.",
+    "perMonth": "/ month",
+    "free": "Free",
+    "current": "Current",
+    "popular": "Popular",
+    "upgrade": "Upgrade",
+    "processing": "Processing...",
+    "compareTitle": "Detailed comparison",
+    "faqTitle": "Frequently asked questions",
+    "faqMore": "See full policy →",
+    "features": {
+      "auditsMonthly": "Audits / month",
+      "siteMode": "Site-mode (pages)",
+      "scheduled": "Scheduled",
+      "aiCalls": "AI suggestions / month",
+      "apiCalls": "API / day",
+      "apiKeys": "API keys",
+      "history": "History retention"
+    }
+  },
+  "policy": {
+    "title": "Policy",
+    "subtitle": "Terms of use, privacy and payment policy for SEO Analyst.",
+    "eyebrow": "Legal center",
+    "lastUpdated": "Last updated",
+    "readTime": "{minutes} min read",
+    "tocTitle": "On this page",
+    "contactTitle": "Still have questions?",
+    "contactBody": "If you have any questions about our terms, privacy or payments, our support team is happy to help.",
+    "contactCta": "Contact support",
+    "contactSubject": "Support request — SEO Analyst",
+    "printPage": "Print page",
+    "backToTop": "Back to top",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "payment": "Payment & refund policy"
   },
   "auth": {
     "common": {
@@ -643,6 +706,79 @@
       "errorMissingToken": "No authentication token was received from Google.",
       "errorInvalidToken": "The authentication token is invalid or has expired.",
       "retry": "Try again"
+    }
+  },
+  "tools": {
+    "common": {
+      "manual": "Manual",
+      "fromUrl": "From URL",
+      "paste": "Paste JSON-LD",
+      "generate": "Generate preview",
+      "analyze": "Analyze",
+      "working": "Working…",
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "empty": "Fill in the form to see the preview.",
+      "urlPlaceholder": "https://example.com/page",
+      "error": "Something went wrong. Please try again."
+    },
+    "quota": {
+      "remaining": "{left}/{total} left today",
+      "cached": "(cached)",
+      "upgrade": "Upgrade",
+      "login": "Sign in for more"
+    },
+    "index": {
+      "title": "SEO Tools",
+      "subtitle": "Free utilities for site owners — preview before you publish.",
+      "google": { "name": "Google SERP Preview", "desc": "Preview how your page appears in Google search." },
+      "social": { "name": "Social Card Preview", "desc": "Facebook, Twitter/X and LinkedIn cards from OG meta." },
+      "schema": { "name": "Schema.org Validator", "desc": "Inspect JSON-LD and check required fields." },
+      "sitemap": { "name": "Sitemap + Robots", "desc": "Validate sitemap.xml and robots.txt." },
+      "favicon": { "name": "Favicon Checker", "desc": "Detect favicons across browser, iOS and Android paths." }
+    },
+    "googlePreview": {
+      "title": "Google SERP Preview",
+      "description": "Preview how your page renders in Google search results.",
+      "fieldUrl": "URL",
+      "fieldTitle": "Title",
+      "fieldDescription": "Description",
+      "fieldFavicon": "Favicon URL (optional)"
+    },
+    "socialPreview": {
+      "title": "Social Card Preview",
+      "description": "Preview Facebook, X/Twitter and LinkedIn cards from your OG and Twitter meta tags.",
+      "fieldOgTitle": "og:title",
+      "fieldOgDescription": "og:description",
+      "fieldOgImage": "og:image URL",
+      "fieldOgSiteName": "og:site_name",
+      "fieldTwitterCard": "twitter:card",
+      "fieldTwitterImage": "twitter:image URL"
+    },
+    "schemaPreview": {
+      "title": "Schema.org Validator",
+      "description": "Paste JSON-LD or fetch a URL to inspect structured data and required fields.",
+      "rawPlaceholder": "Paste your JSON-LD here…",
+      "richResults": "Test in Google Rich Results",
+      "valid": "Valid",
+      "invalid": "Invalid"
+    },
+    "sitemapValidator": {
+      "title": "Sitemap + Robots Validator",
+      "description": "Validate your sitemap.xml and robots.txt.",
+      "fieldSiteUrl": "Site URL",
+      "followIndex": "Follow sitemap index (fetch nested sitemaps)",
+      "robotsHeading": "robots.txt",
+      "sitemapHeading": "Sitemap"
+    },
+    "faviconChecker": {
+      "title": "Favicon Checker",
+      "description": "Detect favicons across browser, iOS and Android paths.",
+      "fieldUrl": "Site URL",
+      "coverage": "Coverage"
+    },
+    "bot": {
+      "title": "About SEOAnalystsBot"
     }
   }
 }

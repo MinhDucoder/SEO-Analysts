@@ -7,6 +7,7 @@ import type {
   SeoRule,
   UpdateRulesDto,
 } from "@/lib/api/types";
+import type { PlanCode } from "@repo/shared";
 
 /**
  * `GET /admin/users` — paginated user list with search + filters.
@@ -65,4 +66,16 @@ export async function updateAdminRules(
   return api
     .put("admin/rules", { json: body })
     .json<{ updated: SeoRule[] }>();
+}
+
+/**
+ * `POST /admin/subscriptions/grant` — admin manually assigns a plan
+ * for `days` (bypassing payment). Returns 200 on success.
+ */
+export async function grantSubscription(input: {
+  userId: string;
+  planCode: PlanCode;
+  days: number;
+}): Promise<void> {
+  await api.post("admin/subscriptions/grant", { json: input });
 }

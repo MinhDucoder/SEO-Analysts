@@ -10,6 +10,7 @@ import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { Test, type TestingModule } from '@nestjs/testing';
 import { type INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
+import { ConfigModule } from '@nestjs/config';
 import { PublicApiModule } from '../../src/public-api/public-api.module';
 import { ApiKeyGuard } from '../../src/public-api/guards/api-key.guard';
 import { PublicApiRateLimitService } from '../../src/public-api/services/public-api-rate-limit.service';
@@ -21,6 +22,8 @@ import { PrismaService } from '../../src/infra/prisma/prisma.service';
 import { RedisService } from '../../src/infra/redis/redis.service';
 import { RateLimiterService } from '../../src/infra/redis/rate-limiter.service';
 import { GrpcClientFactory } from '../../src/infra/grpc/grpc-client.factory';
+import { EntitlementService } from '../../src/billing/services/entitlement.service';
+import { QuotaCounterService } from '../../src/billing/services/quota-counter.service';
 
 const analyzerResponse = {
   ruleVersion: '1.2.0',
@@ -74,7 +77,9 @@ describe('Public API /check (LLM mode, mocked)', () => {
       expire: vi.fn(() => Promise.resolve(1)),
     };
 
-    module = await Test.createTestingModule({ imports: [PublicApiModule] })
+    module = await Test.createTestingModule({
+      imports: [ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }), PublicApiModule],
+    })
       .overrideProvider(SeoSuggestChainFactory)
       .useValue(factoryMock)
       .overrideProvider(AnalyzerGrpcClient)
@@ -106,6 +111,15 @@ describe('Public API /check (LLM mode, mocked)', () => {
         }),
         acquireConcurrency: vi.fn().mockResolvedValue(true),
         releaseConcurrency: vi.fn().mockResolvedValue(undefined),
+      })
+      .overrideProvider(EntitlementService)
+      .useValue({
+        hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+        getEffectivePlan: vi.fn().mockResolvedValue('pro'),
+      })
+      .overrideProvider(QuotaCounterService)
+      .useValue({
+        consume: vi.fn().mockResolvedValue({ allowed: true, remaining: 99, limit: 100, resetAt: new Date() }),
       })
       .overrideGuard(ApiKeyGuard)
       .useValue({
@@ -139,7 +153,7 @@ describe('Public API /check (LLM mode, mocked)', () => {
   it('enrichMode=llm happy path — suggestionSource="llm", degraded=false', async () => {
     factoryMock.getOrNull.mockResolvedValueOnce({
       name: 'seo-suggest',
-      run: vi.fn().mockResolvedValue([
+      invoke: vi.fn().mockResolvedValue([
         { ruleId: 'title_tag', type: 'rewrite', text: 'LLM rewrite', rationale: 'r' },
       ]),
     });
@@ -178,7 +192,7 @@ describe('Public API /check (LLM mode, mocked)', () => {
   it('enrichMode=llm but chain throws — degrades, 200 degraded=true', async () => {
     factoryMock.getOrNull.mockResolvedValueOnce({
       name: 'seo-suggest',
-      run: vi.fn().mockRejectedValue(new Error('anthropic down')),
+      invoke: vi.fn().mockRejectedValue(new Error('anthropic down')),
     });
 
     const res = await request(app.getHttpServer())

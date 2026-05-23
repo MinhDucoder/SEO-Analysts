@@ -15,18 +15,24 @@ describe('ScheduledAuditsService', () => {
       findUnique: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
+      count: vi.fn().mockResolvedValue(0),
     },
   };
   const scheduler = {
     upsert: vi.fn().mockResolvedValue(undefined),
     remove: vi.fn().mockResolvedValue(undefined),
   };
+  const entitlement = {
+    checkScheduledAuditCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+    checkScheduledAuditCron: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+    getEffectivePlan: vi.fn().mockResolvedValue('business'),
+  };
 
   let svc: ScheduledAuditsService;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    svc = new ScheduledAuditsService(prisma as never, scheduler as never);
+    svc = new ScheduledAuditsService(prisma as never, scheduler as never, entitlement as never);
   });
 
   const row = (overrides: Record<string, unknown> = {}) => ({

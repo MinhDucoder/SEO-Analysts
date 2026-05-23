@@ -186,3 +186,7 @@ export function classify(score: number): Classification {
 // ─── Public API (gateway /api/v1/public/*) ───
 
 export * from './public-api';
+
+// ─── Subscriptions & Plans ───
+
+export * from './plans';

@@ -32,6 +32,11 @@ describe('AuditsService', () => {
     enqueueSiteCrawlStart: vi.fn(),
   };
   const reportClient = { getReport: vi.fn().mockRejectedValue(new Error('down')) };
+  const entitlement = {
+    hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+    checkSiteAuditPageCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
+    getEffectivePlan: vi.fn().mockResolvedValue('business'),
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -41,6 +46,7 @@ describe('AuditsService', () => {
       redis as never,
       producer as never,
       reportClient as never,
+      entitlement as never,
     );
   });
 

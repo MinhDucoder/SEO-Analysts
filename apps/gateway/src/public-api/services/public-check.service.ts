@@ -10,7 +10,7 @@
  *   5. Build issues[], optional filter (categories/audiences/minSeverity)
  *   6. Assemble response, cache, return
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { createHash, randomUUID } from 'node:crypto';
 import {
   ContentExtractorService,
@@ -22,6 +22,8 @@ import {
   PUBLIC_API_REDIS_KEYS,
   PUBLIC_API_CACHE_TTL,
   PUBLIC_API_CACHE_SCHEMA_VERSION,
+  PLAN_FEATURES,
+  FeatureFlag,
 } from '@repo/shared';
 import type { PublicCheckRequestDto, PublicCheckFilterDto } from '../dto/public-check-request.dto';
 import {
@@ -29,6 +31,8 @@ import {
   type EnrichMode,
   type Suggestion,
 } from './suggestion-enricher.service';
+import { EntitlementService } from '../../billing/services/entitlement.service';
+import { QuotaCounterService } from '../../billing/services/quota-counter.service';
 
 export interface ExecuteCtx {
   apiKeyId: string;
@@ -94,6 +98,8 @@ export class PublicCheckService {
     private readonly analyzer: AnalyzerGrpcClient,
     private readonly redis: RedisService,
     private readonly enricher: SuggestionEnricherService,
+    private readonly entitlement: EntitlementService,
+    private readonly counter: QuotaCounterService,
   ) {}
 
   async execute(
@@ -131,6 +137,25 @@ export class PublicCheckService {
     });
 
     const contentHash = createHash('sha256').update(extracted.html).digest('hex').slice(0, 32);
+
+    // AI entitlement check: if enrichMode is 'llm' and we have a userId,
+    // verify the user's plan allows AI suggestions and has remaining quota.
+    let effectiveEnrichMode = enrichMode;
+    if (enrichMode === 'llm' && ctx.userId) {
+      const aiAllowed = await this.entitlement.hasFeature(ctx.userId, FeatureFlag.AI_SUGGESTIONS);
+      if (!aiAllowed.allowed) {
+        throw new ForbiddenException({ code: 'AI_NOT_AVAILABLE', message: 'AI suggestions require Pro plan' });
+      }
+      const plan = await this.entitlement.getEffectivePlan(ctx.userId);
+      const r = await this.counter.consume(ctx.userId, 'ai_calls_monthly', PLAN_FEATURES[plan].ai_calls_monthly, 1);
+      if (!r.allowed) {
+        throw new ForbiddenException({ code: 'AI_QUOTA_EXCEEDED', message: 'AI calls/month exceeded' });
+      }
+    } else if (enrichMode === 'llm' && !ctx.userId) {
+      // No userId on this API key — skip entitlement, rate-limit guards already applied
+      effectiveEnrichMode = 'template';
+    }
+
     const enrichment = await this.enricher.enrich(
       result.issues,
       {
@@ -142,7 +167,7 @@ export class PublicCheckService {
         ruleVersion: result.ruleVersion,
         contentHash,
       },
-      enrichMode,
+      effectiveEnrichMode,
     );
 
     const allIssues: PublicCheckIssue[] = result.issues.map((i, idx) => ({
@@ -176,7 +201,7 @@ export class PublicCheckService {
         },
         processingTimeMs: Date.now() - t0,
         ruleVersion: result.ruleVersion,
-        enrichMode,
+        enrichMode: effectiveEnrichMode,
         suggestionSource: enrichment.source,
         degraded: enrichment.degraded,
         cached: false,

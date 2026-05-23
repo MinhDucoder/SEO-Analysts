@@ -10,6 +10,7 @@ import { CreateScheduledAuditDto } from '../dto/create-scheduled-audit.dto';
 import { AuditModeDto } from '../../audits/dto/create-audit.dto';
 import { validateUrlSafety } from '../../common/utils/url-validator';
 import { ScheduledAuditScheduler } from './scheduled-audit-scheduler.service';
+import { EntitlementService } from '../../billing/services/entitlement.service';
 
 @Injectable()
 export class ScheduledAuditsService implements OnModuleInit {
@@ -18,6 +19,7 @@ export class ScheduledAuditsService implements OnModuleInit {
   constructor(
     private readonly prisma: PrismaService,
     private readonly scheduler: ScheduledAuditScheduler,
+    private readonly entitlement: EntitlementService,
   ) {}
 
   /** On boot, re-register every active schedule with BullMQ. */
@@ -44,6 +46,12 @@ export class ScheduledAuditsService implements OnModuleInit {
   }
 
   async create(userId: string, dto: CreateScheduledAuditDto) {
+    const current = await this.prisma.scheduledAudit.count({ where: { userId, isActive: true } });
+    const countCheck = await this.entitlement.checkScheduledAuditCount(userId, current);
+    if (!countCheck.allowed) throw new ForbiddenException({ code: countCheck.code, message: countCheck.reason });
+    const cronCheck = await this.entitlement.checkScheduledAuditCron(userId, dto.cron);
+    if (!cronCheck.allowed) throw new ForbiddenException({ code: cronCheck.code, message: cronCheck.reason });
+
     const safe = await validateUrlSafety(dto.url);
     const mode = dto.mode === AuditModeDto.SITE ? AuditMode.SITE : AuditMode.SINGLE;
 

@@ -14,6 +14,9 @@ import {
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthenticatedRequest } from '../../common/interfaces/authenticated-request.interface';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { PlanGuard } from '../../common/guards/plan.guard';
+import { RequireFeature } from '../../common/decorators/require-feature.decorator';
+import { FeatureFlag } from '@repo/shared';
 import { CreateScheduledAuditDto } from '../dto/create-scheduled-audit.dto';
 import { ScheduledAuditsService } from '../services/scheduled-audits.service';
 
@@ -26,6 +29,8 @@ export class ScheduledAuditsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.SCHEDULED_AUDIT)
   @ApiBody({ type: CreateScheduledAuditDto })
   create(@Req() req: AuthenticatedRequest, @Body() dto: CreateScheduledAuditDto) {
     return this.svc.create(req.user.id, dto);

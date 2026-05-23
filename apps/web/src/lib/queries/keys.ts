@@ -40,6 +40,31 @@ export const queryKeys = {
       ["admin", "users", filters] as const,
     rules: () => ["admin", "rules"] as const,
   },
+  /**
+   * Billing keys — populated by slug 5 (subscriptions-vietqr).
+   *   billing.plans()        → GET /plans
+   *   billing.subscription() → GET /me/subscription
+   *   billing.intents()      → GET /billing/payment-intents
+   *   billing.intent(id)     → GET /billing/payment-intents/:id
+   */
+  billing: {
+    plans: () => ["billing", "plans"] as const,
+    subscription: () => ["billing", "subscription"] as const,
+    intents: () => ["billing", "intents"] as const,
+    intent: (id: string) => ["billing", "intent", id] as const,
+  },
+  /**
+   * SEO tools keys — public tools under /tools/*. Each tool is a mutation
+   * (POST), so these serve as stable mutationKeys for devtools/dedupe.
+   */
+  tools: {
+    all: ["tools"] as const,
+    google: () => ["tools", "google"] as const,
+    social: () => ["tools", "social"] as const,
+    schema: () => ["tools", "schema"] as const,
+    sitemap: () => ["tools", "sitemap"] as const,
+    favicon: () => ["tools", "favicon"] as const,
+  },
 } as const;
 
 export type QueryKeys = typeof queryKeys;
