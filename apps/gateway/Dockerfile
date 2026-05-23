@@ -1,6 +1,13 @@
 # ─── Stage 1: Builder ───
 FROM node:20-alpine AS builder
 
+# openssl lets `prisma generate` detect OpenSSL 3.x and fetch the matching
+# linux-musl-openssl-3.0.x engines (without it Prisma falls back to the 1.1.x
+# engine, which can't link libssl.so.3 at runtime).
+# python3/make/g++ are the node-gyp toolchain needed to compile bcrypt's native
+# addon from source (no Alpine musl prebuilt is published for it).
+RUN apk add --no-cache openssl python3 make g++
+
 WORKDIR /app
 
 # Install turbo globally for monorepo filtering
@@ -19,6 +26,10 @@ COPY packages/eslint-config/package.json packages/eslint-config/
 
 # Install all dependencies
 RUN npm ci --ignore-scripts
+
+# `--ignore-scripts` skips bcrypt's node-pre-gyp build, leaving bcrypt_lib.node
+# missing; compile it explicitly so the runtime stage gets the addon.
+RUN npm rebuild bcrypt --build-from-source
 
 # Copy source code
 COPY packages/shared/ packages/shared/
@@ -40,7 +51,10 @@ RUN npm prune --omit=dev
 # ─── Stage 2: Production ───
 FROM node:20-alpine AS production
 
-RUN apk add --no-cache dumb-init curl
+# openssl is required at runtime: Prisma's migrate/schema engine detects the
+# OpenSSL version via the CLI and dynamically links libssl — without it the
+# entrypoint's `prisma migrate deploy` crashes with a non-JSON engine error.
+RUN apk add --no-cache dumb-init curl openssl
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
