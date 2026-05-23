@@ -22,11 +22,13 @@ import {
 } from "@/lib/audits/proto-map";
 import type {
   AuditDetail,
+  ReportAiSuggestion,
   ReportCategoryScore,
   ReportDetail,
   ReportRuleResult,
 } from "@/lib/api/types";
 import { cn } from "@/lib/utils/cn";
+import { AiSuggestionCard } from "./ai-suggestion-card";
 
 const CATEGORY_ORDER: IssueCategoryKey[] = [
   "meta",
@@ -104,6 +106,16 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
     [report.ruleResults],
   );
 
+  // Map AI suggestions by ruleId. `aiPending` = suggestions not generated yet
+  // (audit just finished, worker still running). When the feature is off or
+  // already produced, aiSuggestionsGeneratedAt is a real timestamp.
+  const aiByRuleId = React.useMemo(() => {
+    const map = new Map<string, ReportAiSuggestion>();
+    for (const s of report.aiSuggestions ?? []) map.set(s.ruleId, s);
+    return map;
+  }, [report.aiSuggestions]);
+  const aiPending = !report.aiSuggestionsGeneratedAt;
+
   const keywordRows: KeywordRow[] = report.keywords.map((k) => ({
     keyword: k.keyword,
     inTitle: k.inTitle,
@@ -157,9 +169,9 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
       {/* Core Web Vitals */}
       <CwvCard
         metrics={{
-          lcp: report.cwvMetrics.lcpMs,
-          cls: report.cwvMetrics.cls,
-          inp: report.cwvMetrics.inpMs,
+          lcp: report.cwvMetrics?.lcpMs ?? null,
+          cls: report.cwvMetrics?.cls ?? null,
+          inp: report.cwvMetrics?.inpMs ?? null,
         }}
       />
 
@@ -184,7 +196,14 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
                         name={rule.ruleName}
                         status={status}
                         weight={rule.weight}
-                        detail={<RuleDetail rule={rule} status={status} />}
+                        detail={
+                          <RuleDetail
+                            rule={rule}
+                            status={status}
+                            aiSuggestion={aiByRuleId.get(rule.ruleId)}
+                            aiPending={aiPending}
+                          />
+                        }
                       />
                     );
                   })}
@@ -236,10 +255,15 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
 function RuleDetail({
   rule,
   status,
+  aiSuggestion,
+  aiPending,
 }: {
   rule: ReportRuleResult;
   status: RuleStatus;
+  aiSuggestion?: ReportAiSuggestion;
+  aiPending?: boolean;
 }) {
+  const isFailing = status === "fail" || status === "warn";
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
@@ -258,6 +282,12 @@ function RuleDetail({
         >
           💡 {rule.suggestion}
         </p>
+      )}
+      {isFailing && (aiSuggestion || aiPending) && (
+        <AiSuggestionCard
+          suggestion={aiSuggestion}
+          status={aiPending && !aiSuggestion ? "loading" : "ready"}
+        />
       )}
     </div>
   );

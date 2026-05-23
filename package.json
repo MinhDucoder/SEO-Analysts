@@ -22,11 +22,13 @@
     "docker:e2e": "docker compose up -d --build && sleep 30 && ./scripts/e2e-smoke-test.sh",
     "prisma:migrate": "turbo run prisma:migrate",
     "prisma:seed": "turbo run prisma:seed",
+    "notion:publish": "node scripts/notion-publish.mjs",
     "prepare": "husky"
   },
   "devDependencies": {
     "husky": "^9.1.7",
     "prettier": "^3.7.4",
+    "tsx": "^4.22.2",
     "turbo": "^2.8.14",
     "typescript": "5.9.2"
   },

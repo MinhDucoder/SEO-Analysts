@@ -19,7 +19,7 @@ import { NotFoundState } from "@/components/audit-detail/not-found-state";
 import { ShareDialog } from "@/components/audit-detail/share-dialog";
 import { useAudit, useAuditStatus, useCreateAudit } from "@/lib/queries/use-audits";
 import { useAuditRealtime } from "@/lib/ws/use-audit-realtime";
-import { auditExportUrl } from "@/lib/api/audits";
+import { downloadAuditPdf } from "@/lib/api/audits";
 import { ROUTES } from "@/lib/constants";
 import {
   formatAbsoluteDate,
@@ -47,6 +47,7 @@ export default function AuditDetailPage() {
 
   const [shareOpen, setShareOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [exporting, setExporting] = React.useState(false);
 
   const auditQuery = useAudit(id);
   const audit = auditQuery.data?.audit;
@@ -102,6 +103,27 @@ export default function AuditDetailPage() {
   const isInProgress = NON_TERMINAL.has(effectiveStatus);
   const isFailed = effectiveStatus === AuditStatus.FAILED;
   const isCompleted = effectiveStatus === AuditStatus.COMPLETED && report;
+
+  const handleExport = async () => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      const { blob, filename } = await downloadAuditPdf(audit.id);
+      const objectUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = objectUrl;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      // Free the blob URL after the click is processed.
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t("actions.export"));
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleRerun = () => {
     createMutation.mutate(
@@ -159,11 +181,13 @@ export default function AuditDetailPage() {
         <div className="flex flex-wrap items-center gap-2">
           {isCompleted && (
             <>
-              <Button variant="outline" asChild>
-                <a href={auditExportUrl(audit.id)} target="_blank" rel="noopener noreferrer">
-                  <Download className="h-4 w-4" />
-                  {t("actions.export")}
-                </a>
+              <Button
+                variant="outline"
+                onClick={handleExport}
+                disabled={exporting}
+              >
+                <Download className="h-4 w-4" />
+                {t("actions.export")}
               </Button>
               <Button variant="outline" onClick={() => setShareOpen(true)}>
                 <Share2 className="h-4 w-4" />

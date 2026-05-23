@@ -29,7 +29,6 @@ import { GoogleAuthGuard } from '../guards/google-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { AuthenticatedUser } from '../../common/interfaces/authenticated-request.interface';
-import { JWT_CONFIG } from '@repo/shared';
 import { GoogleProfilePayload } from '../strategies/google.strategy';
 
 const REFRESH_COOKIE = 'refresh_token';

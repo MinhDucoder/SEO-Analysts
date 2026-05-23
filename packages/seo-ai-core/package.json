@@ -2,7 +2,6 @@
   "name": "@repo/seo-ai-core",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -24,6 +23,7 @@
   "dependencies": {
     "@langchain/anthropic": "^0.3.0",
     "@langchain/core": "^0.3.0",
+    "@langchain/google-genai": "^0.2.0",
     "handlebars": "^4.7.8",
     "semver": "^7.6.0",
     "yaml": "^2.5.0",

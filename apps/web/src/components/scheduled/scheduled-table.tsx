@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 import { scoreTextClass } from "@/lib/utils/classify";
 import { formatAbsoluteDate, formatRelativeDate } from "@/lib/utils/format";
+import { findSchedulePreset } from "@/lib/audits/cron-presets";
 import type { ScheduledAudit } from "@/lib/api/scheduled";
 
 export interface ScheduledTableProps {
@@ -32,6 +33,7 @@ export function ScheduledTable({
   const tActive = useTranslations("scheduled.active");
   const tActions = useTranslations("scheduled.actions");
   const tMode = useTranslations("audits.create");
+  const tCreate = useTranslations("scheduled.create");
 
   return (
     <div className={cn("overflow-x-auto rounded-lg border border-border bg-bg-elevated", className)}>
@@ -51,6 +53,7 @@ export function ScheduledTable({
           {rows.map((row) => {
             const isDeleting = deletingId === row.id;
             const isToggling = togglingId === row.id;
+            const preset = findSchedulePreset(row.cron);
             return (
               <tr
                 key={row.id}
@@ -62,8 +65,14 @@ export function ScheduledTable({
                 <td className="max-w-[280px] truncate px-4 py-3 text-fg" title={row.url}>
                   {row.url}
                 </td>
-                <td className="px-4 py-3 font-mono text-xs text-fg-muted" title={row.cron}>
-                  {row.cron}
+                <td className="px-4 py-3 text-fg-muted" title={row.cron}>
+                  {preset ? (
+                    <span className="whitespace-nowrap">
+                      {tCreate(`presets.${preset.id}`)}
+                    </span>
+                  ) : (
+                    <span className="font-mono text-xs">{row.cron}</span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-fg-muted">
                   {row.mode === "site" ? tMode("modeSite") : tMode("modeSingle")}

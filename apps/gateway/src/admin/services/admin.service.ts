@@ -78,15 +78,25 @@ export class AdminService {
   }
 
   async updateRules(dto: UpdateRulesDto) {
-    const updated = [];
+    // Resolve names → ids once. Saves one gRPC roundtrip per row when the
+    // admin saves a batch (previous impl listed inside the loop).
+    const all = await this.analyzer.listRules();
+    const byName = new Map(all.map((x) => [x.name, x]));
+
+    const updated = [] as Array<unknown>;
     for (const r of dto.rules) {
+      const target = byName.get(r.name);
+      if (!target) continue;
+      if (r.weight === undefined && r.isEnabled === undefined) continue;
       try {
-        // Resolve rule name → ruleId by listing first (cached server-side ideally)
-        const all = await this.analyzer.listRules();
-        const target = all.find((x) => x.name === r.name);
-        if (!target) continue;
-        const u = await this.analyzer.updateRuleWeight(target.id, r.weight);
-        updated.push(u);
+        let row = target;
+        if (r.weight !== undefined) {
+          row = await this.analyzer.updateRuleWeight(target.id, r.weight);
+        }
+        if (r.isEnabled !== undefined) {
+          row = await this.analyzer.updateRuleEnabled(target.id, r.isEnabled);
+        }
+        updated.push(row);
       } catch (e) {
         throw new BadRequestException(`Khong the cap nhat rule ${r.name}: ${(e as Error).message}`);
       }

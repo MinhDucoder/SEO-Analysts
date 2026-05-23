@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils/cn";
 import { useUpdateAdminRules } from "@/lib/queries/use-admin";
 import {
   protoCategoryToKey,
@@ -20,31 +21,49 @@ interface AdminRulesTableProps {
 const MIN_WEIGHT = 1;
 const MAX_WEIGHT = 10;
 
+interface RuleDraft {
+  weight?: number;
+  isEnabled?: boolean;
+}
+
 export function AdminRulesTable({ rules }: AdminRulesTableProps) {
   const t = useTranslations("admin.rules");
   const tCategories = useTranslations("auditDetail.rules.categories");
   const mutation = useUpdateAdminRules();
 
-  // Local edited weights keyed by rule.name. Empty until user touches a row.
-  const [drafts, setDrafts] = React.useState<Record<string, number>>({});
+  // Local edits keyed by rule.name. Only populated fields are in flight.
+  const [drafts, setDrafts] = React.useState<Record<string, RuleDraft>>({});
   const [error, setError] = React.useState<string | null>(null);
 
-  // Re-seed if the server payload identity changes (initial load + after save).
   React.useEffect(() => {
     setDrafts({});
     setError(null);
   }, [rules]);
 
-  const dirtyRules = rules.filter(
-    (r) => drafts[r.name] !== undefined && drafts[r.name] !== r.weight,
-  );
+  const dirtyRules = rules.flatMap((rule) => {
+    const d = drafts[rule.name];
+    if (!d) return [];
+    const weightChanged =
+      d.weight !== undefined && d.weight !== rule.weight;
+    const enabledChanged =
+      d.isEnabled !== undefined && d.isEnabled !== rule.isEnabled;
+    if (!weightChanged && !enabledChanged) return [];
+    return [
+      {
+        name: rule.name,
+        ...(weightChanged ? { weight: d.weight } : {}),
+        ...(enabledChanged ? { isEnabled: d.isEnabled } : {}),
+      },
+    ];
+  });
 
   const onSave = () => {
     if (dirtyRules.length === 0) return;
     if (
       dirtyRules.some(
         (r) =>
-          drafts[r.name]! < MIN_WEIGHT || drafts[r.name]! > MAX_WEIGHT,
+          r.weight !== undefined &&
+          (r.weight < MIN_WEIGHT || r.weight > MAX_WEIGHT),
       )
     ) {
       setError(t("rangeError"));
@@ -52,17 +71,13 @@ export function AdminRulesTable({ rules }: AdminRulesTableProps) {
     }
     setError(null);
     mutation.mutate(
-      {
-        rules: dirtyRules.map((r) => ({
-          name: r.name,
-          weight: drafts[r.name]!,
-        })),
-      },
-      {
-        onSuccess: () => toast.success(t("success")),
-      },
+      { rules: dirtyRules },
+      { onSuccess: () => toast.success(t("success")) },
     );
   };
+
+  const setDraft = (name: string, patch: RuleDraft) =>
+    setDrafts((d) => ({ ...d, [name]: { ...d[name], ...patch } }));
 
   return (
     <div className="flex flex-col gap-3">
@@ -78,10 +93,14 @@ export function AdminRulesTable({ rules }: AdminRulesTableProps) {
           </thead>
           <tbody>
             {rules.map((rule) => {
-              const draftValue = drafts[rule.name];
-              const value = draftValue ?? rule.weight;
-              const isDirty =
-                draftValue !== undefined && draftValue !== rule.weight;
+              const draft = drafts[rule.name];
+              const weightValue = draft?.weight ?? rule.weight;
+              const enabledValue = draft?.isEnabled ?? rule.isEnabled;
+              const weightDirty =
+                draft?.weight !== undefined && draft.weight !== rule.weight;
+              const enabledDirty =
+                draft?.isEnabled !== undefined &&
+                draft.isEnabled !== rule.isEnabled;
               const categoryKey: IssueCategoryKey = protoCategoryToKey(
                 rule.category,
               );
@@ -108,22 +127,44 @@ export function AdminRulesTable({ rules }: AdminRulesTableProps) {
                       type="number"
                       min={MIN_WEIGHT}
                       max={MAX_WEIGHT}
-                      value={value}
+                      value={weightValue}
                       onChange={(e) =>
-                        setDrafts((d) => ({
-                          ...d,
-                          [rule.name]: Number(e.target.value),
-                        }))
+                        setDraft(rule.name, {
+                          weight: Number(e.target.value),
+                        })
                       }
-                      className={`w-20 font-mono ${
-                        isDirty ? "border-class-fair" : ""
-                      }`}
+                      className={cn(
+                        "w-20 font-mono",
+                        weightDirty && "border-class-fair",
+                      )}
                     />
                   </td>
                   <td className="px-4 py-3">
-                    <Badge variant={rule.isEnabled ? "success" : "muted"}>
-                      {rule.isEnabled ? "on" : "off"}
-                    </Badge>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={enabledValue}
+                      onClick={() =>
+                        setDraft(rule.name, { isEnabled: !enabledValue })
+                      }
+                      className={cn(
+                        "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+                        enabledValue
+                          ? "border-transparent bg-class-excellent"
+                          : "border-border bg-bg-overlay",
+                        enabledDirty && "ring-2 ring-class-fair/60",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "inline-block h-5 w-5 transform rounded-full bg-bg shadow transition-transform",
+                          enabledValue ? "translate-x-5" : "translate-x-0.5",
+                        )}
+                      />
+                      <span className="sr-only">
+                        {enabledValue ? "on" : "off"}
+                      </span>
+                    </button>
                   </td>
                 </tr>
               );

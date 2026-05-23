@@ -103,7 +103,11 @@ describe('Audits E2E', () => {
         createShareLink: vi.fn().mockResolvedValue({ shareToken: 'tok', shareUrl: 'https://x/y' }),
         revokeShareLink: vi.fn().mockResolvedValue({ revoked: true }),
         getSharedReport: vi.fn(),
-        generatePdf: vi.fn().mockResolvedValue({ pdfUrl: 'https://x/p.pdf' }),
+        generatePdf: vi.fn().mockResolvedValue({
+          pdfContent: Buffer.from('PDF'),
+          filename: 'audit.pdf',
+          sizeBytes: 3,
+        }),
         isHealthy: vi.fn(),
       })
       .overrideProvider(AuditQueueProducer).useValue({

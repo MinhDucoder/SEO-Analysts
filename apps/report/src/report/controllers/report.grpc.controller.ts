@@ -34,12 +34,12 @@ export class ReportGrpcController {
       cwv: this.mapCwv(req.cwvMetrics),
     });
     return {
-      report_id: report.id,
-      audit_id: report.auditId,
-      final_score: Number(report.finalScore),
+      reportId: report.id,
+      auditId: report.auditId,
+      finalScore: Number(report.finalScore),
       classification: report.classification,
-      total_issues: report.totalIssues,
-      critical_issues: report.criticalIssues,
+      totalIssues: report.totalIssues,
+      criticalIssues: report.criticalIssues,
     };
   }
 
@@ -54,16 +54,16 @@ export class ReportGrpcController {
     const { before, after } = await this.reportService.getTwo(req.auditId1, req.auditId2);
     const result = this.comparator.compare(before as any, after as any);
     return {
-      score_delta: result.scoreDelta,
-      rule_deltas: result.ruleDeltas.map((d) => ({
-        rule_id: d.ruleId,
-        rule_name: d.ruleName,
-        status_before: d.statusBefore ?? 'UNSPECIFIED',
-        status_after: d.statusAfter ?? 'UNSPECIFIED',
-        score_delta: d.scoreDelta,
+      scoreDelta: result.scoreDelta,
+      ruleDeltas: result.ruleDeltas.map((d) => ({
+        ruleId: d.ruleId,
+        ruleName: d.ruleName,
+        statusBefore: toProtoCheckStatus(d.statusBefore),
+        statusAfter: toProtoCheckStatus(d.statusAfter),
+        scoreDelta: d.scoreDelta,
       })),
-      issues_fixed: result.issuesFixed,
-      issues_new: result.issuesNew,
+      issuesFixed: result.issuesFixed,
+      issuesNew: result.issuesNew,
     };
   }
 
@@ -71,7 +71,7 @@ export class ReportGrpcController {
   async createShareLink(req: { auditId: string }) {
     const link = await this.shareLink.create(req.auditId);
     const baseUrl = process.env.PUBLIC_BASE_URL ?? 'http://localhost:3000';
-    return { share_token: link.token, share_url: `${baseUrl}/shared/${link.token}` };
+    return { shareToken: link.token, shareUrl: `${baseUrl}/shared/${link.token}` };
   }
 
   @GrpcMethod('ReportService', 'GetSharedReport')
@@ -105,9 +105,9 @@ export class ReportGrpcController {
       categoryScores: snapshot.categoryScores,
     });
     return {
-      pdf_content: out.pdf,
+      pdfContent: out.pdf,
       filename: out.filename,
-      size_bytes: out.pdf.length,
+      sizeBytes: out.pdf.length,
     };
   }
 
@@ -177,19 +177,79 @@ export class ReportGrpcController {
   private toReportResponse(report: any) {
     const snapshot = report.analysisSnapshot as AnalyzeResult;
     const cwv = report.cwvSnapshot as any;
+    const ai = report.aiSuggestions as
+      | { items?: Array<{ ruleId: string; explanation: string; actionable_fix: string }>; generatedAt?: string }
+      | null;
     return {
-      report_id: report.id,
-      audit_id: report.auditId,
+      reportId: report.id,
+      auditId: report.auditId,
       url: report.url,
       domain: report.domain,
-      final_score: Number(report.finalScore),
+      finalScore: Number(report.finalScore),
       classification: report.classification,
-      rule_results: snapshot.ruleResults,
-      category_scores: snapshot.categoryScores,
+      ruleResults: (snapshot.ruleResults ?? []).map((r: any) => ({
+        ...r,
+        category: toProtoCategory(r.category),
+        status: toProtoCheckStatus(r.status),
+      })),
+      categoryScores: (snapshot.categoryScores ?? []).map((c: any) => ({
+        ...c,
+        category: toProtoCategory(c.category),
+      })),
       keywords: report.keywords ?? [],
-      cwv_metrics: cwv,
-      target_keyword: undefined,
-      created_at: report.createdAt?.toISOString?.() ?? new Date().toISOString(),
+      cwvMetrics: cwv,
+      targetKeyword: undefined,
+      createdAt: report.createdAt?.toISOString?.() ?? new Date().toISOString(),
+      aiSuggestions: (ai?.items ?? []).map((it) => ({
+        ruleId: it.ruleId,
+        explanation: it.explanation,
+        actionableFix: it.actionable_fix,
+      })),
+      aiSuggestionsGeneratedAt: ai?.generatedAt ?? '',
     };
+  }
+}
+
+// Proto-loader is configured with `enums: String`, so it serializes enum
+// fields using the proto enum's *name* (e.g. `ISSUE_CATEGORY_LINKS`). The
+// JS enums in `@repo/shared` use lower-case values (`links`, `fail`),
+// which the loader treats as unknown and falls back to UNSPECIFIED — the
+// FE then renders every category as "Other" and every status as "skipped".
+// These mappers bridge JS-side enum values to the proto name the wire
+// format expects.
+function toProtoCategory(value: unknown): string {
+  switch (value) {
+    case 'meta':
+      return 'ISSUE_CATEGORY_META';
+    case 'headings':
+      return 'ISSUE_CATEGORY_HEADINGS';
+    case 'images':
+      return 'ISSUE_CATEGORY_IMAGES';
+    case 'links':
+      return 'ISSUE_CATEGORY_LINKS';
+    case 'performance':
+      return 'ISSUE_CATEGORY_PERFORMANCE';
+    case 'technical':
+    case 'content':
+      // Proto enum has no CONTENT — fold it into TECHNICAL so the FE has
+      // a category to render instead of dropping the rule.
+      return 'ISSUE_CATEGORY_TECHNICAL';
+    default:
+      if (typeof value === 'string' && value.startsWith('ISSUE_CATEGORY_')) return value;
+      return 'ISSUE_CATEGORY_UNSPECIFIED';
+  }
+}
+
+function toProtoCheckStatus(value: unknown): string {
+  switch (value) {
+    case 'pass':
+      return 'CHECK_STATUS_PASS';
+    case 'warn':
+      return 'CHECK_STATUS_WARN';
+    case 'fail':
+      return 'CHECK_STATUS_FAIL';
+    default:
+      if (typeof value === 'string' && value.startsWith('CHECK_STATUS_')) return value;
+      return 'CHECK_STATUS_UNSPECIFIED';
   }
 }

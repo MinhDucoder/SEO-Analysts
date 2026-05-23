@@ -10,6 +10,13 @@ vi.mock('lighthouse', () => ({
   default: (...args: unknown[]) => mockLighthouse(...args),
 }));
 
+// Inside the Playwright base image chrome-launcher cannot auto-discover
+// Chrome; the runner resolves Playwright's bundled Chromium instead.
+const FAKE_CHROME_PATH = '/ms-playwright/chromium-1155/chrome-linux/chrome';
+vi.mock('playwright', () => ({
+  chromium: { executablePath: () => FAKE_CHROME_PATH },
+}));
+
 import { LighthouseRunner } from '../../src/crawler/services/lighthouse-runner';
 import { CacheService } from '../../src/crawler/persistence/cache.service';
 
@@ -82,6 +89,39 @@ describe('LighthouseRunner', () => {
     expect(result.cached).toBe(false);
     expect(cacheSet).toHaveBeenCalledWith('https://example.com/', 'mobile', expect.objectContaining({ lcpMs: 2100 }));
     expect(fakeChrome.kill).toHaveBeenCalled();
+  });
+
+  it('points chrome-launcher at the Playwright Chromium when CHROME_PATH is unset', async () => {
+    delete process.env.CHROME_PATH;
+    mockLighthouse.mockResolvedValueOnce({
+      lhr: {
+        audits: { 'largest-contentful-paint': { numericValue: 2100 }, 'interaction-to-next-paint': { numericValue: 180 }, 'cumulative-layout-shift': { numericValue: 0.08 } },
+        categories: { performance: { score: 0.87 }, accessibility: { score: 0.92 }, 'best-practices': { score: 0.95 }, seo: { score: 0.9 } },
+      },
+    });
+
+    await runner.run('https://example.com/');
+
+    expect(mockLaunch).toHaveBeenCalledWith(
+      expect.objectContaining({ chromePath: FAKE_CHROME_PATH }),
+    );
+  });
+
+  it('prefers an explicit CHROME_PATH env override over the Playwright path', async () => {
+    process.env.CHROME_PATH = '/usr/bin/google-chrome';
+    mockLighthouse.mockResolvedValueOnce({
+      lhr: {
+        audits: { 'largest-contentful-paint': { numericValue: 2100 }, 'interaction-to-next-paint': { numericValue: 180 }, 'cumulative-layout-shift': { numericValue: 0.08 } },
+        categories: { performance: { score: 0.87 }, accessibility: { score: 0.92 }, 'best-practices': { score: 0.95 }, seo: { score: 0.9 } },
+      },
+    });
+
+    await runner.run('https://example.com/');
+
+    expect(mockLaunch).toHaveBeenCalledWith(
+      expect.objectContaining({ chromePath: '/usr/bin/google-chrome' }),
+    );
+    delete process.env.CHROME_PATH;
   });
 
   it('kills chrome even when lighthouse throws', async () => {

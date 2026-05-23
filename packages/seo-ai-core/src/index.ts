@@ -1,7 +1,7 @@
 // Public type surface — locked for MVP per spec § 3.
 
 export type {
-  ILLMProvider, LLMRequest, LLMResponse, Message, TokenUsage, LLMChunk, FinishReason, Role,
+  ILLM, ILLMProvider, LLMRequest, LLMResponse, Message, TokenUsage, LLMChunk, FinishReason, Role,
 } from './llm/types.js';
 export type {
   IPromptLoader, PromptTemplate, RenderedPrompt, PromptListEntry, PromptMetadata, PromptExample,
@@ -22,6 +22,8 @@ export {
 
 // LLM
 export { createLLM, registerLLMProvider, type LLMConfig, type LLMProviderName } from './llm/provider.js';
+export { AnthropicAdapter } from './llm/adapters/anthropic.adapter.js';
+export { GeminiAdapter } from './llm/adapters/gemini.adapter.js';
 
 // Prompt
 export { FileSystemPromptLoader, type PromptLoaderOptions } from './prompt/loader.js';
@@ -31,9 +33,12 @@ export { renderTemplate } from './prompt/renderer.js';
 export { MemoryRetriever, type MemoryDoc } from './retrievers/memory.retriever.js';
 
 // Guardrails
-export { parseStructured } from './guardrails/output-parser.js';
+export { parseStructured, ZodOutputParser } from './guardrails/output-parser.js';
 export { applyPolicy, type ApplyPolicyOutput } from './guardrails/policy.js';
 
 // Chains
-export { createBaseChain, type BaseChainConfig } from './chains/base.chain.js';
+export {
+  createBaseChain, type BaseChainConfig,
+  BaseChain, type BaseChainOptions, type BaseChainRunOptions, type BaseChainRunContext,
+} from './chains/base.chain.js';
 export { createRagChain, type RagChainConfig } from './chains/rag.chain.js';

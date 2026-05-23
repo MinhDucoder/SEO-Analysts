@@ -118,7 +118,7 @@ export const RATE_LIMIT = {
   AUDIT_PER_HOUR: 10,
   API_PER_MINUTE: 60,
   REGISTER_PER_HOUR: 5,
-  LOGIN_ATTEMPTS_PER_15MIN: 10,
+  LOGIN_ATTEMPTS_PER_5MIN: 10,
 } as const;
 
 export const JWT_CONFIG = {
@@ -137,6 +137,7 @@ export const BULLMQ_QUEUES = {
   ANALYZE_START: 'analyze.start',
   KEYWORD_START: 'keyword.start',
   REPORT_START: 'report.start',
+  AI_SUGGEST_START: 'ai-suggest.start',
   SITE_CRAWL_START: 'site-crawl.start',
   SITE_CRAWL_URL_AUDIT: 'site-crawl.url-audit',
   SITE_CRAWL_AGGREGATE: 'site-crawl.aggregate',

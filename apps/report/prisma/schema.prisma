@@ -22,6 +22,7 @@ model Report {
   passCount        Int      @map("pass_count")
   analysisSnapshot Json     @map("analysis_snapshot") @db.JsonB
   cwvSnapshot      Json     @map("cwv_snapshot") @db.JsonB
+  aiSuggestions    Json?    @map("ai_suggestions") @db.JsonB
   createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
 
   keywords  ReportKeyword[]

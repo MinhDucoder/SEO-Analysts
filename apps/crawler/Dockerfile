@@ -34,8 +34,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
-RUN groupadd -g 1001 nodejs && \
-    useradd -m -u 1001 -g nodejs nestjs
+# GID/UID 1001 may already exist in the base image (Playwright noble drifted to
+# claim it) — fall back to auto-assigned ids; downstream --chown uses names.
+RUN (groupadd -g 1001 nodejs 2>/dev/null || groupadd nodejs) && \
+    (useradd -m -u 1001 -g nodejs nestjs 2>/dev/null || useradd -m -g nodejs nestjs)
 
 # Install Node.js 20 (playwright image may ship with different version)
 # The playwright image already has node, verify version is compatible
@@ -45,6 +47,9 @@ WORKDIR /app
 
 COPY --from=builder --chown=nestjs:nodejs /app/apps/crawler/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/crawler/package.json ./
+# npm hoists workspace deps to the ROOT node_modules, so that must be copied
+# first; the app-local node_modules (non-hoisted packages only) overlays on top.
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/crawler/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/packages/proto ./packages/proto
 COPY --from=builder --chown=nestjs:nodejs /app/packages/shared ./packages/shared

@@ -45,10 +45,20 @@ export interface LLMChunk {
   usage?: TokenUsage;
 }
 
-export interface ILLMProvider {
+/**
+ * Minimal LLM contract — what consumers (chains, parsers) actually call.
+ * Real adapters implement the richer `ILLMProvider`, but factories accept
+ * `ILLM` so tests can pass small stubs.
+ */
+export interface ILLM {
+  readonly providerId: string;
+  readonly modelId: string;
+  invoke(req: LLMRequest, signal?: AbortSignal): Promise<LLMResponse>;
+}
+
+export interface ILLMProvider extends ILLM {
   readonly name: string;
   readonly model: string;
-  invoke(req: LLMRequest, signal?: AbortSignal): Promise<LLMResponse>;
   stream(req: LLMRequest, signal?: AbortSignal): AsyncIterable<LLMChunk>;
   countTokens(text: string): Promise<number>;
 }

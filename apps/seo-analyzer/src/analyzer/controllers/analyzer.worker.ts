@@ -51,10 +51,11 @@ export class AnalyzerWorker extends WorkerHost {
       }),
     );
 
-    // Mark step complete (orchestrator uses this set to detect pipeline completion)
-    await this.publisher.sadd(REDIS_KEYS.auditCompletedSteps(auditId), 'analyze');
-
     // Publish analyze.done event
+    // (Pipeline completion is tracked by report's WaitForBothService via INCR
+    // on REDIS_KEYS.auditCompletedSteps — do NOT also SADD to the same key,
+    // or report's INCR will fail with WRONGTYPE.)
+
     await this.publisher.publish(
       'analyze.done',
       JSON.stringify({

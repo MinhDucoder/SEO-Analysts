@@ -13,6 +13,7 @@ COPY package.json package-lock.json turbo.json ./
 COPY apps/gateway/package.json apps/gateway/
 COPY packages/shared/package.json packages/shared/
 COPY packages/proto/package.json packages/proto/
+COPY packages/seo-ai-core/package.json packages/seo-ai-core/
 COPY packages/typescript-config/package.json packages/typescript-config/
 COPY packages/eslint-config/package.json packages/eslint-config/
 
@@ -22,6 +23,7 @@ RUN npm ci --ignore-scripts
 # Copy source code
 COPY packages/shared/ packages/shared/
 COPY packages/proto/ packages/proto/
+COPY packages/seo-ai-core/ packages/seo-ai-core/
 COPY packages/typescript-config/ packages/typescript-config/
 COPY packages/eslint-config/ packages/eslint-config/
 COPY apps/gateway/ apps/gateway/
@@ -50,10 +52,13 @@ WORKDIR /app
 COPY --from=builder --chown=nestjs:nodejs /app/apps/gateway/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/gateway/package.json ./
 COPY --from=builder --chown=nestjs:nodejs /app/apps/gateway/prisma ./prisma
+# npm hoists workspace deps to the ROOT node_modules, so that must be copied
+# first; the app-local node_modules (non-hoisted packages only) overlays on top.
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/gateway/node_modules ./node_modules
-COPY --from=builder --chown=nestjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nestjs:nodejs /app/packages/proto ./packages/proto
 COPY --from=builder --chown=nestjs:nodejs /app/packages/shared ./packages/shared
+COPY --from=builder --chown=nestjs:nodejs /app/packages/seo-ai-core ./packages/seo-ai-core
 COPY --from=builder --chown=nestjs:nodejs /app/apps/gateway/docker-entrypoint.sh ./docker-entrypoint.sh
 RUN chmod +x ./docker-entrypoint.sh
 

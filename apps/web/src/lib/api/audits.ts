@@ -7,7 +7,6 @@ import type {
   Paginated,
   ShareLinkResponse,
 } from "@/lib/api/types";
-import { API_URL } from "@/lib/constants";
 
 /**
  * Thin wrapper around gateway `GET /audits` (list endpoint). Slug 3 only
@@ -112,12 +111,22 @@ export async function revokeShareLink(id: string): Promise<void> {
 }
 
 /**
- * Direct URL for the gateway's PDF export endpoint. The gateway returns
- * 302 → the report-service PDF stream; using `<a href>` lets the
- * browser handle the redirect + download natively.
+ * `GET /audits/:id/export` — gateway streams the rendered PDF (bytes)
+ * with `Content-Disposition: attachment`. We fetch through `api` so the
+ * JWT bearer (+ silent refresh) travels — a plain `<a href>` would 401
+ * because the browser doesn't attach the Authorization header on
+ * anchor clicks. Returns blob + filename so the caller can trigger a
+ * browser download via `URL.createObjectURL`.
  */
-export function auditExportUrl(id: string): string {
-  return `${API_URL.replace(/\/$/, "")}/audits/${id}/export`;
+export async function downloadAuditPdf(
+  id: string,
+): Promise<{ blob: Blob; filename: string }> {
+  const response = await api.get(`audits/${id}/export`);
+  const blob = await response.blob();
+  const disposition = response.headers.get("Content-Disposition") ?? "";
+  const match = /filename="?([^"]+)"?/i.exec(disposition);
+  const filename = match?.[1] ?? `audit-${id}.pdf`;
+  return { blob, filename };
 }
 
 /**

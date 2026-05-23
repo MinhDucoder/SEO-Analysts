@@ -81,8 +81,8 @@ export class AuthService {
   async login(dto: LoginDto, ctx: RequestContext): Promise<{ user: ReturnType<AuthService['toPublic']>; tokens: IssuedTokens }> {
     const rl = await this.rateLimiter.consume(
       this.rateLimiter.loginBucket(dto.email),
-      RATE_LIMIT.LOGIN_ATTEMPTS_PER_15MIN,
-      900,
+      RATE_LIMIT.LOGIN_ATTEMPTS_PER_5MIN,
+      300,
     );
     if (!rl.allowed) {
       throw new ForbiddenException(`Qua nhieu lan dang nhap that bai. Thu lai sau ${rl.retryAfterSeconds}s`);

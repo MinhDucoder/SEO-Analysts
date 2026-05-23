@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AuthService } from '../../src/auth/services/auth.service';
 import { PasswordService } from '../../src/auth/services/password.service';
 import { ConflictException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
-import { UserRole } from '@repo/shared';
 
 describe('AuthService', () => {
   let svc: AuthService;

@@ -49,6 +49,14 @@ message GetReportResponse {
   common.v1.CoreWebVitals cwv_metrics = 10;
   optional keyword.v1.TargetKeywordAnalysis target_keyword = 11;
   string created_at = 12;
+  repeated AiSuggestion ai_suggestions = 13;
+  string ai_suggestions_generated_at = 14; // ISO timestamp, empty when not yet generated
+}
+
+message AiSuggestion {
+  string rule_id = 1;
+  string explanation = 2;
+  string actionable_fix = 3;
 }
 
 message CompareRequest { string audit_id_1 = 1; string audit_id_2 = 2; }

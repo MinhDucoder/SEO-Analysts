@@ -171,6 +171,12 @@ export interface ReportTargetKeyword {
   verdict: string;
 }
 
+export interface ReportAiSuggestion {
+  ruleId: string;
+  explanation: string;
+  actionableFix: string;
+}
+
 export interface ReportDetail {
   reportId: string;
   auditId: string;
@@ -181,9 +187,13 @@ export interface ReportDetail {
   ruleResults: ReportRuleResult[];
   categoryScores: ReportCategoryScore[];
   keywords: ReportKeyword[];
-  cwvMetrics: ReportCwvMetrics;
-  targetKeyword?: ReportTargetKeyword;
+  cwvMetrics: ReportCwvMetrics | null;
+  targetKeyword?: ReportTargetKeyword | null;
   createdAt: string;
+  // Per-rule AI suggestions (optional — populated async after audit done).
+  // undefined/empty = not yet generated or feature disabled.
+  aiSuggestions?: ReportAiSuggestion[];
+  aiSuggestionsGeneratedAt?: string | null;
 }
 
 export interface AuditDetailResponse {
@@ -282,7 +292,7 @@ export interface SeoRule {
 }
 
 export interface UpdateRulesDto {
-  rules: Array<{ name: string; weight: number }>;
+  rules: Array<{ name: string; weight?: number; isEnabled?: boolean }>;
 }
 
 export interface ListAdminUsersQuery {

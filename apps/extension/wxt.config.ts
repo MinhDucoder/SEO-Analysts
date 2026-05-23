@@ -16,6 +16,7 @@ export default defineConfig({
     host_permissions: [
       'https://api.seoanalyst.app/*',
       'http://localhost:3000/*',
+      'http://localhost:3010/*',
     ],
     action: { default_popup: 'popup.html' },
     options_page: 'options.html',

@@ -7,7 +7,9 @@ import { toLangChainMessages, toLLMResponse } from './_mappers.js';
 
 export class AnthropicAdapter implements ILLMProvider {
   readonly name = 'anthropic';
+  readonly providerId = 'anthropic';
   readonly model: string;
+  readonly modelId: string;
   private readonly client: ChatAnthropic;
 
   constructor(cfg: LLMConfig) {
@@ -18,6 +20,7 @@ export class AnthropicAdapter implements ILLMProvider {
       );
     }
     this.model = cfg.model;
+    this.modelId = cfg.model;
     this.client = new ChatAnthropic({
       apiKey: resolvedKey,
       model: cfg.model,
@@ -36,7 +39,10 @@ export class AnthropicAdapter implements ILLMProvider {
       })) as AIMessage;
       return toLLMResponse(result, this.model);
     } catch (err) {
-      throw new LLMError(`Anthropic invoke failed: ${(err as Error).message}`, { cause: err });
+      throw new LLMError(`Anthropic invoke failed: ${(err as Error).message}`, {
+        cause: err,
+        retriable: true,
+      });
     }
   }
 
@@ -61,7 +67,10 @@ export class AnthropicAdapter implements ILLMProvider {
         }
       }
     } catch (err) {
-      throw new LLMError(`Anthropic stream failed: ${(err as Error).message}`, { cause: err });
+      throw new LLMError(`Anthropic stream failed: ${(err as Error).message}`, {
+        cause: err,
+        retriable: true,
+      });
     }
   }
 

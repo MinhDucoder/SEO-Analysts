@@ -50,10 +50,11 @@ export interface AnalyzeContentResponse {
 interface AnalyzerService {
   ListRules(
     req: object,
-    cb: (err: Error | null, res?: { rules: Array<SeoRuleItem & { display_name?: string; is_enabled?: boolean; doc_ref?: string; available_in?: string }> }) => void,
+    cb: (err: Error | null, res?: { rules: SeoRuleItem[] }) => void,
   ): void;
   GetRulesByCategory(req: { category: string }, cb: (err: Error | null, res?: { rules: SeoRuleItem[] }) => void): void;
-  UpdateRuleWeight(req: { ruleId: string; newWeight: number }, cb: (err: Error | null, res?: SeoRuleItem) => void): void;
+  UpdateRuleWeight(req: { ruleId: string; newWeight: number }, cb: (err: Error | null, res?: { rule: SeoRuleItem }) => void): void;
+  UpdateRuleEnabled(req: { ruleId: string; isEnabled: boolean }, cb: (err: Error | null, res?: { rule: SeoRuleItem }) => void): void;
   AnalyzeContent(
     req: {
       requestId: string;
@@ -111,8 +112,18 @@ export class AnalyzerGrpcClient implements OnModuleInit {
     return new Promise((resolve, reject) => {
       this.client.UpdateRuleWeight({ ruleId, newWeight }, (err, res) => {
         if (err) return reject(err);
-        if (!res) return reject(new Error('Empty response'));
-        resolve(res);
+        if (!res?.rule) return reject(new Error('Empty response'));
+        resolve(res.rule);
+      });
+    });
+  }
+
+  updateRuleEnabled(ruleId: string, isEnabled: boolean): Promise<SeoRuleItem> {
+    return new Promise((resolve, reject) => {
+      this.client.UpdateRuleEnabled({ ruleId, isEnabled }, (err, res) => {
+        if (err) return reject(err);
+        if (!res?.rule) return reject(new Error('Empty response'));
+        resolve(res.rule);
       });
     });
   }

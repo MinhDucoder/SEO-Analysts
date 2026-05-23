@@ -4,7 +4,7 @@
  * results, and returns aggregated scores + classification.
  */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { CheckStatus, IssueCategory, Classification } from '@repo/shared';
+import { IssueCategory, Classification } from '@repo/shared';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { RuleRegistry } from './rule-registry';
 import { RuleRunner, DbRule, RunnerResult } from './rule-runner';
@@ -102,6 +102,13 @@ export class AnalyzerService implements OnModuleInit {
     return this.prisma.seoRule.update({
       where: { id: ruleId },
       data: { weight: newWeight },
+    });
+  }
+
+  async updateRuleEnabled(ruleId: string, isEnabled: boolean) {
+    return this.prisma.seoRule.update({
+      where: { id: ruleId },
+      data: { isEnabled },
     });
   }
 }

@@ -23,8 +23,11 @@ export function getSocket(): Socket {
   const token = useAuthStore.getState().accessToken;
 
   if (!socket) {
-    socket = io(WS_URL, {
-      path: "/ws",
+    // Server uses `@WebSocketGateway({ namespace: '/ws' })` — `/ws` is a
+    // Socket.IO **namespace**, not the engine.io `path`. Append it to the
+    // host URL so the client opens the right namespace; leave `path` at the
+    // default `/socket.io`.
+    socket = io(`${WS_URL}/ws`, {
       auth: token ? { token } : undefined,
       transports: ["websocket", "polling"],
       reconnection: true,

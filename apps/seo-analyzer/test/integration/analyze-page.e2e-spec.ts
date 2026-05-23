@@ -117,13 +117,42 @@ describe('AnalyzePage E2E', () => {
       seededRules.filter((r) => r.category === 'meta'),
     );
     const res = await controller.getRulesByCategory({ category: IssueCategory.META });
-    expect(res.rules.every((r) => r.category === 'meta')).toBe(true);
+    // mapRuleToProto normalises Prisma's lowercase enum to the proto
+    // IssueCategory symbol — proto-loader's `enums: String` expects this.
+    expect(res.rules.every((r) => r.category === 'ISSUE_CATEGORY_META')).toBe(true);
+  });
+
+  it('ListRules emits camelCase displayName + isEnabled (proto-loader wire format)', async () => {
+    findManyMock.mockResolvedValueOnce(seededRules);
+    const res = await controller.listRules();
+    const row = res.rules[0];
+    expect(row.displayName).toBeTypeOf('string');
+    expect(row.isEnabled).toBe(true);
+    // Snake_case variants must NOT exist — proto-loader silently drops them.
+    expect((row as Record<string, unknown>).display_name).toBeUndefined();
+    expect((row as Record<string, unknown>).is_enabled).toBeUndefined();
   });
 
   it('UpdateRuleWeight rejects out-of-range weight', async () => {
     await expect(
       controller.updateRuleWeight({ ruleId: 'r-title_tag', newWeight: 42 }),
     ).rejects.toThrow(/between 1 and 10/);
+  });
+
+  it('UpdateRuleEnabled toggles isEnabled', async () => {
+    updateMock.mockImplementationOnce(({ where, data }: any) => ({
+      ...seededRules.find((r) => r.id === where.id),
+      ...data,
+    }));
+    const res = await controller.updateRuleEnabled({
+      ruleId: 'r-title_tag',
+      isEnabled: false,
+    });
+    expect(res.rule.isEnabled).toBe(false);
+    expect(updateMock).toHaveBeenCalledWith({
+      where: { id: 'r-title_tag' },
+      data: { isEnabled: false },
+    });
   });
 
   it('HealthCheck returns healthy', () => {

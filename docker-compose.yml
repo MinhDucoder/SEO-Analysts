@@ -93,7 +93,14 @@ services:
   redis:
     image: redis:7-alpine
     container_name: seo-redis
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    # --maxmemory + allkeys-lru lets Redis evict old keys gracefully
+    # BEFORE docker hits the hard memory limit and SIGKILLs the container
+    # (exit 137). Site-mode audits + BullMQ + AOF can otherwise blow past
+    # the 256M default in minutes. Keep maxmemory below the docker limit
+    # to leave headroom for AOF rewrite peaks.
+    command: >
+      redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+      --maxmemory 768mb --maxmemory-policy allkeys-lru
     ports:
       - "127.0.0.1:6379:6379"
     volumes:
@@ -108,8 +115,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
-          cpus: '0.25'
+          memory: 1G
+          cpus: '0.5'
     logging:
       driver: json-file
       options:
@@ -190,6 +197,7 @@ services:
       GRPC_PORT: "50052"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
     depends_on:
       redis:
@@ -222,6 +230,7 @@ services:
       ANALYZER_DATABASE_URL: "postgresql://${ANALYZER_DB_USER}:${ANALYZER_DB_PASS}@analyzer-db:5432/${ANALYZER_DB_NAME}"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
     depends_on:
       analyzer-db:
@@ -253,6 +262,7 @@ services:
       GRPC_PORT: "50054"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
     depends_on:
       redis:
@@ -289,6 +299,11 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      SEO_AI_ENABLED: ${SEO_AI_ENABLED:-false}
+      SEO_AI_PROVIDER: ${SEO_AI_PROVIDER:-anthropic}
+      SEO_AI_MODEL: ${SEO_AI_MODEL:-claude-haiku-4-5}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     depends_on:
       report-db:
         condition: service_healthy

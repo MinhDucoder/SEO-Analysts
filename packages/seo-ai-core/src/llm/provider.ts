@@ -1,8 +1,9 @@
 import type { ILLMProvider } from './types.js';
 import { AnthropicAdapter } from './adapters/anthropic.adapter.js';
+import { GeminiAdapter } from './adapters/gemini.adapter.js';
 import { LLMError } from '../errors/index.js';
 
-export type LLMProviderName = 'openai' | 'anthropic' | 'ollama';
+export type LLMProviderName = 'openai' | 'anthropic' | 'gemini' | 'ollama';
 
 export interface LLMConfig {
   provider: LLMProviderName;
@@ -25,6 +26,7 @@ type AdapterCtor = new (cfg: LLMConfig) => ILLMProvider;
  */
 const REGISTRY = new Map<string, AdapterCtor>([
   ['anthropic', AnthropicAdapter],
+  ['gemini', GeminiAdapter],
 ]);
 
 export function createLLM(cfg: LLMConfig): ILLMProvider {
