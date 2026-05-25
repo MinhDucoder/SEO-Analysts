@@ -31,15 +31,25 @@ describe('AuditsService', () => {
     enqueueCrawlStart: vi.fn(),
     enqueueSiteCrawlStart: vi.fn(),
   };
-  const reportClient = { getReport: vi.fn().mockRejectedValue(new Error('down')) };
+  const reportClient = {
+    getReport: vi.fn().mockRejectedValue(new Error('down')),
+    generateSuggestions: vi.fn(),
+  };
   const entitlement = {
     hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
     checkSiteAuditPageCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
     getEffectivePlan: vi.fn().mockResolvedValue('business'),
+    isAdmin: vi.fn().mockResolvedValue(false),
+  };
+  const config = { get: vi.fn().mockReturnValue('true') }; // BILLING_FEATURE_ENABLED
+  const counter = {
+    peek: vi.fn().mockResolvedValue({ allowed: true, used: 0, remaining: 100, resetAt: new Date() }),
+    consume: vi.fn().mockResolvedValue({ allowed: true, used: 1, remaining: 99, resetAt: new Date() }),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    config.get.mockReturnValue('true');
     svc = new AuditsService(
       prisma as never,
       rl as never,
@@ -47,6 +57,8 @@ describe('AuditsService', () => {
       producer as never,
       reportClient as never,
       entitlement as never,
+      config as never,
+      counter as never,
     );
   });
 
@@ -156,6 +168,77 @@ describe('AuditsService', () => {
         svc.createAudit('u1', { url: 'https://example.com', mode: 'site', maxUrls: 10_000 }),
       ).rejects.toBeInstanceOf(BadRequestException);
       expect(prisma.audit.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('suggest', () => {
+    const completedSingle = { id: 'a1', userId: 'u1', mode: 'single', status: AuditStatus.COMPLETED };
+
+    it('generated → consumes 1 lượt and returns count', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.isAdmin.mockResolvedValueOnce(false);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'generated', count: 3, aiSuggestionsGeneratedAt: 'x',
+      });
+      const out = await svc.suggest('u1', UserRole.USER, 'a1');
+      expect(reportClient.generateSuggestions).toHaveBeenCalledWith('a1');
+      expect(counter.consume).toHaveBeenCalledWith('u1', 'ai_calls_monthly', 100, 1);
+      expect(out).toMatchObject({ status: 'generated', count: 3 });
+    });
+
+    it('already → does NOT consume', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'already', count: 2, aiSuggestionsGeneratedAt: 'x',
+      });
+      await svc.suggest('u1', UserRole.USER, 'a1');
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+
+    it('blocks with 429 when quota exhausted (peek before LLM)', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      counter.peek.mockResolvedValueOnce({ allowed: false, used: 100, remaining: 0, resetAt: new Date() });
+      await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toMatchObject({ status: 429 });
+      expect(reportClient.generateSuggestions).not.toHaveBeenCalled();
+    });
+
+    it('admin → skips metering entirely', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.isAdmin.mockResolvedValueOnce(true);
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'generated', count: 1, aiSuggestionsGeneratedAt: 'x',
+      });
+      await svc.suggest('admin', UserRole.ADMIN, 'a1');
+      expect(counter.peek).not.toHaveBeenCalled();
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+
+    it('billing off → skips metering', async () => {
+      config.get.mockReturnValueOnce('false');
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'generated', count: 1, aiSuggestionsGeneratedAt: 'x',
+      });
+      await svc.suggest('u1', UserRole.USER, 'a1');
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+
+    it('site mode → BadRequest', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce({ ...completedSingle, mode: 'site' });
+      await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toBeInstanceOf(BadRequestException);
+    });
+
+    it('status disabled → 503, no consume', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'disabled', count: 0, aiSuggestionsGeneratedAt: '',
+      });
+      await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toMatchObject({ status: 503 });
+      expect(counter.consume).not.toHaveBeenCalled();
     });
   });
 });
