@@ -8,18 +8,22 @@ import {
   createShareLink,
   deleteAudit,
   getAudit,
+  getAuditPages,
   getAuditStatus,
   listAudits,
   revokeShareLink,
+  suggestAudit,
   type CreateAuditDto,
   type CreateAuditResponse,
   type ListAuditsParams,
+  type SuggestAuditResponse,
 } from "@/lib/api/audits";
 import type {
   AuditDetailResponse,
   AuditListItem,
   AuditStatusResponse,
   CompareResult,
+  PageAuditRow,
   Paginated,
   ShareLinkResponse,
 } from "@/lib/api/types";
@@ -170,6 +174,28 @@ export function useAuditStatus(
   return query;
 }
 
+/**
+ * `GET /audits/:id/pages` — paginated per-URL table for a site-mode audit.
+ * Keeps previous page's data during pagination so the table doesn't flash a
+ * skeleton between pages. Disabled until an id is present.
+ */
+export function useAuditPages(
+  id: string | null | undefined,
+  page: number,
+  limit = 20,
+) {
+  const accessToken = useAuthStore((s) => s.accessToken);
+  return useQuery<Paginated<PageAuditRow>>({
+    queryKey: id
+      ? queryKeys.audits.pages(id, page, limit)
+      : ["audits", "pages", "noop"],
+    queryFn: () => getAuditPages(id as string, { page, limit }),
+    enabled: accessToken !== null && Boolean(id),
+    placeholderData: (prev) => prev,
+    staleTime: 30 * 1_000,
+  });
+}
+
 export function useCreateShareLink(auditId: string) {
   const queryClient = useQueryClient();
   return useMutation<ShareLinkResponse, Error, void>({
@@ -207,5 +233,21 @@ export function useCompareAudits(
     queryFn: () => compareAudits(a1, a2),
     enabled: accessToken !== null && Boolean(a1) && Boolean(a2),
     staleTime: 5 * 60 * 1_000,
+  });
+}
+
+/**
+ * `POST /audits/:id/suggest` — on-demand AI suggestions. Invalidates the
+ * detail query on success so the freshly persisted suggestions render under
+ * failing rules. 403/429 bubble up; the global api error handler shows the
+ * upgrade / quota modal.
+ */
+export function useSuggestAudit(auditId: string) {
+  const queryClient = useQueryClient();
+  return useMutation<SuggestAuditResponse, Error, void>({
+    mutationFn: () => suggestAudit(auditId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.audits.detail(auditId) });
+    },
   });
 }

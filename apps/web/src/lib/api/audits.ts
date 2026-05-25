@@ -4,6 +4,7 @@ import type {
   AuditListItem,
   AuditStatusResponse,
   CompareResult,
+  PageAuditRow,
   Paginated,
   ShareLinkResponse,
 } from "@/lib/api/types";
@@ -94,6 +95,22 @@ export async function getAuditStatus(id: string): Promise<AuditStatusResponse> {
 }
 
 /**
+ * `GET /audits/:id/pages` — paginated per-URL results of a site-mode audit
+ * (lowest score first). Empty for single-mode audits.
+ */
+export async function getAuditPages(
+  id: string,
+  params: { page?: number; limit?: number } = {},
+): Promise<Paginated<PageAuditRow>> {
+  const searchParams: Record<string, string> = {};
+  if (params.page !== undefined) searchParams.page = String(params.page);
+  if (params.limit !== undefined) searchParams.limit = String(params.limit);
+  return api
+    .get(`audits/${id}/pages`, { searchParams })
+    .json<Paginated<PageAuditRow>>();
+}
+
+/**
  * `POST /audits/:id/share` — mint a public share link. The gateway
  * generates the `shareToken` and returns the canonical `shareUrl` the
  * user can copy.
@@ -141,4 +158,19 @@ export async function compareAudits(
   return api
     .get("audits/compare", { searchParams: { audit1, audit2 } })
     .json<CompareResult>();
+}
+
+export interface SuggestAuditResponse {
+  status: "generated" | "already" | "empty";
+  count: number;
+  remaining: number | null;
+}
+
+/**
+ * `POST /audits/:id/suggest` — generate AI suggestions on demand. Consumes
+ * 1 `ai_calls_monthly` lượt server-side (only on `generated`). 403 (no
+ * feature) / 429 (quota) are handled globally by the api error interceptor.
+ */
+export async function suggestAudit(id: string): Promise<SuggestAuditResponse> {
+  return api.post(`audits/${id}/suggest`).json<SuggestAuditResponse>();
 }
