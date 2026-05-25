@@ -8,6 +8,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { ReportService } from '../services/report.service';
 import { ReportComparator } from '../services/report.comparator';
 import { ShareLinkService } from '../services/share-link.service';
+import { AiSuggestService } from '../ai-suggest/services/ai-suggest.service';
 import { PdfGenerator } from '../../infra/pdf/pdf.generator';
 import { AnalyzeResult } from '../domain/analyze-result.interface';
 import { KeywordResult } from '../domain/keyword-result.interface';
@@ -21,6 +22,7 @@ export class ReportGrpcController {
     private readonly comparator: ReportComparator,
     private readonly shareLink: ShareLinkService,
     private readonly pdf: PdfGenerator,
+    private readonly aiSuggest: AiSuggestService,
   ) {}
 
   @GrpcMethod('ReportService', 'GenerateReport')
@@ -49,9 +51,28 @@ export class ReportGrpcController {
     return this.toReportResponse(report);
   }
 
+  @GrpcMethod('ReportService', 'GenerateSuggestions')
+  async generateSuggestions(req: { auditId: string }) {
+    const outcome = await this.aiSuggest.generateOnce(req.auditId);
+    return {
+      status: outcome.status,
+      count: outcome.suggestions.length,
+      aiSuggestions: outcome.suggestions.map((it) => ({
+        ruleId: it.ruleId,
+        explanation: it.explanation,
+        actionableFix: it.actionable_fix,
+      })),
+      aiSuggestionsGeneratedAt: outcome.generatedAt ?? '',
+    };
+  }
+
   @GrpcMethod('ReportService', 'CompareReports')
-  async compareReports(req: { auditId1: string; auditId2: string }) {
-    const { before, after } = await this.reportService.getTwo(req.auditId1, req.auditId2);
+  async compareReports(req: { auditId_1: string; auditId_2: string }) {
+    // Proto fields `audit_id_1`/`audit_id_2` camelCase to `auditId_1`/`auditId_2`
+    // under proto-loader (the trailing `_<digit>` is preserved, NOT collapsed
+    // to `auditId1`). Reading `req.auditId1` here yields undefined. Keep the
+    // underscore.
+    const { before, after } = await this.reportService.getTwo(req.auditId_1, req.auditId_2);
     const result = this.comparator.compare(before as any, after as any);
     return {
       scoreDelta: result.scoreDelta,
@@ -70,7 +91,11 @@ export class ReportGrpcController {
   @GrpcMethod('ReportService', 'CreateShareLink')
   async createShareLink(req: { auditId: string }) {
     const link = await this.shareLink.create(req.auditId);
-    const baseUrl = process.env.PUBLIC_BASE_URL ?? 'http://localhost:3000';
+    // Share link is opened in a browser, so it must point at the web app
+    // (`/shared/:token` Next.js page), NOT the gateway. FRONTEND_URL is the
+    // same env the gateway already uses; default to the web port 3001, never
+    // the gateway port 3000 (3000 has no `/shared/:token` route → 404).
+    const baseUrl = process.env.FRONTEND_URL ?? 'http://localhost:3001';
     return { shareToken: link.token, shareUrl: `${baseUrl}/shared/${link.token}` };
   }
 

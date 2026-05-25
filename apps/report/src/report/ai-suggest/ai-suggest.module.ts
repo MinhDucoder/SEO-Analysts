@@ -1,34 +1,12 @@
 import * as path from 'node:path';
 import { Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bullmq';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { BULLMQ_QUEUES } from '@repo/shared';
 import { createLLM, FileSystemPromptLoader } from '@repo/seo-ai-core';
 import { AiSuggestService, PROMPT_LOADER, LLM_PROVIDER } from './services/ai-suggest.service';
-import { AiSuggestListener } from './controllers/ai-suggest.listener';
-import { AiSuggestWorker } from './controllers/ai-suggest.worker';
 
+// AI suggestions are generated ON DEMAND (sync gRPC ReportService.GenerateSuggestions),
+// metered per-subscription at the gateway. There is no longer a report.done →
+// BullMQ auto-run path; AiSuggestService is exported for the gRPC controller.
 @Module({
-  imports: [
-    // Mirror ReportModule's BullMQ root config (codebase convention: each
-    // feature module declares forRootAsync + registerQueue together).
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const url = config.get<string>('REDIS_URL') ?? 'redis://localhost:6379';
-        const parsed = new URL(url);
-        return {
-          connection: {
-            host: parsed.hostname,
-            port: Number(parsed.port || 6379),
-            password: parsed.password || undefined,
-          },
-        };
-      },
-    }),
-    BullModule.registerQueue({ name: BULLMQ_QUEUES.AI_SUGGEST_START }),
-  ],
   providers: [
     {
       provide: PROMPT_LOADER,
@@ -64,8 +42,7 @@ import { AiSuggestWorker } from './controllers/ai-suggest.worker';
       },
     },
     AiSuggestService,
-    AiSuggestListener,
-    AiSuggestWorker,
   ],
+  exports: [AiSuggestService],
 })
 export class AiSuggestModule {}
