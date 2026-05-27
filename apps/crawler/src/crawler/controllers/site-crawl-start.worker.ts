@@ -68,7 +68,14 @@ export class SiteCrawlStartWorker extends WorkerHost {
     } catch (err) {
       const error = err as Error;
       this.logger.error(`site-crawl.start failed audit=${auditId}: ${error.message}`);
-      await this.publisher.publishCrawlFailed(auditId, error);
+      // Only surface crawl.failed on the final attempt so a transient
+      // discovery failure that succeeds on retry doesn't mark the audit
+      // FAILED. During process() attemptsMade is the 0-based count of prior
+      // attempts (BullMQ retries while attemptsMade + 1 < attempts).
+      const willRetry = (job.attemptsMade ?? 0) + 1 < (job.opts?.attempts ?? 1);
+      if (!willRetry) {
+        await this.publisher.publishCrawlFailed(auditId, error);
+      }
       throw error;
     }
   }

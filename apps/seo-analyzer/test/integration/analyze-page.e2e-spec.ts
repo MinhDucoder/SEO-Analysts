@@ -68,10 +68,14 @@ describe('AnalyzePage E2E', () => {
       pageData: makePageData(),
     });
 
-    expect(response.audit_id).toBe('00000000-0000-0000-0000-000000000001');
-    expect(response.rule_results.length).toBe(20);
-    expect(response.category_scores.length).toBeGreaterThanOrEqual(5);
-    expect(response.overall_score).toBeGreaterThanOrEqual(80);
+    // Wire format is camelCase — proto-loader runs with `keepCase: false`, so
+    // snake_case keys (audit_id, rule_results, overall_score) are silently
+    // dropped during serialization. Asserting camelCase is what guards the
+    // crawler's site-audit path from receiving empty ruleResults / score 0.
+    expect(response.auditId).toBe('00000000-0000-0000-0000-000000000001');
+    expect(response.ruleResults.length).toBe(20);
+    expect(response.categoryScores.length).toBeGreaterThanOrEqual(5);
+    expect(response.overallScore).toBeGreaterThanOrEqual(80);
     expect(response.classification).toBe(Classification.EXCELLENT);
     expect(createManyMock).toHaveBeenCalledOnce();
   });
@@ -102,7 +106,7 @@ describe('AnalyzePage E2E', () => {
       pageData: bad,
     });
 
-    expect(response.overall_score).toBeLessThan(40);
+    expect(response.overallScore).toBeLessThan(40);
     expect(response.classification).toBe(Classification.POOR);
   });
 

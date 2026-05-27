@@ -85,8 +85,16 @@ export class CrawlerWorker extends WorkerHost {
     } catch (err) {
       const error = err as Error;
       this.logger.error(`crawl failed audit=${auditId}: ${error.message}`, error.stack);
-      await this.publisher.publishCrawlFailed(auditId, error);
-      throw error; // let BullMQ mark the job failed
+      // Only surface crawl.failed once BullMQ has exhausted retries — a
+      // transient failure (DNS blip) that succeeds on retry must NOT flip the
+      // audit to FAILED. Mirrors BullMQ's own retry test (it retries while
+      // attemptsMade + 1 < attempts); during process() attemptsMade is the
+      // 0-based count of prior attempts.
+      const willRetry = (job.attemptsMade ?? 0) + 1 < (job.opts?.attempts ?? 1);
+      if (!willRetry) {
+        await this.publisher.publishCrawlFailed(auditId, error);
+      }
+      throw error; // let BullMQ mark the job failed / schedule the retry
     }
   }
 }
