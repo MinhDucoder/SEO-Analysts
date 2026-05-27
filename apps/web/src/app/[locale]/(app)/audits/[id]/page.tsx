@@ -5,13 +5,14 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Download, RotateCw, Share2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { AuditStatus } from "@repo/shared";
+import { AuditMode, AuditStatus } from "@repo/shared";
 import { HTTPError } from "ky";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AuditStatusBadge } from "@/components/audits/audit-status-badge";
 import { AuditDetailSkeleton } from "@/components/audit-detail/audit-detail-skeleton";
 import { CompletedReport } from "@/components/audit-detail/completed-report";
+import { SiteReport } from "@/components/audit-detail/site-report";
 import { DeleteDialog } from "@/components/audit-detail/delete-dialog";
 import { FailedState } from "@/components/audit-detail/failed-state";
 import { InProgressState } from "@/components/audit-detail/in-progress-state";
@@ -52,15 +53,20 @@ export default function AuditDetailPage() {
   const auditQuery = useAudit(id);
   const audit = auditQuery.data?.audit;
   const report = auditQuery.data?.report ?? null;
+  const siteSummary = auditQuery.data?.siteSummary ?? null;
 
   // WS subscription — gives us live progress updates while the audit is
   // running. Always subscribe; the hook self-noops on terminal status.
   const realtime = useAuditRealtime(id);
 
-  // Poll /status as a fallback (cheap; auto-stops on terminal status).
-  // Disabled once the WS hook has sent us a fresh snapshot.
+  // Poll /status as a fallback while the audit is non-terminal (cheap;
+  // auto-stops on terminal status). WS is the primary channel, but a
+  // room-join ack is NOT proof events will arrive: Redis pub/sub has no
+  // replay, so an audit that finishes before the subscribe ack (or while
+  // the gateway/subscriber was restarting) emits nothing to this client.
+  // Keep polling on so the UI still converges in that case.
   const auditStatusEnabled = audit ? NON_TERMINAL.has(audit.status) : true;
-  useAuditStatus(id, { enabled: auditStatusEnabled && !realtime.subscribed });
+  const statusQuery = useAuditStatus(id, { enabled: auditStatusEnabled });
 
   const createMutation = useCreateAudit();
 
@@ -96,13 +102,20 @@ export default function AuditDetailPage() {
     );
   }
 
-  // Pull the freshest progress: WS event → cache → audit row.
-  const liveProgress = realtime.latest?.progress ?? 0;
-  const liveStage = realtime.latest?.stage ?? null;
-  const effectiveStatus = realtime.latest?.status ?? audit.status;
+  // Pull the freshest progress: WS event → polled /status → audit row. The
+  // polled fallback is what keeps this moving when WS delivers no events.
+  const polled = statusQuery.data;
+  const liveProgress = realtime.latest?.progress ?? polled?.progress ?? 0;
+  const liveStage = realtime.latest?.stage ?? polled?.stage ?? null;
+  const effectiveStatus = realtime.latest?.status ?? polled?.status ?? audit.status;
   const isInProgress = NON_TERMINAL.has(effectiveStatus);
   const isFailed = effectiveStatus === AuditStatus.FAILED;
-  const isCompleted = effectiveStatus === AuditStatus.COMPLETED && report;
+  const isSite = audit.mode === AuditMode.SITE;
+  const isCompleted = effectiveStatus === AuditStatus.COMPLETED;
+  // Single audits render once their per-page report arrives; site audits render
+  // off the aggregate summary (they never produce a report).
+  const isCompletedSingle = isCompleted && !isSite && Boolean(report);
+  const isCompletedSite = isCompleted && isSite && Boolean(siteSummary);
 
   const handleExport = async () => {
     if (exporting) return;
@@ -179,7 +192,7 @@ export default function AuditDetailPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {isCompleted && (
+          {isCompletedSingle && (
             <>
               <Button
                 variant="outline"
@@ -235,8 +248,12 @@ export default function AuditDetailPage() {
         />
       )}
 
-      {isCompleted && report && (
+      {isCompletedSingle && report && (
         <CompletedReport audit={audit} report={report} />
+      )}
+
+      {isCompletedSite && siteSummary && (
+        <SiteReport audit={audit} summary={siteSummary} />
       )}
 
       <ShareDialog auditId={audit.id} open={shareOpen} onOpenChange={setShareOpen} />
