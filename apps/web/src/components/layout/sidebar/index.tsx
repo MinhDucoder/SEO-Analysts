@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
   Users,
+  Wrench,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SidebarHeader } from "./header";
@@ -67,6 +68,7 @@ export function Sidebar() {
           label={tNav("compare")}
           collapsed={collapsed}
         />
+        <NavItem href={ROUTES.tools} icon={Wrench} label={tNav("tools")} collapsed={collapsed} />
         <NavItem
           href={ROUTES.pricing}
           icon={Sparkles}

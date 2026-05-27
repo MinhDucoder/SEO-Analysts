@@ -48,25 +48,25 @@ export default function GooglePreviewPage() {
         {mode === "manual" ? (
           <div className="space-y-3">
             <input
-              className="w-full rounded border p-2"
+              className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
               placeholder={t("fieldUrl")}
               value={manual.url}
               onChange={(e) => setManual({ ...manual, url: e.target.value })}
             />
             <input
-              className="w-full rounded border p-2"
+              className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
               placeholder={t("fieldTitle")}
               value={manual.title}
               onChange={(e) => setManual({ ...manual, title: e.target.value })}
             />
             <textarea
-              className="w-full rounded border p-2"
+              className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
               placeholder={t("fieldDescription")}
               value={manual.description}
               onChange={(e) => setManual({ ...manual, description: e.target.value })}
             />
             <input
-              className="w-full rounded border p-2"
+              className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
               placeholder={t("fieldFavicon")}
               value={manual.faviconUrl}
               onChange={(e) => setManual({ ...manual, faviconUrl: e.target.value })}
@@ -74,7 +74,7 @@ export default function GooglePreviewPage() {
           </div>
         ) : (
           <input
-            className="w-full rounded border p-2"
+            className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
             placeholder={tc("urlPlaceholder")}
             value={fetchUrl}
             onChange={(e) => setFetchUrl(e.target.value)}

@@ -26,7 +26,7 @@ export default function SitemapValidatorPage() {
       <ToolShell.Input>
         <div className="space-y-3">
           <input
-            className="w-full rounded border p-2"
+            className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
             placeholder={tc("urlPlaceholder")}
             value={siteUrl}
             onChange={(e) => setSiteUrl(e.target.value)}

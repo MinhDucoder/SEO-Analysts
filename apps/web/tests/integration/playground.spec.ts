@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { uniqueUser } from './helpers/unique-user';
+import { uniqueUser } from '../helpers/unique-user';
 
 async function createApiKeyViaApi(apiBase: string, accessToken: string) {
   const r = await fetch(`${apiBase}/users/me/api-keys`, {

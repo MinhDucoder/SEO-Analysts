@@ -38,7 +38,7 @@ export default function SocialPreviewPage() {
     `rounded px-3 py-1 text-sm ${active ? "bg-primary text-primary-foreground" : "bg-muted"}`;
   const field = (key: keyof typeof manual, label: string) => (
     <input
-      className="w-full rounded border p-2"
+      className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
       placeholder={label}
       value={manual[key]}
       onChange={(e) => setManual({ ...manual, [key]: e.target.value })}
@@ -67,7 +67,7 @@ export default function SocialPreviewPage() {
           </div>
         ) : (
           <input
-            className="w-full rounded border p-2"
+            className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
             placeholder={tc("urlPlaceholder")}
             value={fetchUrl}
             onChange={(e) => setFetchUrl(e.target.value)}

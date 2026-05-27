@@ -41,14 +41,14 @@ export default function SchemaPreviewPage() {
 
         {mode === "paste" ? (
           <textarea
-            className="h-64 w-full rounded border p-2 font-mono text-xs"
+            className="h-64 w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted font-mono text-xs"
             placeholder={t("rawPlaceholder")}
             value={raw}
             onChange={(e) => setRaw(e.target.value)}
           />
         ) : (
           <input
-            className="w-full rounded border p-2"
+            className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
             placeholder={tc("urlPlaceholder")}
             value={fetchUrl}
             onChange={(e) => setFetchUrl(e.target.value)}

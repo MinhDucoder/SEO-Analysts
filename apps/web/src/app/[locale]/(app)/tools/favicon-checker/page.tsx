@@ -22,7 +22,7 @@ export default function FaviconCheckerPage() {
     <ToolShell title={t("title")} description={t("description")}>
       <ToolShell.Input>
         <input
-          className="w-full rounded border p-2"
+          className="w-full rounded border border-border bg-bg p-2 text-fg placeholder:text-fg-muted"
           placeholder={tc("urlPlaceholder")}
           value={url}
           onChange={(e) => setUrl(e.target.value)}

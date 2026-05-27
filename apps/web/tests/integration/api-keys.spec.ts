@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { uniqueUser } from './helpers/unique-user';
+import { uniqueUser } from '../helpers/unique-user';
 
 test('api-keys: login → create → plaintext modal → list shows prefix → revoke', async ({ page, request }) => {
   const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:3000/api/v1';
