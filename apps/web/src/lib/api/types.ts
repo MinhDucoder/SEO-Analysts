@@ -92,10 +92,15 @@ export interface AuditListItem {
 
 /**
  * Detail-shape from `GET /audits/:id` — Summary plus errorMessage which
- * is only populated when status === 'failed'.
+ * is only populated when status === 'failed'. `mode` drives the detail
+ * view branch: single → per-page report, site → aggregate + page table.
+ * `discoveredUrlsCount`/`auditedUrlsCount` are only set for site-mode.
  */
 export interface AuditDetail extends AuditListItem {
   errorMessage: string | null;
+  mode: import("@repo/shared").AuditMode;
+  discoveredUrlsCount: number | null;
+  auditedUrlsCount: number | null;
 }
 
 /**
@@ -196,9 +201,42 @@ export interface ReportDetail {
   aiSuggestionsGeneratedAt?: string | null;
 }
 
+/**
+ * One of the 10 lowest-scoring URLs in a site-mode audit. `issueCount` is
+ * the number of failing/warning rules on that page (not the rule total).
+ */
+export interface SiteWorstPage {
+  url: string;
+  score: number;
+  issueCount: number;
+}
+
+/**
+ * Aggregate view of a site-mode audit, recomputed by the gateway from the
+ * durable page_audits rows. Present on `GET /audits/:id` when audit.mode
+ * === 'site'; null for single-mode audits.
+ */
+export interface SiteAuditSummary {
+  totalUrls: number;
+  auditedUrls: number;
+  failedUrls: number;
+  avgScore: number;
+  medianScore: number;
+  worstPages: SiteWorstPage[];
+}
+
+/** One row of `GET /audits/:id/pages` — a single crawled URL's result. */
+export interface PageAuditRow {
+  url: string;
+  score: number;
+  issueCount: number;
+  fetchedAt: string;
+}
+
 export interface AuditDetailResponse {
   audit: AuditDetail;
   report: ReportDetail | null;
+  siteSummary: SiteAuditSummary | null;
 }
 
 export interface AuditStatusResponse {
@@ -276,6 +314,25 @@ export interface AdminStats {
   newUsersToday: number;
   auditsToday: number;
   topDomains: Array<{ domain: string; count: number }>;
+}
+
+export interface AdminRevenue {
+  period: {
+    type: "month" | "quarter" | "year";
+    year: number;
+    month?: number;
+    quarter?: number;
+    label: string;
+    start: string;
+    end: string;
+  };
+  grossVnd: number;
+  netVnd: number;
+  vatVnd: number;
+  vatPercent: number;
+  paidCount: number;
+  deltaPercent: number | null;
+  byPlan: Array<{ planCode: string; displayName: string; count: number; grossVnd: number }>;
 }
 
 /**

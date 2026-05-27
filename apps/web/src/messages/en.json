@@ -38,6 +38,7 @@
     "users": "Users",
     "rules": "Rules",
     "stats": "Stats",
+    "tools": "Tools",
     "pricing": "Pricing",
     "policy": "Policy"
   },
@@ -314,6 +315,25 @@
       "submitting": "Deleting…",
       "success": "Audit deleted",
       "fail": "Deletion failed"
+    },
+    "site": {
+      "subtitle": "Whole-site audit — aggregate score across every crawled page.",
+      "stats": {
+        "avg": "Avg score",
+        "median": "Median",
+        "audited": "Audited",
+        "failed": "Failed"
+      },
+      "worstPages": {
+        "title": "Lowest-scoring pages"
+      },
+      "table": {
+        "title": "All pages",
+        "totalPages": "{count} pages",
+        "loading": "Loading pages…",
+        "empty": "No pages yet",
+        "issues": "{count, plural, =0 {No issues} one {# issue} other {# issues}}"
+      }
     }
   },
   "scheduled": {
@@ -441,6 +461,25 @@
       "topDomains": "Top domains",
       "topDomainsEmpty": "No domain activity yet"
     },
+    "revenue": {
+      "title": "Revenue & tax",
+      "typeMonth": "Month",
+      "typeQuarter": "Quarter",
+      "typeYear": "Year",
+      "prev": "Previous period",
+      "next": "Next period",
+      "export": "Export CSV",
+      "gross": "Total revenue",
+      "net": "Net revenue",
+      "vat": "VAT",
+      "vatLabel": "VAT {percent}%",
+      "transactions": "{count} transactions",
+      "deltaVsPrev": "vs previous period",
+      "byPlanTitle": "Revenue by plan",
+      "byPlanEmpty": "No transactions",
+      "loading": "Loading revenue…",
+      "error": "Couldn't load revenue"
+    },
     "users": {
       "title": "Users",
       "subtitle": "Manage user accounts.",
@@ -476,6 +515,8 @@
       },
       "lockSuccess": "{email} has been locked",
       "unlockSuccess": "{email} has been unlocked",
+      "roleChangeSuccess": "{email} is now {role}",
+      "selfRoleHint": "You can't change your own role",
       "empty": "No users match the filter.",
       "error": "Couldn't load users",
       "loading": "Loading users…"
@@ -731,11 +772,26 @@
     "index": {
       "title": "SEO Tools",
       "subtitle": "Free utilities for site owners — preview before you publish.",
-      "google": { "name": "Google SERP Preview", "desc": "Preview how your page appears in Google search." },
-      "social": { "name": "Social Card Preview", "desc": "Facebook, Twitter/X and LinkedIn cards from OG meta." },
-      "schema": { "name": "Schema.org Validator", "desc": "Inspect JSON-LD and check required fields." },
-      "sitemap": { "name": "Sitemap + Robots", "desc": "Validate sitemap.xml and robots.txt." },
-      "favicon": { "name": "Favicon Checker", "desc": "Detect favicons across browser, iOS and Android paths." }
+      "google": {
+        "name": "Google SERP Preview",
+        "desc": "Preview how your page appears in Google search."
+      },
+      "social": {
+        "name": "Social Card Preview",
+        "desc": "Facebook, Twitter/X and LinkedIn cards from OG meta."
+      },
+      "schema": {
+        "name": "Schema.org Validator",
+        "desc": "Inspect JSON-LD and check required fields."
+      },
+      "sitemap": {
+        "name": "Sitemap + Robots",
+        "desc": "Validate sitemap.xml and robots.txt."
+      },
+      "favicon": {
+        "name": "Favicon Checker",
+        "desc": "Detect favicons across browser, iOS and Android paths."
+      }
     },
     "googlePreview": {
       "title": "Google SERP Preview",

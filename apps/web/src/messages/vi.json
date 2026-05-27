@@ -38,6 +38,7 @@
     "users": "Người dùng",
     "rules": "Quy tắc",
     "stats": "Thống kê",
+    "tools": "Công cụ",
     "pricing": "Bảng giá",
     "policy": "Chính sách"
   },
@@ -314,6 +315,25 @@
       "submitting": "Đang xóa…",
       "success": "Đã xóa audit",
       "fail": "Xóa thất bại"
+    },
+    "site": {
+      "subtitle": "Audit toàn site — điểm tổng hợp trên tất cả trang đã crawl.",
+      "stats": {
+        "avg": "Điểm TB",
+        "median": "Trung vị",
+        "audited": "Đã audit",
+        "failed": "Lỗi"
+      },
+      "worstPages": {
+        "title": "Trang điểm thấp nhất"
+      },
+      "table": {
+        "title": "Tất cả trang",
+        "totalPages": "{count} trang",
+        "loading": "Đang tải danh sách trang…",
+        "empty": "Chưa có trang nào",
+        "issues": "{count, plural, =0 {Không lỗi} other {# vấn đề}}"
+      }
     }
   },
   "scheduled": {
@@ -441,6 +461,25 @@
       "topDomains": "Top domain",
       "topDomainsEmpty": "Chưa có hoạt động"
     },
+    "revenue": {
+      "title": "Doanh thu & thuế",
+      "typeMonth": "Tháng",
+      "typeQuarter": "Quý",
+      "typeYear": "Năm",
+      "prev": "Kỳ trước",
+      "next": "Kỳ sau",
+      "export": "Xuất CSV",
+      "gross": "Tổng doanh thu",
+      "net": "Doanh thu thuần",
+      "vat": "Thuế VAT",
+      "vatLabel": "VAT {percent}%",
+      "transactions": "{count} giao dịch",
+      "deltaVsPrev": "so với kỳ trước",
+      "byPlanTitle": "Doanh thu theo gói",
+      "byPlanEmpty": "Chưa có giao dịch",
+      "loading": "Đang tải doanh thu…",
+      "error": "Không tải được doanh thu"
+    },
     "users": {
       "title": "Người dùng",
       "subtitle": "Quản lý tài khoản người dùng.",
@@ -476,6 +515,8 @@
       },
       "lockSuccess": "Đã khóa {email}",
       "unlockSuccess": "Đã mở khóa {email}",
+      "roleChangeSuccess": "Đã đổi vai trò {email} thành {role}",
+      "selfRoleHint": "Không thể đổi vai trò của chính bạn",
       "empty": "Không có user nào khớp bộ lọc.",
       "error": "Không tải được danh sách người dùng",
       "loading": "Đang tải danh sách…"
@@ -731,11 +772,26 @@
     "index": {
       "title": "Công cụ SEO",
       "subtitle": "Tiện ích miễn phí cho chủ website — xem trước trước khi xuất bản.",
-      "google": { "name": "Xem trước Google SERP", "desc": "Xem trang của bạn hiển thị thế nào trên Google." },
-      "social": { "name": "Xem trước thẻ mạng xã hội", "desc": "Thẻ Facebook, Twitter/X và LinkedIn từ thẻ OG." },
-      "schema": { "name": "Kiểm tra Schema.org", "desc": "Soi JSON-LD và kiểm tra các trường bắt buộc." },
-      "sitemap": { "name": "Sitemap + Robots", "desc": "Kiểm tra sitemap.xml và robots.txt." },
-      "favicon": { "name": "Kiểm tra Favicon", "desc": "Phát hiện favicon cho trình duyệt, iOS và Android." }
+      "google": {
+        "name": "Xem trước Google SERP",
+        "desc": "Xem trang của bạn hiển thị thế nào trên Google."
+      },
+      "social": {
+        "name": "Xem trước thẻ mạng xã hội",
+        "desc": "Thẻ Facebook, Twitter/X và LinkedIn từ thẻ OG."
+      },
+      "schema": {
+        "name": "Kiểm tra Schema.org",
+        "desc": "Soi JSON-LD và kiểm tra các trường bắt buộc."
+      },
+      "sitemap": {
+        "name": "Sitemap + Robots",
+        "desc": "Kiểm tra sitemap.xml và robots.txt."
+      },
+      "favicon": {
+        "name": "Kiểm tra Favicon",
+        "desc": "Phát hiện favicon cho trình duyệt, iOS và Android."
+      }
     },
     "googlePreview": {
       "title": "Xem trước Google SERP",

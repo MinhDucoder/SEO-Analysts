@@ -4,14 +4,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HTTPError } from "ky";
 import { toast } from "sonner";
 import {
+  getAdminRevenue,
   getAdminStats,
   listAdminRules,
   listAdminUsers,
   updateAdminRules,
   updateUserLock,
+  updateUserRole,
 } from "@/lib/api/admin";
 import type {
   AdminPaginated,
+  AdminRevenue,
   AdminStats,
   AdminUser,
   ListAdminUsersQuery,
@@ -60,6 +63,16 @@ export function useAdminStats(period = 30) {
   });
 }
 
+export function useAdminRevenue(query: Record<string, string>) {
+  const enabled = useAdminEnabled();
+  return useQuery<AdminRevenue>({
+    queryKey: queryKeys.admin.revenue(query),
+    queryFn: () => getAdminRevenue(query),
+    enabled,
+    staleTime: 5 * 60 * 1_000,
+  });
+}
+
 export function useAdminUsers(filters: ListAdminUsersQuery) {
   const enabled = useAdminEnabled();
   return useQuery<AdminPaginated<AdminUser>>({
@@ -92,6 +105,44 @@ export function useUpdateUserLock() {
           data: value.data.map((u) =>
             u.id === id ? { ...u, isLocked } : u,
           ),
+        });
+      }
+      return { previous };
+    },
+    onError: async (err, _vars, ctx) => {
+      const context = ctx as { previous?: Array<{ key: unknown; value: AdminPaginated<AdminUser> }> } | undefined;
+      if (context?.previous) {
+        for (const { key, value } of context.previous) {
+          queryClient.setQueryData(key as readonly unknown[], value);
+        }
+      }
+      toast.error(await describeAdminError(err));
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+    },
+  });
+}
+
+export function useUpdateUserRole() {
+  const queryClient = useQueryClient();
+  return useMutation<
+    Pick<AdminUser, "id" | "email" | "role">,
+    unknown,
+    { id: string; role: AdminUser["role"] }
+  >({
+    mutationFn: ({ id, role }) => updateUserRole(id, role),
+    onMutate: async ({ id, role }) => {
+      // Optimistic patch — swap the row's role immediately, roll back on error.
+      const lists = queryClient.getQueriesData<AdminPaginated<AdminUser>>({
+        queryKey: ["admin", "users"],
+      });
+      const previous = lists.map(([key, value]) => ({ key, value }));
+      for (const [key, value] of lists) {
+        if (!value) continue;
+        queryClient.setQueryData<AdminPaginated<AdminUser>>(key, {
+          ...value,
+          data: value.data.map((u) => (u.id === id ? { ...u, role } : u)),
         });
       }
       return { previous };
