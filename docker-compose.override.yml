@@ -1,0 +1,14 @@
+# Local-dev only. Publishes the internal gRPC ports of the backend services to
+# the host so a gateway run on the host (`npm run dev:gateway`) can reach them.
+# The committed docker-compose.yml keeps these `expose`-only (internal network).
+# Safe to delete — `docker compose up -d` without this file reverts to internal-only.
+services:
+  crawler:
+    ports:
+      - "127.0.0.1:50052:50052"
+  seo-analyzer:
+    ports:
+      - "127.0.0.1:50053:50053"
+  keyword-analyzer:
+    ports:
+      - "127.0.0.1:50054:50054"
