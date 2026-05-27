@@ -121,6 +121,7 @@ describe('Audits E2E', () => {
         hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
         checkSiteAuditPageCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
         getEffectivePlan: vi.fn().mockResolvedValue('business'),
+        isAdmin: vi.fn().mockResolvedValue(false),
       })
       .overrideProvider(QuotaCounterService).useValue({
         consume: vi.fn().mockResolvedValue({ allowed: true, remaining: 99, limit: 100, resetAt: new Date() }),
