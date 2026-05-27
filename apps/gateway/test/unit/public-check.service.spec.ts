@@ -56,6 +56,7 @@ function makeEntitlement() {
   return {
     hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
     getEffectivePlan: vi.fn().mockResolvedValue('pro'),
+    isAdmin: vi.fn().mockResolvedValue(false),
   } as never;
 }
 function makeCounter() {

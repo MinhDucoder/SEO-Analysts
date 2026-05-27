@@ -33,12 +33,17 @@ export class ProgressSubscriberService implements OnModuleInit {
     await this.redis.subscribe('audit.progress', (data) => this.handleProgress(data as ProgressPayload));
     await this.redis.subscribe('audit.completed', (data) => this.handleCompleted(data as ProgressPayload));
     await this.redis.subscribe('audit.failed', (data) => this.handleFailed(data as ProgressPayload));
+    // The crawler publishes crawl.failed (single + site audits) when a crawl
+    // permanently fails (retries exhausted). Without this, a failed crawl
+    // leaves the audit stuck in "crawling" forever — the gateway never learns
+    // it died. Route it to the same FAILED handler.
+    await this.redis.subscribe('crawl.failed', (data) => this.handleFailed(data as ProgressPayload));
     await this.redis.subscribe('report.done', (data) => this.handleReportDone(data as ProgressPayload));
     await this.redis.subscribe('audit.suggestions.done', (data) =>
       this.handleSuggestionsDone(data as { auditId?: string; count?: number }),
     );
     await this.redis.subscribe('billing.confirmed', (data) => this.handleBillingConfirmed(data as BillingConfirmedPayload));
-    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / report.done / audit.suggestions.done / billing.confirmed channels');
+    this.logger.log('Subscribed to audit.progress / audit.completed / audit.failed / crawl.failed / report.done / audit.suggestions.done / billing.confirmed channels');
   }
 
   private handleSuggestionsDone(p: { auditId?: string; count?: number }) {

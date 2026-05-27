@@ -54,6 +54,11 @@ export class ToolsQuotaService {
       };
     }
 
+    // Admin god-mode: unmetered tools fetches.
+    if (await this.entitlement.isAdmin(ctx.userId)) {
+      return { scope: 'user-day', used: 0, limit: -1, remaining: -1 };
+    }
+
     const enabled = this.config.get<string>('BILLING_FEATURE_ENABLED') === 'true';
     if (!enabled) {
       return { scope: 'user-day', used: 0, limit: -1, remaining: -1 };

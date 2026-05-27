@@ -5,7 +5,7 @@ describe('ToolsQuotaService', () => {
   let entitlement: any, counter: any, rateLimiter: any, config: any, svc: ToolsQuotaService;
 
   beforeEach(() => {
-    entitlement = { getEffectivePlan: vi.fn() };
+    entitlement = { getEffectivePlan: vi.fn(), isAdmin: vi.fn().mockResolvedValue(false) };
     counter = { consume: vi.fn(), peek: vi.fn() };
     rateLimiter = { consume: vi.fn() };
     config = { get: vi.fn().mockReturnValue('true') };

@@ -12,6 +12,8 @@ import { PUBLIC_API_REDIS_KEYS, PUBLIC_API_RATE_LIMITS } from '@repo/shared';
 export interface EnforceInput {
   apiKeyId: string;
   ip: string;
+  /** Admin god-mode: skip all buckets (per-IP, per-key minute, per-key day). */
+  bypass?: boolean;
 }
 
 export interface EnforceResult {
@@ -28,12 +30,25 @@ export class PublicApiRateLimitService {
     private readonly redis: RedisService,
   ) {}
 
-  async enforce({ apiKeyId, ip }: EnforceInput): Promise<EnforceResult> {
+  async enforce({ apiKeyId, ip, bypass }: EnforceInput): Promise<EnforceResult> {
     const now = Date.now();
     const resetAt = {
       minute: new Date(now + 60_000).toISOString(),
       day: new Date(new Date().setUTCHours(24, 0, 0, 0)).toISOString(),
     };
+
+    // Admin god-mode: no public-API rate limiting.
+    if (bypass) {
+      return {
+        allowed: true,
+        remaining: {
+          minute: PUBLIC_API_RATE_LIMITS.PER_KEY_MINUTE,
+          day: PUBLIC_API_RATE_LIMITS.PER_KEY_DAY,
+        },
+        retryAfterSeconds: 0,
+        resetAt,
+      };
+    }
 
     const ipR = await this.rl.consume(
       PUBLIC_API_REDIS_KEYS.rateLimitIp(ip),

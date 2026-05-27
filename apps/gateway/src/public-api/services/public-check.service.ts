@@ -146,10 +146,13 @@ export class PublicCheckService {
       if (!aiAllowed.allowed) {
         throw new ForbiddenException({ code: 'AI_NOT_AVAILABLE', message: 'AI suggestions require Pro plan' });
       }
-      const plan = await this.entitlement.getEffectivePlan(ctx.userId);
-      const r = await this.counter.consume(ctx.userId, 'ai_calls_monthly', PLAN_FEATURES[plan].ai_calls_monthly, 1);
-      if (!r.allowed) {
-        throw new ForbiddenException({ code: 'AI_QUOTA_EXCEEDED', message: 'AI calls/month exceeded' });
+      // Admin god-mode: no AI calls/month metering.
+      if (!(await this.entitlement.isAdmin(ctx.userId))) {
+        const plan = await this.entitlement.getEffectivePlan(ctx.userId);
+        const r = await this.counter.consume(ctx.userId, 'ai_calls_monthly', PLAN_FEATURES[plan].ai_calls_monthly, 1);
+        if (!r.allowed) {
+          throw new ForbiddenException({ code: 'AI_QUOTA_EXCEEDED', message: 'AI calls/month exceeded' });
+        }
       }
     } else if (enrichMode === 'llm' && !ctx.userId) {
       // No userId on this API key — skip entitlement, rate-limit guards already applied

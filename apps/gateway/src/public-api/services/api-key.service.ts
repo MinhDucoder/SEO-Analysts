@@ -30,11 +30,14 @@ export class ApiKeyService {
   ) {}
 
   async create(userId: string, name: string, environment: ApiKeyEnvironment) {
-    const current = await this.prisma.apiKey.count({ where: { userId, revokedAt: null } });
-    const plan = await this.entitlement.getEffectivePlan(userId);
-    const max = PLAN_FEATURES[plan].api_keys_max;
-    if (current >= max) {
-      throw new ForbiddenException({ code: 'API_KEY_LIMIT_EXCEEDED', message: `Plan "${plan}" cho phép tối đa ${max} API keys` });
+    // Admin god-mode: no cap on number of API keys.
+    if (!(await this.entitlement.isAdmin(userId))) {
+      const current = await this.prisma.apiKey.count({ where: { userId, revokedAt: null } });
+      const plan = await this.entitlement.getEffectivePlan(userId);
+      const max = PLAN_FEATURES[plan].api_keys_max;
+      if (current >= max) {
+        throw new ForbiddenException({ code: 'API_KEY_LIMIT_EXCEEDED', message: `Plan "${plan}" cho phép tối đa ${max} API keys` });
+      }
     }
 
     const randomPart = randomBytes(32).toString('base64url');

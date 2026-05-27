@@ -7,10 +7,14 @@ import { FeatureFlag } from '@repo/shared';
 describe('EntitlementService', () => {
   let svc: EntitlementService;
   const subSvc = { getCurrent: vi.fn() } as unknown as SubscriptionService;
+  const billingOn = { get: vi.fn().mockReturnValue('true') } as any;
+  const prisma = { user: { findUnique: vi.fn() } } as any;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    svc = new EntitlementService(subSvc);
+    // Default: non-admin user. Admin tests override this per-case.
+    prisma.user.findUnique.mockResolvedValue({ role: 'user' });
+    svc = new EntitlementService(subSvc, billingOn, prisma);
   });
 
   it('Free user lacks SITE_AUDIT feature', async () => {
@@ -65,5 +69,47 @@ describe('EntitlementService', () => {
     expect(d.allowed).toBe(false);
     const d2 = await svc.checkScheduledAuditCron('u1', '0 0 * * *');
     expect(d2.allowed).toBe(true);
+  });
+
+  it('billing disabled → every check allows regardless of plan', async () => {
+    const billingOff = { get: vi.fn().mockReturnValue('false') } as any;
+    const offSvc = new EntitlementService(subSvc, billingOff, prisma);
+    // Free plan would normally block all of these.
+    (subSvc.getCurrent as any).mockResolvedValue({ planCode: 'free', status: 'active' });
+
+    expect((await offSvc.hasFeature('u1', FeatureFlag.SCHEDULED_AUDIT)).allowed).toBe(true);
+    expect((await offSvc.checkSiteAuditPageCount('u1', 5000)).allowed).toBe(true);
+    expect((await offSvc.checkScheduledAuditCount('u1', 999)).allowed).toBe(true);
+    expect((await offSvc.checkScheduledAuditCron('u1', '* * * * *')).allowed).toBe(true);
+  });
+
+  describe('admin god-mode (billing ON)', () => {
+    beforeEach(() => {
+      prisma.user.findUnique.mockResolvedValue({ role: 'admin' });
+      // Admin has no purchased subscription → would resolve to Free.
+      (subSvc.getCurrent as any).mockResolvedValue(null);
+    });
+
+    it('isAdmin returns true for admin role', async () => {
+      expect(await svc.isAdmin('admin1')).toBe(true);
+    });
+
+    it('admin has every feature despite Free-equivalent plan', async () => {
+      for (const f of Object.values(FeatureFlag)) {
+        expect((await svc.hasFeature('admin1', f)).allowed).toBe(true);
+      }
+    });
+
+    it('admin bypasses site-audit page cap', async () => {
+      expect((await svc.checkSiteAuditPageCount('admin1', 999999)).allowed).toBe(true);
+    });
+
+    it('admin bypasses scheduled-audit count cap', async () => {
+      expect((await svc.checkScheduledAuditCount('admin1', 999999)).allowed).toBe(true);
+    });
+
+    it('admin bypasses scheduled-audit cron min interval', async () => {
+      expect((await svc.checkScheduledAuditCron('admin1', '* * * * *')).allowed).toBe(true);
+    });
   });
 });
