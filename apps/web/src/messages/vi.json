@@ -212,9 +212,36 @@
     "errorBody": "Kiểm tra cả 2 audit đã hoàn thành chưa.",
     "retry": "Thử lại",
     "statusBeforeLabel": "Trước",
-    "statusAfterLabel": "Sau"
+    "statusAfterLabel": "Sau",
+    "pickerLockedDomain": "lọc theo {domain}",
+    "swappedBanner": "Audit B hoàn thành trước Audit A — đã đảo thứ tự để delta tính từ cũ → mới.",
+    "error": {
+      "COMPARE_SAME_AUDIT": {
+        "title": "Chọn 2 audit khác nhau",
+        "body": "Bạn đang chọn cùng 1 audit hai lần — hãy chọn audit thứ hai để so sánh."
+      },
+      "COMPARE_NOT_COMPLETED": {
+        "title": "Audit chưa hoàn thành",
+        "body": "Chỉ so sánh được khi cả 2 audit đã hoàn thành. Chờ audit đang chạy xong nhé."
+      },
+      "COMPARE_MODE_MISMATCH": {
+        "title": "Hai audit khác chế độ",
+        "body": "Chỉ so sánh được audit cùng chế độ — single với single, hoặc site với site."
+      },
+      "COMPARE_DOMAIN_MISMATCH": {
+        "title": "Hai audit khác domain",
+        "body": "Chọn 2 audit cùng website — so sánh khác domain không có ý nghĩa."
+      },
+      "COMPARE_SITE_MODE_UNSUPPORTED": {
+        "title": "Compare site audit sắp ra mắt",
+        "body": "Page-level diff cho audit toàn site đang được phát triển. Tạm thời chỉ so sánh single-page audit được."
+      }
+    }
   },
   "auditDetail": {
+    "tabs": {
+      "seo": "Báo cáo SEO"
+    },
     "loading": "Đang tải báo cáo…",
     "notFoundTitle": "Audit không tồn tại",
     "notFoundBody": "Audit này đã bị xóa hoặc bạn không có quyền truy cập.",
@@ -333,6 +360,26 @@
         "loading": "Đang tải danh sách trang…",
         "empty": "Chưa có trang nào",
         "issues": "{count, plural, =0 {Không lỗi} other {# vấn đề}}"
+      }
+    },
+    "geoTab": "AI Visibility",
+    "geo": {
+      "title": "Hiển thị với AI (GEO)",
+      "subtitle": "Trang này có dễ được AI trích dẫn không?",
+      "generatorCta": "Tạo llms.txt",
+      "degradedBadge": "Giảm cấp — Bỏ qua rule LLM",
+      "paywallTitle": "Mở khoá GEO Audit với gói Pro",
+      "paywallDescription": "Đánh giá trang cho ChatGPT, Perplexity, Google AI Overview.",
+      "paywallCta": "Nâng cấp lên Pro",
+      "rules": {
+        "geo_ai_bot_access": { "name": "AI Bot Access" },
+        "geo_llms_txt_present": { "name": "Chuẩn llms.txt" },
+        "geo_direct_answer_intro": { "name": "Đoạn intro trả lời trực tiếp" },
+        "geo_semantic_completeness": { "name": "Đoạn tự đủ ý" },
+        "geo_article_schema": { "name": "Article Schema" },
+        "geo_entity_markup": { "name": "Tác giả + Publisher" },
+        "geo_quotable_density": { "name": "Mật độ block trích dẫn" },
+        "geo_citation_outbound": { "name": "Trích dẫn nguồn uy tín" }
       }
     }
   },
@@ -835,6 +882,14 @@
     },
     "bot": {
       "title": "Về SEOAnalystsBot"
+    },
+    "llmsTxt": {
+      "title": "Tạo llms.txt",
+      "description": "Tạo file llms.txt để AI hiểu nội dung website của bạn.",
+      "cta": "Tạo",
+      "copy": "Sao chép",
+      "download": "Tải xuống",
+      "copySuccess": "Đã sao chép"
     }
   }
 }

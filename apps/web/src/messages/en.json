@@ -212,9 +212,36 @@
     "errorBody": "Make sure both audits are completed.",
     "retry": "Retry",
     "statusBeforeLabel": "Before",
-    "statusAfterLabel": "After"
+    "statusAfterLabel": "After",
+    "pickerLockedDomain": "filtered to {domain}",
+    "swappedBanner": "Audit B was completed earlier — we swapped the order so the delta runs from older → newer.",
+    "error": {
+      "COMPARE_SAME_AUDIT": {
+        "title": "Pick two different audits",
+        "body": "You selected the same audit twice — choose a second audit to compare against."
+      },
+      "COMPARE_NOT_COMPLETED": {
+        "title": "Audit not yet completed",
+        "body": "Compare only works once both audits have finished. Wait for the in-progress one to finish."
+      },
+      "COMPARE_MODE_MISMATCH": {
+        "title": "Audit modes don't match",
+        "body": "You can only compare audits in the same mode — single page vs single page, or site vs site."
+      },
+      "COMPARE_DOMAIN_MISMATCH": {
+        "title": "Domains don't match",
+        "body": "Pick two audits on the same site — comparing different domains isn't meaningful."
+      },
+      "COMPARE_SITE_MODE_UNSUPPORTED": {
+        "title": "Site audit compare is coming soon",
+        "body": "Page-level diff for whole-site audits is being built. For now, compare single-page audits."
+      }
+    }
   },
   "auditDetail": {
+    "tabs": {
+      "seo": "SEO Report"
+    },
     "loading": "Loading report…",
     "notFoundTitle": "Audit not found",
     "notFoundBody": "This audit was deleted or you don't have access.",
@@ -333,6 +360,26 @@
         "loading": "Loading pages…",
         "empty": "No pages yet",
         "issues": "{count, plural, =0 {No issues} one {# issue} other {# issues}}"
+      }
+    },
+    "geoTab": "AI Visibility",
+    "geo": {
+      "title": "AI Visibility (GEO)",
+      "subtitle": "How citable is this page for AI search engines?",
+      "generatorCta": "Generate llms.txt",
+      "degradedBadge": "Degraded — LLM rules skipped",
+      "paywallTitle": "Unlock GEO Audit with Pro",
+      "paywallDescription": "Audit your page for ChatGPT, Perplexity, and Google AI Overview citation readiness.",
+      "paywallCta": "Upgrade to Pro",
+      "rules": {
+        "geo_ai_bot_access": { "name": "AI Bot Access" },
+        "geo_llms_txt_present": { "name": "llms.txt Standard" },
+        "geo_direct_answer_intro": { "name": "Direct Answer Intro" },
+        "geo_semantic_completeness": { "name": "Semantic Completeness" },
+        "geo_article_schema": { "name": "Article Schema" },
+        "geo_entity_markup": { "name": "Author + Publisher" },
+        "geo_quotable_density": { "name": "Quotable Density" },
+        "geo_citation_outbound": { "name": "Authoritative Citations" }
       }
     }
   },
@@ -835,6 +882,14 @@
     },
     "bot": {
       "title": "About SEOAnalystsBot"
+    },
+    "llmsTxt": {
+      "title": "llms.txt Generator",
+      "description": "Generate an llms.txt file to help AI tools understand your site.",
+      "cta": "Generate",
+      "copy": "Copy",
+      "download": "Download",
+      "copySuccess": "Copied to clipboard"
     }
   }
 }

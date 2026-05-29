@@ -18,6 +18,9 @@ import { FailedState } from "@/components/audit-detail/failed-state";
 import { InProgressState } from "@/components/audit-detail/in-progress-state";
 import { NotFoundState } from "@/components/audit-detail/not-found-state";
 import { ShareDialog } from "@/components/audit-detail/share-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GeoTab } from "@/components/audit-detail/geo/geo-tab";
+import { GeoPaywallOverlay } from "@/components/audit-detail/geo/geo-paywall-overlay";
 import { useAudit, useAuditStatus, useCreateAudit } from "@/lib/queries/use-audits";
 import { useAuditRealtime } from "@/lib/ws/use-audit-realtime";
 import { downloadAuditPdf } from "@/lib/api/audits";
@@ -249,7 +252,20 @@ export default function AuditDetailPage() {
       )}
 
       {isCompletedSingle && report && (
-        <CompletedReport audit={audit} report={report} />
+        <Tabs defaultValue="seo">
+          <TabsList>
+            <TabsTrigger value="seo">{t("tabs.seo")}</TabsTrigger>
+            <TabsTrigger value="geo">{t("geoTab")}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="seo">
+            <CompletedReport audit={audit} report={report} />
+          </TabsContent>
+          <TabsContent value="geo">
+            {audit.geoEnabled
+              ? <GeoTab geoScore={audit.geoScore ?? null} rules={audit.geoBreakdown?.rules ?? []} geoVersion={audit.geoVersion ?? null} auditUrl={audit.url} />
+              : <GeoPaywallOverlay />}
+          </TabsContent>
+        </Tabs>
       )}
 
       {isCompletedSite && siteSummary && (
