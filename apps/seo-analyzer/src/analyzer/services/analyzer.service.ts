@@ -56,7 +56,7 @@ export class AnalyzerService implements OnModuleInit {
       weight: r.weight,
     }));
 
-    const results = this.runner.runAll(pageData, dbRules, targetKeyword);
+    const results = await this.runner.runAll(pageData, dbRules, targetKeyword);
 
     // Persist rule_results rows
     if (results.length > 0) {
