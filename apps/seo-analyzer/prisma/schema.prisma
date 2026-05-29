@@ -17,6 +17,7 @@ enum RuleCategory {
   performance
   technical
   content
+  geo
 }
 
 enum CheckStatus {

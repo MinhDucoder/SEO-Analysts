@@ -25,6 +25,15 @@ const rules = [
   { name: 'language_tag',       displayName: 'Language Tag',       category: 'technical' as const,   weight: 3,  description: 'html lang duoc khai bao' },
   { name: 'favicon',            displayName: 'Favicon',            category: 'technical' as const,   weight: 2,  description: 'Co favicon.ico hoac link rel=icon' },
   { name: 'readability',        displayName: 'Readability (Flesch-Kincaid)', category: 'content' as const,   weight: 4,  description: 'Flesch Reading Ease; target 60-70 cho plain English' },
+  // GEO Audit rules (Phase 4)
+  { name: 'geo_ai_bot_access',         displayName: 'AI Bot Access Policy',      category: 'geo' as const, weight: 13, description: 'Verify robots.txt does not block major AI crawlers (GPTBot, ClaudeBot, etc.)' },
+  { name: 'geo_llms_txt_present',      displayName: 'llms.txt Standard',         category: 'geo' as const, weight: 13, description: 'Site provides a valid /llms.txt with H1 + blockquote summary per llmstxt.org spec' },
+  { name: 'geo_direct_answer_intro',   displayName: 'Direct Answer Intro',       category: 'geo' as const, weight: 13, description: 'Page intro directly answers the implied question from the H1 (LLM-graded)' },
+  { name: 'geo_semantic_completeness', displayName: 'Semantic Completeness',     category: 'geo' as const, weight: 13, description: 'H2 sections are self-contained enough to be quoted standalone (LLM-graded)' },
+  { name: 'geo_article_schema',        displayName: 'Article Schema Markup',     category: 'geo' as const, weight: 12, description: 'Page has Article/BlogPosting/NewsArticle JSON-LD with datePublished + dateModified' },
+  { name: 'geo_entity_markup',         displayName: 'Author + Publisher Markup', category: 'geo' as const, weight: 12, description: 'Author and publisher entities marked up in JSON-LD' },
+  { name: 'geo_quotable_density',      displayName: 'Quotable Content Density',  category: 'geo' as const, weight: 12, description: 'Page has >=5 quotable blocks (blockquote/callout/stat) per 1000 words' },
+  { name: 'geo_citation_outbound',     displayName: 'Authoritative Citations',   category: 'geo' as const, weight: 12, description: 'Page links to authoritative external sources (.gov, .edu, high-DA domains)' },
 ];
 
 async function main() {
