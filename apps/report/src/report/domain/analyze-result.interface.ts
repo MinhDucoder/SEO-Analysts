@@ -31,4 +31,8 @@ export interface AnalyzeResult {
   overallScore: number;
   ruleResults: AnalyzeRuleResult[];
   categoryScores: AnalyzeCategoryScore[];
+  /** GEO audit score (0-100). Present only when runGeo=true was passed to the analyzer. */
+  geoScore?: number | null;
+  /** GEO rule-set version (e.g. '1.0'). Present only when geoScore is set. */
+  geoVersion?: string | null;
 }
