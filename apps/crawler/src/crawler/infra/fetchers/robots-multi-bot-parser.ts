@@ -28,9 +28,9 @@ export function parseRobotsForAiBots(robotsTxt: string): ParsedUserAgentRule[] {
       continue;
     }
     const match = /^([A-Za-z-]+)\s*:\s*(.+)$/.exec(line);
-    if (!match) continue;
-    const directive = match[1].toLowerCase();
-    const value = match[2].trim();
+    const directive = match?.[1]?.toLowerCase();
+    const value = match?.[2]?.trim();
+    if (!directive || value === undefined) continue;
 
     if (directive === 'user-agent') {
       const canonical = targets.get(value.toLowerCase());
