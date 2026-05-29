@@ -16,11 +16,10 @@ export class LlmsTxtFetcherService {
 
   async fetch(siteRoot: string): Promise<LlmsTxtResult> {
     const url = new URL('/llms.txt', siteRoot).toString();
+    const ctrl = new AbortController();
+    const timerId = setTimeout(() => ctrl.abort(), this.TIMEOUT_MS);
     try {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), this.TIMEOUT_MS);
       const res = await fetch(url, { signal: ctrl.signal });
-      clearTimeout(t);
       if (!res.ok) {
         return { url, status: res.status, sectionCount: 0, sizeBytes: 0 };
       }
@@ -36,6 +35,8 @@ export class LlmsTxtFetcherService {
     } catch (err) {
       this.logger.warn(`llms.txt fetch failed for ${url}: ${(err as Error).message}`);
       return { url, status: -1, sectionCount: 0, sizeBytes: 0 };
+    } finally {
+      clearTimeout(timerId);
     }
   }
 
