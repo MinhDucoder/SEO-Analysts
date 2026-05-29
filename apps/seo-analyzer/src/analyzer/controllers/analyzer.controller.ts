@@ -56,7 +56,7 @@ export class AnalyzerController {
       ),
     }));
 
-    return {
+    const response: Record<string, unknown> = {
       auditId: result.auditId,
       ruleResults,
       categoryScores: result.categoryScores.map((c) => ({
@@ -70,6 +70,12 @@ export class AnalyzerController {
       overallScore: result.overallScore,
       classification: result.classification,
     };
+
+    // GEO score fields — camelCase required (keepCase: false drops snake_case)
+    if (result.geoScore != null) response.geoScore = result.geoScore;
+    if (result.geoVersion) response.geoVersion = result.geoVersion;
+
+    return response;
   }
 
   @GrpcMethod('SeoAnalyzerService', 'ListRules')
@@ -194,6 +200,8 @@ function toProtoCategory(value: unknown): string {
       return 'ISSUE_CATEGORY_LINKS';
     case 'performance':
       return 'ISSUE_CATEGORY_PERFORMANCE';
+    case 'geo':
+      return 'ISSUE_CATEGORY_GEO';
     case 'technical':
     case 'content':
       // Proto IssueCategory has no CONTENT — fold it into TECHNICAL so the
