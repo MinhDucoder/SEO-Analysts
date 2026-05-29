@@ -62,7 +62,13 @@ export class CrawlerOrchestrator {
     // 1. Cache check
     const cached = await this.cache.getCrawl<CrawlResult>(url);
     if (cached) {
-      this.logger.log(`crawl cache HIT for ${url}`);
+      if (options.runGeo && !cached.pageData.aiBotAccess) {
+        this.logger.log(`crawl cache HIT for ${url} (re-enriching with GEO)`);
+        await this.attachGeoData(cached.pageData);
+        await this.cache.setCrawl(url, cached);
+      } else {
+        this.logger.log(`crawl cache HIT for ${url}`);
+      }
       return cached;
     }
 

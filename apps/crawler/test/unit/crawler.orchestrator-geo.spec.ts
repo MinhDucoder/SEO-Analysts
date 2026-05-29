@@ -127,4 +127,34 @@ describe('CrawlerOrchestrator — GEO enrichment (runGeo flag)', () => {
     });
     expect(result.pageData.llmsTxt?.status).toBe(404);
   });
+
+  it('re-enriches a cache hit when runGeo flag is set but cached result lacks GEO data', async () => {
+    const stalePageData = makePageData('https://example.com/');
+    cache.getCrawl.mockResolvedValueOnce({
+      pageData: stalePageData,
+      cwvMetrics: { lcpMs: 0, inpMs: 0, cls: 0, performanceScore: 0, accessibilityScore: 0, bestPracticesScore: 0, seoScore: 0 },
+      metadata: { crawlerType: 'cheerio', isSpa: false, crawlDurationMs: 100, lighthouseDurationMs: 0, lighthouseCached: false },
+    });
+    mockGlobalFetch.mockResolvedValue({
+      status: 200,
+      ok: true,
+      text: async () => 'User-agent: GPTBot\nAllow: /\n',
+    });
+    llmsTxtFetcher.fetch.mockResolvedValue({
+      url: 'https://example.com/llms.txt',
+      status: 200,
+      h1: 'Example',
+      sectionCount: 0,
+      sizeBytes: 10,
+    });
+
+    const result = await orchestrator.crawl('https://example.com/', { includeLighthouse: false, runGeo: true });
+
+    expect(result.pageData.aiBotAccess).toBeDefined();
+    expect(result.pageData.aiBotAccess?.rules).toHaveLength(1);
+    expect(result.pageData.llmsTxt?.h1).toBe('Example');
+    expect(cache.setCrawl).toHaveBeenCalledTimes(1);
+    // cheerio fetcher should NOT have been called — we hit cache
+    expect(cheerio.fetch).not.toHaveBeenCalled();
+  });
 });
