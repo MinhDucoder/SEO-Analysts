@@ -27,6 +27,9 @@ message AnalyzeResponse {
   repeated CategoryScore category_scores = 3;
   double overall_score = 4;
   string classification = 5;
+  // GEO Audit (separate score from overall SEO score; null when GEO didn't run)
+  optional int32 geo_score = 10;
+  optional string geo_version = 11;
 }
 
 message RuleResult {

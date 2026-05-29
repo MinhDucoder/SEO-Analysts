@@ -26,6 +26,7 @@ enum IssueCategory {
   ISSUE_CATEGORY_LINKS = 4;
   ISSUE_CATEGORY_PERFORMANCE = 5;
   ISSUE_CATEGORY_TECHNICAL = 6;
+  ISSUE_CATEGORY_GEO = 7;
 }
 
 message CoreWebVitals {
