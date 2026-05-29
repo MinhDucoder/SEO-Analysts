@@ -48,4 +48,14 @@ export interface PageData {
     sectionCount: number;
     sizeBytes: number;
   };
+  /** Parsed JSON-LD blocks (objects) — populated alongside schemaJsonLd for GEO rules */
+  jsonLdBlocks?: Record<string, unknown>[];
+  /** Quotable structural blocks extracted from page HTML — used by G7 quotable-density rule.
+   * TODO Phase 2 follow-up: extract quotableBlocks from Cheerio in crawler.orchestrator */
+  quotableBlocks?: {
+    tables: number;
+    lists: number;
+    blockquotes: number;
+    dls: number;
+  };
 }

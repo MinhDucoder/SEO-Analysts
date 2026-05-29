@@ -48,4 +48,13 @@ export interface PageData {
     sectionCount: number;
     sizeBytes: number;
   };
+  /** Parsed JSON-LD blocks (objects) — mirrors schemaJsonLd but pre-parsed for GEO rules */
+  jsonLdBlocks?: Record<string, unknown>[];
+  /** Quotable structural blocks extracted from page HTML — used by G7 quotable-density rule */
+  quotableBlocks?: {
+    tables: number;
+    lists: number;
+    blockquotes: number;
+    dls: number;
+  };
 }
