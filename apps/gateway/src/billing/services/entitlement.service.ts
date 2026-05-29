@@ -4,6 +4,7 @@ import { parseExpression } from 'cron-parser';
 import { UserRole } from '@repo/shared';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { SubscriptionService } from './subscription.service';
+import { QuotaCounterService } from './quota-counter.service';
 import { PLAN_FEATURES, FeatureFlag, PlanCode } from '../domain/plan-features';
 
 export interface EntitlementDecision {
@@ -20,6 +21,7 @@ export class EntitlementService {
     private readonly subscriptions: SubscriptionService,
     private readonly config: ConfigService,
     private readonly prisma: PrismaService,
+    private readonly quotaCounter: QuotaCounterService,
   ) {}
 
   /**
@@ -120,5 +122,37 @@ export class EntitlementService {
     const first = iter.next().toDate();
     const second = iter.next().toDate();
     return Math.round((second.getTime() - first.getTime()) / 60_000);
+  }
+
+  /**
+   * Gate for GEO Audit feature (Pro+ only, monthly quota).
+   * Returns whether the user may run a GEO audit, the denial reason, and
+   * the remaining monthly quota (read-only — caller must call quotaCounter.consume
+   * to deduct upon actual use).
+   */
+  async canRunGeo(userId: string): Promise<{
+    allowed: boolean;
+    reason: 'free_plan' | 'quota_exhausted' | null;
+    remainingQuota: number;
+  }> {
+    if (!this.billingEnforced()) {
+      const plan = await this.getEffectivePlan(userId);
+      const limit = PLAN_FEATURES[plan].geo_audits_monthly;
+      const remaining = await this.quotaCounter.getRemaining('geo_audits_monthly', userId, limit < 0 ? Number.MAX_SAFE_INTEGER : limit);
+      return { allowed: true, reason: null, remainingQuota: remaining };
+    }
+    if (await this.isAdmin(userId)) {
+      return { allowed: true, reason: null, remainingQuota: -1 };
+    }
+    const plan = await this.getEffectivePlan(userId);
+    if (!PLAN_FEATURES[plan].features.includes(FeatureFlag.GEO_AUDIT)) {
+      return { allowed: false, reason: 'free_plan', remainingQuota: 0 };
+    }
+    const limit = PLAN_FEATURES[plan].geo_audits_monthly;
+    const remaining = await this.quotaCounter.getRemaining('geo_audits_monthly', userId, limit < 0 ? Number.MAX_SAFE_INTEGER : limit);
+    if (remaining <= 0) {
+      return { allowed: false, reason: 'quota_exhausted', remainingQuota: 0 };
+    }
+    return { allowed: true, reason: null, remainingQuota: remaining };
   }
 }

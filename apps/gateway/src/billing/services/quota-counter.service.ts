@@ -45,6 +45,16 @@ export class QuotaCounterService {
     };
   }
 
+  /**
+   * Returns the number of remaining uses for a dimension without consuming.
+   * Used by EntitlementService to gate features without side-effects.
+   */
+  async getRemaining(dimension: string, userId: string, limit: number): Promise<number> {
+    const { key } = this.key(userId, dimension);
+    const used = Number((await this.redis.client.get(key)) ?? 0);
+    return Math.max(0, limit - used);
+  }
+
   private key(
     userId: string,
     dimension: string,
