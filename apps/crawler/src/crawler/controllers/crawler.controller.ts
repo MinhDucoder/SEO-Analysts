@@ -115,6 +115,29 @@ export class CrawlerController {
       viewport_content: pd.viewportContent,
       text_content: pd.textContent,
       raw_html: pd.rawHtml,
+      // GEO fields: camelCase because protoLoader uses keepCase:false.
+      // snake_case keys (e.g. ai_bot_access) would be silently dropped by the
+      // marshaller — the normalised schema has no snake_case fields at runtime.
+      // Note: request-side runGeo plumbing is skipped — CrawlOptions in the
+      // proto schema (packages/proto/crawler/v1/crawler.proto) has no run_geo
+      // field as of Task 8. Add it in a dedicated proto-extension task.
+      aiBotAccess: pd.aiBotAccess
+        ? {
+            robotsTxtUrl: pd.aiBotAccess.robotsTxtUrl,
+            robotsTxtStatus: pd.aiBotAccess.robotsTxtStatus,
+            rules: pd.aiBotAccess.rules,
+          }
+        : undefined,
+      llmsTxt: pd.llmsTxt
+        ? {
+            url: pd.llmsTxt.url,
+            status: pd.llmsTxt.status,
+            h1: pd.llmsTxt.h1,
+            summary: pd.llmsTxt.summary,
+            sectionCount: pd.llmsTxt.sectionCount,
+            sizeBytes: pd.llmsTxt.sizeBytes,
+          }
+        : undefined,
     };
   }
 }
