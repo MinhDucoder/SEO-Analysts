@@ -57,4 +57,7 @@ export interface PageData {
     blockquotes: number;
     dls: number;
   };
+  /** H2 sections extracted from page HTML — used by G4 semantic-completeness rule.
+   * TODO Phase 4 follow-up: extract sections from Cheerio in crawler.orchestrator */
+  sections?: Array<{ heading: string; text: string }>;
 }
