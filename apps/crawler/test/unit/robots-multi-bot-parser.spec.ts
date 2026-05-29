@@ -36,4 +36,11 @@ describe('parseRobotsForAiBots', () => {
     const input = `User-agent: Googlebot\nDisallow: /admin\n`;
     expect(parseRobotsForAiBots(input)).toEqual([]);
   });
+
+  it('applies rules to all agents in a multi-UA block', () => {
+    const input = `User-agent: GPTBot\nUser-agent: ClaudeBot\nDisallow: /shared\n`;
+    const result = parseRobotsForAiBots(input);
+    expect(result.find((r) => r.userAgent === 'GPTBot')?.disallow).toEqual(['/shared']);
+    expect(result.find((r) => r.userAgent === 'ClaudeBot')?.disallow).toEqual(['/shared']);
+  });
 });
