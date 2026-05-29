@@ -101,6 +101,12 @@ export interface AuditDetail extends AuditListItem {
   mode: import("@repo/shared").AuditMode;
   discoveredUrlsCount: number | null;
   auditedUrlsCount: number | null;
+  // GEO fields (null/false when audit predates GEO feature or user is free-tier)
+  geoScore?: number | null;
+  geoVersion?: string | null;
+  geoEnabled?: boolean;
+  geoSkippedReason?: "free_plan" | "quota_exhausted" | null;
+  geoBreakdown?: GeoBreakdown | null;
 }
 
 /**
@@ -268,6 +274,31 @@ export interface CompareResult {
 }
 
 /**
+ * Single-mode compare response (Phase 1). Site mode will discriminate via
+ * `kind: 'site'` once Phase 2 ships — the discriminated union lives here so
+ * consumers can `switch` on `kind` without breaking.
+ */
+export interface SingleCompareResponse extends CompareResult {
+  kind: "single";
+  /** True when backend reordered the input pair because audit2 was older than audit1. */
+  swapped: boolean;
+}
+
+export type CompareAuditsResponse = SingleCompareResponse;
+
+/**
+ * Discriminator returned by the gateway when /audits/compare 400s. The FE
+ * uses this to render targeted error UX instead of a generic "something went
+ * wrong". Keep in sync with apps/gateway/src/audits/services/audits.service.ts.
+ */
+export type CompareErrorCode =
+  | "COMPARE_SAME_AUDIT"
+  | "COMPARE_NOT_COMPLETED"
+  | "COMPARE_MODE_MISMATCH"
+  | "COMPARE_DOMAIN_MISMATCH"
+  | "COMPARE_SITE_MODE_UNSUPPORTED";
+
+/**
  * Pagination meta envelope used by admin endpoints. Distinct from
  * `Paginated<T>` (which uses `data + total + page + limit`); admin endpoints
  * also surface `totalPages` precomputed.
@@ -358,4 +389,32 @@ export interface ListAdminUsersQuery {
   search?: string;
   role?: "user" | "admin";
   isLocked?: "true" | "false";
+}
+
+// ─── GEO Audit types (Phase 8) ────────────────────────────────────────────────
+
+export type GeoRuleStatus = "pass" | "warn" | "fail";
+
+export interface GeoRuleResult {
+  id: string;
+  status: GeoRuleStatus;
+  score: number;
+  message: string;
+  evidence: Record<string, unknown>;
+}
+
+export interface GeoBreakdown {
+  rules: GeoRuleResult[];
+}
+
+/**
+ * GEO fields augmented on AuditDetailResponse by the gateway (Phase 6 / Task 26).
+ * The gateway sets `geoEnabled=false` for free-plan users (paywall).
+ */
+export interface AuditGeoFields {
+  geoScore: number | null;
+  geoVersion: string | null;
+  geoEnabled: boolean;
+  geoSkippedReason: "free_plan" | "quota_exhausted" | null;
+  geoBreakdown: GeoBreakdown | null;
 }
