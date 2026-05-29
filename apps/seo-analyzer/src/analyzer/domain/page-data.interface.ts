@@ -35,4 +35,17 @@ export interface PageData {
   viewportContent?: string;
   textContent: string;
   rawHtml: string;
+  aiBotAccess?: {
+    robotsTxtUrl: string;
+    robotsTxtStatus: number;
+    rules: Array<{ userAgent: string; disallow: string[]; allow: string[] }>;
+  };
+  llmsTxt?: {
+    url: string;
+    status: number;
+    h1?: string;
+    summary?: string;
+    sectionCount: number;
+    sizeBytes: number;
+  };
 }
