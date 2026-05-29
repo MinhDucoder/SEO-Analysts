@@ -33,7 +33,10 @@ export class AnalyzerService implements OnModuleInit {
 
   onModuleInit() {
     this.registry.clear();
-    registerAllRules(this.registry);
+    registerAllRules(this.registry, {
+      runGeo: process.env.GEO_AUDIT_ENABLED !== 'false',
+      geminiKey: process.env.GEMINI_API_KEY ?? process.env.SEO_AI_API_KEY,
+    });
     this.logger.log(`Registered ${this.registry.getAll().length} SEO rules`);
   }
 
