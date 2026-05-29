@@ -16,6 +16,7 @@ import { CrawlerWorker } from './controllers/crawler.worker';
 import { LiteFetchController } from './controllers/lite-fetch.controller';
 import { LiteFetchService } from './services/lite-fetch.service';
 import { EventPublisher } from './services/event-publisher';
+import { LlmsTxtFetcherService } from './infra/fetchers/llms-txt-fetcher.service';
 import { PoliteFetcher } from './infra/fetchers/polite-fetcher';
 import { LinkChecker } from './infra/fetchers/link-checker';
 import { SitemapDiscovery } from './infra/sitemap/sitemap-discovery';
@@ -77,6 +78,7 @@ const browserPoolFactory = {
     PlaywrightFetcher,
     LighthouseRunner,
     PageDataExtractor,
+    LlmsTxtFetcherService,
     CrawlerOrchestrator,
     EventPublisher,
     CrawlerWorker,

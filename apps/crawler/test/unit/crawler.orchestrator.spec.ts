@@ -75,6 +75,7 @@ describe('CrawlerOrchestrator', () => {
       lighthouse as any,
       extractor as any,
       linkChecker as any,
+      { fetch: vi.fn() } as any,
     );
   });
 
