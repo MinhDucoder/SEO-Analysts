@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AuditsService } from '../../src/audits/services/audits.service';
-import { AuditStatus, UserRole } from '@repo/shared';
+import { AuditStatus, AuditMode, UserRole } from '@repo/shared';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 
 vi.mock('../../src/common/utils/url-validator', () => ({
@@ -40,6 +40,7 @@ describe('AuditsService', () => {
     checkSiteAuditPageCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
     getEffectivePlan: vi.fn().mockResolvedValue('business'),
     isAdmin: vi.fn().mockResolvedValue(false),
+    canRunGeo: vi.fn().mockResolvedValue({ allowed: true, reason: null, remainingQuota: 5 }),
   };
   const config = { get: vi.fn().mockReturnValue('true') }; // BILLING_FEATURE_ENABLED
   const counter = {
@@ -239,6 +240,93 @@ describe('AuditsService', () => {
       });
       await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toMatchObject({ status: 503 });
       expect(counter.consume).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('GEO Audit entitlement gate in createAudit', () => {
+    const pendingAudit = { id: 'a-geo', status: AuditStatus.PENDING, userId: 'u1', url: 'https://example.com/', mode: AuditMode.SINGLE };
+
+    beforeEach(() => {
+      prisma.audit.create.mockResolvedValue(pendingAudit);
+    });
+
+    it('runGeo absent → canRunGeo NOT called; BullMQ payload has no runGeo', async () => {
+      await svc.createAudit('u1', { url: 'https://example.com' });
+      expect(entitlement.canRunGeo).not.toHaveBeenCalled();
+      const call = producer.enqueueCrawlStart.mock.calls[0][0];
+      expect(call.options?.runGeo).toBeUndefined();
+    });
+
+    it('runGeo: false → canRunGeo NOT called; BullMQ payload has no runGeo', async () => {
+      await svc.createAudit('u1', { url: 'https://example.com', runGeo: false });
+      expect(entitlement.canRunGeo).not.toHaveBeenCalled();
+      const call = producer.enqueueCrawlStart.mock.calls[0][0];
+      expect(call.options?.runGeo).toBeUndefined();
+    });
+
+    it('runGeo: true + allowed → BullMQ payload has runGeo: true', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: true, reason: null, remainingQuota: 4 });
+      await svc.createAudit('u1', { url: 'https://example.com', runGeo: true });
+      expect(entitlement.canRunGeo).toHaveBeenCalledWith('u1');
+      const call = producer.enqueueCrawlStart.mock.calls[0][0];
+      expect(call.options?.runGeo).toBe(true);
+    });
+
+    it('runGeo: true + denied (free_plan) → ForbiddenException with Pro plan message', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: false, reason: 'free_plan', remainingQuota: 0 });
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', runGeo: true }),
+      ).rejects.toThrow('GEO Audit requires Pro/Business plan');
+      expect(producer.enqueueCrawlStart).not.toHaveBeenCalled();
+    });
+
+    it('runGeo: true + denied (quota_exhausted) → ForbiddenException with quota message', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: false, reason: 'quota_exhausted', remainingQuota: 0 });
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', runGeo: true }),
+      ).rejects.toThrow('GEO quota exceeded this month');
+      expect(producer.enqueueCrawlStart).not.toHaveBeenCalled();
+    });
+
+    it('runGeo: true + denied → throws ForbiddenException (not BadRequest)', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: false, reason: 'free_plan', remainingQuota: 0 });
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', runGeo: true }),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+  });
+
+  describe('GEO fields in getAuditDetail', () => {
+    const baseAudit = {
+      id: 'a1', userId: 'u1', url: 'x', domain: 'd',
+      status: AuditStatus.COMPLETED, mode: AuditMode.SINGLE,
+      seoScore: null, targetKeyword: null, crawlerType: 'cheerio',
+      crawlDurationMs: 1000, discoveredUrlsCount: null, auditedUrlsCount: null,
+      createdAt: new Date(), completedAt: new Date(), errorMessage: null,
+    };
+
+    it('returns geoScore and geoVersion from report when present', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(baseAudit);
+      reportClient.getReport.mockResolvedValueOnce({ geoScore: 72, geoVersion: '1.0' });
+      const out = await svc.getAuditDetail('u1', UserRole.USER, 'a1');
+      expect(out.geoScore).toBe(72);
+      expect(out.geoVersion).toBe('1.0');
+    });
+
+    it('returns null for geoScore and geoVersion when report has no GEO data', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(baseAudit);
+      reportClient.getReport.mockResolvedValueOnce({ seoScore: 85 });
+      const out = await svc.getAuditDetail('u1', UserRole.USER, 'a1');
+      expect(out.geoScore).toBeNull();
+      expect(out.geoVersion).toBeNull();
+    });
+
+    it('returns null for geoScore and geoVersion when report service is down', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(baseAudit);
+      reportClient.getReport.mockRejectedValueOnce(new Error('down'));
+      const out = await svc.getAuditDetail('u1', UserRole.USER, 'a1');
+      expect(out.geoScore).toBeNull();
+      expect(out.geoVersion).toBeNull();
     });
   });
 });

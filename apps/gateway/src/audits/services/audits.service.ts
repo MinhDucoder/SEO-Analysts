@@ -105,6 +105,19 @@ export class AuditsService {
       },
     });
 
+    // Gate GEO Audit behind FeatureFlag.GEO_AUDIT + monthly quota
+    let runGeo = false;
+    if (dto.runGeo === true) {
+      const geoDecision = await this.entitlement.canRunGeo(userId);
+      if (!geoDecision.allowed) {
+        if (geoDecision.reason === 'free_plan') {
+          throw new ForbiddenException('GEO Audit requires Pro/Business plan');
+        }
+        throw new ForbiddenException('GEO quota exceeded this month');
+      }
+      runGeo = true;
+    }
+
     if (mode === AuditMode.SITE) {
       await this.producer.enqueueSiteCrawlStart({
         auditId: audit.id,
@@ -116,7 +129,7 @@ export class AuditsService {
       await this.producer.enqueueCrawlStart({
         auditId: audit.id,
         url: safe.href,
-        options: { targetKeyword: dto.targetKeyword },
+        options: { targetKeyword: dto.targetKeyword, ...(runGeo ? { runGeo: true } : {}) },
       });
     }
 
@@ -217,7 +230,90 @@ export class AuditsService {
       this.logger.warn(`Report service unavailable for audit ${auditId}: ${(e as Error).message}`);
     }
 
-    return { audit: auditView, report, siteSummary: null };
+    const geoScore =
+      report != null && typeof (report as Record<string, unknown>).geoScore === 'number'
+        ? ((report as Record<string, unknown>).geoScore as number)
+        : null;
+    const geoVersion =
+      report != null && typeof (report as Record<string, unknown>).geoVersion === 'string'
+        ? ((report as Record<string, unknown>).geoVersion as string)
+        : null;
+
+    return { audit: auditView, report, siteSummary: null, geoScore, geoVersion };
+  }
+
+  /**
+   * Resolve 2 audit IDs into an ordered before/after pair for the
+   * `/audits/compare` endpoint. Enforces:
+   *   - ownership (ADMIN bypasses)
+   *   - same domain (case-insensitive — Audit.domain is already URL.hostname so
+   *     this is belt+braces)
+   *   - same mode (single vs site)
+   *   - both COMPLETED
+   *   - distinct audit IDs
+   * Sorts by completedAt ASC — caller learns whether we swapped the input via
+   * the `swapped` flag so the UI can surface a banner. BadRequestException
+   * carries a discriminator `code` so the FE can render targeted error UX.
+   */
+  async resolveComparableAudits(
+    userId: string,
+    role: UserRole,
+    auditId1: string,
+    auditId2: string,
+  ): Promise<{
+    before: NonNullable<Awaited<ReturnType<PrismaService['audit']['findUnique']>>>;
+    after: NonNullable<Awaited<ReturnType<PrismaService['audit']['findUnique']>>>;
+    swapped: boolean;
+  }> {
+    if (auditId1 === auditId2) {
+      throw new BadRequestException({
+        message: 'Khong the so sanh 1 audit voi chinh no',
+        code: 'COMPARE_SAME_AUDIT',
+      });
+    }
+
+    const [a, b] = await Promise.all([
+      this.prisma.audit.findUnique({ where: { id: auditId1 } }),
+      this.prisma.audit.findUnique({ where: { id: auditId2 } }),
+    ]);
+
+    if (!a || !b) {
+      throw new NotFoundException('Audit khong ton tai');
+    }
+
+    const isAdmin = role === UserRole.ADMIN;
+    if (!isAdmin && (a.userId !== userId || b.userId !== userId)) {
+      throw new ForbiddenException('Khong co quyen xem audit nay');
+    }
+
+    if (a.status !== AuditStatus.COMPLETED || b.status !== AuditStatus.COMPLETED) {
+      throw new BadRequestException({
+        message: 'Chi so sanh duoc audit da hoan thanh',
+        code: 'COMPARE_NOT_COMPLETED',
+      });
+    }
+
+    if (a.mode !== b.mode) {
+      throw new BadRequestException({
+        message: 'Hai audit phai cung che do (single hoac site)',
+        code: 'COMPARE_MODE_MISMATCH',
+      });
+    }
+
+    if (a.domain.toLowerCase() !== b.domain.toLowerCase()) {
+      throw new BadRequestException({
+        message: 'Hai audit phai cung domain',
+        code: 'COMPARE_DOMAIN_MISMATCH',
+      });
+    }
+
+    // Order by completedAt ASC. createdAt is the stable fallback when one of
+    // them is somehow null (shouldn't happen with the COMPLETED gate above,
+    // but the type is nullable so we handle it explicitly).
+    const aTime = (a.completedAt ?? a.createdAt).getTime();
+    const bTime = (b.completedAt ?? b.createdAt).getTime();
+    const swapped = bTime < aTime;
+    return swapped ? { before: b, after: a, swapped } : { before: a, after: b, swapped };
   }
 
   /**
