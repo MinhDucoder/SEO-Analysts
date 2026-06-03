@@ -320,6 +320,108 @@ describe('PublicCheckService (with enricher)', () => {
     }
   });
 
+  it('issue list excludes PASS-status rules but score still averages them in', async () => {
+    // Regression: extension popup used to render "Title length 53 is
+    // optimal" labelled WARNING because PASS rules were emitted as
+    // issues with their rule's intrinsic metadata severity.
+    const mkRule = (
+      ruleId: string,
+      status: 'pass' | 'warn' | 'fail',
+      score: number,
+      message: string,
+    ) => ({
+      ruleId,
+      status,
+      score,
+      category: 'meta',
+      severity: 'warning',
+      audiences: ['writer'],
+      message,
+      templateSuggestion: '',
+      evidence: {},
+      docRef: '',
+    });
+    const analyzer = makeAnalyzer({
+      ruleVersion: '1.2.0',
+      issues: [
+        mkRule('title_tag', 'pass', 100, 'Title length 53 is optimal (50-60 chars)'),
+        mkRule('meta_description', 'warn', 50, 'Meta description too short'),
+      ],
+      contentStats: {
+        wordCount: 1,
+        characterCount: 2,
+        readingTimeSec: 1,
+        paragraphCount: 0,
+        imageCount: 0,
+        internalLinkCount: 0,
+        externalLinkCount: 0,
+      },
+    });
+    enricher.enrich.mockResolvedValue({
+      suggestions: [null],
+      source: 'none',
+      degraded: false,
+    });
+    svc = new PublicCheckService(extractor, analyzer, makeRedis(), enricher as never, makeEntitlement(), makeCounter());
+
+    const r = await svc.execute(
+      { ...baseReq, options: { ...baseReq.options, enrichMode: 'off' } },
+      ctx,
+    );
+
+    expect(r.issues).toHaveLength(1);
+    expect(r.issues[0]!.ruleId).toBe('meta_description');
+    expect(r.issues[0]!.title).toBe('Meta description');
+    // description is now localized to Vietnamese when language='vi' (baseReq default)
+    expect(r.issues[0]!.description).toMatch(/Độ dài meta description|Thiếu meta description/);
+    expect(r.score).toBe(75);
+    expect(enricher.enrich).toHaveBeenCalledWith(
+      expect.arrayContaining([expect.objectContaining({ ruleId: 'meta_description' })]),
+      expect.any(Object),
+      'off',
+    );
+    const enrichArg = enricher.enrich.mock.calls[0]![0];
+    expect(enrichArg).toHaveLength(1);
+  });
+
+  it('localizes issue description to Vietnamese when language=vi', async () => {
+    enricher.enrich.mockResolvedValue({
+      suggestions: [null],
+      source: 'none',
+      degraded: false,
+    });
+    // build the service exactly like the other tests in this file
+    const res = await svc.execute(
+      {
+        input: { type: 'html', html: '<p>hi</p>' },
+        targetKeyword: 'seo',
+        options: { language: 'vi', enrichMode: 'off' },
+      } as never,
+      { apiKeyId: 'k1', userId: '', ip: '127.0.0.1' } as never,
+    );
+    const issue = res.issues.find((i) => i.ruleId === 'title_tag');
+    expect(issue?.description).toMatch(/Độ dài title|Thiếu/); // Vietnamese
+    expect(issue?.description).not.toBe('Title short'); // not the raw English message
+  });
+
+  it('keeps English description when language=en', async () => {
+    enricher.enrich.mockResolvedValue({
+      suggestions: [null],
+      source: 'none',
+      degraded: false,
+    });
+    const res = await svc.execute(
+      {
+        input: { type: 'html', html: '<p>hi</p>' },
+        targetKeyword: 'seo',
+        options: { language: 'en', enrichMode: 'off' },
+      } as never,
+      { apiKeyId: 'k1', userId: '', ip: '127.0.0.1' } as never,
+    );
+    const issue = res.issues.find((i) => i.ruleId === 'title_tag');
+    expect(issue?.description).toBe('Title short'); // unchanged English message
+  });
+
   it('cache-hit with no filter returns ALL issues even when first request was filtered', async () => {
     const mkIssue = (ruleId: string, severity: 'info' | 'warning' | 'error') => ({
       ruleId,

@@ -31,6 +31,10 @@ import {
   type EnrichMode,
   type Suggestion,
 } from './suggestion-enricher.service';
+import {
+  localizeIssueMessage,
+  type IssueStatus,
+} from '../i18n/issue-localization';
 import { EntitlementService } from '../../billing/services/entitlement.service';
 import { QuotaCounterService } from '../../billing/services/quota-counter.service';
 
@@ -159,8 +163,18 @@ export class PublicCheckService {
       effectiveEnrichMode = 'template';
     }
 
+    // Score uses the FULL rule set (PASS rules contribute their 100 to
+    // the average). Issues exposed to the client are ONLY non-passing
+    // rules — a PASS check is not an "issue" and rendering it as one
+    // confuses users (e.g. "Title length 53 is optimal" labelled WARNING
+    // because the rule's intrinsic severity in RuleMetadata is `warning`).
+    const score = this.computeScore(result.issues);
+    const scoreBreakdown = this.computeBreakdown(result.issues);
+
+    const failingIssues = result.issues.filter((i) => i.status !== 'pass');
+
     const enrichment = await this.enricher.enrich(
-      result.issues,
+      failingIssues,
       {
         apiKeyId: ctx.apiKeyId,
         targetKeyword: dto.targetKeyword,
@@ -173,22 +187,23 @@ export class PublicCheckService {
       effectiveEnrichMode,
     );
 
-    const allIssues: PublicCheckIssue[] = result.issues.map((i, idx) => ({
+    const allIssues: PublicCheckIssue[] = failingIssues.map((i, idx) => ({
       ruleId: i.ruleId,
       severity: this.toSeverity(i.severity),
       category: i.category,
       audience: (i.audiences ?? []).filter(
         (a): a is IssueAudience => a === 'writer' || a === 'dev',
       ),
-      title: this.shortTitle(i.message),
-      description: i.message,
+      title: this.humanizeRuleId(i.ruleId),
+      description:
+        language === 'vi'
+          ? localizeIssueMessage(i.ruleId, i.status as IssueStatus, i.evidence ?? {}) ??
+            i.message
+          : i.message,
       evidence: i.evidence ?? {},
       suggestion: enrichment.suggestions[idx] ?? null,
       docRef: i.docRef || undefined,
     }));
-
-    const score = this.computeScore(result.issues);
-    const scoreBreakdown = this.computeBreakdown(result.issues);
 
     const fullResponse: PublicCheckResponse = {
       score,
@@ -250,8 +265,14 @@ export class PublicCheckService {
     return 'info';
   }
 
-  private shortTitle(msg: string): string {
-    return msg.length > 80 ? `${msg.slice(0, 77)}...` : msg;
+  // Humanize a snake_case rule id ("title_tag" → "Title tag") so the
+  // popup card title is the *check name* while description carries the
+  // verbose result message ("Title length 53 is out of range"). Before
+  // this fix both fields were the same message string.
+  private humanizeRuleId(ruleId: string): string {
+    if (!ruleId) return 'Rule';
+    const spaced = ruleId.replace(/_/g, ' ');
+    return spaced.charAt(0).toUpperCase() + spaced.slice(1);
   }
 
   private computeScore(issues: Array<{ score: number }>): number {
