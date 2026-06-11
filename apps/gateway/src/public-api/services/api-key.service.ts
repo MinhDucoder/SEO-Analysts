@@ -114,11 +114,18 @@ export class ApiKeyService {
   async verify(
     authorizationHeader: string | undefined,
     installId: string | undefined,
+    opts?: { skipInstallCheck?: boolean },
   ): Promise<ApiKeyVerifyResult> {
     if (!authorizationHeader) return { valid: false, reason: 'invalid_format' };
     const bearer = authorizationHeader.replace(/^Bearer\s+/i, '').trim();
     if (!API_KEY_REGEX.test(bearer)) return { valid: false, reason: 'invalid_format' };
-    if (!installId || !UUID_V4_REGEX.test(installId)) return { valid: false, reason: 'missing_install_id' };
+
+    const skipInstall = opts?.skipInstallCheck === true;
+    if (!skipInstall) {
+      if (!installId || !UUID_V4_REGEX.test(installId)) {
+        return { valid: false, reason: 'missing_install_id' };
+      }
+    }
 
     const hash = this.hash(bearer);
     const cacheKey = PUBLIC_API_REDIS_KEYS.apiKeyVerify(hash);
@@ -131,6 +138,14 @@ export class ApiKeyService {
           | null
           | { apiKeyId: string; userId: string; environment: ApiKeyEnvironment; installId: string | null };
         if (parsed === null) return { valid: false, reason: 'not_found' };
+        if (skipInstall) {
+          return {
+            valid: true,
+            apiKeyId: parsed.apiKeyId,
+            userId: parsed.userId,
+            environment: parsed.environment,
+          };
+        }
         // Cannot bind from cache — cache might be stale relative to a concurrent rebind.
         // Fall through to DB whenever the cached installId is null.
         if (parsed.installId !== null) {
@@ -161,6 +176,15 @@ export class ApiKeyService {
     }
     if (row.revokedAt) return { valid: false, reason: 'revoked' };
     if (row.user.isLocked) return { valid: false, reason: 'user_disabled' };
+
+    if (skipInstall) {
+      return {
+        valid: true,
+        apiKeyId: row.id,
+        userId: row.userId,
+        environment: row.environment as ApiKeyEnvironment,
+      };
+    }
 
     // Bind / match
     if (row.installId === null) {
