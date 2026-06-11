@@ -18,6 +18,7 @@ import { loadApiKey } from '@/lib/storage';
 import { check } from '@/lib/client';
 import { PublicApiError } from '@/lib/errors';
 import { API_BASE_URL } from '@/lib/api-base';
+import { ensureInstallId } from '@/lib/install-id';
 import { cacheKey, readCache, writeCache } from '@/lib/cache';
 import type {
   ContentScrapeProbe,
@@ -57,6 +58,7 @@ export default defineBackground(() => {
   });
 
   chrome.runtime.onInstalled.addListener(async () => {
+    await ensureInstallId();
     if (!(await loadApiKey())) chrome.runtime.openOptionsPage();
   });
 });
@@ -151,9 +153,11 @@ async function runAudit(msg: {
     input = { type: 'url', url: probe.url };
   }
 
-  const callApi = (body: PublicCheckInput): Promise<PublicCheckResponse> =>
-    check({
+  const callApi = async (body: PublicCheckInput): Promise<PublicCheckResponse> => {
+    const installId = await ensureInstallId();
+    return check({
       apiKey,
+      installId,
       baseUrl: API_BASE_URL,
       body: {
         input: body,
@@ -162,6 +166,7 @@ async function runAudit(msg: {
         options: { enrichMode: 'llm', language },
       },
     });
+  };
 
   try {
     const result = await callApi(input);

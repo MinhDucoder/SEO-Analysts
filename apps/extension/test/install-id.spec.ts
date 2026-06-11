@@ -5,7 +5,6 @@ import { ensureInstallId, isValidInstallId, loadInstallId } from '../lib/install
 let store: Record<string, unknown> = {};
 beforeEach(() => {
   store = {};
-  // @ts-expect-error inject chrome global
   globalThis.chrome = {
     storage: {
       local: {
@@ -18,7 +17,7 @@ beforeEach(() => {
         }),
       },
     },
-  };
+  } as any;
   // crypto.randomUUID is available in Node 19+; fall back if missing.
   if (typeof globalThis.crypto?.randomUUID !== 'function') {
     // @ts-expect-error
