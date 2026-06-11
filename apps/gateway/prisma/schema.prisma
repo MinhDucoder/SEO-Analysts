@@ -195,24 +195,27 @@ model AuditAlert {
 /// and never stored; only sha256(plaintext) is kept in `hashedKey`.
 /// Consumers call /api/v1/public/* with `Authorization: Bearer sk_live_...`.
 model ApiKey {
-  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId      String            @map("user_id") @db.Uuid
-  name        String            @db.VarChar(100)
-  prefix      String            @db.VarChar(20)
-  hashedKey   String            @unique @map("hashed_key") @db.VarChar(64)
-  environment ApiKeyEnvironment @default(live)
-  lastUsedAt  DateTime?         @map("last_used_at") @db.Timestamptz
-  lastUsedIp  String?           @map("last_used_ip") @db.Inet
-  revokedAt   DateTime?         @map("revoked_at") @db.Timestamptz
-  expiresAt   DateTime?         @map("expires_at") @db.Timestamptz
-  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt   DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String            @map("user_id") @db.Uuid
+  name           String            @db.VarChar(100)
+  prefix         String            @db.VarChar(20)
+  hashedKey      String            @unique @map("hashed_key") @db.VarChar(64)
+  environment    ApiKeyEnvironment @default(live)
+  installId      String?           @map("install_id") @db.VarChar(36)
+  installBoundAt DateTime?         @map("install_bound_at") @db.Timestamptz
+  lastUsedAt     DateTime?         @map("last_used_at") @db.Timestamptz
+  lastUsedIp     String?           @map("last_used_ip") @db.Inet
+  revokedAt      DateTime?         @map("revoked_at") @db.Timestamptz
+  expiresAt      DateTime?         @map("expires_at") @db.Timestamptz
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime          @updatedAt @map("updated_at") @db.Timestamptz
 
   user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   usageDaily UsageDaily[]
 
   @@index([hashedKey], name: "idx_api_keys_hashed_key")
   @@index([userId, revokedAt], name: "idx_api_keys_user_active")
+  @@index([installId], name: "idx_api_keys_install_id")
   @@map("api_keys")
 }
 
