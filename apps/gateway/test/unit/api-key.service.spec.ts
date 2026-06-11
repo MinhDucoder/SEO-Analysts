@@ -175,7 +175,8 @@ describe('ApiKeyService', () => {
           userId: 'u1',
           environment: 'test',
         });
-        // bind UPDATE called with conditional where { id, installId: null }
+        // bind UPDATE is unconditional in v1 — the conditional `updateMany where: { id, installId: null }`
+        // variant is documented as out-of-scope per plan §Task 3 race-condition note.
         const updateCall = (prisma.apiKey.update as any).mock.calls[0][0];
         expect(updateCall.where).toEqual({ id: 'k1' });
         expect(updateCall.data.installId).toBe(VALID_INSTALL_A);
