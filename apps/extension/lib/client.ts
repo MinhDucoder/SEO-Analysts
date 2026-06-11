@@ -3,7 +3,8 @@
  *
  * Mirrors `packages/seo-check-cli/src/client.ts` so the same auth and
  * error-mapping contract holds across both clients. Specifically:
- *   - Always `Authorization: Bearer sk_...`
+ *   - Always `Authorization: Bearer sk_...` (API key)
+ *   - Always `X-Install-Id: <installId>` (device binding)
  *   - Always `Content-Type: application/json`
  *   - On non-2xx, parses the documented `{statusCode, code, message,
  *     requestId, details?}` envelope and throws `PublicApiError`
@@ -24,6 +25,7 @@ import type {
 
 export interface CheckArgs {
   apiKey: string;
+  installId: string;
   baseUrl: string;
   body: PublicCheckRequest;
   /** Optional AbortSignal — popup wires this so cancellation works. */
@@ -44,6 +46,7 @@ export async function check(args: CheckArgs): Promise<PublicCheckResponse> {
       method: 'POST',
       headers: {
         authorization: `Bearer ${args.apiKey}`,
+        'x-install-id': args.installId,
         'content-type': 'application/json',
       },
       body: JSON.stringify(args.body),
