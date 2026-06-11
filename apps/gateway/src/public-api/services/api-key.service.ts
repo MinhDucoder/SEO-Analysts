@@ -75,6 +75,8 @@ export class ApiKeyService {
         lastUsedAt: true,
         createdAt: true,
         revokedAt: true,
+        installId: true,
+        installBoundAt: true,
       },
     });
   }

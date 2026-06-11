@@ -22,6 +22,10 @@ export class ApiKeyDto {
   @ApiProperty({ nullable: true, type: String }) lastUsedAt!: Date | null;
   @ApiProperty() createdAt!: Date;
   @ApiProperty({ nullable: true, type: String }) revokedAt!: Date | null;
+  @ApiProperty({ nullable: true, type: String, description: 'UUID v4 of the bound extension/CLI install. Null = unbound.' })
+  installId!: string | null;
+  @ApiProperty({ nullable: true, type: String, description: 'Timestamp of first bind. Null when never bound.' })
+  installBoundAt!: Date | null;
 }
 
 export class CreateApiKeyResponseDto extends ApiKeyDto {
