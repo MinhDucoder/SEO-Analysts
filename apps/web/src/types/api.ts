@@ -90,6 +90,8 @@ export interface ApiKeyDto {
   lastUsedAt: string | Date | null;
   createdAt: string | Date;
   revokedAt: string | Date | null;
+  installId: string | null;
+  installBoundAt: string | null;
 }
 
 export interface CreateApiKeyInput {

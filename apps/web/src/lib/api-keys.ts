@@ -19,3 +19,7 @@ export async function createApiKey(
 export async function revokeApiKey(id: string): Promise<void> {
   await api.delete(`users/me/api-keys/${id}`);
 }
+
+export async function rebindApiKey(id: string): Promise<void> {
+  await api.post(`users/me/api-keys/${id}/rebind`);
+}
