@@ -32,7 +32,8 @@ export class ApiKeyGuard implements CanActivate {
       });
     }
 
-    const r = await this.svc.verify(auth);
+    // installId wired up in Task 6 — pass undefined for now so signature lines up
+    const r = await this.svc.verify(auth, undefined);
     if (!r.valid) {
       if (r.reason === 'user_disabled') {
         throw new ForbiddenException({
