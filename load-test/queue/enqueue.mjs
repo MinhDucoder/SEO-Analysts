@@ -41,3 +41,9 @@ await Promise.all(
   }),
 );
 console.log(`Enqueued ${COUNT} audits: ${accepted} accepted (202), ${failed} failed`);
+if (failed > 0) {
+  // Partial success dễ bị bỏ sót vì Promise.all chạy song song. Fail rõ ràng:
+  // 403/400 "đạt giới hạn" thường là user demo chưa phải admin → xem seed.md bước 2.
+  console.error('Có audit bị từ chối — kiểm tra demo user đã là admin chưa (seed.md).');
+  process.exit(1);
+}

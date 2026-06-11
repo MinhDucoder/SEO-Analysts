@@ -30,8 +30,10 @@ async function tick() {
   console.table(rows);
 }
 
-await tick();
-const timer = setInterval(tick, 1000);
+// Bọc tick: 1 cú hiccup Redis (vd worker chưa lên) không được làm sập bảng live giữa demo.
+const safeTick = () => tick().catch((e) => console.error('tick failed:', e.message));
+await safeTick();
+const timer = setInterval(safeTick, 1000);
 
 process.on('SIGINT', async () => {
   clearInterval(timer);
