@@ -71,12 +71,14 @@ describe('ApiKeyService', () => {
   });
 
   describe('verify', () => {
+    const VALID_INSTALL = '4f8d3a2b-1c5e-4a7f-9b2d-8e3c5f1a6d04';
+
     it('rejects a missing Authorization header as invalid_format', async () => {
-      expect(await svc.verify(undefined)).toEqual({ valid: false, reason: 'invalid_format' });
+      expect(await svc.verify(undefined, VALID_INSTALL)).toEqual({ valid: false, reason: 'invalid_format' });
     });
 
     it('rejects a malformed key without hitting cache or DB', async () => {
-      const res = await svc.verify('Bearer not-a-real-key');
+      const res = await svc.verify('Bearer not-a-real-key', VALID_INSTALL);
       expect(res).toEqual({ valid: false, reason: 'invalid_format' });
       expect(client.get).not.toHaveBeenCalled();
       expect(prisma.apiKey.findUnique).not.toHaveBeenCalled();
@@ -86,7 +88,7 @@ describe('ApiKeyService', () => {
       const payload = { apiKeyId: 'k1', userId: 'u1', environment: 'test' };
       client.get.mockResolvedValue(JSON.stringify(payload));
 
-      const res = await svc.verify(`Bearer ${VALID_KEY}`);
+      const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
 
       expect(res).toEqual({ valid: true, ...payload });
       expect(client.get).toHaveBeenCalledWith(`apikey:${sha256(VALID_KEY)}`);
@@ -95,14 +97,14 @@ describe('ApiKeyService', () => {
 
     it('treats a cached null (known-missing) as not_found', async () => {
       client.get.mockResolvedValue('null');
-      expect(await svc.verify(`Bearer ${VALID_KEY}`)).toEqual({ valid: false, reason: 'not_found' });
+      expect(await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL)).toEqual({ valid: false, reason: 'not_found' });
     });
 
     it('on cache miss + DB miss: caches the negative result and returns not_found', async () => {
       client.get.mockResolvedValue(null);
       (prisma.apiKey.findUnique as any).mockResolvedValue(null);
 
-      const res = await svc.verify(`Bearer ${VALID_KEY}`);
+      const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
 
       expect(res).toEqual({ valid: false, reason: 'not_found' });
       expect(client.setex).toHaveBeenCalledWith(`apikey:${sha256(VALID_KEY)}`, 60, 'null');
@@ -113,7 +115,7 @@ describe('ApiKeyService', () => {
       (prisma.apiKey.findUnique as any).mockResolvedValue({
         id: 'k1', userId: 'u1', environment: 'test', revokedAt: new Date(), user: { isLocked: false },
       });
-      expect(await svc.verify(`Bearer ${VALID_KEY}`)).toEqual({ valid: false, reason: 'revoked' });
+      expect(await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL)).toEqual({ valid: false, reason: 'revoked' });
     });
 
     it('reports a locked user as user_disabled', async () => {
@@ -121,7 +123,7 @@ describe('ApiKeyService', () => {
       (prisma.apiKey.findUnique as any).mockResolvedValue({
         id: 'k1', userId: 'u1', environment: 'test', revokedAt: null, user: { isLocked: true },
       });
-      expect(await svc.verify(`Bearer ${VALID_KEY}`)).toEqual({ valid: false, reason: 'user_disabled' });
+      expect(await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL)).toEqual({ valid: false, reason: 'user_disabled' });
     });
 
     it('validates a live key, caches the payload, and returns it', async () => {
@@ -130,7 +132,7 @@ describe('ApiKeyService', () => {
         id: 'k1', userId: 'u1', environment: 'test', revokedAt: null, user: { isLocked: false },
       });
 
-      const res = await svc.verify(`Bearer ${VALID_KEY}`);
+      const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
 
       expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
       expect(client.setex).toHaveBeenCalledWith(
@@ -145,8 +147,37 @@ describe('ApiKeyService', () => {
       (prisma.apiKey.findUnique as any).mockResolvedValue({
         id: 'k1', userId: 'u1', environment: 'test', revokedAt: null, user: { isLocked: false },
       });
-      const res = await svc.verify(`Bearer ${VALID_KEY}`);
+      const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
       expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
+    });
+
+    describe('install id input', () => {
+      it('rejects a missing X-Install-Id header as missing_install_id', async () => {
+        expect(await svc.verify(`Bearer ${VALID_KEY}`, undefined)).toEqual({
+          valid: false,
+          reason: 'missing_install_id',
+        });
+        expect(client.get).not.toHaveBeenCalled();
+      });
+
+      it('rejects a non-UUIDv4 install id as missing_install_id', async () => {
+        expect(await svc.verify(`Bearer ${VALID_KEY}`, 'not-a-uuid')).toEqual({
+          valid: false,
+          reason: 'missing_install_id',
+        });
+        // Even a UUID v1 must be rejected — only v4 is allowed.
+        expect(await svc.verify(`Bearer ${VALID_KEY}`, '550e8400-e29b-11d4-a716-446655440000')).toEqual({
+          valid: false,
+          reason: 'missing_install_id',
+        });
+      });
+
+      it('rejects a malformed KEY before checking install id (install_id error must not leak for bad keys)', async () => {
+        expect(await svc.verify('Bearer not-a-real-key', VALID_INSTALL)).toEqual({
+          valid: false,
+          reason: 'invalid_format',
+        });
+      });
     });
   });
 

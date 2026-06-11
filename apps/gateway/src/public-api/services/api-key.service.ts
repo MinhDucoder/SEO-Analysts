@@ -14,9 +14,19 @@ import { EntitlementService } from '../../billing/services/entitlement.service';
 
 export type ApiKeyVerifyResult =
   | { valid: true; apiKeyId: string; userId: string; environment: ApiKeyEnvironment }
-  | { valid: false; reason: 'invalid_format' | 'not_found' | 'revoked' | 'user_disabled' };
+  | {
+      valid: false;
+      reason:
+        | 'invalid_format'
+        | 'not_found'
+        | 'revoked'
+        | 'user_disabled'
+        | 'missing_install_id'
+        | 'install_mismatch';
+    };
 
 const API_KEY_REGEX = /^sk_(live|test)_[A-Za-z0-9_-]{43}$/;
+const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 @Injectable()
 export class ApiKeyService {
@@ -79,11 +89,17 @@ export class ApiKeyService {
     }
   }
 
-  async verify(authorizationHeader: string | undefined): Promise<ApiKeyVerifyResult> {
+  async verify(
+    authorizationHeader: string | undefined,
+    installId: string | undefined,
+  ): Promise<ApiKeyVerifyResult> {
     if (!authorizationHeader) return { valid: false, reason: 'invalid_format' };
     const bearer = authorizationHeader.replace(/^Bearer\s+/i, '').trim();
     if (!API_KEY_REGEX.test(bearer)) {
       return { valid: false, reason: 'invalid_format' };
+    }
+    if (!installId || !UUID_V4_REGEX.test(installId)) {
+      return { valid: false, reason: 'missing_install_id' };
     }
     const hash = this.hash(bearer);
     const cacheKey = PUBLIC_API_REDIS_KEYS.apiKeyVerify(hash);
