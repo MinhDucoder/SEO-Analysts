@@ -1,3 +1,5 @@
+import { ensureInstallId } from './install-id.js';
+
 export interface SeoClientOptions {
   apiBase: string;
   apiKey: string;
@@ -82,12 +84,14 @@ export class SeoClient {
   async check(body: PublicCheckRequest): Promise<PublicCheckResponse> {
     let res: Response;
     try {
+      const installId = await ensureInstallId();
       res = await fetch(`${this.opts.apiBase}/public/check`, {
         method: 'POST',
         headers: {
           accept: 'application/json',
           'content-type': 'application/json',
           authorization: `Bearer ${this.opts.apiKey}`,
+          'x-install-id': installId,
         },
         body: JSON.stringify(body),
       });

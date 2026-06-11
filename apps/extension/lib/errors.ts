@@ -14,6 +14,8 @@ export type PublicApiErrorCode =
   | 'MISSING_API_KEY'
   | 'INVALID_API_KEY'
   | 'KEY_DISABLED'
+  | 'KEY_INSTALL_MISMATCH'
+  | 'MISSING_INSTALL_ID'
   | 'PAYLOAD_TOO_LARGE'
   | 'INPUT_TYPE_MISMATCH'
   | 'INVALID_URL'
@@ -34,6 +36,8 @@ export type PublicApiErrorCode =
 
 export type ErrorAction =
   | 'OPEN_OPTIONS' // missing/invalid/disabled key
+  | 'OPEN_REBIND_PAGE' // key bound to different device → guide user to rebind
+  | 'RELOAD_EXTENSION' // install-id not yet generated → manual extension reload
   | 'RETRY_LATER' // rate limit (with countdown)
   | 'FALLBACK_TO_HTML' // url-fetch failure → try DOM scrape
   | 'REDUCE_PAYLOAD' // 413: drop noise from HTML, then retry
@@ -48,6 +52,10 @@ export function dispatchErrorCode(code: string): ErrorAction {
     case 'INVALID_API_KEY':
     case 'KEY_DISABLED':
       return 'OPEN_OPTIONS';
+    case 'KEY_INSTALL_MISMATCH':
+      return 'OPEN_REBIND_PAGE';
+    case 'MISSING_INSTALL_ID':
+      return 'RELOAD_EXTENSION';
     case 'RATE_LIMIT_EXCEEDED':
       return 'RETRY_LATER';
     case 'URL_FETCH_FAILED':

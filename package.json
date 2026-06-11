@@ -14,6 +14,7 @@
     "check-types": "turbo run check-types",
     "test": "turbo run test",
     "test:watch": "turbo run test:watch",
+    "docker:db": "docker compose up -d gateway-db analyzer-db report-db redis",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:reset": "docker compose down -v && docker compose up -d",

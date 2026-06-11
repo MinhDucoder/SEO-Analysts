@@ -1,11 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Repeat } from "lucide-react";
+import { Repeat, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { FeatureFlag } from "@repo/shared";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "@/i18n/navigation";
+import { ROUTES } from "@/lib/constants";
+import { useSuggestAudit } from "@/lib/queries/use-audits";
+import { useSubscription } from "@/lib/queries/use-billing";
 import { CategoryBars, type CategoryBarRow } from "@/components/domain/category-bars";
 import { CategoryRadar, type CategoryRadarPoint } from "@/components/domain/category-radar";
 import { CwvCard } from "@/components/domain/cwv-card";
@@ -106,15 +112,43 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
     [report.ruleResults],
   );
 
-  // Map AI suggestions by ruleId. `aiPending` = suggestions not generated yet
-  // (audit just finished, worker still running). When the feature is off or
-  // already produced, aiSuggestionsGeneratedAt is a real timestamp.
+  // Map AI suggestions by ruleId. Suggestions are now generated ON DEMAND via
+  // the "Tạo gợi ý AI" button (metered per subscription) — no longer auto-run
+  // after the audit. `generating` (the mutation in-flight) drives the loading
+  // card; once persisted, `aiSuggestionsGeneratedAt` is a real timestamp.
   const aiByRuleId = React.useMemo(() => {
     const map = new Map<string, ReportAiSuggestion>();
     for (const s of report.aiSuggestions ?? []) map.set(s.ruleId, s);
     return map;
   }, [report.aiSuggestions]);
-  const aiPending = !report.aiSuggestionsGeneratedAt;
+
+  const hasGenerated = Boolean(report.aiSuggestionsGeneratedAt);
+  const failingCount = React.useMemo(
+    () =>
+      report.ruleResults.filter((r) => {
+        const s = protoCheckToRuleStatus(r.status);
+        return s === "fail" || s === "warn";
+      }).length,
+    [report.ruleResults],
+  );
+
+  const subscription = useSubscription();
+  const canUseAi =
+    subscription.data?.isAdminGranted === true ||
+    (subscription.data?.features.features ?? []).includes(FeatureFlag.AI_SUGGESTIONS);
+
+  const suggestMutation = useSuggestAudit(audit.id);
+  const generating = suggestMutation.isPending;
+
+  const handleSuggest = () => {
+    suggestMutation.mutate(undefined, {
+      onError: (err) => {
+        // 403 (no feature) / 429 (quota) are surfaced by the global api modal;
+        // toast covers any other failure (502/503/network).
+        toast.error(err instanceof Error ? err.message : "Tạo gợi ý thất bại");
+      },
+    });
+  };
 
   const keywordRows: KeywordRow[] = report.keywords.map((k) => ({
     keyword: k.keyword,
@@ -177,7 +211,29 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
 
       {/* Rules grouped by category */}
       <Card className="flex flex-col gap-4 p-6">
-        <h3 className="font-ui text-lg font-semibold text-fg">{t("sections.rules")}</h3>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-ui text-lg font-semibold text-fg">{t("sections.rules")}</h3>
+          {failingCount > 0 && !hasGenerated && (
+            <div className="flex items-center gap-2">
+              {!canUseAi && (
+                <Link href={ROUTES.pricing} className="text-xs text-accent hover:underline">
+                  Nâng cấp Pro
+                </Link>
+              )}
+              <span title={canUseAi ? undefined : "Nâng cấp Pro để dùng AI gợi ý"}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleSuggest}
+                  disabled={!canUseAi || generating}
+                >
+                  <Sparkles className={generating ? "h-4 w-4 animate-pulse" : "h-4 w-4"} />
+                  {generating ? "Đang tạo gợi ý..." : "Tạo gợi ý AI"}
+                </Button>
+              </span>
+            </div>
+          )}
+        </div>
         {ruleGroups.length === 0 ? (
           <p className="font-ui text-sm text-fg-muted">{t("rules.empty")}</p>
         ) : (
@@ -201,7 +257,7 @@ export function CompletedReport({ audit, report }: CompletedReportProps) {
                             rule={rule}
                             status={status}
                             aiSuggestion={aiByRuleId.get(rule.ruleId)}
-                            aiPending={aiPending}
+                            aiPending={generating}
                           />
                         }
                       />

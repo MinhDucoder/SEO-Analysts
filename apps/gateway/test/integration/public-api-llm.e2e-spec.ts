@@ -116,6 +116,7 @@ describe('Public API /check (LLM mode, mocked)', () => {
       .useValue({
         hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
         getEffectivePlan: vi.fn().mockResolvedValue('pro'),
+        isAdmin: vi.fn().mockResolvedValue(false),
       })
       .overrideProvider(QuotaCounterService)
       .useValue({

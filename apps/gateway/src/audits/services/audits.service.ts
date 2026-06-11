@@ -4,12 +4,15 @@
  * Enforces ownership (audit.userId === user.id) on every read/delete.
  */
 import {
+  BadGatewayException,
   BadRequestException,
   ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { CreateAuditDto, AuditModeDto } from '../dto/create-audit.dto';
 import { ListAuditsQuery } from '../dto/list-audits.query';
@@ -23,11 +26,13 @@ import {
   UserRole,
   SITE_CRAWL_LIMITS,
   FeatureFlag,
+  PLAN_FEATURES,
 } from '@repo/shared';
 import { AuditQueueProducer } from './audit-queue.producer';
 import { ReportGrpcClient } from '../../infra/grpc/report.client';
 import { EntitlementService } from '../../billing/services/entitlement.service';
-import { FeatureNotAvailableError } from '../../billing/domain/billing.errors';
+import { QuotaCounterService } from '../../billing/services/quota-counter.service';
+import { FeatureNotAvailableError, QuotaExceededError } from '../../billing/domain/billing.errors';
 import { clampPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
 import { Prisma } from '../../infra/prisma/generated';
 
@@ -42,6 +47,8 @@ export class AuditsService {
     private readonly producer: AuditQueueProducer,
     private readonly reportClient: ReportGrpcClient,
     private readonly entitlement: EntitlementService,
+    private readonly config: ConfigService,
+    private readonly counter: QuotaCounterService,
   ) {}
 
   async createAudit(userId: string, dto: CreateAuditDto) {
@@ -71,15 +78,18 @@ export class AuditsService {
       }
     }
 
-    const rl = await this.rateLimiter.consume(
-      this.rateLimiter.auditBucket(userId),
-      RATE_LIMIT.AUDIT_PER_HOUR,
-      3600,
-    );
-    if (!rl.allowed) {
-      throw new BadRequestException(
-        `Da dat gioi han ${RATE_LIMIT.AUDIT_PER_HOUR} audits/gio. Thu lai sau ${rl.retryAfterSeconds}s`,
+    // Admin god-mode: no per-hour audit rate limit.
+    if (!(await this.entitlement.isAdmin(userId))) {
+      const rl = await this.rateLimiter.consume(
+        this.rateLimiter.auditBucket(userId),
+        RATE_LIMIT.AUDIT_PER_HOUR,
+        3600,
       );
+      if (!rl.allowed) {
+        throw new BadRequestException(
+          `Da dat gioi han ${RATE_LIMIT.AUDIT_PER_HOUR} audits/gio. Thu lai sau ${rl.retryAfterSeconds}s`,
+        );
+      }
     }
 
     const safe = await validateUrlSafety(dto.url);
@@ -95,6 +105,19 @@ export class AuditsService {
       },
     });
 
+    // Gate GEO Audit behind FeatureFlag.GEO_AUDIT + monthly quota
+    let runGeo = false;
+    if (dto.runGeo === true) {
+      const geoDecision = await this.entitlement.canRunGeo(userId);
+      if (!geoDecision.allowed) {
+        if (geoDecision.reason === 'free_plan') {
+          throw new ForbiddenException('GEO Audit requires Pro/Business plan');
+        }
+        throw new ForbiddenException('GEO quota exceeded this month');
+      }
+      runGeo = true;
+    }
+
     if (mode === AuditMode.SITE) {
       await this.producer.enqueueSiteCrawlStart({
         auditId: audit.id,
@@ -106,7 +129,7 @@ export class AuditsService {
       await this.producer.enqueueCrawlStart({
         auditId: audit.id,
         url: safe.href,
-        options: { targetKeyword: dto.targetKeyword },
+        options: { targetKeyword: dto.targetKeyword, ...(runGeo ? { runGeo: true } : {}) },
       });
     }
 
@@ -174,6 +197,32 @@ export class AuditsService {
       throw new ForbiddenException('Khong co quyen xem audit nay');
     }
 
+    const auditView = {
+      id: audit.id,
+      url: audit.url,
+      domain: audit.domain,
+      status: audit.status,
+      mode: audit.mode,
+      seoScore: audit.seoScore ? Number(audit.seoScore) : null,
+      targetKeyword: audit.targetKeyword,
+      crawlerType: audit.crawlerType,
+      crawlDurationMs: audit.crawlDurationMs,
+      discoveredUrlsCount: audit.discoveredUrlsCount,
+      auditedUrlsCount: audit.auditedUrlsCount,
+      createdAt: audit.createdAt,
+      completedAt: audit.completedAt,
+      errorMessage: audit.errorMessage,
+    };
+
+    // Site-mode audits never produce a per-page Report in the report service —
+    // their results live in the gateway's own page_audits table + Audit summary
+    // columns. Building the aggregate from the DB (not the 1h Redis cache) keeps
+    // the detail page working for audits older than the cache TTL.
+    if (audit.mode === AuditMode.SITE) {
+      const siteSummary = await this.buildSiteSummary(audit);
+      return { audit: auditView, report: null, siteSummary };
+    }
+
     let report: unknown = null;
     try {
       report = await this.reportClient.getReport(auditId);
@@ -181,21 +230,178 @@ export class AuditsService {
       this.logger.warn(`Report service unavailable for audit ${auditId}: ${(e as Error).message}`);
     }
 
+    const geoScore =
+      report != null && typeof (report as Record<string, unknown>).geoScore === 'number'
+        ? ((report as Record<string, unknown>).geoScore as number)
+        : null;
+    const geoVersion =
+      report != null && typeof (report as Record<string, unknown>).geoVersion === 'string'
+        ? ((report as Record<string, unknown>).geoVersion as string)
+        : null;
+
+    return { audit: auditView, report, siteSummary: null, geoScore, geoVersion };
+  }
+
+  /**
+   * Resolve 2 audit IDs into an ordered before/after pair for the
+   * `/audits/compare` endpoint. Enforces:
+   *   - ownership (ADMIN bypasses)
+   *   - same domain (case-insensitive — Audit.domain is already URL.hostname so
+   *     this is belt+braces)
+   *   - same mode (single vs site)
+   *   - both COMPLETED
+   *   - distinct audit IDs
+   * Sorts by completedAt ASC — caller learns whether we swapped the input via
+   * the `swapped` flag so the UI can surface a banner. BadRequestException
+   * carries a discriminator `code` so the FE can render targeted error UX.
+   */
+  async resolveComparableAudits(
+    userId: string,
+    role: UserRole,
+    auditId1: string,
+    auditId2: string,
+  ): Promise<{
+    before: NonNullable<Awaited<ReturnType<PrismaService['audit']['findUnique']>>>;
+    after: NonNullable<Awaited<ReturnType<PrismaService['audit']['findUnique']>>>;
+    swapped: boolean;
+  }> {
+    if (auditId1 === auditId2) {
+      throw new BadRequestException({
+        message: 'Khong the so sanh 1 audit voi chinh no',
+        code: 'COMPARE_SAME_AUDIT',
+      });
+    }
+
+    const [a, b] = await Promise.all([
+      this.prisma.audit.findUnique({ where: { id: auditId1 } }),
+      this.prisma.audit.findUnique({ where: { id: auditId2 } }),
+    ]);
+
+    if (!a || !b) {
+      throw new NotFoundException('Audit khong ton tai');
+    }
+
+    const isAdmin = role === UserRole.ADMIN;
+    if (!isAdmin && (a.userId !== userId || b.userId !== userId)) {
+      throw new ForbiddenException('Khong co quyen xem audit nay');
+    }
+
+    if (a.status !== AuditStatus.COMPLETED || b.status !== AuditStatus.COMPLETED) {
+      throw new BadRequestException({
+        message: 'Chi so sanh duoc audit da hoan thanh',
+        code: 'COMPARE_NOT_COMPLETED',
+      });
+    }
+
+    if (a.mode !== b.mode) {
+      throw new BadRequestException({
+        message: 'Hai audit phai cung che do (single hoac site)',
+        code: 'COMPARE_MODE_MISMATCH',
+      });
+    }
+
+    if (a.domain.toLowerCase() !== b.domain.toLowerCase()) {
+      throw new BadRequestException({
+        message: 'Hai audit phai cung domain',
+        code: 'COMPARE_DOMAIN_MISMATCH',
+      });
+    }
+
+    // Order by completedAt ASC. createdAt is the stable fallback when one of
+    // them is somehow null (shouldn't happen with the COMPLETED gate above,
+    // but the type is nullable so we handle it explicitly).
+    const aTime = (a.completedAt ?? a.createdAt).getTime();
+    const bTime = (b.completedAt ?? b.createdAt).getTime();
+    const swapped = bTime < aTime;
+    return swapped ? { before: b, after: a, swapped } : { before: a, after: b, swapped };
+  }
+
+  /**
+   * Aggregate view for a SITE-mode audit, recomputed from the durable
+   * page_audits rows + Audit summary columns. `worstPages` carries the 10
+   * lowest-scoring URLs with their failing-issue count.
+   */
+  private async buildSiteSummary(audit: {
+    id: string;
+    seoScore: Prisma.Decimal | null;
+    discoveredUrlsCount: number | null;
+    auditedUrlsCount: number | null;
+  }) {
+    const [scoreRows, worst] = await Promise.all([
+      this.prisma.pageAudit.findMany({ where: { auditId: audit.id }, select: { score: true } }),
+      this.prisma.pageAudit.findMany({
+        where: { auditId: audit.id },
+        orderBy: { score: 'asc' },
+        take: 10,
+        select: { url: true, score: true, issues: true },
+      }),
+    ]);
+
+    const scores = scoreRows.map((r) => r.score).sort((a, b) => a - b);
+    const medianScore =
+      scores.length === 0
+        ? 0
+        : scores.length % 2 === 0
+          ? Math.round((scores[scores.length / 2 - 1]! + scores[scores.length / 2]!) / 2)
+          : scores[(scores.length - 1) / 2]!;
+
+    const totalUrls = audit.discoveredUrlsCount ?? scoreRows.length;
+    const auditedUrls = audit.auditedUrlsCount ?? scoreRows.length;
+
     return {
-      audit: {
-        id: audit.id,
-        url: audit.url,
-        domain: audit.domain,
-        status: audit.status,
-        seoScore: audit.seoScore ? Number(audit.seoScore) : null,
-        targetKeyword: audit.targetKeyword,
-        crawlerType: audit.crawlerType,
-        crawlDurationMs: audit.crawlDurationMs,
-        createdAt: audit.createdAt,
-        completedAt: audit.completedAt,
-        errorMessage: audit.errorMessage,
-      },
-      report,
+      totalUrls,
+      auditedUrls,
+      failedUrls: Math.max(0, totalUrls - auditedUrls),
+      avgScore: audit.seoScore ? Number(audit.seoScore) : 0,
+      medianScore,
+      worstPages: worst.map((w) => ({
+        url: w.url,
+        score: w.score,
+        issueCount: countFailingIssues(w.issues),
+      })),
+    };
+  }
+
+  /**
+   * Paginated per-URL results for a SITE-mode audit (lowest score first), so
+   * the detail page can render the full crawled-page table. Returns the flat
+   * `{ data, total, page, limit }` shape the web client's `Paginated<T>` expects.
+   */
+  async getAuditPages(
+    userId: string,
+    role: UserRole,
+    auditId: string,
+    query: { page?: number; limit?: number },
+  ) {
+    const audit = await this.prisma.audit.findUnique({ where: { id: auditId } });
+    if (!audit) throw new NotFoundException('Audit khong ton tai');
+    if (audit.userId !== userId && role !== UserRole.ADMIN) {
+      throw new ForbiddenException('Khong co quyen xem audit nay');
+    }
+
+    const { page, limit, skip } = clampPagination(query.page, query.limit);
+    const where: Prisma.PageAuditWhereInput = { auditId };
+    const [rows, total] = await Promise.all([
+      this.prisma.pageAudit.findMany({
+        where,
+        orderBy: { score: 'asc' },
+        skip,
+        take: limit,
+        select: { url: true, score: true, issues: true, fetchedAt: true },
+      }),
+      this.prisma.pageAudit.count({ where }),
+    ]);
+
+    return {
+      data: rows.map((r) => ({
+        url: r.url,
+        score: r.score,
+        issueCount: countFailingIssues(r.issues),
+        fetchedAt: r.fetchedAt,
+      })),
+      total,
+      page,
+      limit,
     };
   }
 
@@ -241,4 +447,78 @@ export class AuditsService {
     }
     return audit;
   }
+
+  /**
+   * On-demand AI suggestion for a completed single-mode audit. Quota
+   * (`ai_calls_monthly`) is metered HERE — the only place that knows the
+   * user's subscription. Peek before the (expensive) LLM call; consume 1
+   * lượt ONLY when the report service reports `generated`. Admin + billing-off
+   * bypass metering (mirrors PlanGuard/QuotaGuard).
+   */
+  async suggest(userId: string, role: UserRole, auditId: string) {
+    const audit = await this.prisma.audit.findUnique({ where: { id: auditId } });
+    if (!audit) throw new NotFoundException('Audit khong ton tai');
+    if (audit.userId !== userId && role !== UserRole.ADMIN) {
+      throw new ForbiddenException('Khong co quyen xem audit nay');
+    }
+    if (audit.mode !== AuditMode.SINGLE) {
+      throw new BadRequestException('AI goi y chi ho tro audit don trang');
+    }
+    if (audit.status !== AuditStatus.COMPLETED) {
+      throw new BadRequestException('Audit chua hoan thanh');
+    }
+
+    const billingOn = this.config.get<string>('BILLING_FEATURE_ENABLED') === 'true';
+    const isAdmin = await this.entitlement.isAdmin(userId);
+    const meter = billingOn && !isAdmin;
+
+    let limit = 0;
+    if (meter) {
+      const plan = await this.entitlement.getEffectivePlan(userId);
+      limit = PLAN_FEATURES[plan].ai_calls_monthly;
+      const peek = await this.counter.peek(userId, 'ai_calls_monthly', limit);
+      if (!peek.allowed) throw new QuotaExceededError('ai_calls_monthly', limit, peek.resetAt);
+    }
+
+    const res = (await this.reportClient.generateSuggestions(auditId)) as {
+      status: string;
+      count: number;
+      aiSuggestionsGeneratedAt: string;
+    };
+
+    if (res.status === 'disabled') {
+      throw new ServiceUnavailableException('Tinh nang AI dang tat');
+    }
+    if (res.status === 'failed') {
+      throw new BadGatewayException('Tao AI goi y that bai, thu lai sau');
+    }
+
+    let remaining: number | null = null;
+    if (meter) {
+      remaining =
+        res.status === 'generated'
+          ? (await this.counter.consume(userId, 'ai_calls_monthly', limit, 1)).remaining
+          : (await this.counter.peek(userId, 'ai_calls_monthly', limit)).remaining;
+    }
+
+    return { status: res.status, count: res.count, remaining };
+  }
+}
+
+/**
+ * Count only the actionable issues (fail/warn) in a stored page_audits.issues
+ * blob. New rows carry proto enum names (CHECK_STATUS_FAIL); tolerate the
+ * lowercase form too for rows written before the analyzer wire-format fix.
+ */
+function countFailingIssues(issues: unknown): number {
+  if (!Array.isArray(issues)) return 0;
+  return issues.filter((i) => {
+    const status = (i as { status?: unknown } | null)?.status;
+    return (
+      status === 'fail' ||
+      status === 'warn' ||
+      status === 'CHECK_STATUS_FAIL' ||
+      status === 'CHECK_STATUS_WARN'
+    );
+  }).length;
 }

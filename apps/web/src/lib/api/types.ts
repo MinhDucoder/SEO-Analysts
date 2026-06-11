@@ -92,10 +92,21 @@ export interface AuditListItem {
 
 /**
  * Detail-shape from `GET /audits/:id` — Summary plus errorMessage which
- * is only populated when status === 'failed'.
+ * is only populated when status === 'failed'. `mode` drives the detail
+ * view branch: single → per-page report, site → aggregate + page table.
+ * `discoveredUrlsCount`/`auditedUrlsCount` are only set for site-mode.
  */
 export interface AuditDetail extends AuditListItem {
   errorMessage: string | null;
+  mode: import("@repo/shared").AuditMode;
+  discoveredUrlsCount: number | null;
+  auditedUrlsCount: number | null;
+  // GEO fields (null/false when audit predates GEO feature or user is free-tier)
+  geoScore?: number | null;
+  geoVersion?: string | null;
+  geoEnabled?: boolean;
+  geoSkippedReason?: "free_plan" | "quota_exhausted" | null;
+  geoBreakdown?: GeoBreakdown | null;
 }
 
 /**
@@ -196,9 +207,42 @@ export interface ReportDetail {
   aiSuggestionsGeneratedAt?: string | null;
 }
 
+/**
+ * One of the 10 lowest-scoring URLs in a site-mode audit. `issueCount` is
+ * the number of failing/warning rules on that page (not the rule total).
+ */
+export interface SiteWorstPage {
+  url: string;
+  score: number;
+  issueCount: number;
+}
+
+/**
+ * Aggregate view of a site-mode audit, recomputed by the gateway from the
+ * durable page_audits rows. Present on `GET /audits/:id` when audit.mode
+ * === 'site'; null for single-mode audits.
+ */
+export interface SiteAuditSummary {
+  totalUrls: number;
+  auditedUrls: number;
+  failedUrls: number;
+  avgScore: number;
+  medianScore: number;
+  worstPages: SiteWorstPage[];
+}
+
+/** One row of `GET /audits/:id/pages` — a single crawled URL's result. */
+export interface PageAuditRow {
+  url: string;
+  score: number;
+  issueCount: number;
+  fetchedAt: string;
+}
+
 export interface AuditDetailResponse {
   audit: AuditDetail;
   report: ReportDetail | null;
+  siteSummary: SiteAuditSummary | null;
 }
 
 export interface AuditStatusResponse {
@@ -228,6 +272,31 @@ export interface CompareResult {
   issuesFixed: string[];
   issuesNew: string[];
 }
+
+/**
+ * Single-mode compare response (Phase 1). Site mode will discriminate via
+ * `kind: 'site'` once Phase 2 ships — the discriminated union lives here so
+ * consumers can `switch` on `kind` without breaking.
+ */
+export interface SingleCompareResponse extends CompareResult {
+  kind: "single";
+  /** True when backend reordered the input pair because audit2 was older than audit1. */
+  swapped: boolean;
+}
+
+export type CompareAuditsResponse = SingleCompareResponse;
+
+/**
+ * Discriminator returned by the gateway when /audits/compare 400s. The FE
+ * uses this to render targeted error UX instead of a generic "something went
+ * wrong". Keep in sync with apps/gateway/src/audits/services/audits.service.ts.
+ */
+export type CompareErrorCode =
+  | "COMPARE_SAME_AUDIT"
+  | "COMPARE_NOT_COMPLETED"
+  | "COMPARE_MODE_MISMATCH"
+  | "COMPARE_DOMAIN_MISMATCH"
+  | "COMPARE_SITE_MODE_UNSUPPORTED";
 
 /**
  * Pagination meta envelope used by admin endpoints. Distinct from
@@ -278,6 +347,25 @@ export interface AdminStats {
   topDomains: Array<{ domain: string; count: number }>;
 }
 
+export interface AdminRevenue {
+  period: {
+    type: "month" | "quarter" | "year";
+    year: number;
+    month?: number;
+    quarter?: number;
+    label: string;
+    start: string;
+    end: string;
+  };
+  grossVnd: number;
+  netVnd: number;
+  vatVnd: number;
+  vatPercent: number;
+  paidCount: number;
+  deltaPercent: number | null;
+  byPlan: Array<{ planCode: string; displayName: string; count: number; grossVnd: number }>;
+}
+
 /**
  * `GET /admin/rules` row + `PUT /admin/rules` patch shape.
  */
@@ -301,4 +389,32 @@ export interface ListAdminUsersQuery {
   search?: string;
   role?: "user" | "admin";
   isLocked?: "true" | "false";
+}
+
+// ─── GEO Audit types (Phase 8) ────────────────────────────────────────────────
+
+export type GeoRuleStatus = "pass" | "warn" | "fail";
+
+export interface GeoRuleResult {
+  id: string;
+  status: GeoRuleStatus;
+  score: number;
+  message: string;
+  evidence: Record<string, unknown>;
+}
+
+export interface GeoBreakdown {
+  rules: GeoRuleResult[];
+}
+
+/**
+ * GEO fields augmented on AuditDetailResponse by the gateway (Phase 6 / Task 26).
+ * The gateway sets `geoEnabled=false` for free-plan users (paywall).
+ */
+export interface AuditGeoFields {
+  geoScore: number | null;
+  geoVersion: string | null;
+  geoEnabled: boolean;
+  geoSkippedReason: "free_plan" | "quota_exhausted" | null;
+  geoBreakdown: GeoBreakdown | null;
 }

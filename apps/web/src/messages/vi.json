@@ -38,6 +38,7 @@
     "users": "Người dùng",
     "rules": "Quy tắc",
     "stats": "Thống kê",
+    "tools": "Công cụ",
     "pricing": "Bảng giá",
     "policy": "Chính sách"
   },
@@ -119,6 +120,8 @@
       "modeSiteDesc": "Crawl nhiều trang nội bộ tới giới hạn maxUrls.",
       "maxUrlsLabel": "Số trang tối đa",
       "maxUrlsHint": "Khoảng 1–5000. Càng nhiều thì càng tốn thời gian.",
+      "geoLabel": "Bật AI Visibility (GEO)",
+      "geoDesc": "Chấm điểm mức độ tối ưu cho AI/LLM (ChatGPT, Gemini…). Chỉ áp dụng cho audit một trang và tính vào quota GEO hằng tháng.",
       "submit": "Bắt đầu audit",
       "submitting": "Đang tạo audit…",
       "successTitle": "Audit đã được tạo",
@@ -211,9 +214,36 @@
     "errorBody": "Kiểm tra cả 2 audit đã hoàn thành chưa.",
     "retry": "Thử lại",
     "statusBeforeLabel": "Trước",
-    "statusAfterLabel": "Sau"
+    "statusAfterLabel": "Sau",
+    "pickerLockedDomain": "lọc theo {domain}",
+    "swappedBanner": "Audit B hoàn thành trước Audit A — đã đảo thứ tự để delta tính từ cũ → mới.",
+    "error": {
+      "COMPARE_SAME_AUDIT": {
+        "title": "Chọn 2 audit khác nhau",
+        "body": "Bạn đang chọn cùng 1 audit hai lần — hãy chọn audit thứ hai để so sánh."
+      },
+      "COMPARE_NOT_COMPLETED": {
+        "title": "Audit chưa hoàn thành",
+        "body": "Chỉ so sánh được khi cả 2 audit đã hoàn thành. Chờ audit đang chạy xong nhé."
+      },
+      "COMPARE_MODE_MISMATCH": {
+        "title": "Hai audit khác chế độ",
+        "body": "Chỉ so sánh được audit cùng chế độ — single với single, hoặc site với site."
+      },
+      "COMPARE_DOMAIN_MISMATCH": {
+        "title": "Hai audit khác domain",
+        "body": "Chọn 2 audit cùng website — so sánh khác domain không có ý nghĩa."
+      },
+      "COMPARE_SITE_MODE_UNSUPPORTED": {
+        "title": "Compare site audit sắp ra mắt",
+        "body": "Page-level diff cho audit toàn site đang được phát triển. Tạm thời chỉ so sánh single-page audit được."
+      }
+    }
   },
   "auditDetail": {
+    "tabs": {
+      "seo": "Báo cáo SEO"
+    },
     "loading": "Đang tải báo cáo…",
     "notFoundTitle": "Audit không tồn tại",
     "notFoundBody": "Audit này đã bị xóa hoặc bạn không có quyền truy cập.",
@@ -314,6 +344,48 @@
       "submitting": "Đang xóa…",
       "success": "Đã xóa audit",
       "fail": "Xóa thất bại"
+    },
+    "site": {
+      "subtitle": "Audit toàn site — điểm tổng hợp trên tất cả trang đã crawl.",
+      "stats": {
+        "avg": "Điểm TB",
+        "median": "Trung vị",
+        "audited": "Đã audit",
+        "failed": "Lỗi"
+      },
+      "worstPages": {
+        "title": "Trang điểm thấp nhất"
+      },
+      "table": {
+        "title": "Tất cả trang",
+        "totalPages": "{count} trang",
+        "loading": "Đang tải danh sách trang…",
+        "empty": "Chưa có trang nào",
+        "issues": "{count, plural, =0 {Không lỗi} other {# vấn đề}}"
+      }
+    },
+    "geoTab": "AI Visibility",
+    "geo": {
+      "title": "Hiển thị với AI (GEO)",
+      "subtitle": "Trang này có dễ được AI trích dẫn không?",
+      "generatorCta": "Tạo llms.txt",
+      "degradedBadge": "Giảm cấp — Bỏ qua rule LLM",
+      "paywallTitle": "Mở khoá GEO Audit với gói Pro",
+      "paywallDescription": "Đánh giá trang cho ChatGPT, Perplexity, Google AI Overview.",
+      "paywallCta": "Nâng cấp lên Pro",
+      "emptyTitle": "Audit này chưa có dữ liệu GEO",
+      "emptyDescription": "Gói của bạn đã mở khoá GEO Audit. Chạy lại audit với GEO bật để xem điểm AI Visibility cho trang này.",
+      "emptyCta": "Chạy lại với GEO",
+      "rules": {
+        "geo_ai_bot_access": { "name": "AI Bot Access" },
+        "geo_llms_txt_present": { "name": "Chuẩn llms.txt" },
+        "geo_direct_answer_intro": { "name": "Đoạn intro trả lời trực tiếp" },
+        "geo_semantic_completeness": { "name": "Đoạn tự đủ ý" },
+        "geo_article_schema": { "name": "Article Schema" },
+        "geo_entity_markup": { "name": "Tác giả + Publisher" },
+        "geo_quotable_density": { "name": "Mật độ block trích dẫn" },
+        "geo_citation_outbound": { "name": "Trích dẫn nguồn uy tín" }
+      }
     }
   },
   "scheduled": {
@@ -441,6 +513,25 @@
       "topDomains": "Top domain",
       "topDomainsEmpty": "Chưa có hoạt động"
     },
+    "revenue": {
+      "title": "Doanh thu & thuế",
+      "typeMonth": "Tháng",
+      "typeQuarter": "Quý",
+      "typeYear": "Năm",
+      "prev": "Kỳ trước",
+      "next": "Kỳ sau",
+      "export": "Xuất CSV",
+      "gross": "Tổng doanh thu",
+      "net": "Doanh thu thuần",
+      "vat": "Thuế VAT",
+      "vatLabel": "VAT {percent}%",
+      "transactions": "{count} giao dịch",
+      "deltaVsPrev": "so với kỳ trước",
+      "byPlanTitle": "Doanh thu theo gói",
+      "byPlanEmpty": "Chưa có giao dịch",
+      "loading": "Đang tải doanh thu…",
+      "error": "Không tải được doanh thu"
+    },
     "users": {
       "title": "Người dùng",
       "subtitle": "Quản lý tài khoản người dùng.",
@@ -476,6 +567,8 @@
       },
       "lockSuccess": "Đã khóa {email}",
       "unlockSuccess": "Đã mở khóa {email}",
+      "roleChangeSuccess": "Đã đổi vai trò {email} thành {role}",
+      "selfRoleHint": "Không thể đổi vai trò của chính bạn",
       "empty": "Không có user nào khớp bộ lọc.",
       "error": "Không tải được danh sách người dùng",
       "loading": "Đang tải danh sách…"
@@ -731,11 +824,26 @@
     "index": {
       "title": "Công cụ SEO",
       "subtitle": "Tiện ích miễn phí cho chủ website — xem trước trước khi xuất bản.",
-      "google": { "name": "Xem trước Google SERP", "desc": "Xem trang của bạn hiển thị thế nào trên Google." },
-      "social": { "name": "Xem trước thẻ mạng xã hội", "desc": "Thẻ Facebook, Twitter/X và LinkedIn từ thẻ OG." },
-      "schema": { "name": "Kiểm tra Schema.org", "desc": "Soi JSON-LD và kiểm tra các trường bắt buộc." },
-      "sitemap": { "name": "Sitemap + Robots", "desc": "Kiểm tra sitemap.xml và robots.txt." },
-      "favicon": { "name": "Kiểm tra Favicon", "desc": "Phát hiện favicon cho trình duyệt, iOS và Android." }
+      "google": {
+        "name": "Xem trước Google SERP",
+        "desc": "Xem trang của bạn hiển thị thế nào trên Google."
+      },
+      "social": {
+        "name": "Xem trước thẻ mạng xã hội",
+        "desc": "Thẻ Facebook, Twitter/X và LinkedIn từ thẻ OG."
+      },
+      "schema": {
+        "name": "Kiểm tra Schema.org",
+        "desc": "Soi JSON-LD và kiểm tra các trường bắt buộc."
+      },
+      "sitemap": {
+        "name": "Sitemap + Robots",
+        "desc": "Kiểm tra sitemap.xml và robots.txt."
+      },
+      "favicon": {
+        "name": "Kiểm tra Favicon",
+        "desc": "Phát hiện favicon cho trình duyệt, iOS và Android."
+      }
     },
     "googlePreview": {
       "title": "Xem trước Google SERP",
@@ -779,6 +887,25 @@
     },
     "bot": {
       "title": "Về SEOAnalystsBot"
+    },
+    "llmsTxt": {
+      "title": "Tạo llms.txt",
+      "description": "Tạo file llms.txt để AI hiểu nội dung website của bạn.",
+      "cta": "Tạo",
+      "copy": "Sao chép",
+      "download": "Tải xuống",
+      "copySuccess": "Đã sao chép"
+    }
+  },
+  "apiKeys": {
+    "column": { "device": "Thiết bị" },
+    "badge": { "bound": "đã bound · {when}", "unbound": "chưa bound" },
+    "action": { "rebind": "Rebind thiết bị" },
+    "rebind": {
+      "confirmTitle": "Rebind thiết bị?",
+      "confirmBody": "Sau khi rebind, thiết bị đang dùng key sẽ KHÔNG truy cập được nữa. Thiết bị tiếp theo gọi key sẽ trở thành thiết bị bound mới.",
+      "success": "Đã unbind. Caller tiếp theo sẽ bind.",
+      "errorGeneric": "Không rebind được. Thử lại."
     }
   }
 }

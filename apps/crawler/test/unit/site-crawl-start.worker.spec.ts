@@ -83,4 +83,20 @@ describe('SiteCrawlStartWorker', () => {
       .rejects.toThrow(/sitemap timeout/);
     expect(publisher.publishCrawlFailed).toHaveBeenCalledWith('aud-6', expect.any(Error));
   });
+
+  it('does NOT publish crawl.failed while retries remain (non-final attempt)', async () => {
+    discovery.discoverAllUrls.mockResolvedValue([]);
+    // attemptsMade=0, attempts=2 → BullMQ will retry → must stay silent so a
+    // transient failure that succeeds on retry never flips the audit to FAILED.
+    const job = { id: 'job-r', attemptsMade: 0, opts: { attempts: 2 }, data: { auditId: 'aud-7', rootUrl: 'https://x/' } } as any;
+    await expect(worker.process(job)).rejects.toThrow(/no URLs/i);
+    expect(publisher.publishCrawlFailed).not.toHaveBeenCalled();
+  });
+
+  it('publishes crawl.failed on the final attempt (retries exhausted)', async () => {
+    discovery.discoverAllUrls.mockResolvedValue([]);
+    const job = { id: 'job-f', attemptsMade: 1, opts: { attempts: 2 }, data: { auditId: 'aud-8', rootUrl: 'https://x/' } } as any;
+    await expect(worker.process(job)).rejects.toThrow(/no URLs/i);
+    expect(publisher.publishCrawlFailed).toHaveBeenCalledWith('aud-8', expect.any(Error));
+  });
 });

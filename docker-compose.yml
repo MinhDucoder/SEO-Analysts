@@ -159,6 +159,16 @@ services:
       CASSO_WEBHOOK_SECRET: "${CASSO_WEBHOOK_SECRET}"
       BILLING_INTENT_TTL_MINUTES: "${BILLING_INTENT_TTL_MINUTES}"
       BILLING_FEATURE_ENABLED: "${BILLING_FEATURE_ENABLED}"
+      # AI issue suggestions (public /check → extension/CLI). Provider-driven,
+      # default Gemini — mirrors the report service's SEO_AI_* config.
+      SEO_AI_ENABLED: ${SEO_AI_ENABLED:-false}
+      SEO_AI_PROVIDER: ${SEO_AI_PROVIDER:-gemini}
+      SEO_AI_MODEL: ${SEO_AI_MODEL:-gemini-2.5-flash}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      # Keep ≥8192: /public/check sends ALL page issues in one LLM call;
+      # 2048 truncates the JSON for ~15+ issues → parse fails → degrade to template.
+      LLM_MAX_TOKENS: ${LLM_MAX_TOKENS:-8192}
     depends_on:
       gateway-db:
         condition: service_healthy
@@ -199,8 +209,14 @@ services:
       REDIS_PORT: "6379"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      # F1 site-wide audit: the per-URL worker calls seo-analyzer over gRPC
+      # inline. Without this it defaults to localhost:50053 (unreachable from
+      # inside the container) so every sub-URL audit fails → site audit scores 0.
+      ANALYZER_GRPC_URL: "seo-analyzer:50053"
     depends_on:
       redis:
+        condition: service_healthy
+      seo-analyzer:
         condition: service_healthy
     networks:
       - backend
@@ -299,6 +315,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      FRONTEND_URL: "${FRONTEND_URL}"
       SEO_AI_ENABLED: ${SEO_AI_ENABLED:-false}
       SEO_AI_PROVIDER: ${SEO_AI_PROVIDER:-anthropic}
       SEO_AI_MODEL: ${SEO_AI_MODEL:-claude-haiku-4-5}

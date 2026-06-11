@@ -32,6 +32,7 @@ import { AuthenticatedUser } from '../../common/interfaces/authenticated-request
 import { AuditsService } from '../services/audits.service';
 import { CreateAuditDto } from '../dto/create-audit.dto';
 import { ListAuditsQuery } from '../dto/list-audits.query';
+import { ListPageAuditsQuery } from '../dto/list-page-audits.query';
 import { CompareAuditsQuery } from '../dto/compare-audits.query';
 import { ReportGrpcClient } from '../../infra/grpc/report.client';
 
@@ -77,10 +78,29 @@ export class AuditsController {
     return this.audits.getAuditDetail(user.id, user.role, id);
   }
 
+  @Post(':id/suggest')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(PlanGuard)
+  @RequireFeature(FeatureFlag.AI_SUGGESTIONS)
+  @ApiOperation({ summary: 'Tao AI goi y theo yeu cau (tru 1 luot ai_calls_monthly)' })
+  suggest(@CurrentUser() user: AuthenticatedUser, @Param('id', ParseUUIDPipe) id: string) {
+    return this.audits.suggest(user.id, user.role, id);
+  }
+
   @Get(':id/status')
   @ApiOperation({ summary: 'Trang thai audit' })
   status(@CurrentUser() user: AuthenticatedUser, @Param('id', ParseUUIDPipe) id: string) {
     return this.audits.getStatus(user.id, id);
+  }
+
+  @Get(':id/pages')
+  @ApiOperation({ summary: 'Danh sach trang da audit (site-mode), phan trang' })
+  pages(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() query: ListPageAuditsQuery,
+  ) {
+    return this.audits.getAuditPages(user.id, user.role, id, query);
   }
 
   @Delete(':id')

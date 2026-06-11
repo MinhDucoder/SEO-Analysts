@@ -1,7 +1,7 @@
 /**
  * @file Central rule registration — every new rule must be added here.
  * Called once at module init (`AnalyzerService.onModuleInit`) so the
- * registry mirrors the 21 rows seeded in the `seo_rules` table.
+ * registry mirrors the seeded rows in the `seo_rules` table.
  */
 import { RuleRegistry } from '../../services/rule-registry';
 import { TitleTagRule } from './meta/title-tag.rule';
@@ -26,9 +26,33 @@ import { LanguageTagRule } from './technical/language-tag.rule';
 import { FaviconRule } from './technical/favicon.rule';
 import { PageSizeRule } from './performance/page-size.rule';
 import { ReadabilityRule } from './content/readability.rule';
+// GEO rules
+import { AiBotAccessRule } from './geo/ai-bot-access.rule';
+import { LlmsTxtPresentRule } from './geo/llms-txt-present.rule';
+import { ArticleSchemaRule } from './geo/article-schema.rule';
+import { EntityMarkupRule } from './geo/entity-markup.rule';
+import { QuotableDensityRule } from './geo/quotable-density.rule';
+import { CitationOutboundRule } from './geo/citation-outbound.rule';
+import { DirectAnswerIntroRule } from './geo/direct-answer-intro.rule';
+import { SemanticCompletenessRule } from './geo/semantic-completeness.rule';
+import { GeminiClientService } from '../../services/gemini-client.service';
 
-/** Register all built-in rules into the given registry. Idempotent. */
-export function registerAllRules(registry: RuleRegistry): void {
+export interface RegisterRulesOpts {
+  /** When true, registers all 8 GEO rules (requires GEO_AUDIT feature). */
+  runGeo?: boolean;
+  /** Gemini API key — required for the 2 LLM-backed GEO rules (G3 + G4). */
+  geminiKey?: string;
+}
+
+/** Weight per GEO rule (8 rules × 12.5 = 100 total). */
+export const GEO_RULE_WEIGHT = 12.5;
+
+/**
+ * Register all built-in rules into the given registry.
+ * The 22 standard SEO rules are always registered.
+ * GEO rules are registered only when `opts.runGeo === true`.
+ */
+export function registerAllRules(registry: RuleRegistry, opts: RegisterRulesOpts = {}): void {
   registry.register(new TitleTagRule());
   registry.register(new MetaDescriptionRule());
   registry.register(new OpenGraphRule());
@@ -51,4 +75,18 @@ export function registerAllRules(registry: RuleRegistry): void {
   registry.register(new FaviconRule());
   registry.register(new PageSizeRule());
   registry.register(new ReadabilityRule());
+
+  if (opts.runGeo) {
+    registry.register(new AiBotAccessRule());
+    registry.register(new LlmsTxtPresentRule());
+    registry.register(new ArticleSchemaRule());
+    registry.register(new EntityMarkupRule());
+    registry.register(new QuotableDensityRule());
+    registry.register(new CitationOutboundRule());
+    if (opts.geminiKey) {
+      const llm = new GeminiClientService(opts.geminiKey);
+      registry.register(new DirectAnswerIntroRule(llm));
+      registry.register(new SemanticCompletenessRule(llm));
+    }
+  }
 }

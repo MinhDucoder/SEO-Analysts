@@ -76,7 +76,7 @@ export class AnalyzeContentController {
     const pageData = this.builder.build(req.html, resolvedUrl);
     const mode = req.mode === 2 ? 'full' : 'content_only';
 
-    const results = this.runner.runContent(
+    const results = await this.runner.runContent(
       pageData,
       req.targetKeyword || undefined,
       mode,

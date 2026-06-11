@@ -148,6 +148,17 @@ function CompareBody({
   added: string[];
 }) {
   const t = useTranslations("auditCompare");
+
+  // Backend returns issuesFixed/issuesNew as raw rule ids. Resolve each to its
+  // human-readable name via ruleDeltas (same source, so every id is present),
+  // falling back to the id if a name is somehow missing.
+  const issueItems = React.useMemo(() => {
+    const nameById = new Map(ruleDeltas.map((d) => [d.ruleId, d.ruleName]));
+    const toItems = (ids: string[]) =>
+      ids.map((id) => ({ id, label: nameById.get(id) ?? id }));
+    return { fixed: toItems(fixed), added: toItems(added) };
+  }, [ruleDeltas, fixed, added]);
+
   return (
     <div className="space-y-5">
       <CompareSummary scoreDelta={scoreDelta} before={before} after={after} />
@@ -165,7 +176,7 @@ function CompareBody({
         )}
       </Card>
 
-      <CompareIssues fixed={fixed} added={added} />
+      <CompareIssues fixed={issueItems.fixed} added={issueItems.added} />
     </div>
   );
 }

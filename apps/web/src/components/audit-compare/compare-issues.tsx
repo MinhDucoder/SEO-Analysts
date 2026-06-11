@@ -4,9 +4,16 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Card } from "@/components/ui/card";
 
+export interface CompareIssueItem {
+  /** Rule id — stable React key. */
+  id: string;
+  /** Human-readable rule name shown to the user. */
+  label: string;
+}
+
 export interface CompareIssuesProps {
-  fixed: string[];
-  added: string[];
+  fixed: CompareIssueItem[];
+  added: CompareIssueItem[];
 }
 
 /**
@@ -44,7 +51,7 @@ function IssueListCard({
 }: {
   title: string;
   emptyLabel: string;
-  items: string[];
+  items: CompareIssueItem[];
   icon: React.ReactNode;
   rowClass: string;
 }) {
@@ -61,12 +68,12 @@ function IssueListCard({
         <p className="font-ui text-sm text-fg-muted">{emptyLabel}</p>
       ) : (
         <ul className="flex flex-col gap-2">
-          {items.map((name) => (
+          {items.map((item) => (
             <li
-              key={name}
+              key={item.id}
               className={`rounded-md px-3 py-2 font-ui text-sm ${rowClass}`}
             >
-              {name}
+              {item.label}
             </li>
           ))}
         </ul>

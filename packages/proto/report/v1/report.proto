@@ -13,6 +13,7 @@ service ReportService {
   rpc GetSharedReport(GetSharedReportRequest) returns (GetReportResponse);
   rpc RevokeShareLink(RevokeShareLinkRequest) returns (RevokeShareLinkResponse);
   rpc GeneratePdf(GeneratePdfRequest) returns (GeneratePdfResponse);
+  rpc GenerateSuggestions(GenerateSuggestionsRequest) returns (GenerateSuggestionsResponse);
   rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
 }
 
@@ -57,6 +58,15 @@ message AiSuggestion {
   string rule_id = 1;
   string explanation = 2;
   string actionable_fix = 3;
+}
+
+message GenerateSuggestionsRequest { string audit_id = 1; }
+
+message GenerateSuggestionsResponse {
+  string status = 1;                       // generated|already|empty|disabled|failed
+  int32 count = 2;
+  repeated AiSuggestion ai_suggestions = 3;
+  string ai_suggestions_generated_at = 4;  // ISO timestamp, empty when not yet generated
 }
 
 message CompareRequest { string audit_id_1 = 1; string audit_id_2 = 2; }

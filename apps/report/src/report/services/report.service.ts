@@ -78,6 +78,8 @@ export class ReportService {
       keywords: input.keywords.keywords,
       cwv: input.cwv,
       cwvDesktop: input.cwvDesktop,
+      geoScore: input.analyze.geoScore ?? null,
+      geoVersion: input.analyze.geoVersion ?? null,
     });
 
     // Publish report.done (for any service that cares about report lifecycle)

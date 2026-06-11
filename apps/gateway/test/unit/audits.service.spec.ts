@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AuditsService } from '../../src/audits/services/audits.service';
-import { AuditStatus, UserRole } from '@repo/shared';
+import { AuditStatus, AuditMode, UserRole } from '@repo/shared';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 
 vi.mock('../../src/common/utils/url-validator', () => ({
@@ -31,15 +31,26 @@ describe('AuditsService', () => {
     enqueueCrawlStart: vi.fn(),
     enqueueSiteCrawlStart: vi.fn(),
   };
-  const reportClient = { getReport: vi.fn().mockRejectedValue(new Error('down')) };
+  const reportClient = {
+    getReport: vi.fn().mockRejectedValue(new Error('down')),
+    generateSuggestions: vi.fn(),
+  };
   const entitlement = {
     hasFeature: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
     checkSiteAuditPageCount: vi.fn().mockResolvedValue({ allowed: true, code: 'OK', reason: '' }),
     getEffectivePlan: vi.fn().mockResolvedValue('business'),
+    isAdmin: vi.fn().mockResolvedValue(false),
+    canRunGeo: vi.fn().mockResolvedValue({ allowed: true, reason: null, remainingQuota: 5 }),
+  };
+  const config = { get: vi.fn().mockReturnValue('true') }; // BILLING_FEATURE_ENABLED
+  const counter = {
+    peek: vi.fn().mockResolvedValue({ allowed: true, used: 0, remaining: 100, resetAt: new Date() }),
+    consume: vi.fn().mockResolvedValue({ allowed: true, used: 1, remaining: 99, resetAt: new Date() }),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    config.get.mockReturnValue('true');
     svc = new AuditsService(
       prisma as never,
       rl as never,
@@ -47,6 +58,8 @@ describe('AuditsService', () => {
       producer as never,
       reportClient as never,
       entitlement as never,
+      config as never,
+      counter as never,
     );
   });
 
@@ -156,6 +169,164 @@ describe('AuditsService', () => {
         svc.createAudit('u1', { url: 'https://example.com', mode: 'site', maxUrls: 10_000 }),
       ).rejects.toBeInstanceOf(BadRequestException);
       expect(prisma.audit.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('suggest', () => {
+    const completedSingle = { id: 'a1', userId: 'u1', mode: 'single', status: AuditStatus.COMPLETED };
+
+    it('generated → consumes 1 lượt and returns count', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.isAdmin.mockResolvedValueOnce(false);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'generated', count: 3, aiSuggestionsGeneratedAt: 'x',
+      });
+      const out = await svc.suggest('u1', UserRole.USER, 'a1');
+      expect(reportClient.generateSuggestions).toHaveBeenCalledWith('a1');
+      expect(counter.consume).toHaveBeenCalledWith('u1', 'ai_calls_monthly', 100, 1);
+      expect(out).toMatchObject({ status: 'generated', count: 3 });
+    });
+
+    it('already → does NOT consume', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'already', count: 2, aiSuggestionsGeneratedAt: 'x',
+      });
+      await svc.suggest('u1', UserRole.USER, 'a1');
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+
+    it('blocks with 429 when quota exhausted (peek before LLM)', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      counter.peek.mockResolvedValueOnce({ allowed: false, used: 100, remaining: 0, resetAt: new Date() });
+      await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toMatchObject({ status: 429 });
+      expect(reportClient.generateSuggestions).not.toHaveBeenCalled();
+    });
+
+    it('admin → skips metering entirely', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.isAdmin.mockResolvedValueOnce(true);
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'generated', count: 1, aiSuggestionsGeneratedAt: 'x',
+      });
+      await svc.suggest('admin', UserRole.ADMIN, 'a1');
+      expect(counter.peek).not.toHaveBeenCalled();
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+
+    it('billing off → skips metering', async () => {
+      config.get.mockReturnValueOnce('false');
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'generated', count: 1, aiSuggestionsGeneratedAt: 'x',
+      });
+      await svc.suggest('u1', UserRole.USER, 'a1');
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+
+    it('site mode → BadRequest', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce({ ...completedSingle, mode: 'site' });
+      await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toBeInstanceOf(BadRequestException);
+    });
+
+    it('status disabled → 503, no consume', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(completedSingle);
+      entitlement.getEffectivePlan.mockResolvedValueOnce('pro');
+      reportClient.generateSuggestions.mockResolvedValueOnce({
+        status: 'disabled', count: 0, aiSuggestionsGeneratedAt: '',
+      });
+      await expect(svc.suggest('u1', UserRole.USER, 'a1')).rejects.toMatchObject({ status: 503 });
+      expect(counter.consume).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('GEO Audit entitlement gate in createAudit', () => {
+    const pendingAudit = { id: 'a-geo', status: AuditStatus.PENDING, userId: 'u1', url: 'https://example.com/', mode: AuditMode.SINGLE };
+
+    beforeEach(() => {
+      prisma.audit.create.mockResolvedValue(pendingAudit);
+    });
+
+    it('runGeo absent → canRunGeo NOT called; BullMQ payload has no runGeo', async () => {
+      await svc.createAudit('u1', { url: 'https://example.com' });
+      expect(entitlement.canRunGeo).not.toHaveBeenCalled();
+      const call = producer.enqueueCrawlStart.mock.calls[0][0];
+      expect(call.options?.runGeo).toBeUndefined();
+    });
+
+    it('runGeo: false → canRunGeo NOT called; BullMQ payload has no runGeo', async () => {
+      await svc.createAudit('u1', { url: 'https://example.com', runGeo: false });
+      expect(entitlement.canRunGeo).not.toHaveBeenCalled();
+      const call = producer.enqueueCrawlStart.mock.calls[0][0];
+      expect(call.options?.runGeo).toBeUndefined();
+    });
+
+    it('runGeo: true + allowed → BullMQ payload has runGeo: true', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: true, reason: null, remainingQuota: 4 });
+      await svc.createAudit('u1', { url: 'https://example.com', runGeo: true });
+      expect(entitlement.canRunGeo).toHaveBeenCalledWith('u1');
+      const call = producer.enqueueCrawlStart.mock.calls[0][0];
+      expect(call.options?.runGeo).toBe(true);
+    });
+
+    it('runGeo: true + denied (free_plan) → ForbiddenException with Pro plan message', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: false, reason: 'free_plan', remainingQuota: 0 });
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', runGeo: true }),
+      ).rejects.toThrow('GEO Audit requires Pro/Business plan');
+      expect(producer.enqueueCrawlStart).not.toHaveBeenCalled();
+    });
+
+    it('runGeo: true + denied (quota_exhausted) → ForbiddenException with quota message', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: false, reason: 'quota_exhausted', remainingQuota: 0 });
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', runGeo: true }),
+      ).rejects.toThrow('GEO quota exceeded this month');
+      expect(producer.enqueueCrawlStart).not.toHaveBeenCalled();
+    });
+
+    it('runGeo: true + denied → throws ForbiddenException (not BadRequest)', async () => {
+      entitlement.canRunGeo.mockResolvedValueOnce({ allowed: false, reason: 'free_plan', remainingQuota: 0 });
+      await expect(
+        svc.createAudit('u1', { url: 'https://example.com', runGeo: true }),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+  });
+
+  describe('GEO fields in getAuditDetail', () => {
+    const baseAudit = {
+      id: 'a1', userId: 'u1', url: 'x', domain: 'd',
+      status: AuditStatus.COMPLETED, mode: AuditMode.SINGLE,
+      seoScore: null, targetKeyword: null, crawlerType: 'cheerio',
+      crawlDurationMs: 1000, discoveredUrlsCount: null, auditedUrlsCount: null,
+      createdAt: new Date(), completedAt: new Date(), errorMessage: null,
+    };
+
+    it('returns geoScore and geoVersion from report when present', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(baseAudit);
+      reportClient.getReport.mockResolvedValueOnce({ geoScore: 72, geoVersion: '1.0' });
+      const out = await svc.getAuditDetail('u1', UserRole.USER, 'a1');
+      expect(out.geoScore).toBe(72);
+      expect(out.geoVersion).toBe('1.0');
+    });
+
+    it('returns null for geoScore and geoVersion when report has no GEO data', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(baseAudit);
+      reportClient.getReport.mockResolvedValueOnce({ seoScore: 85 });
+      const out = await svc.getAuditDetail('u1', UserRole.USER, 'a1');
+      expect(out.geoScore).toBeNull();
+      expect(out.geoVersion).toBeNull();
+    });
+
+    it('returns null for geoScore and geoVersion when report service is down', async () => {
+      prisma.audit.findUnique.mockResolvedValueOnce(baseAudit);
+      reportClient.getReport.mockRejectedValueOnce(new Error('down'));
+      const out = await svc.getAuditDetail('u1', UserRole.USER, 'a1');
+      expect(out.geoScore).toBeNull();
+      expect(out.geoVersion).toBeNull();
     });
   });
 });

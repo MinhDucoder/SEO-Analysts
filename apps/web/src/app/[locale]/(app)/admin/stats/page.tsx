@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { AdminStatsCards } from "@/components/admin/admin-stats-cards";
+import { AdminRevenueSection } from "@/components/admin/admin-revenue-section";
 import { useAdminStats } from "@/lib/queries/use-admin";
 
 const SELECT_CLS =
@@ -63,6 +64,7 @@ export default function AdminStatsPage() {
       )}
 
       {query.data && <AdminStatsCards stats={query.data} />}
+      <AdminRevenueSection />
     </div>
   );
 }

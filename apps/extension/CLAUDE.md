@@ -49,12 +49,20 @@ apps/extension/
 
 | # | Tier | Status | Scope |
 |---|---|---|---|
-| 1 | LARGE | **in progress** | WXT scaffold + options page (paste key) + service worker auth routing + gateway CORS patch |
-| 2 | LARGE | pending | `lib/client.ts` + content-script DOM extract + popup audit UI + 15-code error dispatch |
-| 3 | LARGE | pending | UX polish — loading states, retry 429+countdown, local cache 1h, auto-fallback URL→HTML |
+| 1 | LARGE | **done** | WXT scaffold + options page (paste key) + service worker auth routing + gateway CORS patch |
+| 2 | LARGE | **done** | `lib/client.ts` + content-script DOM extract + popup audit UI + 15-code error dispatch |
+| 3 | LARGE | **done** | UX polish — loading states, retry 429+countdown, local cache 1h, auto-fallback URL→HTML |
 | 3.5 | MEDIUM | **done** | Visual redesign — design tokens + 5 components + score hero + bug fixes (see `docs/superpowers/specs/2026-05-15-chrome-ext-redesign-design.md` + plan at `docs/superpowers/plans/2026-05-15-chrome-ext-redesign-plan.md`) |
-| 4 | LARGE | pending | Side panel + i18n (vi/en) + history + audience filter |
-| 5 | SMALL | pending | Publish prep — icons, screenshots, store listing, privacy policy, submit |
+| 4 | LARGE | **dropped** | Side panel + i18n (vi/en) + history + audience filter |
+| 5 | SMALL | **dropped** | Publish prep — icons, screenshots, store listing, privacy policy, submit |
+
+**Current state: Phase 3.5 is the canonical / final version on `improve/main`.**
+Phases 4–5 were fully implemented on the `feat/chrome-ext-v2` branch (i18n,
+history, side panel, icons, privacy policy, store-listing copy) but that branch
+also carried a *different* "linear-mono" redesign of popup/options that conflicts
+with this branch's "score hero" redesign. Decision (2026-05-24): keep this
+branch's redesign + Phase 3.5 scope; do **not** merge v2. Treat Phases 4–5 as
+out of scope unless that decision is revisited.
 
 Design v2: `docs/superpowers/specs/2026-04-29-chrome-ext-design.md`
 

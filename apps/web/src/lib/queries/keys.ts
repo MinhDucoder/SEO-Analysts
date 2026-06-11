@@ -22,6 +22,8 @@ export const queryKeys = {
       ["audits", "recent", opts] as const,
     detail: (id: string) => ["audits", "detail", id] as const,
     status: (id: string) => ["audits", "status", id] as const,
+    pages: (id: string, page: number, limit: number) =>
+      ["audits", "pages", id, page, limit] as const,
     compare: (audit1: string, audit2: string) =>
       ["audits", "compare", audit1, audit2] as const,
   },
@@ -39,6 +41,8 @@ export const queryKeys = {
     users: (filters: Record<string, unknown>) =>
       ["admin", "users", filters] as const,
     rules: () => ["admin", "rules"] as const,
+    revenue: (query: Record<string, unknown>) =>
+      ["admin", "revenue", query] as const,
   },
   /**
    * Billing keys — populated by slug 5 (subscriptions-vietqr).

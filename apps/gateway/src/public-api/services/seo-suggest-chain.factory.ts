@@ -1,7 +1,12 @@
 /**
  * @file Lazy factory for the batched SEO-suggest chain. Returns null
- * when the Anthropic API key is absent so the caller can degrade
- * gracefully. Otherwise builds the chain once and caches it.
+ * when AI is disabled (`SEO_AI_ENABLED` not "true") or when the chosen
+ * provider fails to initialise (e.g. missing key) so the caller can
+ * degrade gracefully to template suggestions. Otherwise builds the chain
+ * once and caches it.
+ *
+ * Provider is config-driven (`SEO_AI_PROVIDER`, default Gemini) — mirrors
+ * the report service's `ai-suggest` wiring so one env set drives both.
  *
  * Test-only: accept an `llmOverride` to inject a stub ILLMProvider
  * without requiring a live key in unit tests.
@@ -53,6 +58,11 @@ const OutputSchema = z.array(
 
 export interface SeoSuggestChainFactoryOptions {
   promptsDir: string;
+  /** SEO_AI_ENABLED kill switch. When false, enrichment degrades to template. */
+  enabled: boolean;
+  /** LLM provider routed into createLLM (config-driven; default Gemini in the module). */
+  provider: 'anthropic' | 'gemini';
+  /** Provider API key (GEMINI_API_KEY or ANTHROPIC_API_KEY). */
   apiKey: string | undefined;
   model: string;
   defaultMaxTokens?: number;
@@ -69,22 +79,33 @@ export class SeoSuggestChainFactory {
 
   async getOrNull(): Promise<IChain<SuggestInput, SuggestOutput> | null> {
     if (this.chainCache !== undefined) return this.chainCache;
-    if (!this.opts.apiKey && !this.opts.llmOverride) {
+    if (!this.opts.llmOverride && !this.opts.enabled) {
       this.logger.warn(
-        'ANTHROPIC_API_KEY not set — LLM enrichment disabled; will degrade to template.',
+        'SEO_AI_ENABLED is not "true" — LLM enrichment disabled; will degrade to template.',
       );
       this.chainCache = null;
       return null;
     }
-    const llm =
-      this.opts.llmOverride ??
-      createLLM({
-        provider: 'anthropic',
-        apiKey: this.opts.apiKey,
-        model: this.opts.model,
-        defaultMaxTokens: this.opts.defaultMaxTokens ?? 2048,
-        defaultTemperature: 0.2,
-      });
+    let llm: ILLMProvider;
+    try {
+      llm =
+        this.opts.llmOverride ??
+        createLLM({
+          provider: this.opts.provider,
+          apiKey: this.opts.apiKey,
+          model: this.opts.model,
+          defaultMaxTokens: this.opts.defaultMaxTokens ?? 2048,
+          defaultTemperature: 0.2,
+        });
+    } catch (e) {
+      // Missing/invalid provider key, unknown provider, etc. Preserve the
+      // degrade-to-template contract instead of failing the whole request.
+      this.logger.warn(
+        `LLM init failed (${e instanceof Error ? e.message : String(e)}) — degrading to template.`,
+      );
+      this.chainCache = null;
+      return null;
+    }
     const loader = new FileSystemPromptLoader({ baseDir: this.opts.promptsDir });
 
     this.chainCache = createBaseChain<SuggestInput, SuggestOutput>({

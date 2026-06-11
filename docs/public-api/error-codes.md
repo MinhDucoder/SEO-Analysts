@@ -22,6 +22,8 @@ Dispatch on `code` — it's stable across versions; `message` is human-readable 
 | 400 | `INVALID_JSON` | Body is not parseable JSON |
 | 401 | `MISSING_API_KEY` | No `Authorization` header |
 | 401 | `INVALID_API_KEY` | Format wrong / revoked / unknown |
+| 401 | `MISSING_INSTALL_ID` | The `X-Install-Id` header is missing or not a valid UUID v4 |
+| 401 | `KEY_INSTALL_MISMATCH` | Key was previously used from a different install; each key binds to its first install |
 | 403 | `KEY_DISABLED` | Key exists but associated account is locked |
 | 413 | `PAYLOAD_TOO_LARGE` | Body > 200 KB |
 | 422 | `INPUT_TYPE_MISMATCH` | `input.type` doesn't match the payload field |

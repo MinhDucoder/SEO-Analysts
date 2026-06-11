@@ -45,8 +45,9 @@ export class RuleRunner {
   /**
    * Run every DB-enabled rule that has a matching implementation. Rules
    * missing an impl are skipped with a warn log (DB → code drift detection).
+   * Supports both sync and async (LLM-backed) rules via Promise.all.
    */
-  runAll(pageData: PageData, dbRules: DbRule[], targetKeyword?: string): RunnerResult[] {
+  async runAll(pageData: PageData, dbRules: DbRule[], targetKeyword?: string): Promise<RunnerResult[]> {
     const out: RunnerResult[] = [];
     for (const db of dbRules) {
       const impl = this.registry.get(db.name);
@@ -55,7 +56,7 @@ export class RuleRunner {
         continue;
       }
       try {
-        const result = impl.check(pageData, targetKeyword);
+        const result = await Promise.resolve(impl.check(pageData, targetKeyword));
         out.push({
           ruleId: db.id,
           ruleName: db.name,
@@ -90,17 +91,18 @@ export class RuleRunner {
    * Rules with no `requires` are "pure HTML" and always run.
    * content_only mode skips rules requiring http_metadata or performance.
    * full mode runs everything (equivalent to `runAll` over all registered rules).
+   * Supports both sync and async (LLM-backed) rules.
    */
-  runContent(
+  async runContent(
     pageData: PageData,
     targetKeyword?: string,
     mode: RunMode = 'content_only',
-  ): ContentRunnerResult[] {
+  ): Promise<ContentRunnerResult[]> {
     const out: ContentRunnerResult[] = [];
     for (const rule of this.registry.getAll()) {
       if (!this.isApplicable(rule, mode)) continue;
       try {
-        const result = rule.check(pageData, targetKeyword);
+        const result = await Promise.resolve(rule.check(pageData, targetKeyword));
         out.push({
           ruleId: rule.id,
           ruleName: rule.id,

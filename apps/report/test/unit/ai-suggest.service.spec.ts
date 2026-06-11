@@ -135,3 +135,123 @@ describe('AiSuggestService.generate', () => {
     expect(updateArgs.data.aiSuggestions.error).toBe('parse_failed');
   });
 });
+
+describe('AiSuggestService.generateOnce', () => {
+  beforeEach(() => {
+    process.env.SEO_AI_ENABLED = 'true';
+  });
+
+  it('returns already + skips LLM when prior success exists', async () => {
+    const deps = makeDeps();
+    deps.prisma.report.findUnique = vi.fn().mockResolvedValue({
+      ...fakeReport,
+      aiSuggestions: {
+        items: [{ ruleId: 'title-tag', explanation: 'x'.repeat(12), actionable_fix: 'y'.repeat(12) }],
+        generatedAt: '2026-01-01T00:00:00.000Z',
+        model: 'm',
+        promptHash: 'h',
+      },
+    }) as AnyMock;
+    const svc = buildService(deps);
+    const out = await svc.generateOnce('a-1');
+    expect(out.status).toBe('already');
+    expect(out.suggestions).toHaveLength(1);
+    expect(deps.llm.invoke).not.toHaveBeenCalled();
+  });
+
+  it('returns generated when LLM produced items', async () => {
+    const deps = makeDeps();
+    deps.prisma.report.findUnique = vi
+      .fn()
+      .mockResolvedValueOnce(fakeReport)
+      .mockResolvedValueOnce(fakeReport)
+      .mockResolvedValueOnce({
+        ...fakeReport,
+        aiSuggestions: {
+          items: [{ ruleId: 'title-tag', explanation: 'x'.repeat(12), actionable_fix: 'y'.repeat(12) }],
+          generatedAt: '2026-01-02T00:00:00.000Z',
+          model: 'm',
+          promptHash: 'h',
+        },
+      }) as AnyMock;
+    const svc = buildService(deps);
+    const out = await svc.generateOnce('a-1');
+    expect(out.status).toBe('generated');
+    expect(out.suggestions).toHaveLength(1);
+  });
+
+  it('returns empty when no failing rules', async () => {
+    const noFail = {
+      ...fakeReport,
+      analysisSnapshot: {
+        ruleResults: [
+          { ruleId: 'x', ruleName: 'X', status: 'pass', weight: 5, category: 'meta', message: '', suggestion: null },
+        ],
+      },
+    };
+    const deps = makeDeps();
+    deps.prisma.report.findUnique = vi
+      .fn()
+      .mockResolvedValueOnce(noFail)
+      .mockResolvedValueOnce(noFail)
+      .mockResolvedValueOnce({
+        ...noFail,
+        aiSuggestions: { items: [], generatedAt: '2026-01-02T00:00:00.000Z', model: 'm', promptHash: '' },
+      }) as AnyMock;
+    const svc = buildService(deps);
+    const out = await svc.generateOnce('a-1');
+    expect(out.status).toBe('empty');
+    expect(deps.llm.invoke).not.toHaveBeenCalled();
+  });
+
+  it('returns disabled when SEO_AI_ENABLED=false', async () => {
+    process.env.SEO_AI_ENABLED = 'false';
+    const deps = makeDeps();
+    deps.prisma.report.findUnique = vi
+      .fn()
+      .mockResolvedValueOnce(fakeReport)
+      .mockResolvedValueOnce(fakeReport)
+      .mockResolvedValueOnce({
+        ...fakeReport,
+        aiSuggestions: {
+          items: [],
+          generatedAt: '2026-01-02T00:00:00.000Z',
+          model: 'disabled',
+          promptHash: '',
+          error: 'disabled',
+        },
+      }) as AnyMock;
+    const svc = buildService(deps);
+    const out = await svc.generateOnce('a-1');
+    expect(out.status).toBe('disabled');
+  });
+
+  it('returns failed when LLM throws', async () => {
+    const deps = makeDeps();
+    deps.llm.invoke = vi.fn().mockRejectedValue(new Error('boom')) as AnyMock;
+    deps.prisma.report.findUnique = vi
+      .fn()
+      .mockResolvedValueOnce(fakeReport)
+      .mockResolvedValueOnce(fakeReport)
+      .mockResolvedValueOnce({
+        ...fakeReport,
+        aiSuggestions: {
+          items: [],
+          generatedAt: '2026-01-02T00:00:00.000Z',
+          model: 'm',
+          promptHash: 'h',
+          error: 'llm_failed',
+        },
+      }) as AnyMock;
+    const svc = buildService(deps);
+    const out = await svc.generateOnce('a-1');
+    expect(out.status).toBe('failed');
+  });
+
+  it('throws when report not found', async () => {
+    const deps = makeDeps();
+    deps.prisma.report.findUnique = vi.fn().mockResolvedValue(null) as AnyMock;
+    const svc = buildService(deps);
+    await expect(svc.generateOnce('missing')).rejects.toThrow(/report not found/);
+  });
+});

@@ -35,4 +35,29 @@ export interface PageData {
   viewportContent?: string;
   textContent: string;
   rawHtml: string;
+  aiBotAccess?: {
+    robotsTxtUrl: string;
+    robotsTxtStatus: number;
+    rules: Array<{ userAgent: string; disallow: string[]; allow: string[] }>;
+  };
+  llmsTxt?: {
+    url: string;
+    status: number;
+    h1?: string;
+    summary?: string;
+    sectionCount: number;
+    sizeBytes: number;
+  };
+  /** Parsed JSON-LD blocks (objects) — mirrors schemaJsonLd but pre-parsed for GEO rules */
+  jsonLdBlocks?: Record<string, unknown>[];
+  /** Quotable structural blocks extracted from page HTML — used by G7 quotable-density rule */
+  quotableBlocks?: {
+    tables: number;
+    lists: number;
+    blockquotes: number;
+    dls: number;
+  };
+  /** H2 sections extracted from page HTML — used by G4 semantic-completeness rule.
+   * TODO Phase 4 follow-up: extract sections from Cheerio in crawler.orchestrator */
+  sections?: Array<{ heading: string; text: string }>;
 }

@@ -50,3 +50,12 @@ export function formatAbsoluteDate(input: string | Date | null | undefined): str
   if (!d.isValid()) return "—";
   return d.format("DD/MM/YYYY HH:mm");
 }
+
+/**
+ * Render a VND amount: "497.000đ". Uses vi-VN digit grouping (dots) to match
+ * the pricing UI. Returns "—" for null/undefined/NaN.
+ */
+export function formatVnd(value: number | null | undefined): string {
+  if (value === null || value === undefined || Number.isNaN(value)) return "—";
+  return `${Math.round(value).toLocaleString("vi-VN")}đ`;
+}

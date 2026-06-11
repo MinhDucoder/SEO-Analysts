@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { EntitlementService } from '../../billing/services/entitlement.service';
 import { QuotaCounterService } from '../../billing/services/quota-counter.service';
-import { PLAN_FEATURES, QuotaDimension } from '@repo/shared';
+import { PLAN_FEATURES, QuotaDimension, UserRole } from '@repo/shared';
 import { REQUIRE_QUOTA_KEY } from '../decorators/require-quota.decorator';
 import { QuotaExceededError } from '../../billing/domain/billing.errors';
 
@@ -28,6 +28,9 @@ export class QuotaGuard implements CanActivate {
     const enabled = this.config.get<string>('BILLING_FEATURE_ENABLED') === 'true';
     const req = ctx.switchToHttp().getRequest();
     const userId = req.user?.id;
+
+    // Admin god-mode: no quota metering.
+    if (req.user?.role === UserRole.ADMIN) return true;
 
     if (!enabled) {
       if (userId) {

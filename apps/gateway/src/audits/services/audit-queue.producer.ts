@@ -14,6 +14,7 @@ export interface CrawlStartPayload {
   url: string;
   options?: {
     targetKeyword?: string;
+    runGeo?: boolean;
   };
 }
 

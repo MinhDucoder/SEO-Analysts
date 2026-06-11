@@ -1,8 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsEnum, IsOptional } from 'class-validator';
+import { UserRole } from '@repo/shared';
 
 export class UpdateUserDto {
-  @ApiProperty({ example: true, description: 'true = khoa tai khoan, false = mo khoa' })
+  @ApiPropertyOptional({ example: true, description: 'true = khoa tai khoan, false = mo khoa' })
+  @IsOptional()
   @IsBoolean()
-  isLocked!: boolean;
+  isLocked?: boolean;
+
+  @ApiPropertyOptional({ enum: UserRole, description: 'Vai tro moi cua user' })
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole;
 }

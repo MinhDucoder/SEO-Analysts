@@ -12,8 +12,8 @@ import { RuleMetadataService } from '../services/rule-metadata.service';
 import { PageData } from '../domain/page-data.interface';
 
 interface ProtoRuleResult {
-  rule_id: string;
-  rule_name: string;
+  ruleId: string;
+  ruleName: string;
   status: string;
   score: number;
   weight: number;
@@ -36,13 +36,19 @@ export class AnalyzerController {
     const pageData = this.mapPageData(req.pageData);
     const result = await this.analyzer.analyze(req.auditId, pageData, req.targetKeyword);
 
+    // Wire format is camelCase + proto enum *names* — proto-loader runs with
+    // `keepCase: false` (main.ts) and `enums: String`, so snake_case keys are
+    // silently dropped and lowercase enum values fall back to UNSPECIFIED.
+    // Returning snake_case here is exactly how the F1 site pipeline ended up
+    // persisting score=0 / issues=[] for every crawled URL (the crawler's
+    // AnalyzerGrpcClient received an empty ruleResults + overallScore=0).
     const ruleResults: ProtoRuleResult[] = result.ruleResults.map((r) => ({
-      rule_id: r.ruleId,
-      rule_name: r.ruleName,
-      status: r.status,
+      ruleId: r.ruleId,
+      ruleName: r.ruleName,
+      status: toProtoCheckStatus(r.status),
       score: r.score,
       weight: r.weight,
-      category: r.category,
+      category: toProtoCategory(r.category),
       message: r.message,
       suggestion: r.suggestion ?? undefined,
       metadata: Object.fromEntries(
@@ -50,20 +56,26 @@ export class AnalyzerController {
       ),
     }));
 
-    return {
-      audit_id: result.auditId,
-      rule_results: ruleResults,
-      category_scores: result.categoryScores.map((c) => ({
-        category: c.category,
+    const response: Record<string, unknown> = {
+      auditId: result.auditId,
+      ruleResults,
+      categoryScores: result.categoryScores.map((c) => ({
+        category: toProtoCategory(c.category),
         score: c.score,
-        total_rules: c.totalRules,
+        totalRules: c.totalRules,
         passed: c.passed,
         warned: c.warned,
         failed: c.failed,
       })),
-      overall_score: result.overallScore,
+      overallScore: result.overallScore,
       classification: result.classification,
     };
+
+    // GEO score fields — camelCase required (keepCase: false drops snake_case)
+    if (result.geoScore != null) response.geoScore = result.geoScore;
+    if (result.geoVersion) response.geoVersion = result.geoVersion;
+
+    return response;
   }
 
   @GrpcMethod('SeoAnalyzerService', 'ListRules')
@@ -169,5 +181,48 @@ export class AnalyzerController {
       textContent: raw.textContent ?? raw.text_content ?? '',
       rawHtml: raw.rawHtml ?? raw.raw_html ?? '',
     };
+  }
+}
+
+// Loader runs with `enums: String`, so enum fields serialize by the proto
+// enum's *name*. The JS enums in @repo/shared use lowercase values
+// (`meta`, `fail`); these bridge them to the proto name the wire expects,
+// mirroring apps/report/.../report.grpc.controller.ts.
+function toProtoCategory(value: unknown): string {
+  switch (value) {
+    case 'meta':
+      return 'ISSUE_CATEGORY_META';
+    case 'headings':
+      return 'ISSUE_CATEGORY_HEADINGS';
+    case 'images':
+      return 'ISSUE_CATEGORY_IMAGES';
+    case 'links':
+      return 'ISSUE_CATEGORY_LINKS';
+    case 'performance':
+      return 'ISSUE_CATEGORY_PERFORMANCE';
+    case 'geo':
+      return 'ISSUE_CATEGORY_GEO';
+    case 'technical':
+    case 'content':
+      // Proto IssueCategory has no CONTENT — fold it into TECHNICAL so the
+      // rule is rendered instead of dropped.
+      return 'ISSUE_CATEGORY_TECHNICAL';
+    default:
+      if (typeof value === 'string' && value.startsWith('ISSUE_CATEGORY_')) return value;
+      return 'ISSUE_CATEGORY_UNSPECIFIED';
+  }
+}
+
+function toProtoCheckStatus(value: unknown): string {
+  switch (value) {
+    case 'pass':
+      return 'CHECK_STATUS_PASS';
+    case 'warn':
+      return 'CHECK_STATUS_WARN';
+    case 'fail':
+      return 'CHECK_STATUS_FAIL';
+    default:
+      if (typeof value === 'string' && value.startsWith('CHECK_STATUS_')) return value;
+      return 'CHECK_STATUS_UNSPECIFIED';
   }
 }

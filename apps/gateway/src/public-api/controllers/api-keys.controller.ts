@@ -81,6 +81,16 @@ export class ApiKeysController {
     }
   }
 
+  @Post(':id/rebind')
+  @HttpCode(204)
+  @ApiOperation({ summary: 'Clear the device binding so the next request from any install rebinds the key.' })
+  async rebind(
+    @Req() req: AuthedRequest,
+    @Param('id') id: string,
+  ): Promise<void> {
+    await this.svc.rebind(id, req.user.id);
+  }
+
   private toDto(r: {
     id: string;
     name: string;
@@ -89,6 +99,8 @@ export class ApiKeysController {
     lastUsedAt: Date | null;
     createdAt: Date;
     revokedAt: Date | null;
+    installId: string | null;
+    installBoundAt: Date | null;
   }): ApiKeyDto {
     return {
       id: r.id,
@@ -98,6 +110,8 @@ export class ApiKeysController {
       lastUsedAt: r.lastUsedAt,
       createdAt: r.createdAt,
       revokedAt: r.revokedAt,
+      installId: r.installId,
+      installBoundAt: r.installBoundAt,
     };
   }
 }

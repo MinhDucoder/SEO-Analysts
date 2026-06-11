@@ -83,6 +83,9 @@ describe('Quota enforcement on POST /audits (Free plan)', () => {
     process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
     process.env.GOOGLE_CLIENT_SECRET = 'test-google-client-secret';
     process.env.GOOGLE_CALLBACK_URL = 'http://localhost:3000/api/v1/auth/google/callback';
+    // This suite asserts quota/feature enforcement, which only runs when billing
+    // is enabled. The default env has it off, so PlanGuard/QuotaGuard would bypass.
+    process.env.BILLING_FEATURE_ENABLED = 'true';
 
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
@@ -113,6 +116,7 @@ describe('Quota enforcement on POST /audits (Free plan)', () => {
         getEffectivePlan: vi.fn(async () => 'free'),
         hasFeature: vi.fn(async () => ({ allowed: true })),
         checkSiteAuditPageCount: vi.fn(async () => ({ allowed: true })),
+        isAdmin: vi.fn(async () => false),
       })
       .overrideProvider(QuotaCounterService).useValue({ consume })
       .overrideGuard(JwtAuthGuard).useClass(FakeJwtGuard)

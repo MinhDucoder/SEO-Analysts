@@ -64,12 +64,22 @@ export class AdminService {
     if (adminId === targetId && dto.isLocked) {
       throw new BadRequestException('Admin khong the lock chinh minh');
     }
+    // Self-demotion guard: changing your own role can only strip admin and
+    // lock you out — block it the same way self-lock is blocked.
+    if (adminId === targetId && dto.role !== undefined) {
+      throw new BadRequestException('Admin khong the doi vai tro cua chinh minh');
+    }
     const user = await this.prisma.user.findUnique({ where: { id: targetId } });
     if (!user) throw new NotFoundException('User khong ton tai');
+
+    const data: Prisma.UserUpdateInput = {};
+    if (dto.isLocked !== undefined) data.isLocked = dto.isLocked;
+    if (dto.role !== undefined) data.role = dto.role;
+
     return this.prisma.user.update({
       where: { id: targetId },
-      data: { isLocked: dto.isLocked },
-      select: { id: true, email: true, isLocked: true },
+      data,
+      select: { id: true, email: true, isLocked: true, role: true },
     });
   }
 

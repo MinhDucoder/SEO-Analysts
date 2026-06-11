@@ -30,6 +30,7 @@ export interface CrawlOptions {
   forcePlaywright?: boolean;
   includeLighthouse?: boolean;
   includeLinkChecks?: boolean;
+  runGeo?: boolean;
   userAgent?: string;
   timeoutMs?: number;
 }

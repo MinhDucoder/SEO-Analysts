@@ -60,6 +60,44 @@ message PageData {
   optional string viewport_content = 54;
   string text_content = 60;
   string raw_html = 61;
+  // GEO Audit fields (additive; populated only when crawl runs with GEO enabled)
+  optional AiBotAccess ai_bot_access = 70;
+  optional LlmsTxt llms_txt = 71;
+  optional QuotableBlocks quotable_blocks = 72;
+  repeated Section sections = 73;
+}
+
+message AiBotAccess {
+  string robots_txt_url = 1;
+  int32 robots_txt_status = 2;
+  repeated UserAgentRule rules = 3;
+}
+
+message UserAgentRule {
+  string user_agent = 1;
+  repeated string disallow = 2;
+  repeated string allow = 3;
+}
+
+message LlmsTxt {
+  string url = 1;
+  int32 status = 2;
+  optional string h1 = 3;
+  optional string summary = 4;
+  int32 section_count = 5;
+  int32 size_bytes = 6;
+}
+
+message QuotableBlocks {
+  int32 tables = 1;
+  int32 lists = 2;
+  int32 blockquotes = 3;
+  int32 dls = 4;
+}
+
+message Section {
+  string heading = 1;
+  string text = 2;
 }
 
 message CrawlMetadata {

@@ -22,10 +22,10 @@ describe('PaymentIntentService', () => {
   };
   const configMock = {
     get: vi.fn((key: string) => ({
-      VIETQR_BANK_BIN: '970422',
-      VIETQR_ACCOUNT_NO: '0123456789',
-      VIETQR_ACCOUNT_NAME: 'NGUYEN VAN A',
-      BILLING_INTENT_TTL_MINUTES: '30',
+      VIETQR_BANK_BIN: '970423',
+      VIETQR_ACCOUNT_NO: '17171777777',
+      VIETQR_ACCOUNT_NAME: 'NGUYEN Minh Duc',
+      BILLING_INTENT_TTL_MINUTES: '15',
     } as any)[key]),
   };
 

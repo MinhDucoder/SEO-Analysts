@@ -1,11 +1,17 @@
 "use client";
 
-import { Lock, Unlock } from "lucide-react";
+import { Check, ChevronDown, Lock, Unlock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useUpdateUserLock } from "@/lib/queries/use-admin";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useUpdateUserLock, useUpdateUserRole } from "@/lib/queries/use-admin";
 import { useAuthStore } from "@/lib/auth/store";
 import type { AdminUser } from "@/lib/api/types";
 import { formatRelativeDate } from "@/lib/utils/format";
@@ -14,10 +20,16 @@ interface AdminUsersTableProps {
   rows: AdminUser[];
 }
 
+const ROLE_OPTIONS: AdminUser["role"][] = ["user", "admin"];
+
 export function AdminUsersTable({ rows }: AdminUsersTableProps) {
   const t = useTranslations("admin.users");
   const lock = useUpdateUserLock();
+  const role = useUpdateUserRole();
   const me = useAuthStore((s) => s.user);
+
+  const roleLabel = (r: AdminUser["role"]) =>
+    r === "admin" ? t("filters.roleAdmin") : t("filters.roleUser");
 
   const onToggle = (user: AdminUser) => {
     const nextLocked = !user.isLocked;
@@ -28,6 +40,23 @@ export function AdminUsersTable({ rows }: AdminUsersTableProps) {
           toast.success(
             t(nextLocked ? "lockSuccess" : "unlockSuccess", {
               email: user.email,
+            }),
+          );
+        },
+      },
+    );
+  };
+
+  const onChangeRole = (user: AdminUser, nextRole: AdminUser["role"]) => {
+    if (nextRole === user.role) return;
+    role.mutate(
+      { id: user.id, role: nextRole },
+      {
+        onSuccess: () => {
+          toast.success(
+            t("roleChangeSuccess", {
+              email: user.email,
+              role: roleLabel(nextRole),
             }),
           );
         },
@@ -62,9 +91,53 @@ export function AdminUsersTable({ rows }: AdminUsersTableProps) {
                 <td className="px-4 py-3 font-mono text-xs">{user.email}</td>
                 <td className="px-4 py-3">{user.fullName}</td>
                 <td className="px-4 py-3">
-                  <Badge variant={user.role === "admin" ? "info" : "muted"}>
-                    {user.role}
-                  </Badge>
+                  {isSelf ? (
+                    <Badge
+                      variant={user.role === "admin" ? "info" : "muted"}
+                      title={t("selfRoleHint")}
+                    >
+                      {roleLabel(user.role)}
+                    </Badge>
+                  ) : (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type="button"
+                          disabled={role.isPending}
+                          className="inline-flex items-center gap-1 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-60"
+                        >
+                          <Badge
+                            variant={user.role === "admin" ? "info" : "muted"}
+                          >
+                            {roleLabel(user.role)}
+                          </Badge>
+                          <ChevronDown
+                            className="h-3.5 w-3.5 text-fg-muted"
+                            aria-hidden
+                          />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        {ROLE_OPTIONS.map((opt) => (
+                          <DropdownMenuItem
+                            key={opt}
+                            onSelect={() => onChangeRole(user, opt)}
+                            className="gap-2"
+                          >
+                            <Check
+                              className={
+                                opt === user.role
+                                  ? "h-4 w-4"
+                                  : "h-4 w-4 opacity-0"
+                              }
+                              aria-hidden
+                            />
+                            {roleLabel(opt)}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </td>
                 <td className="px-4 py-3 font-mono text-xs">
                   {user.auditCount}

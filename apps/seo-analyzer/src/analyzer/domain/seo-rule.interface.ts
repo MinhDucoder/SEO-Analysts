@@ -26,5 +26,5 @@ export interface ISeoRule {
   readonly id: string; // unique rule name, e.g. "title_tag"
   readonly category: IssueCategory;
   readonly requires?: RuleRequirement[];
-  check(pageData: PageData, targetKeyword?: string): RuleCheckOutput;
+  check(pageData: PageData, targetKeyword?: string): RuleCheckOutput | Promise<RuleCheckOutput>;
 }

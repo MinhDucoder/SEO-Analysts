@@ -50,6 +50,14 @@ function deriveBreadcrumbs(pathname: string, tNav: NavTranslator): BreadcrumbIte
   if (path.startsWith("/scheduled")) {
     return [{ label: tNav("scheduled") }];
   }
+  if (path === "/tools") {
+    return [{ label: tNav("tools") }];
+  }
+  if (path.startsWith("/tools/")) {
+    return [
+      { label: tNav("tools"), href: "/tools" },
+    ];
+  }
   if (path.startsWith("/settings/profile")) {
     return [
       { label: tNav("settings"), href: "/settings/profile" },

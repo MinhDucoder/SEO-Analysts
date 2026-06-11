@@ -1,8 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { loadApiKey, parseApiKeyEnvironment } from '@/lib/storage';
 import { dispatchErrorCode } from '@/lib/errors';
-import { Button, Input, Badge, ScoreRing, IssueCard } from '@/components';
-import type { PublicCheckResponse } from '@/lib/api-types';
+import { API_BASE_URL } from '@/lib/api-base';
+import {
+  Button,
+  Input,
+  Badge,
+  ScoreRing,
+  ScoreBreakdown,
+  IssueCard,
+  IssueFilters,
+  applyFilters,
+  EMPTY_FILTER,
+  Toast,
+} from '@/components';
+import type { FilterState, ToastState } from '@/components';
+import type { PublicCheckIssue, PublicCheckResponse } from '@/lib/api-types';
 import type { AuditReply, AuditErr } from '../background';
 
 type Mode =
@@ -136,7 +149,41 @@ function LoadingSkeleton() {
 }
 
 function ResultView({ result }: { result: PublicCheckResponse }) {
-  const banner = aiBanner(result.meta);
+  const sourceLabel = aiSourceLabel(result.meta);
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTER);
+  const [toast, setToast] = useState<ToastState | null>(null);
+
+  // Re-filter on every state change so the copy button still operates on
+  // the visible subset; memoised to avoid recomputing while the toast
+  // ticks down its dismiss timer.
+  const visibleIssues = useMemo(
+    () => applyFilters(result.issues, filters),
+    [result.issues, filters],
+  );
+
+  // Adapted from apps/web's playground result-viewer onCopy handler —
+  // navigator.clipboard guarded for clipboards blocked by policy, with
+  // a friendly inline toast either way so the click isn't silent.
+  const onCopySuggestion = useCallback((issue: PublicCheckIssue) => {
+    const text = issue.suggestion?.text ?? '';
+    if (!text) {
+      setToast({ message: 'Nothing to copy', tone: 'error', nonce: Date.now() });
+      return;
+    }
+    void navigator.clipboard
+      .writeText(text)
+      .then(() =>
+        setToast({ message: 'Suggestion copied', tone: 'success', nonce: Date.now() }),
+      )
+      .catch(() =>
+        setToast({
+          message: 'Copy blocked by browser',
+          tone: 'error',
+          nonce: Date.now(),
+        }),
+      );
+  }, []);
+
   return (
     <section className="popup-result">
       <div className="popup-score">
@@ -144,18 +191,26 @@ function ResultView({ result }: { result: PublicCheckResponse }) {
         <p className="popup-stats">
           {result.issues.length} issues · {result.meta.contentStats.words} words
           {result.meta.cached && <> · <Badge variant="cached">cached</Badge></>}
+          {sourceLabel && <> · <Badge variant="meta">{sourceLabel}</Badge></>}
         </p>
       </div>
 
-      {banner && <div className={`popup-banner popup-banner-${banner.tone}`}>{banner.text}</div>}
+      <ScoreBreakdown breakdown={result.scoreBreakdown} />
+
+      <IssueFilters issues={result.issues} value={filters} onChange={setFilters} />
 
       <ul className="popup-issues">
         {result.issues.length === 0 && (
           <li className="popup-none">No issues found 🎉</li>
         )}
-        {result.issues.map((i, idx) => (
+        {result.issues.length > 0 && visibleIssues.length === 0 && (
+          <li className="popup-none popup-none-empty">
+            No issues match the current filter.
+          </li>
+        )}
+        {visibleIssues.map((i, idx) => (
           <li key={`${i.ruleId}-${idx}`}>
-            <IssueCard issue={i} />
+            <IssueCard issue={i} onCopySuggestion={onCopySuggestion} />
           </li>
         ))}
       </ul>
@@ -164,21 +219,35 @@ function ResultView({ result }: { result: PublicCheckResponse }) {
         {result.meta.usage.remaining.minute} reqs left / min ·{' '}
         {result.meta.usage.remaining.day} / day
       </p>
+
+      <Toast toast={toast} onDismiss={() => setToast(null)} />
     </section>
   );
 }
 
-function aiBanner(meta: PublicCheckResponse['meta']): { text: string; tone: 'info' | 'warning' } | null {
-  if (meta.suggestionSource === 'llm') {
-    return { text: '✨ AI suggestions', tone: 'info' };
-  }
-  if (meta.suggestionSource === 'mixed') {
-    return { text: '✨ AI + template suggestions', tone: 'info' };
-  }
+// Suggestion-source indicator. Previously rendered as a full-width
+// rounded banner that looked clickable — users tapped expecting an
+// action and got nothing. Now an inline meta badge alongside "issues ·
+// words · cached" so the label clearly reads as status, not control.
+function aiSourceLabel(meta: PublicCheckResponse['meta']): string | null {
+  if (meta.suggestionSource === 'llm') return '✨ AI';
+  if (meta.suggestionSource === 'mixed') return '✨ AI + template';
   if (meta.suggestionSource === 'template' && meta.enrichMode === 'llm') {
-    return { text: '⚠️ Template fallback (AI unavailable)', tone: 'warning' };
+    return '⚠️ Template fallback';
   }
   return null;
+}
+
+/**
+ * Derive the web-app base URL from the gateway URL.
+ * Dev:  http://localhost:3000  → http://localhost:3001
+ * Prod: https://api.seoanalyst.app → https://seoanalyst.app
+ * All other values fall back to the API_BASE_URL itself (safe no-op).
+ */
+function resolveWebBaseUrl(): string {
+  return API_BASE_URL
+    .replace('http://localhost:3000', 'http://localhost:3001')
+    .replace('https://api.seoanalyst.app', 'https://seoanalyst.app');
 }
 
 function ErrorView({
@@ -201,6 +270,27 @@ function ErrorView({
       </p>
       {action === 'OPEN_OPTIONS' && (
         <Button variant="primary" size="md" onClick={onOpenOptions}>Open settings</Button>
+      )}
+      {action === 'OPEN_REBIND_PAGE' && (
+        <div className="popup-error-detail">
+          <p className="popup-error-hint">
+            Key đang được bound thiết bị khác. Mở web app → Settings → API Keys → Rebind, hoặc dùng thiết bị gốc.
+          </p>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() =>
+              chrome.tabs.create({ url: `${resolveWebBaseUrl()}/settings/api-keys` })
+            }
+          >
+            Open rebind page
+          </Button>
+        </div>
+      )}
+      {action === 'RELOAD_EXTENSION' && (
+        <p className="popup-error-hint">
+          Install id chưa sinh. Hãy reload extension (chrome://extensions → reload).
+        </p>
       )}
       {action === 'RETRY_LATER' && (
         <RetryCountdown seconds={err.retryAfterSeconds ?? 30} onRetry={onRetry} />

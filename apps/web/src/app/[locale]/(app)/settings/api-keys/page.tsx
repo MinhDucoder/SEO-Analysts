@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -20,12 +21,13 @@ import { Select } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/toast';
 import { SettingsShell } from "@/components/settings/settings-shell";
-import { listApiKeys, createApiKey, revokeApiKey } from '@/lib/api-keys';
+import { listApiKeys, createApiKey, revokeApiKey, rebindApiKey } from '@/lib/api-keys';
 import { getFriendlyMessage } from '@/lib/api/errors';
 import type { ApiKeyDto, ApiKeyEnvironment, CreateApiKeyResponse } from '@/types/api';
 
 export default function ApiKeysPage() {
   const qc = useQueryClient();
+  const t = useTranslations('apiKeys');
 
   const keysQuery = useQuery<ApiKeyDto[]>({
     queryKey: ['api-keys'],
@@ -36,6 +38,7 @@ export default function ApiKeysPage() {
   const [newKeyName, setNewKeyName] = React.useState('');
   const [newKeyEnv, setNewKeyEnv] = React.useState<ApiKeyEnvironment>('test');
   const [plaintext, setPlaintext] = React.useState<string | null>(null);
+  const [rebindTargetId, setRebindTargetId] = React.useState<string | null>(null);
 
   const createMut = useMutation<
     CreateApiKeyResponse,
@@ -59,6 +62,19 @@ export default function ApiKeysPage() {
       void qc.invalidateQueries({ queryKey: ['api-keys'] });
     },
     onError: (err) => toast.error(getFriendlyMessage(err, 'Revoke failed')),
+  });
+
+  const rebindMut = useMutation<void, Error, string>({
+    mutationFn: (id) => rebindApiKey(id),
+    onSuccess: () => {
+      setRebindTargetId(null);
+      toast.success(t('rebind.success'));
+      void qc.invalidateQueries({ queryKey: ['api-keys'] });
+    },
+    onError: () => {
+      setRebindTargetId(null);
+      toast.error(t('rebind.errorGeneric'));
+    },
   });
 
   const rows = keysQuery.data ?? [];
@@ -152,6 +168,33 @@ export default function ApiKeysPage() {
         </DialogContent>
       </Dialog>
 
+      {/* Rebind confirm dialog */}
+      <Dialog
+        open={rebindTargetId !== null}
+        onOpenChange={(open) => { if (!open) setRebindTargetId(null); }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('rebind.confirmTitle')}</DialogTitle>
+            <DialogDescription>{t('rebind.confirmBody')}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              disabled={rebindMut.isPending}
+              onClick={() => {
+                if (rebindTargetId) rebindMut.mutate(rebindTargetId);
+              }}
+            >
+              {rebindMut.isPending ? 'Rebinding…' : t('action.rebind')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Your keys</CardTitle>
@@ -168,6 +211,7 @@ export default function ApiKeysPage() {
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Prefix</th>
                   <th className="px-4 py-2">Env</th>
+                  <th className="px-4 py-2">{t('column.device')}</th>
                   <th className="px-4 py-2">Last used</th>
                   <th className="px-4 py-2">Actions</th>
                 </tr>
@@ -175,6 +219,9 @@ export default function ApiKeysPage() {
               <tbody>
                 {rows.map((k) => {
                   const revoked = k.revokedAt !== null;
+                  const boundAt = k.installBoundAt
+                    ? new Date(k.installBoundAt).toLocaleString()
+                    : null;
                   return (
                     <tr key={k.id} className="border-b last:border-b-0">
                       <td className="px-4 py-2">{k.name}</td>
@@ -184,26 +231,52 @@ export default function ApiKeysPage() {
                           {k.environment}
                         </Badge>
                       </td>
+                      <td className="px-4 py-2">
+                        {k.installId ? (
+                          <Badge
+                            variant="muted"
+                            title={k.installId}
+                          >
+                            {t('badge.bound', { when: boundAt ?? '—' })}
+                          </Badge>
+                        ) : (
+                          <Badge variant="muted" className="opacity-50">
+                            {t('badge.unbound')}
+                          </Badge>
+                        )}
+                      </td>
                       <td className="px-4 py-2 text-muted-foreground">
                         {k.lastUsedAt ? new Date(k.lastUsedAt).toLocaleString() : 'never'}
                       </td>
                       <td className="px-4 py-2">
-                        {revoked ? (
-                          <Badge variant="muted">revoked</Badge>
-                        ) : (
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            disabled={revokeMut.isPending}
-                            onClick={() => {
-                              if (window.confirm(`Revoke "${k.name}"? This cannot be undone.`)) {
-                                revokeMut.mutate(k.id);
-                              }
-                            }}
-                          >
-                            Revoke
-                          </Button>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {revoked ? (
+                            <Badge variant="muted">revoked</Badge>
+                          ) : (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={rebindMut.isPending || k.installId === null}
+                                onClick={() => setRebindTargetId(k.id)}
+                              >
+                                {t('action.rebind')}
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                disabled={revokeMut.isPending}
+                                onClick={() => {
+                                  if (window.confirm(`Revoke "${k.name}"? This cannot be undone.`)) {
+                                    revokeMut.mutate(k.id);
+                                  }
+                                }}
+                              >
+                                Revoke
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );

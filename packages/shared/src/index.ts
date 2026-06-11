@@ -23,6 +23,7 @@ export enum IssueCategory {
   PERFORMANCE = 'performance',
   TECHNICAL = 'technical',
   CONTENT = 'content',
+  GEO = 'geo',
 }
 
 export enum UserRole {

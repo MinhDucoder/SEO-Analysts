@@ -13,6 +13,7 @@ export const ROUTES = {
   home: "/",
 
   // Marketing (public)
+  tools: "/tools",
   pricing: "/pricing",
   policy: "/policy",
 

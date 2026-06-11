@@ -1,6 +1,11 @@
 # ─── Stage 1: Builder ───
 FROM node:20-alpine AS builder
 
+# openssl lets `prisma generate` detect OpenSSL 3.x and fetch the matching
+# linux-musl-openssl-3.0.x engines (without it Prisma falls back to the 1.1.x
+# engine, which can't link libssl.so.3 at runtime).
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 RUN npm install -g turbo@^2
@@ -29,7 +34,10 @@ RUN npm prune --omit=dev
 # ─── Stage 2: Production ───
 FROM node:20-alpine AS production
 
-RUN apk add --no-cache dumb-init curl
+# openssl is required at runtime: Prisma's migrate/schema engine detects the
+# OpenSSL version via the CLI and dynamically links libssl — without it the
+# entrypoint's `prisma migrate deploy` crashes with a non-JSON engine error.
+RUN apk add --no-cache dumb-init curl openssl
 
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nestjs -u 1001 -G nodejs

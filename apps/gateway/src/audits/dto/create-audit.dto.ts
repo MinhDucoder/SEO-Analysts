@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsOptional, IsString, IsUrl, Max, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsOptional, IsString, IsUrl, Max, MaxLength, Min } from 'class-validator';
 
 export enum AuditModeDto {
   SINGLE = 'single',
@@ -38,4 +38,12 @@ export class CreateAuditDto {
   @Min(1)
   @Max(5000)
   maxUrls?: number;
+
+  @ApiPropertyOptional({
+    example: false,
+    description: 'Bat GEO Audit (AI Visibility) — chi danh cho goi Pro/Business',
+  })
+  @IsOptional()
+  @IsBoolean()
+  runGeo?: boolean;
 }

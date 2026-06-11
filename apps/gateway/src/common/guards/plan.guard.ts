@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/commo
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { EntitlementService } from '../../billing/services/entitlement.service';
-import { FeatureFlag } from '@repo/shared';
+import { FeatureFlag, UserRole } from '@repo/shared';
 import { REQUIRE_FEATURE_KEY } from '../decorators/require-feature.decorator';
 import { FeatureNotAvailableError } from '../../billing/domain/billing.errors';
 
@@ -26,6 +26,9 @@ export class PlanGuard implements CanActivate {
     const enabled = this.config.get<string>('BILLING_FEATURE_ENABLED') === 'true';
     const req = ctx.switchToHttp().getRequest();
     const userId = req.user?.id;
+
+    // Admin god-mode: bypass every feature gate.
+    if (req.user?.role === UserRole.ADMIN) return true;
 
     if (!enabled) {
       if (userId) {

@@ -13,8 +13,13 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
+    "e2e:headed": "playwright test --headed",
+    "e2e:debug": "playwright test --debug",
+    "e2e:report": "playwright show-report playwright-report",
     "test:integration": "playwright test --config=playwright.integration.config.ts",
-    "test:integration:headed": "playwright test --config=playwright.integration.config.ts --headed"
+    "test:integration:headed": "playwright test --config=playwright.integration.config.ts --headed",
+    "test:integration:report": "playwright show-report playwright-report/integration",
+    "test:e2e:all": "playwright test && playwright test --config=playwright.integration.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

@@ -7,6 +7,7 @@ export enum FeatureFlag {
   SHARE_LINK = 'share_link',
   EMAIL_ALERT = 'email_alert',
   PRIORITY_QUEUE = 'priority_queue',
+  GEO_AUDIT = 'geo_audit',
 }
 
 export type PlanCode = 'free' | 'pro' | 'business';
@@ -20,6 +21,7 @@ export type QuotaDimension =
   | 'api_calls_daily'
   | 'ai_calls_monthly'
   | 'tools_fetches_daily'
+  | 'geo_audits_monthly'
   | 'history_retention_days';
 
 export interface PlanDefinition {
@@ -31,6 +33,7 @@ export interface PlanDefinition {
   api_calls_daily: number;
   ai_calls_monthly: number;
   tools_fetches_daily: number; // -1 = unlimited (soft cap 1000)
+  geo_audits_monthly: number; // -1 = unlimited
   history_retention_days: number; // -1 = unlimited
   features: FeatureFlag[];
 }
@@ -43,6 +46,7 @@ const PRO_FEATURES = [
   FeatureFlag.PDF_EXPORT,
   FeatureFlag.SHARE_LINK,
   FeatureFlag.EMAIL_ALERT,
+  FeatureFlag.GEO_AUDIT,
 ];
 
 export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
@@ -55,6 +59,7 @@ export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
     api_calls_daily: 0,
     ai_calls_monthly: 0,
     tools_fetches_daily: 10,
+    geo_audits_monthly: 0,
     history_retention_days: 7,
     features: [],
   },
@@ -67,6 +72,7 @@ export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
     api_calls_daily: 1000,
     ai_calls_monthly: 100,
     tools_fetches_daily: -1,
+    geo_audits_monthly: 50,
     history_retention_days: 90,
     features: PRO_FEATURES,
   },
@@ -79,6 +85,7 @@ export const PLAN_FEATURES: Record<PlanCode, PlanDefinition> = {
     api_calls_daily: 20_000,
     ai_calls_monthly: 1000,
     tools_fetches_daily: -1,
+    geo_audits_monthly: 300,
     history_retention_days: -1,
     features: [...PRO_FEATURES, FeatureFlag.PRIORITY_QUEUE],
   },

@@ -29,6 +29,7 @@ import { PublicCheckService } from '../services/public-check.service';
 import { PublicApiRateLimitService } from '../services/public-api-rate-limit.service';
 import { PublicCheckRequestDto } from '../dto/public-check-request.dto';
 import { PublicApiExceptionFilter } from '../filters/public-api-exception.filter';
+import { EntitlementService } from '../../billing/services/entitlement.service';
 
 @ApiTags('Public SEO Check')
 @ApiBearerAuth('apiKey')
@@ -38,6 +39,7 @@ export class PublicCheckController {
   constructor(
     private readonly svc: PublicCheckService,
     private readonly rl: PublicApiRateLimitService,
+    private readonly entitlement: EntitlementService,
   ) {}
 
   @Post('check')
@@ -66,7 +68,8 @@ export class PublicCheckController {
     // any client to spoof its IP and bypass per-IP rate limits.
     const ip = req.ip ?? '0.0.0.0';
 
-    const rlRes = await this.rl.enforce({ apiKeyId: authed.apiKey.id, ip });
+    const isAdmin = await this.entitlement.isAdmin(authed.apiKey.userId);
+    const rlRes = await this.rl.enforce({ apiKeyId: authed.apiKey.id, ip, bypass: isAdmin });
     res.setHeader('X-RateLimit-Limit-Minute', '20');
     res.setHeader('X-RateLimit-Remaining-Minute', String(rlRes.remaining.minute));
     res.setHeader('X-RateLimit-Limit-Day', '500');

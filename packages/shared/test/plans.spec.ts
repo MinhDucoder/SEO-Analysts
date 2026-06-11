@@ -15,6 +15,7 @@ describe('PLAN_FEATURES', () => {
     'api_keys_max',
     'api_calls_daily',
     'ai_calls_monthly',
+    'geo_audits_monthly',
   ] as const;
 
   it('Free < Pro < Business for every numeric quota', () => {
@@ -36,9 +37,9 @@ describe('PLAN_FEATURES', () => {
     );
   });
 
-  it('Free has no features, Pro has 7, Business has 8 (incl PRIORITY_QUEUE)', () => {
+  it('Free has no features, Pro has 8 (incl GEO_AUDIT), Business has 9 (incl PRIORITY_QUEUE)', () => {
     expect(PLAN_FEATURES.free.features).toHaveLength(0);
-    expect(PLAN_FEATURES.pro.features).toHaveLength(7);
+    expect(PLAN_FEATURES.pro.features).toHaveLength(8);
     expect(PLAN_FEATURES.business.features).toContain(FeatureFlag.PRIORITY_QUEUE);
     expect(PLAN_FEATURES.pro.features).not.toContain(FeatureFlag.PRIORITY_QUEUE);
   });
@@ -72,5 +73,38 @@ describe('tools_fetches_daily', () => {
   it('tools_fetches_daily is a valid QuotaDimension', () => {
     const dimension: QuotaDimension = 'tools_fetches_daily';
     expect(dimension).toBe('tools_fetches_daily');
+  });
+});
+
+describe('GEO_AUDIT feature flag', () => {
+  it('is absent on free plan', () => {
+    expect(PLAN_FEATURES.free.features).not.toContain(FeatureFlag.GEO_AUDIT);
+  });
+
+  it('is included on pro plan', () => {
+    expect(PLAN_FEATURES.pro.features).toContain(FeatureFlag.GEO_AUDIT);
+  });
+
+  it('is included on business plan', () => {
+    expect(PLAN_FEATURES.business.features).toContain(FeatureFlag.GEO_AUDIT);
+  });
+});
+
+describe('geo_audits_monthly quota', () => {
+  it('free plan grants 0', () => {
+    expect(PLAN_FEATURES.free.geo_audits_monthly).toBe(0);
+  });
+
+  it('pro plan grants 50', () => {
+    expect(PLAN_FEATURES.pro.geo_audits_monthly).toBe(50);
+  });
+
+  it('business plan grants 300', () => {
+    expect(PLAN_FEATURES.business.geo_audits_monthly).toBe(300);
+  });
+
+  it('geo_audits_monthly is a valid QuotaDimension', () => {
+    const dimension: QuotaDimension = 'geo_audits_monthly';
+    expect(dimension).toBe('geo_audits_monthly');
   });
 });

@@ -9,8 +9,10 @@ import { CacheService } from '../persistence/cache.service';
 import { CheerioFetcher } from '../infra/fetchers/cheerio-fetcher';
 import { LighthouseRunner } from './lighthouse-runner';
 import { LinkChecker } from '../infra/fetchers/link-checker';
+import { LlmsTxtFetcherService } from '../infra/fetchers/llms-txt-fetcher.service';
 import { PageDataExtractor } from './page-data-extractor';
 import { PlaywrightFetcher } from '../infra/fetchers/playwright-fetcher';
+import { parseRobotsForAiBots } from '../infra/fetchers/robots-multi-bot-parser';
 import { UrlValidator } from '../domain/url-validator';
 import { CrawlOptions, CrawlResult } from '../domain/crawl-result.interface';
 import { FetchResult } from '../domain/fetcher.interface';
@@ -43,6 +45,7 @@ export class CrawlerOrchestrator {
     private readonly lighthouse: LighthouseRunner,
     private readonly extractor: PageDataExtractor,
     private readonly linkChecker: LinkChecker,
+    private readonly llmsTxtFetcher: LlmsTxtFetcherService,
   ) {}
 
   /**
@@ -59,7 +62,13 @@ export class CrawlerOrchestrator {
     // 1. Cache check
     const cached = await this.cache.getCrawl<CrawlResult>(url);
     if (cached) {
-      this.logger.log(`crawl cache HIT for ${url}`);
+      if (options.runGeo && !cached.pageData.aiBotAccess) {
+        this.logger.log(`crawl cache HIT for ${url} (re-enriching with GEO)`);
+        await this.attachGeoData(cached.pageData);
+        await this.cache.setCrawl(url, cached);
+      } else {
+        this.logger.log(`crawl cache HIT for ${url}`);
+      }
       return cached;
     }
 
@@ -100,6 +109,11 @@ export class CrawlerOrchestrator {
 
     // 4. Extract PageData
     const pageData = this.extractor.extract(url, fetched);
+
+    // 4a. GEO enrichment (opt-in via runGeo flag)
+    if (options.runGeo) {
+      await this.attachGeoData(pageData);
+    }
 
     // 5. F4 broken-link check (opt-in — expensive for N links)
     let linkChecks: LinkCheckResult[] | undefined;
@@ -151,6 +165,37 @@ export class CrawlerOrchestrator {
     } catch (err) {
       this.logger.warn(`link checks failed for ${pageData.url}: ${(err as Error).message}`);
       return undefined;
+    }
+  }
+
+  /**
+   * Fetch /robots.txt (parse AI-bot rules) and /llms.txt in parallel,
+   * attach to PageData. Failures non-fatal — leave the field undefined.
+   */
+  private async attachGeoData(pageData: PageData): Promise<void> {
+    const origin = new URL(pageData.url).origin;
+    const [robotsRes, llmsRes] = await Promise.allSettled([
+      this.fetchRobotsTxt(origin),
+      this.llmsTxtFetcher.fetch(origin),
+    ]);
+    if (robotsRes.status === 'fulfilled') {
+      pageData.aiBotAccess = {
+        robotsTxtUrl: `${origin}/robots.txt`,
+        robotsTxtStatus: robotsRes.value.status,
+        rules: parseRobotsForAiBots(robotsRes.value.body),
+      };
+    }
+    if (llmsRes.status === 'fulfilled') {
+      pageData.llmsTxt = llmsRes.value;
+    }
+  }
+
+  private async fetchRobotsTxt(origin: string): Promise<{ status: number; body: string }> {
+    try {
+      const res = await fetch(`${origin}/robots.txt`, { signal: AbortSignal.timeout(5000) });
+      return { status: res.status, body: res.ok ? await res.text() : '' };
+    } catch {
+      return { status: -1, body: '' };
     }
   }
 }
