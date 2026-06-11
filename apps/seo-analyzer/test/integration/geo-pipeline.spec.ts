@@ -17,6 +17,7 @@
  * Tests pass the correct positional args.
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { IssueCategory } from '@repo/shared';
 import { AnalyzerService } from '../../src/analyzer/services/analyzer.service';
 import { RuleRegistry } from '../../src/analyzer/services/rule-registry';
 import { RuleRunner } from '../../src/analyzer/services/rule-runner';
@@ -182,7 +183,6 @@ function buildService(llmResult: any, llmShouldThrow = false) {
   // For the "shouldThrow" scenario, spy on ALL GEO rules' check() methods so
   // the outer AnalyzerService try/catch catches the error and sets errored=true.
   if (llmShouldThrow) {
-    const { IssueCategory } = require('@repo/shared');
     const geoRules = registry.getByCategory(IssueCategory.GEO);
     for (const rule of geoRules) {
       vi.spyOn(rule, 'check').mockRejectedValue(new Error('timeout'));
