@@ -21,6 +21,7 @@ import { PublicApiRateLimitService } from './services/public-api-rate-limit.serv
 import { PublicCheckService } from './services/public-check.service';
 import { SuggestionEnricherService } from './services/suggestion-enricher.service';
 import { SeoSuggestChainFactory } from './services/seo-suggest-chain.factory';
+import { INSTALL_BIND_MODE, readInstallBindMode } from './config/install-bind-mode';
 import { ApiKeysController } from './controllers/api-keys.controller';
 import { PublicCheckController } from './controllers/public-check.controller';
 import { PublicRulesController } from './controllers/public-rules.controller';
@@ -56,6 +57,11 @@ import { PublicHealthController } from './controllers/public-health.controller';
           defaultMaxTokens: Number(config.get<string>('LLM_MAX_TOKENS') ?? 8192),
         });
       },
+      inject: [ConfigService],
+    },
+    {
+      provide: INSTALL_BIND_MODE,
+      useFactory: (config: ConfigService) => readInstallBindMode(config),
       inject: [ConfigService],
     },
     SuggestionEnricherService,
