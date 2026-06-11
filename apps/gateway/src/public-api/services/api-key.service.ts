@@ -5,7 +5,7 @@
  * short TTL (60s) so revoke propagates quickly. Cache-null for missing
  * keys blocks timing-based brute force on nonexistent tokens.
  */
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { createHash, randomBytes } from 'node:crypto';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { RedisService } from '../../infra/redis/redis.service';
@@ -77,6 +77,28 @@ export class ApiKeyService {
         revokedAt: true,
       },
     });
+  }
+
+  async rebind(id: string, userId: string): Promise<void> {
+    const row = await this.prisma.apiKey.findUnique({
+      where: { id },
+      select: { id: true, userId: true, hashedKey: true, revokedAt: true },
+    });
+    if (!row || row.userId !== userId || row.revokedAt != null) {
+      throw new NotFoundException({
+        code: 'NOT_FOUND',
+        message: 'API key not found or already revoked',
+      });
+    }
+    await this.prisma.apiKey.update({
+      where: { id },
+      data: { installId: null, installBoundAt: null },
+    });
+    try {
+      await this.redis.client.del(PUBLIC_API_REDIS_KEYS.apiKeyVerify(row.hashedKey));
+    } catch (e) {
+      this.logger.warn({ err: e }, 'apikey cache invalidation after rebind failed');
+    }
   }
 
   async revoke(id: string, userId: string): Promise<void> {

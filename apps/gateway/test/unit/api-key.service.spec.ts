@@ -23,7 +23,7 @@ describe('ApiKeyService', () => {
       update: vi.fn(),
     },
   } as unknown as PrismaService;
-  const client = { get: vi.fn(), setex: vi.fn() };
+  const client = { get: vi.fn(), setex: vi.fn(), del: vi.fn() };
   const redis = { client } as unknown as RedisService;
   const entitlement = { isAdmin: vi.fn(), getEffectivePlan: vi.fn() } as unknown as EntitlementService;
 
@@ -304,6 +304,48 @@ describe('ApiKeyService', () => {
         where: { id: 'k1', userId: 'u1', revokedAt: null },
         data: { revokedAt: expect.any(Date) },
       });
+    });
+  });
+
+  describe('rebind', () => {
+    it('clears installId + installBoundAt on the owned key and invalidates cache', async () => {
+      (prisma.apiKey.findUnique as any).mockResolvedValue({
+        id: 'k1', userId: 'u1', hashedKey: sha256(VALID_KEY),
+      });
+      (prisma.apiKey.update as any).mockResolvedValue({ id: 'k1' });
+      client.del = vi.fn().mockResolvedValue(1);
+
+      await svc.rebind('k1', 'u1');
+
+      expect(prisma.apiKey.update).toHaveBeenCalledWith({
+        where: { id: 'k1' },
+        data: { installId: null, installBoundAt: null },
+      });
+      expect(client.del).toHaveBeenCalledWith(`apikey:${sha256(VALID_KEY)}`);
+    });
+
+    it('throws NotFoundException when the key is not owned by the user', async () => {
+      (prisma.apiKey.findUnique as any).mockResolvedValue(null);
+
+      await expect(svc.rebind('k1', 'u1')).rejects.toThrow(/not found/i);
+      expect(prisma.apiKey.update).not.toHaveBeenCalled();
+    });
+
+    it('throws NotFoundException when the key belongs to a different user', async () => {
+      (prisma.apiKey.findUnique as any).mockResolvedValue({
+        id: 'k1', userId: 'someone-else', hashedKey: sha256(VALID_KEY),
+      });
+
+      await expect(svc.rebind('k1', 'u1')).rejects.toThrow(/not found/i);
+      expect(prisma.apiKey.update).not.toHaveBeenCalled();
+    });
+
+    it('throws NotFoundException when the key is already revoked', async () => {
+      (prisma.apiKey.findUnique as any).mockResolvedValue({
+        id: 'k1', userId: 'u1', hashedKey: sha256(VALID_KEY), revokedAt: new Date(),
+      });
+
+      await expect(svc.rebind('k1', 'u1')).rejects.toThrow(/not found/i);
     });
   });
 
