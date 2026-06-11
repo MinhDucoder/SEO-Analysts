@@ -120,6 +120,8 @@
       "modeSiteDesc": "Crawl internal pages up to the maxUrls limit.",
       "maxUrlsLabel": "Max pages",
       "maxUrlsHint": "Range 1–5000. More pages → longer audit.",
+      "geoLabel": "Enable AI Visibility (GEO)",
+      "geoDesc": "Score how well the page is optimised for AI/LLMs (ChatGPT, Gemini…). Single-page audits only; counts toward your monthly GEO quota.",
       "submit": "Start audit",
       "submitting": "Creating audit…",
       "successTitle": "Audit created",
@@ -371,6 +373,9 @@
       "paywallTitle": "Unlock GEO Audit with Pro",
       "paywallDescription": "Audit your page for ChatGPT, Perplexity, and Google AI Overview citation readiness.",
       "paywallCta": "Upgrade to Pro",
+      "emptyTitle": "No GEO data for this audit yet",
+      "emptyDescription": "Your plan already includes GEO Audit. Re-run this audit with GEO enabled to see AI Visibility scoring.",
+      "emptyCta": "Re-run with GEO",
       "rules": {
         "geo_ai_bot_access": { "name": "AI Bot Access" },
         "geo_llms_txt_present": { "name": "llms.txt Standard" },
@@ -890,6 +895,17 @@
       "copy": "Copy",
       "download": "Download",
       "copySuccess": "Copied to clipboard"
+    }
+  },
+  "apiKeys": {
+    "column": { "device": "Device" },
+    "badge": { "bound": "bound · {when}", "unbound": "unbound" },
+    "action": { "rebind": "Rebind device" },
+    "rebind": {
+      "confirmTitle": "Rebind device?",
+      "confirmBody": "After rebind, the device currently using this key will lose access. The next device to call the key will become the new bound device.",
+      "success": "Device unbound. Next caller will bind.",
+      "errorGeneric": "Could not rebind. Please try again."
     }
   }
 }

@@ -120,6 +120,8 @@
       "modeSiteDesc": "Crawl nhiều trang nội bộ tới giới hạn maxUrls.",
       "maxUrlsLabel": "Số trang tối đa",
       "maxUrlsHint": "Khoảng 1–5000. Càng nhiều thì càng tốn thời gian.",
+      "geoLabel": "Bật AI Visibility (GEO)",
+      "geoDesc": "Chấm điểm mức độ tối ưu cho AI/LLM (ChatGPT, Gemini…). Chỉ áp dụng cho audit một trang và tính vào quota GEO hằng tháng.",
       "submit": "Bắt đầu audit",
       "submitting": "Đang tạo audit…",
       "successTitle": "Audit đã được tạo",
@@ -371,6 +373,9 @@
       "paywallTitle": "Mở khoá GEO Audit với gói Pro",
       "paywallDescription": "Đánh giá trang cho ChatGPT, Perplexity, Google AI Overview.",
       "paywallCta": "Nâng cấp lên Pro",
+      "emptyTitle": "Audit này chưa có dữ liệu GEO",
+      "emptyDescription": "Gói của bạn đã mở khoá GEO Audit. Chạy lại audit với GEO bật để xem điểm AI Visibility cho trang này.",
+      "emptyCta": "Chạy lại với GEO",
       "rules": {
         "geo_ai_bot_access": { "name": "AI Bot Access" },
         "geo_llms_txt_present": { "name": "Chuẩn llms.txt" },
@@ -890,6 +895,17 @@
       "copy": "Sao chép",
       "download": "Tải xuống",
       "copySuccess": "Đã sao chép"
+    }
+  },
+  "apiKeys": {
+    "column": { "device": "Thiết bị" },
+    "badge": { "bound": "đã bound · {when}", "unbound": "chưa bound" },
+    "action": { "rebind": "Rebind thiết bị" },
+    "rebind": {
+      "confirmTitle": "Rebind thiết bị?",
+      "confirmBody": "Sau khi rebind, thiết bị đang dùng key sẽ KHÔNG truy cập được nữa. Thiết bị tiếp theo gọi key sẽ trở thành thiết bị bound mới.",
+      "success": "Đã unbind. Caller tiếp theo sẽ bind.",
+      "errorGeneric": "Không rebind được. Thử lại."
     }
   }
 }
