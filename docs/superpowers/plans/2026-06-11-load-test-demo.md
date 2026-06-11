@@ -99,9 +99,8 @@ Expected: JSON containing `"accessToken":"eyJ..."`. If 401, complete the registe
 
 ```bash
 git add load-test/seed.md load-test/.gitignore
-git commit -m "chore(load-test): scaffold dir + admin demo-user seed guide" --no-verify
+git commit -m "chore(load-test): scaffold dir + admin demo-user seed guide"
 ```
-> `--no-verify` is used throughout this plan: the husky pre-commit hook runs full-repo `turbo lint`, which currently fails on a pre-existing `require()` lint error in `apps/seo-analyzer/test/integration/geo-pipeline.spec.ts` unrelated to these files. If that error is fixed separately, drop `--no-verify`.
 
 ---
 
@@ -165,7 +164,7 @@ export default function (data) {
 
 ```bash
 git add load-test/k6/script.js
-git commit -m "feat(load-test): k6 HTTP scenario for read endpoints" --no-verify
+git commit -m "feat(load-test): k6 HTTP scenario for read endpoints"
 ```
 
 ---
@@ -215,7 +214,7 @@ Expected: end-of-run summary shows `http_req_failed` ≈ 0% and all three `check
 
 ```bash
 git add load-test/run-k6.sh
-git commit -m "feat(load-test): k6 runner with web dashboard + HTML export" --no-verify
+git commit -m "feat(load-test): k6 runner with web dashboard + HTML export"
 ```
 
 ---
@@ -274,7 +273,7 @@ console.log(`Enqueued ${COUNT} audits: ${accepted} accepted (202), ${failed} fai
 
 ```bash
 git add load-test/queue/enqueue.mjs
-git commit -m "feat(load-test): enqueue N audits for queue throughput demo" --no-verify
+git commit -m "feat(load-test): enqueue N audits for queue throughput demo"
 ```
 
 ---
@@ -342,7 +341,7 @@ Expected: a table with rows `crawl.start / analyze.start / report.start` and num
 
 ```bash
 git add load-test/queue/watch.mjs
-git commit -m "feat(load-test): live BullMQ queue-counts watcher" --no-verify
+git commit -m "feat(load-test): live BullMQ queue-counts watcher"
 ```
 
 ---
@@ -381,7 +380,7 @@ Expected:
 
 ```bash
 git add docker-compose.yml   # or apps/seo-analyzer/.env if that's what changed
-git commit -m "chore(load-test): disable GEO/LLM on analyzer for clean audit load demo" --no-verify
+git commit -m "chore(load-test): disable GEO/LLM on analyzer for clean audit load demo"
 ```
 > If the change is only in a git-ignored `.env`, skip the commit and instead document the required env in `README.md` (Task 7).
 
@@ -449,7 +448,7 @@ Replace the placeholder line in the README's step 4 with the exact install comma
 
 ```bash
 git add load-test/README.md
-git commit -m "docs(load-test): run guide + committee talking points" --no-verify
+git commit -m "docs(load-test): run guide + committee talking points"
 ```
 
 ---
@@ -458,5 +457,5 @@ git commit -m "docs(load-test): run guide + committee talking points" --no-verif
 
 - **Spec coverage:** Part A (§3) → Tasks 2-3. Part B (§4) → Tasks 4-6. File structure (§5) → Tasks 1-7. Risks (§6): rate-limit → Task 3 Step 4; local URL → Task 6 Step 1; seed → Task 1; worker concurrency → visible in Task 6 Step 4; k6 install → Task 3 Step 3.
 - **Type/name consistency:** `accessToken`, `BASE`, `TARGET_URL`, `COUNT`, queue names `crawl.start/analyze.start/report.start`, and env `GEO_AUDIT_ENABLED` are used identically across all tasks.
-- **Known external dependency:** every commit uses `--no-verify` due to a pre-existing unrelated lint error in `apps/seo-analyzer/test/integration/geo-pipeline.spec.ts`; remove once that is fixed.
+- **Commits:** clean (no `--no-verify`); the pre-existing `require()` lint error in `apps/seo-analyzer/test/integration/geo-pipeline.spec.ts` was fixed before this plan, so the husky pre-commit hook passes.
 ```
