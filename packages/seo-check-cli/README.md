@@ -68,3 +68,16 @@ const res = await client.check({
 });
 console.log(res.score);
 ```
+
+## Install binding
+
+Each CLI installation binds to a freshly-generated `install_id` (UUID v4)
+stored in `${XDG_CONFIG_HOME:-~/.config}/seo-check-cli/install-id`. This is
+sent as the `X-Install-Id` header on every request.
+
+A single API key can only be used from one install at a time. If you move
+the key to a new machine, the first call from that machine will be rejected
+with `KEY_INSTALL_MISMATCH`. Rebind via the web app's
+**Settings → API Keys → Rebind device** action.
+
+Deleting the install-id file forces a fresh install_id on the next run.
