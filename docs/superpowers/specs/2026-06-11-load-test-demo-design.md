@@ -55,8 +55,8 @@ k6 tô xanh PASS nếu đạt → bằng chứng trực quan cho hội đồng.
 ## 4. Phần B — Audit queue-throughput test
 
 ### 4.1 Chuẩn bị môi trường
-- Đặt `GEO_AUDIT_ENABLED=false` cho service seo-analyzer → bỏ toàn bộ rule LLM, audit chạy thuần crawl + chấm điểm rule, không gọi Gemini, không tốn quota ([apps/seo-analyzer/src/analyzer/services/analyzer.service.ts:40](../../../apps/seo-analyzer/src/analyzer/services/analyzer.service.ts)).
-- Tất cả audit trỏ vào **một URL local cố định** (trang trong compose network, ví dụ web container) → không đập site ngoài, thời gian xử lý ổn định.
+- **GEO/LLM tự động TẮT — không cần đổi env.** Gateway chỉ gắn cờ GEO vào job khi client gửi `runGeo:true` ([apps/gateway/src/audits/services/audits.service.ts:109](../../../apps/gateway/src/audits/services/audits.service.ts)); analyzer chỉ chạy GEO batch `if (runGeo)` ([apps/seo-analyzer/src/analyzer/services/analyzer.service.ts:69](../../../apps/seo-analyzer/src/analyzer/services/analyzer.service.ts)). Script enqueue không gửi `runGeo` → audit chạy thuần crawl + chấm điểm rule, không gọi Gemini, không tốn quota, và **không đụng hành vi production**.
+- Tất cả audit trỏ vào **một URL cố định** — mặc định `https://example.com` (IANA test domain). Crawler chạy trong docker không reach được web app trên host, nên dùng example.com cho ổn định; muốn crawl site thật thì truyền `TARGET_URL`.
 
 ### 4.2 Kịch bản
 1. Login lấy token (tái dùng script auth của Phần A).
@@ -84,7 +84,7 @@ load-test/
 ## 6. Rủi ro & điểm cần xác minh khi lập plan
 
 - **Rate-limit toàn cục**: xác minh `GET /api/v1/audits` có bị giới hạn (có `rate-limiter.service.ts` dùng Redis) ở mức 50 VU không; nếu dính 429 → giảm tỉ trọng endpoint đó hoặc nâng limit chỉ cho môi trường demo.
-- **URL local cho crawler**: chốt URL cụ thể crawler (trong docker) gọi được — ưu tiên web container trong compose network thay vì `host.docker.internal`.
+- **URL crawl cho crawler** (đã chốt): crawler chạy trong docker không reach web app trên host (không có service `web` trong compose, không có `host.docker.internal`) → dùng `https://example.com` làm mặc định; truyền `TARGET_URL` nếu muốn crawl site thật.
 - **Seed dữ liệu**: tạo sẵn 1 user demo; với Phần A, `GET /audits` rỗng vẫn trả 200 nên seed audit là tùy chọn (đẹp hơn nếu có data).
 - **Worker concurrency**: kiểm tra cấu hình concurrency của crawler/analyzer worker để biết mức song song thật sẽ hiện trong demo.
 - **Cài k6**: binary đơn lẻ, cài qua package manager hoặc tải trực tiếp — ghi rõ trong README.

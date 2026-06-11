@@ -4,7 +4,7 @@
 
 **Goal:** Build two runnable load-test demos for live presentation before a thesis committee — Part A (k6 HTTP latency/throughput on lightweight endpoints) and Part B (audit queue-throughput visualization).
 
-**Architecture:** All artifacts live under a new `load-test/` directory at repo root. Part A uses the standalone k6 binary driving read-only HTTP endpoints (login once, reuse JWT). Part B uses two plain Node `.mjs` scripts — one enqueues N audits via the real `POST /api/v1/audits` API, the other polls BullMQ job counts directly from Redis and prints a live table. No application code is modified except one env flag (`GEO_AUDIT_ENABLED=false`) to keep audits LLM-free.
+**Architecture:** All artifacts live under a new `load-test/` directory at repo root. Part A uses the standalone k6 binary driving read-only HTTP endpoints (login once, reuse JWT). Part B uses two plain Node `.mjs` scripts — one enqueues N audits via the real `POST /api/v1/audits` API, the other polls BullMQ job counts directly from Redis and prints a live table. No application code is modified. Audits are LLM-free by construction: the gateway only sets `runGeo:true` on a job when the client sends `runGeo:true` in the POST body ([apps/gateway/src/audits/services/audits.service.ts:109](../../../apps/gateway/src/audits/services/audits.service.ts)), and the enqueue script never does — so the analyzer skips the GEO batch with no env change needed.
 
 **Tech Stack:** k6 (standalone), Node 24 with built-in `fetch`, `bullmq` + `ioredis` (already monorepo deps), Redis, docker-compose.
 
@@ -21,7 +21,7 @@ These facts were confirmed from the codebase and are assumed throughout:
 - Audit create: `POST /api/v1/audits`, body `{ "url": ..., "mode": "single" }`, returns HTTP 202. Guarded by `QuotaGuard` (`audits_monthly`) → **the demo user must be role `admin`** to bypass quota (admin god-mode).
 - BullMQ queue names (single-URL audit pipeline): `crawl.start` → `analyze.start` → `report.start` ([packages/shared/src/index.ts:136](../../../packages/shared/src/index.ts)).
 - Redis (reachable from host): `redis://:redis-secret-change-in-production@localhost:6379` (from [apps/gateway/.env](../../../apps/gateway/.env)).
-- GEO/LLM off switch: env `GEO_AUDIT_ENABLED=false` on the seo-analyzer service ([apps/seo-analyzer/src/analyzer/services/analyzer.service.ts:40](../../../apps/seo-analyzer/src/analyzer/services/analyzer.service.ts)).
+- GEO/LLM gating is per-audit, not env-forced: the gateway sets `runGeo:true` on the job only when the POST body has `runGeo:true` ([apps/gateway/src/audits/services/audits.service.ts:109](../../../apps/gateway/src/audits/services/audits.service.ts)); the analyzer's execution gate is `if (runGeo)` ([apps/seo-analyzer/src/analyzer/services/analyzer.service.ts:69](../../../apps/seo-analyzer/src/analyzer/services/analyzer.service.ts)). Demo enqueue omits the flag → GEO never runs, no env change required.
 
 ---
 
@@ -228,12 +228,16 @@ git commit -m "feat(load-test): k6 runner with web dashboard + HTML export"
 
 `load-test/queue/enqueue.mjs`:
 ```javascript
-// Bắn N audit single-mode vào 1 URL local. Chạy từ repo root:
+// Bắn N audit single-mode vào 1 URL cố định. Chạy từ repo root:
 //   node load-test/queue/enqueue.mjs
+// GEO/LLM tự động TẮT: script không gửi runGeo:true nên gateway enqueue job
+// không có cờ GEO → analyzer bỏ qua GEO batch (không gọi Gemini, không tốn quota).
+// TARGET_URL mặc định là example.com (IANA test domain) vì crawler chạy trong
+// docker và không reach được web app trên host; đổi sang site của bạn nếu muốn.
 const BASE = process.env.BASE_URL || 'http://localhost:3000/api/v1';
 const EMAIL = process.env.DEMO_EMAIL || 'demo@loadtest.local';
 const PASSWORD = process.env.DEMO_PASSWORD || 'Demo12345!';
-const TARGET = process.env.TARGET_URL || 'http://web:3000';
+const TARGET = process.env.TARGET_URL || 'https://example.com';
 const COUNT = Number(process.env.COUNT || 30);
 
 const loginRes = await fetch(`${BASE}/auth/login`, {
@@ -346,43 +350,30 @@ git commit -m "feat(load-test): live BullMQ queue-counts watcher"
 
 ---
 
-## Task 6: Part B — GEO-off + local target wiring + end-to-end dry run
+## Task 6: Part B — end-to-end dry run (no code/env change)
 
 **Files:**
-- Modify: seo-analyzer service env (whichever the running analyzer reads — `apps/seo-analyzer/.env` or the `seo-analyzer` service block in `docker-compose.yml`)
+- None modified. GEO is already off for demo audits (see Architecture / Existing infrastructure). This task is a rehearsal, not a change.
 
-- [ ] **Step 1: Confirm a local crawl target reachable from the crawler container**
+- [ ] **Step 1: Confirm GEO is off by construction (no action)**
 
-The crawler runs inside docker; `TARGET_URL` must resolve from inside the compose network.
-Run: `docker compose ps` and `docker compose config | grep -A3 "web:"`
-Determine the web service's in-network host:port. Default assumption is `http://web:3000`. If the web service name/port differs (or web isn't in the compose network), pick another in-network HTML page (e.g. another service's HTML route) and use that as `TARGET_URL`. Record the chosen value for Step 4.
+The enqueue script sends `{url, mode:'single'}` with no `runGeo`. Gateway sets the job's GEO flag only `if (dto.runGeo === true)` ([apps/gateway/src/audits/services/audits.service.ts:109](../../../apps/gateway/src/audits/services/audits.service.ts)); analyzer runs GEO only `if (runGeo)` ([apps/seo-analyzer/src/analyzer/services/analyzer.service.ts:69](../../../apps/seo-analyzer/src/analyzer/services/analyzer.service.ts)). So no `GEO_AUDIT_ENABLED` change and no compose edit are needed — leave production behavior untouched.
 
-- [ ] **Step 2: Disable GEO/LLM on the analyzer**
+- [ ] **Step 2: Crawl target (no action)**
 
-Set `GEO_AUDIT_ENABLED=false` for the running seo-analyzer service:
-- If analyzer runs from docker-compose: add `GEO_AUDIT_ENABLED: "false"` under the `seo-analyzer` service `environment:` block, then `docker compose up -d seo-analyzer`.
-- If analyzer runs locally: add `GEO_AUDIT_ENABLED=false` to `apps/seo-analyzer/.env` and restart the process.
+`TARGET_URL` defaults to `https://example.com` (IANA test domain). The crawler runs inside docker and cannot reach a web app on the host, so example.com is the safe default. To crawl a real site, pass `TARGET_URL=https://your-site.com`.
 
-- [ ] **Step 3: Verify GEO is actually off**
-
-Run: `docker compose logs --since 1m seo-analyzer | grep -i geo` (or analyzer local logs) after triggering one audit in Step 4.
-Expected: no Gemini/LLM calls logged; audit completes without GEO rule LLM activity. (The code path at `analyzer.service.ts:40` sets `runGeo: false` when the env is `'false'`.)
-
-- [ ] **Step 4: End-to-end Part B dry run (the actual demo rehearsal)**
+- [ ] **Step 3: End-to-end Part B dry run (the actual demo rehearsal)**
 
 Terminal 1 (from repo root): `node load-test/queue/watch.mjs`
-Terminal 2 (from repo root): `COUNT=30 TARGET_URL=http://web:3000 node load-test/queue/enqueue.mjs` (use the target chosen in Step 1).
+Terminal 2 (from repo root): `COUNT=30 node load-test/queue/enqueue.mjs`
 Expected:
 - enqueue prints `Enqueued 30 audits: 30 accepted (202), 0 failed`. If you see 403/429, the demo user is not admin → fix via `seed.md` (Task 1).
 - watch table shows `crawl.start` waiting/active spike, then `analyze.start` and `report.start` light up, `completed` columns climb, `waiting` drains toward 0. This is the throughput story to narrate to the committee.
 
-- [ ] **Step 5: Commit the env change**
+- [ ] **Step 4: Verify no Gemini calls (optional sanity check)**
 
-```bash
-git add docker-compose.yml   # or apps/seo-analyzer/.env if that's what changed
-git commit -m "chore(load-test): disable GEO/LLM on analyzer for clean audit load demo"
-```
-> If the change is only in a git-ignored `.env`, skip the commit and instead document the required env in `README.md` (Task 7).
+After the dry run: `docker compose logs --since 2m seo-analyzer | grep -i gemini` should print nothing — confirming the GEO batch was skipped without any env change.
 
 ---
 
@@ -397,14 +388,16 @@ git commit -m "chore(load-test): disable GEO/LLM on analyzer for clean audit loa
 ```markdown
 # Load Test Demo
 
-Hai bài demo chạy trên local docker-compose để trình diễn live trước hội đồng.
+Hai bài demo chạy trên local stack để trình diễn live trước hội đồng.
 
 ## Chuẩn bị (1 lần)
 
-1. Bật stack: infra (docker), gateway (:3000), seo-analyzer, crawler, report, web.
+1. Bật stack: infra docker, gateway (:3000), seo-analyzer, crawler, report.
 2. Tạo admin demo user — xem `seed.md`.
-3. Tắt GEO/LLM cho analyzer: đặt `GEO_AUDIT_ENABLED=false` rồi restart analyzer.
-4. Cài k6: `k6 version` phải chạy được. (Ghi lại lệnh cài thực tế đã dùng ở đây.)
+3. Cài k6 (binary đơn lẻ) — xem lệnh apt trong README đã commit; xác nhận `k6 version`.
+
+> GEO/LLM tự động TẮT cho demo — không cần làm gì. Script Part B không gửi
+> `runGeo:true`, nên gateway enqueue job không có cờ GEO và analyzer bỏ qua GEO batch.
 
 ## Part A — k6 HTTP load test
 
@@ -424,8 +417,8 @@ Hai terminal, chạy từ repo root:
     # Terminal 1 — bảng queue live
     node load-test/queue/watch.mjs
 
-    # Terminal 2 — bắn 30 audit vào URL local
-    COUNT=30 TARGET_URL=http://web:3000 node load-test/queue/enqueue.mjs
+    # Terminal 2 — bắn 30 audit (TARGET_URL mặc định https://example.com)
+    COUNT=30 node load-test/queue/enqueue.mjs
 
 Quan sát bảng: crawl.start → analyze.start → report.start, cột `completed`
 tăng dần, `waiting` rút về 0 → đo được throughput (jobs/phút) và mức song song
@@ -437,12 +430,12 @@ tăng dần, `waiting` rút về 0 → đo được throughput (jobs/phút) và 
 - Part B chứng minh kiến trúc microservices + hàng đợi BullMQ xử lý song song:
   job fan-out qua crawler → analyzer → report, hệ thống rút cạn backlog ổn định.
 - Audit chạy GEO-off để demo sạch (không phụ thuộc LLM quota / site ngoài);
-  production bật GEO để chấm điểm AI Visibility.
+  production bật GEO (gửi `runGeo:true`) để chấm điểm AI Visibility.
 ```
 
-- [ ] **Step 2: Backfill the real k6 install command**
+- [ ] **Step 2: Include the real k6 install command**
 
-Replace the placeholder line in the README's step 4 with the exact install command verified in Task 3 Step 3.
+The committed README embeds the verified Ubuntu/Debian apt install commands for k6 plus the binary-download fallback; no placeholder remains.
 
 - [ ] **Step 3: Commit**
 
@@ -455,7 +448,7 @@ git commit -m "docs(load-test): run guide + committee talking points"
 
 ## Self-Review notes (already applied)
 
-- **Spec coverage:** Part A (§3) → Tasks 2-3. Part B (§4) → Tasks 4-6. File structure (§5) → Tasks 1-7. Risks (§6): rate-limit → Task 3 Step 4; local URL → Task 6 Step 1; seed → Task 1; worker concurrency → visible in Task 6 Step 4; k6 install → Task 3 Step 3.
-- **Type/name consistency:** `accessToken`, `BASE`, `TARGET_URL`, `COUNT`, queue names `crawl.start/analyze.start/report.start`, and env `GEO_AUDIT_ENABLED` are used identically across all tasks.
+- **Spec coverage:** Part A (§3) → Tasks 2-3. Part B (§4) → Tasks 4-6. File structure (§5) → Tasks 1-7. Risks (§6): rate-limit → Task 3 Step 4; crawl target → Task 6 Step 2 (example.com default); seed → Task 1; worker concurrency → visible in Task 6 Step 3; k6 install → Task 3 Step 3.
+- **Type/name consistency:** `accessToken`, `BASE`, `TARGET_URL` (default `https://example.com`), `COUNT`, and queue names `crawl.start/analyze.start/report.start` are used identically across all tasks. GEO is off by construction (no env flag), per Architecture.
 - **Commits:** clean (no `--no-verify`); the pre-existing `require()` lint error in `apps/seo-analyzer/test/integration/geo-pipeline.spec.ts` was fixed before this plan, so the husky pre-commit hook passes.
 ```
