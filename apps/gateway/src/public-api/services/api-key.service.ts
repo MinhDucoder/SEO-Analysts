@@ -95,26 +95,39 @@ export class ApiKeyService {
   ): Promise<ApiKeyVerifyResult> {
     if (!authorizationHeader) return { valid: false, reason: 'invalid_format' };
     const bearer = authorizationHeader.replace(/^Bearer\s+/i, '').trim();
-    if (!API_KEY_REGEX.test(bearer)) {
-      return { valid: false, reason: 'invalid_format' };
-    }
-    if (!installId || !UUID_V4_REGEX.test(installId)) {
-      return { valid: false, reason: 'missing_install_id' };
-    }
+    if (!API_KEY_REGEX.test(bearer)) return { valid: false, reason: 'invalid_format' };
+    if (!installId || !UUID_V4_REGEX.test(installId)) return { valid: false, reason: 'missing_install_id' };
+
     const hash = this.hash(bearer);
     const cacheKey = PUBLIC_API_REDIS_KEYS.apiKeyVerify(hash);
 
+    // Cache path
     try {
       const cached = await this.redis.client.get(cacheKey);
       if (cached) {
-        const parsed = JSON.parse(cached);
+        const parsed = JSON.parse(cached) as
+          | null
+          | { apiKeyId: string; userId: string; environment: ApiKeyEnvironment; installId: string | null };
         if (parsed === null) return { valid: false, reason: 'not_found' };
-        return { valid: true, ...parsed };
+        // Cannot bind from cache — cache might be stale relative to a concurrent rebind.
+        // Fall through to DB whenever the cached installId is null.
+        if (parsed.installId !== null) {
+          if (parsed.installId === installId) {
+            return {
+              valid: true,
+              apiKeyId: parsed.apiKeyId,
+              userId: parsed.userId,
+              environment: parsed.environment,
+            };
+          }
+          return { valid: false, reason: 'install_mismatch' };
+        }
       }
     } catch (e) {
       this.logger.warn({ err: e }, 'apikey cache read failed, falling through to DB');
     }
 
+    // DB path
     const row = await this.prisma.apiKey.findUnique({
       where: { hashedKey: hash },
       include: { user: { select: { isLocked: true } } },
@@ -127,13 +140,52 @@ export class ApiKeyService {
     if (row.revokedAt) return { valid: false, reason: 'revoked' };
     if (row.user.isLocked) return { valid: false, reason: 'user_disabled' };
 
+    // Bind / match
+    if (row.installId === null) {
+      await this.prisma.apiKey.update({
+        where: { id: row.id },
+        data: { installId, installBoundAt: new Date() },
+      });
+      const payload = {
+        apiKeyId: row.id,
+        userId: row.userId,
+        environment: row.environment as ApiKeyEnvironment,
+        installId,
+      };
+      await this.trySet(cacheKey, payload);
+      return {
+        valid: true,
+        apiKeyId: row.id,
+        userId: row.userId,
+        environment: row.environment as ApiKeyEnvironment,
+      };
+    }
+
+    if (row.installId !== installId) {
+      // Cache the *stored* binding so the next mismatch returns from cache without a DB hit.
+      await this.trySet(cacheKey, {
+        apiKeyId: row.id,
+        userId: row.userId,
+        environment: row.environment as ApiKeyEnvironment,
+        installId: row.installId,
+      });
+      return { valid: false, reason: 'install_mismatch' };
+    }
+
+    // Match — cache + return
     const payload = {
       apiKeyId: row.id,
       userId: row.userId,
       environment: row.environment as ApiKeyEnvironment,
+      installId: row.installId,
     };
     await this.trySet(cacheKey, payload);
-    return { valid: true, ...payload };
+    return {
+      valid: true,
+      apiKeyId: row.id,
+      userId: row.userId,
+      environment: row.environment as ApiKeyEnvironment,
+    };
   }
 
   recordUsage(apiKeyId: string, ip: string | undefined): void {

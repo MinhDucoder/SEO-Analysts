@@ -85,12 +85,12 @@ describe('ApiKeyService', () => {
     });
 
     it('returns the cached payload on a cache hit without touching the DB', async () => {
-      const payload = { apiKeyId: 'k1', userId: 'u1', environment: 'test' };
+      const payload = { apiKeyId: 'k1', userId: 'u1', environment: 'test', installId: VALID_INSTALL };
       client.get.mockResolvedValue(JSON.stringify(payload));
 
       const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
 
-      expect(res).toEqual({ valid: true, ...payload });
+      expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
       expect(client.get).toHaveBeenCalledWith(`apikey:${sha256(VALID_KEY)}`);
       expect(prisma.apiKey.findUnique).not.toHaveBeenCalled();
     });
@@ -129,7 +129,7 @@ describe('ApiKeyService', () => {
     it('validates a live key, caches the payload, and returns it', async () => {
       client.get.mockResolvedValue(null);
       (prisma.apiKey.findUnique as any).mockResolvedValue({
-        id: 'k1', userId: 'u1', environment: 'test', revokedAt: null, user: { isLocked: false },
+        id: 'k1', userId: 'u1', environment: 'test', installId: VALID_INSTALL, revokedAt: null, user: { isLocked: false },
       });
 
       const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
@@ -138,17 +138,126 @@ describe('ApiKeyService', () => {
       expect(client.setex).toHaveBeenCalledWith(
         `apikey:${sha256(VALID_KEY)}`,
         60,
-        JSON.stringify({ apiKeyId: 'k1', userId: 'u1', environment: 'test' }),
+        JSON.stringify({ apiKeyId: 'k1', userId: 'u1', environment: 'test', installId: VALID_INSTALL }),
       );
     });
 
     it('falls through to the DB when the cache read throws', async () => {
       client.get.mockRejectedValue(new Error('redis down'));
       (prisma.apiKey.findUnique as any).mockResolvedValue({
-        id: 'k1', userId: 'u1', environment: 'test', revokedAt: null, user: { isLocked: false },
+        id: 'k1', userId: 'u1', environment: 'test', installId: VALID_INSTALL, revokedAt: null, user: { isLocked: false },
       });
       const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL);
       expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
+    });
+
+    describe('bind / match', () => {
+      const VALID_INSTALL_A = '4f8d3a2b-1c5e-4a7f-9b2d-8e3c5f1a6d04';
+      const VALID_INSTALL_B = '7a1b2c3d-4e5f-4a6b-9c8d-1e2f3a4b5c6d';
+
+      it('binds the key on first authenticated use when DB row.installId is null', async () => {
+        client.get.mockResolvedValue(null);
+        (prisma.apiKey.findUnique as any).mockResolvedValue({
+          id: 'k1',
+          userId: 'u1',
+          environment: 'test',
+          installId: null,
+          revokedAt: null,
+          user: { isLocked: false },
+        });
+        (prisma.apiKey.update as any).mockResolvedValue({ count: 1 });
+
+        const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL_A);
+
+        expect(res).toEqual({
+          valid: true,
+          apiKeyId: 'k1',
+          userId: 'u1',
+          environment: 'test',
+        });
+        // bind UPDATE called with conditional where { id, installId: null }
+        const updateCall = (prisma.apiKey.update as any).mock.calls[0][0];
+        expect(updateCall.where).toEqual({ id: 'k1' });
+        expect(updateCall.data.installId).toBe(VALID_INSTALL_A);
+        expect(updateCall.data.installBoundAt).toBeInstanceOf(Date);
+        // cache write includes installId
+        const cacheWrite = client.setex.mock.calls.find((c: any[]) =>
+          c[0] === `apikey:${sha256(VALID_KEY)}`,
+        );
+        expect(cacheWrite).toBeDefined();
+        const cached = JSON.parse(cacheWrite![2]);
+        expect(cached).toMatchObject({ apiKeyId: 'k1', installId: VALID_INSTALL_A });
+      });
+
+      it('returns valid when the request install id matches the bound row', async () => {
+        client.get.mockResolvedValue(null);
+        (prisma.apiKey.findUnique as any).mockResolvedValue({
+          id: 'k1', userId: 'u1', environment: 'test',
+          installId: VALID_INSTALL_A, revokedAt: null,
+          user: { isLocked: false },
+        });
+
+        const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL_A);
+
+        expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
+        expect(prisma.apiKey.update).not.toHaveBeenCalled();
+      });
+
+      it('rejects install_mismatch when request install id differs from bound row', async () => {
+        client.get.mockResolvedValue(null);
+        (prisma.apiKey.findUnique as any).mockResolvedValue({
+          id: 'k1', userId: 'u1', environment: 'test',
+          installId: VALID_INSTALL_A, revokedAt: null,
+          user: { isLocked: false },
+        });
+
+        const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL_B);
+
+        expect(res).toEqual({ valid: false, reason: 'install_mismatch' });
+        expect(prisma.apiKey.update).not.toHaveBeenCalled();
+      });
+
+      it('honours installId stored in the Redis cache payload (cache match)', async () => {
+        client.get.mockResolvedValue(JSON.stringify({
+          apiKeyId: 'k1', userId: 'u1', environment: 'test',
+          installId: VALID_INSTALL_A,
+        }));
+
+        const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL_A);
+
+        expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
+        expect(prisma.apiKey.findUnique).not.toHaveBeenCalled();
+      });
+
+      it('rejects install_mismatch from the Redis cache payload (cache mismatch)', async () => {
+        client.get.mockResolvedValue(JSON.stringify({
+          apiKeyId: 'k1', userId: 'u1', environment: 'test',
+          installId: VALID_INSTALL_A,
+        }));
+
+        const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL_B);
+
+        expect(res).toEqual({ valid: false, reason: 'install_mismatch' });
+        expect(prisma.apiKey.findUnique).not.toHaveBeenCalled();
+      });
+
+      it('falls through to DB when cached installId is null (cannot bind from cache)', async () => {
+        client.get.mockResolvedValue(JSON.stringify({
+          apiKeyId: 'k1', userId: 'u1', environment: 'test',
+          installId: null,
+        }));
+        (prisma.apiKey.findUnique as any).mockResolvedValue({
+          id: 'k1', userId: 'u1', environment: 'test',
+          installId: null, revokedAt: null, user: { isLocked: false },
+        });
+        (prisma.apiKey.update as any).mockResolvedValue({ count: 1 });
+
+        const res = await svc.verify(`Bearer ${VALID_KEY}`, VALID_INSTALL_A);
+
+        expect(res).toEqual({ valid: true, apiKeyId: 'k1', userId: 'u1', environment: 'test' });
+        expect(prisma.apiKey.findUnique).toHaveBeenCalledTimes(1);
+        expect(prisma.apiKey.update).toHaveBeenCalledTimes(1);
+      });
     });
 
     describe('install id input', () => {
