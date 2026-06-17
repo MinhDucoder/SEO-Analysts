@@ -17,8 +17,8 @@
         "writer",
         "dev"
       ],
-      "title": "Title length 55 is optimal (50-60 chars)",
-      "description": "Title length 55 is optimal (50-60 chars)",
+      "title": "Title length 54 is optimal (50-60 chars)",
+      "description": "Title length 54 is optimal (50-60 chars)",
       "evidence": {
         "fields": {}
       },
@@ -33,8 +33,8 @@
         "writer",
         "dev"
       ],
-      "title": "Meta description length 151 is optimal",
-      "description": "Meta description length 151 is optimal",
+      "title": "Meta description length 149 is optimal",
+      "description": "Meta description length 149 is optimal",
       "evidence": {
         "fields": {}
       },
@@ -135,8 +135,8 @@
         "writer",
         "dev"
       ],
-      "title": "5 internal links found",
-      "description": "5 internal links found",
+      "title": "16 internal links found",
+      "description": "16 internal links found",
       "evidence": {
         "fields": {}
       },
@@ -305,24 +305,24 @@
   "meta": {
     "inputType": "html",
     "contentStats": {
-      "words": 333,
-      "characters": 3238,
-      "readingTimeSec": 80
+      "words": 1193,
+      "characters": 10795,
+      "readingTimeSec": 287
     },
-    "processingTimeMs": 18,
+    "processingTimeMs": 10,
     "ruleVersion": "1.2.0",
     "enrichMode": "llm",
     "suggestionSource": "template",
     "degraded": true,
     "cached": false,
-    "requestId": "req_3399885191f74f8abb5c95",
+    "requestId": "req_7132b242d9a0408d8d1cad",
     "usage": {
       "remaining": {
         "minute": 20,
         "day": 500
       },
       "resetAt": {
-        "minute": "2026-06-17T04:46:21.643Z",
+        "minute": "2026-06-17T07:23:33.131Z",
         "day": "2026-06-18T00:00:00.000Z"
       }
     }

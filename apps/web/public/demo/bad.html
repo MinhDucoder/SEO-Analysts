@@ -1,140 +1,368 @@
-<!doctype html>
-<!-- ❌ language-tag: <html> thiếu thuộc tính lang -->
+<!DOCTYPE html>
+<!-- ❌ Thiếu thuộc tính lang trên thẻ <html> (không khai báo ngôn ngữ trang) -->
 <html>
 <head>
-  <meta charset="utf-8">
-  <!-- ❌ viewport-meta: quên thẻ viewport (trang không khai báo responsive) -->
-  <!-- ❌ title-tag: title generic, ngắn, không chứa từ khóa sản phẩm -->
-  <title>Núi Cao Coffee</title>
-  <!-- ❌ meta-description: không có -->
-  <!-- ❌ canonical-url: không có -->
-  <!-- ❌ favicon: không khai báo -->
-  <!-- ❌ open-graph / twitter-card: không có thẻ chia sẻ mạng xã hội -->
-  <!-- ❌ robots-meta: sót noindex,nofollow từ lúc dev (lỗi rất hay gặp) -->
+  <meta charset="UTF-8">
+  <!-- ❌ Không có <meta name="viewport"> → trang không responsive trên mobile -->
+  <!-- ❌ <title> generic & ngắn, không chứa từ khóa sản phẩm, chỉ là tên thương hiệu -->
+  <title>Highland Roastery</title>
+  <!-- ❌ Không có <meta name="description"> -->
+  <!-- ❌ Không có <link rel="canonical"> -->
+  <!-- ❌ Không có favicon (<link rel="icon">) -->
+  <!-- ❌ Không có Open Graph (og:title, og:description, og:image...) -->
+  <!-- ❌ Không có Twitter Card (twitter:card, twitter:title...) -->
+  <!-- ❌ Có robots noindex,nofollow — dev set lúc dev rồi quên gỡ → trang bị chặn index -->
   <meta name="robots" content="noindex, nofollow">
-  <!-- ❌ schema-org: không có JSON-LD structured data -->
+  <!-- ❌ Không có JSON-LD structured data (schema.org Product/Offer/AggregateRating) -->
   <style>
-    *{box-sizing:border-box}
-    body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#333;background:#fff}
-    .topbar{background:#5b3a21;color:#fff;font-size:13px;padding:6px 20px;text-align:center}
-    header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #eee}
-    .logo{font-size:20px;font-weight:bold;color:#5b3a21}
-    nav a{margin-left:18px;color:#444;text-decoration:none;font-size:14px}
-    .wrap{max-width:1000px;margin:0 auto;padding:20px}
-    .crumb{font-size:13px;color:#999;margin-bottom:16px}
-    .product{display:flex;gap:30px;flex-wrap:wrap}
-    .gallery{flex:1;min-width:280px}
-    .gallery>img{width:100%;border:1px solid #eee;border-radius:6px}
-    .thumbs{display:flex;gap:8px;margin-top:10px}
-    .thumbs img{width:70px;height:70px;object-fit:cover;border:1px solid #eee;border-radius:4px}
-    .info{flex:1;min-width:280px}
-    .product-title{font-size:24px;font-weight:bold;margin-bottom:8px}
-    .rating{color:#f5a623;font-size:14px;margin-bottom:10px}
-    .price{font-size:26px;color:#c0392b;font-weight:bold;margin:14px 0}
-    .old{color:#999;text-decoration:line-through;font-size:16px;font-weight:normal;margin-left:8px}
-    .btns{display:flex;gap:10px;margin:18px 0}
-    .btn{padding:12px 22px;border:none;border-radius:5px;font-size:15px;cursor:pointer}
-    .btn-buy{background:#c0392b;color:#fff}
-    .btn-cart{background:#fff;color:#c0392b;border:1px solid #c0392b}
-    .meta-list{font-size:14px;color:#555;line-height:1.9;margin-top:14px}
-    .section{margin-top:36px}
-    .tabs{display:flex;gap:20px;border-bottom:2px solid #eee;margin-bottom:16px}
-    .tabs span{padding:10px 0;font-weight:bold;color:#5b3a21;border-bottom:2px solid #5b3a21;margin-bottom:-2px}
-    .desc{font-size:15px;line-height:1.8;color:#444}
-    h2{font-size:19px;color:#2c1d12}
-    table.spec{border-collapse:collapse;width:100%;font-size:14px}
-    table.spec td{border:1px solid #eee;padding:8px 12px}
-    table.spec td:first-child{background:#faf7f2;width:180px;color:#666}
-    .review{border-bottom:1px solid #eee;padding:12px 0}
-    .review .name{font-weight:bold}
-    .review .stars{color:#f5a623;font-size:13px}
-    footer{background:#2c1d12;color:#cbb;margin-top:48px;padding:24px 20px;font-size:13px;text-align:center}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      color: #2e2620;
+      background: #f6f1ea;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      background: #3a2a1d;
+      color: #f0e6d8;
+      font-size: 13px;
+      text-align: center;
+      padding: 8px 12px;
+      font-family: Arial, sans-serif;
+    }
+    .topbar strong { color: #d9a441; }
+
+    header {
+      background: #fffdf9;
+      border-bottom: 1px solid #e6ddcf;
+    }
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #6f4a2d;
+    }
+    .logo span { color: #2e2620; }
+    nav.main-nav ul { list-style: none; display: flex; gap: 24px; font-family: Arial, sans-serif; }
+    nav.main-nav a {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 2px;
+      border-bottom: 2px solid transparent;
+    }
+    nav.main-nav a:hover { border-bottom-color: #6f4a2d; color: #6f4a2d; }
+
+    .breadcrumb {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      font-size: 13px;
+      color: #8a7a68;
+      font-family: Arial, sans-serif;
+    }
+    .breadcrumb a:hover { color: #6f4a2d; }
+    .breadcrumb span { color: #2e2620; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+
+    .product {
+      background: #fffdf9;
+      border: 1px solid #e6ddcf;
+      border-radius: 10px;
+      padding: 28px;
+      display: flex;
+      gap: 36px;
+    }
+    .gallery { width: 440px; flex-shrink: 0; }
+    .gallery .main-img {
+      width: 100%;
+      border: 1px solid #ece3d4;
+      border-radius: 8px;
+      display: block;
+    }
+    .thumbs { display: flex; gap: 10px; margin-top: 12px; }
+    .thumbs img {
+      width: 84px;
+      height: 84px;
+      border: 1px solid #e6ddcf;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .thumbs img:hover { border-color: #6f4a2d; }
+
+    .info { flex: 1; }
+    /* ❌ Tên sản phẩm dùng <div> để style chứ KHÔNG dùng <h1> → trang không có heading cấp 1 */
+    .product-title {
+      font-size: 27px;
+      font-weight: 700;
+      color: #2e2620;
+      margin-bottom: 10px;
+    }
+    .rating { font-size: 14px; color: #8a7a68; margin-bottom: 16px; font-family: Arial, sans-serif; }
+    .stars { color: #d9a441; letter-spacing: 2px; }
+    .rating a { color: #6f4a2d; }
+
+    .price-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+    .price { font-size: 30px; font-weight: 700; color: #9c4d1e; }
+    .price-old { font-size: 17px; color: #b3a795; text-decoration: line-through; }
+    .discount {
+      font-size: 13px;
+      background: #f3e2cd;
+      color: #9c4d1e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-family: Arial, sans-serif;
+    }
+    .tax-note { font-size: 12px; color: #b3a795; margin-bottom: 22px; font-family: Arial, sans-serif; }
+
+    .buttons { display: flex; gap: 14px; margin-bottom: 24px; }
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 14px 26px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+    }
+    .btn-buy { background: #6f4a2d; color: #fff; }
+    .btn-buy:hover { background: #5a3c24; }
+    .btn-cart { background: #fffdf9; color: #6f4a2d; border: 1px solid #6f4a2d; }
+    .btn-cart:hover { background: #f7efe4; }
+
+    .commit { border-top: 1px dashed #e6ddcf; padding-top: 18px; font-family: Arial, sans-serif; }
+    .commit-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #5a4d3e;
+      padding: 6px 0;
+    }
+    .commit-line .ic { width: 22px; text-align: center; color: #2e8b57; font-weight: 700; }
+
+    section.block {
+      background: #fffdf9;
+      border: 1px solid #e6ddcf;
+      border-radius: 10px;
+      padding: 26px 28px;
+      margin-top: 24px;
+    }
+    section.block h2 {
+      font-size: 20px;
+      color: #2e2620;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f0e7d8;
+    }
+    section.block p { margin-bottom: 14px; color: #443a2e; }
+
+    table.spec { width: 100%; border-collapse: collapse; font-size: 14px; font-family: Arial, sans-serif; }
+    table.spec th, table.spec td {
+      text-align: left;
+      padding: 11px 14px;
+      border: 1px solid #ece3d4;
+    }
+    table.spec th { background: #faf5ed; width: 220px; color: #6b5d4b; font-weight: 600; }
+
+    .review { border-bottom: 1px solid #f0e7d8; padding: 16px 0; }
+    .review:last-child { border-bottom: none; }
+    .review .head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; font-family: Arial, sans-serif; }
+    .review .name { font-weight: 600; color: #2e2620; }
+    .review .date { font-size: 12px; color: #b3a795; margin-left: auto; }
+    .review p { color: #443a2e; margin: 0; }
+
+    footer { background: #3a2a1d; color: #d8cab9; margin-top: 40px; font-family: Arial, sans-serif; }
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    footer h3 { color: #fff; font-size: 15px; margin-bottom: 12px; }
+    footer p, footer li { font-size: 13px; line-height: 1.9; }
+    footer ul { list-style: none; }
+    footer a:hover { color: #fff; }
+    .footer-bottom {
+      border-top: 1px solid #4f3b2a;
+      text-align: center;
+      font-size: 12px;
+      padding: 14px;
+      color: #a3917d;
+    }
   </style>
 </head>
 <body>
-  <div class="topbar">Miễn phí giao hàng cho đơn từ 300.000đ · Hotline 0900 123 456</div>
 
+  <!-- Thanh thông báo trên cùng -->
+  <div class="topbar">
+    Freeship đơn từ <strong>300.000₫</strong> &nbsp;•&nbsp; Rang theo đơn, giao trong 24h &nbsp;•&nbsp; Hotline: 0912 345 678
+  </div>
+
+  <!-- Header: logo + menu điều hướng nội bộ -->
   <header>
-    <div class="logo">☕ Núi Cao Coffee</div>
-    <nav>
-      <a href="/demo/bad.html">Trang chủ</a>
-      <a href="/demo/bad.html#san-pham">Sản phẩm</a>
-      <a href="/demo/bad.html#gioi-thieu">Giới thiệu</a>
-      <a href="/demo/bad.html#lien-he">Liên hệ</a>
-    </nav>
+    <div class="header-inner">
+      <a href="/" class="logo">Highland <span>Roastery</span></a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Trang chủ</a></li>
+          <li><a href="/ca-phe-hat">Cà phê hạt</a></li>
+          <li><a href="/ca-phe-bot">Cà phê bột</a></li>
+          <li><a href="/dung-cu-pha">Dụng cụ pha</a></li>
+          <li><a href="/lien-he">Liên hệ</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <div class="wrap">
-    <div class="crumb">Trang chủ › Cà phê hạt › Arabica Cầu Đất 250g</div>
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a href="/">Trang chủ</a> / <a href="/ca-phe-bot">Cà phê bột</a> / <span>Arabica Cầu Đất 250g</span>
+  </nav>
 
-    <div class="product" id="san-pham">
+  <div class="container">
+
+    <!-- Khu sản phẩm -->
+    <div class="product">
       <div class="gallery">
-        <!-- ❌ image-alt + image-optimization: ảnh không có alt, không width/height/loading -->
-        <img src="assets/product.svg">
+        <!-- ❌ <img> không có alt, không có width/height, không có loading -->
+        <img class="main-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='460' viewBox='0 0 600 460'><rect width='600' height='460' fill='rgb(244,236,224)'/><path d='M225 120 h150 l18 250 a20 20 0 0 1 -20 22 h-146 a20 20 0 0 1 -20 -22 z' fill='rgb(74,52,34)'/><rect x='225' y='120' width='150' height='40' rx='4' fill='rgb(58,40,26)'/><rect x='248' y='195' width='104' height='120' rx='6' fill='rgb(238,224,205)'/><circle cx='300' cy='235' r='22' fill='rgb(111,74,45)'/><text x='300' y='278' font-family='Georgia' font-size='15' fill='rgb(111,74,45)' text-anchor='middle'>ARABICA</text><text x='300' y='300' font-family='Georgia' font-size='12' fill='rgb(140,110,80)' text-anchor='middle'>Cầu Đất 250g</text><g fill='rgb(95,66,42)'><ellipse cx='150' cy='390' rx='26' ry='16' transform='rotate(-20 150 390)'/><ellipse cx='450' cy='380' rx='26' ry='16' transform='rotate(25 450 380)'/><ellipse cx='420' cy='418' rx='26' ry='16' transform='rotate(-10 420 418)'/></g></svg>">
         <div class="thumbs">
-          <img src="assets/product.svg">
-          <img src="assets/badge.svg">
+          <!-- ❌ Thumbnail cũng dùng <img> thiếu alt/width/height/loading -->
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='84' height='84'><rect width='84' height='84' fill='rgb(238,228,214)'/><path d='M32 20 h20 l4 40 h-28 z' fill='rgb(74,52,34)'/></svg>">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='84' height='84'><rect width='84' height='84' fill='rgb(235,222,205)'/><ellipse cx='42' cy='42' rx='20' ry='13' fill='rgb(95,66,42)'/></svg>">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='84' height='84'><rect width='84' height='84' fill='rgb(240,232,220)'/><circle cx='42' cy='44' r='18' fill='none' stroke='rgb(111,74,45)' stroke-width='6'/></svg>">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='84' height='84'><rect width='84' height='84' fill='rgb(243,226,205)'/><rect x='26' y='26' width='32' height='32' rx='4' fill='rgb(156,77,30)'/></svg>">
         </div>
       </div>
 
       <div class="info">
-        <!-- ❌ h1-tag: tiêu đề sản phẩm dùng <div> để style, KHÔNG phải <h1> -->
-        <div class="product-title">Cà phê Arabica Cầu Đất 250g - Rang Mộc</div>
-        <div class="rating">★★★★★ <span style="color:#999">(126 đánh giá)</span></div>
+        <!-- ❌ Tên sản phẩm là <div>, không phải <h1> -->
+        <div class="product-title">Cà phê Arabica Cầu Đất rang xay 250g</div>
 
-        <div class="price">145.000đ <span class="old">180.000đ</span></div>
+        <div class="rating">
+          <span class="stars">★★★★★</span> 4.9/5 &nbsp;·&nbsp; <a href="#reviews">208 đánh giá</a> &nbsp;·&nbsp; Đã bán 3.2k
+        </div>
 
-        <div class="btns">
+        <div class="price-row">
+          <div class="price">185.000₫</div>
+          <div class="price-old">220.000₫</div>
+          <div class="discount">-16%</div>
+        </div>
+        <div class="tax-note">Giá cho gói 250g. Rang theo đơn để giữ độ tươi.</div>
+
+        <div class="buttons">
           <button class="btn btn-buy">Mua ngay</button>
           <button class="btn btn-cart">Thêm vào giỏ</button>
         </div>
 
-        <div class="meta-list">
-          🚚 Giao hàng 2-3 ngày toàn quốc<br>
-          🔄 Đổi trả trong 7 ngày<br>
-          ✅ Cam kết nguyên chất 100%
+        <div class="commit">
+          <div class="commit-line"><span class="ic">✓</span> Rang trong ngày, đóng gói van một chiều giữ hương</div>
+          <div class="commit-line"><span class="ic">✓</span> Giao toàn quốc, nội thành Hà Nội trong 24h</div>
+          <div class="commit-line"><span class="ic">✓</span> Đổi gói khác miễn phí nếu không hợp khẩu vị (lần đầu)</div>
         </div>
       </div>
     </div>
 
-    <!-- ❌ heading-hierarchy: trang không có h1, các mục nhảy thẳng vào h2 -->
-    <div class="section">
-      <div class="tabs"><span>Mô tả sản phẩm</span></div>
-      <div class="desc" id="gioi-thieu">
-        <p>Cà phê Arabica Cầu Đất được trồng tại vùng cao nguyên Đà Lạt ở độ cao 1.650m,
-        nơi có khí hậu mát mẻ quanh năm. Hạt được hái chín, sơ chế kỹ và rang mộc thủ công
-        để giữ trọn hương thơm tự nhiên.</p>
-        <p>Sản phẩm phù hợp pha phin, pha máy hoặc pha lạnh. Khi thưởng thức, bạn sẽ cảm nhận
-        hương hoa nhẹ, vị chua thanh đặc trưng và hậu ngọt kéo dài.</p>
-      </div>
-    </div>
+    <!-- Mô tả sản phẩm: 2 đoạn văn tự nhiên, không nhồi từ khóa -->
+    <section class="block">
+      <h2>Mô tả sản phẩm</h2>
+      <p>Hạt Arabica trong gói này được thu từ vùng Cầu Đất, nơi độ cao và khí hậu mát giúp hạt chín chậm và giữ được vị chua thanh đặc trưng. Tụi mình rang ở mức medium, đủ để hương phát triển mà không bị cháy mất phần ngọt hậu. Khi pha lên bạn sẽ thấy mùi chocolate và một chút caramel, vị chua dịu như trái cây chín chứ không gắt.</p>
+      <p>Gói 250g hợp với người uống đều mỗi ngày, dùng trong khoảng hai đến ba tuần là vừa đẹp. Bạn có thể pha phin kiểu truyền thống, hoặc dùng pour over và máy espresso đều ổn vì độ xay tụi mình để ở mức trung bình, dễ điều chỉnh. Nếu thích đậm hơn thì tăng lượng bột một chút, còn muốn nhẹ nhàng buổi sáng thì pha loãng ra vẫn giữ được hương.</p>
+    </section>
 
-    <div class="section">
+    <!-- Bảng thông số -->
+    <section class="block">
       <h2>Thông số sản phẩm</h2>
       <table class="spec">
-        <tr><td>Khối lượng</td><td>250g</td></tr>
-        <tr><td>Giống cà phê</td><td>Arabica</td></tr>
-        <tr><td>Vùng trồng</td><td>Cầu Đất, Đà Lạt (1.650m)</td></tr>
-        <tr><td>Mức độ rang</td><td>Rang mộc (medium)</td></tr>
-        <tr><td>Hạn sử dụng</td><td>12 tháng kể từ ngày rang</td></tr>
+        <tr><th>Loại hạt</th><td>100% Arabica</td></tr>
+        <tr><th>Vùng trồng</th><td>Cầu Đất, Đà Lạt</td></tr>
+        <tr><th>Độ rang</th><td>Medium (City Roast)</td></tr>
+        <tr><th>Hình thức</th><td>Bột rang xay (độ xay trung bình)</td></tr>
+        <tr><th>Khối lượng</th><td>250g / gói</td></tr>
+        <tr><th>Hương vị</th><td>Chocolate, caramel, chua nhẹ trái cây</td></tr>
+        <tr><th>Cách pha phù hợp</th><td>Phin, pour over, máy espresso</td></tr>
+        <tr><th>Hạn sử dụng</th><td>12 tháng kể từ ngày rang</td></tr>
       </table>
-    </div>
+    </section>
 
-    <div class="section">
+    <!-- Đánh giá khách hàng -->
+    <section class="block" id="reviews">
       <h2>Đánh giá khách hàng</h2>
+
       <div class="review">
-        <div class="name">Nguyễn Minh <span class="stars">★★★★★</span></div>
-        <div>Pha phin rất hợp, hương thơm tự nhiên, sẽ mua lại.</div>
+        <div class="head">
+          <span class="name">Phương Anh</span>
+          <span class="stars">★★★★★</span>
+          <span class="date">02/06/2026</span>
+        </div>
+        <p>Mùi thơm thật, mở gói ra là mê. Pha phin lên vị chua nhẹ rất dễ chịu, không bị chát. Sẽ mua lại.</p>
       </div>
+
       <div class="review">
-        <div class="name">Trần Lan <span class="stars">★★★★★</span></div>
-        <div>Đóng gói chắc chắn, cà phê tươi, vị sạch. Giao nhanh.</div>
+        <div class="head">
+          <span class="name">Đức Anh</span>
+          <span class="stars">★★★★☆</span>
+          <span class="date">21/05/2026</span>
+        </div>
+        <p>Hạt tươi, đóng gói chắc chắn. Với khẩu vị mình thì hơi nhạt một chút nên phải cho thêm bột, nhưng nhìn chung ngon.</p>
       </div>
-    </div>
+
+      <div class="review">
+        <div class="head">
+          <span class="name">Ngọc Mai</span>
+          <span class="stars">★★★★★</span>
+          <span class="date">09/05/2026</span>
+        </div>
+        <p>Pha pour over hợp lắm, hậu vị ngọt. Shop rang theo đơn nên cảm giác tươi hơn hẳn mấy chỗ mua sẵn.</p>
+      </div>
+    </section>
+
   </div>
 
-  <footer id="lien-he">
-    © 2026 Núi Cao Coffee · 123 Đường Cà Phê, Đà Lạt · 0900 123 456
+  <!-- Footer liên hệ -->
+  <footer>
+    <div class="footer-inner">
+      <div style="flex:1.4; min-width:240px;">
+        <h3>Highland Roastery</h3>
+        <p>Xưởng rang cà phê thủ công, rang theo đơn để giữ hương tươi nhất. Nguồn hạt chọn lọc từ các vùng trồng trong nước.</p>
+      </div>
+      <div style="min-width:160px;">
+        <h3>Liên hệ</h3>
+        <ul>
+          <li>Địa chỉ: 48 Nguyễn Trãi, Thanh Xuân, Hà Nội</li>
+          <li>Điện thoại: 0912 345 678</li>
+          <li>Email: xinchao@highlandroastery.vn</li>
+        </ul>
+      </div>
+      <div style="min-width:140px;">
+        <h3>Hỗ trợ</h3>
+        <ul>
+          <li><a href="/cach-pha">Hướng dẫn pha</a></li>
+          <li><a href="/chinh-sach-doi-tra">Chính sách đổi trả</a></li>
+          <li><a href="/van-chuyen">Thông tin vận chuyển</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Highland Roastery. Giờ mở cửa: 7h–22h hằng ngày.</div>
   </footer>
+
 </body>
 </html>

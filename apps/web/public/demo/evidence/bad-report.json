@@ -17,8 +17,8 @@
         "writer",
         "dev"
       ],
-      "title": "Title length 14 is out of range",
-      "description": "Title length 14 is out of range",
+      "title": "Title length 17 is out of range",
+      "description": "Title length 17 is out of range",
       "evidence": {
         "fields": {}
       },
@@ -155,8 +155,8 @@
         "writer",
         "dev"
       ],
-      "title": "4 internal links found",
-      "description": "4 internal links found",
+      "title": "12 internal links found",
+      "description": "12 internal links found",
       "evidence": {
         "fields": {}
       },
@@ -345,24 +345,24 @@
   "meta": {
     "inputType": "html",
     "contentStats": {
-      "words": 301,
-      "characters": 3246,
-      "readingTimeSec": 73
+      "words": 1139,
+      "characters": 7085,
+      "readingTimeSec": 274
     },
-    "processingTimeMs": 29,
+    "processingTimeMs": 14,
     "ruleVersion": "1.2.0",
     "enrichMode": "llm",
     "suggestionSource": "template",
     "degraded": true,
     "cached": false,
-    "requestId": "req_f872f31a606040fcb7bed5",
+    "requestId": "req_9d2a87596f8949d4ae1a87",
     "usage": {
       "remaining": {
         "minute": 20,
         "day": 500
       },
       "resetAt": {
-        "minute": "2026-06-17T06:56:52.824Z",
+        "minute": "2026-06-17T07:23:33.032Z",
         "day": "2026-06-18T00:00:00.000Z"
       }
     }
