@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e9dcc8"/><stop offset="1" stop-color="#d7c2a3"/>
+    </linearGradient>
+    <linearGradient id="bag" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5b3a21"/><stop offset="1" stop-color="#3a2414"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="640" fill="url(#bg)"/>
+  <rect x="210" y="150" width="220" height="340" rx="14" fill="url(#bag)"/>
+  <rect x="232" y="190" width="176" height="120" rx="8" fill="#efe6d6"/>
+  <text x="320" y="245" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#3a2414">ARABICA</text>
+  <text x="320" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#7a5638">Cầu Đất 250g</text>
+  <circle cx="320" cy="395" r="42" fill="#c98a3a"/>
+  <text x="320" y="404" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#fff">Rang Mộc</text>
+</svg>
