@@ -1,0 +1,378 @@
+{
+  "score": 17,
+  "scoreBreakdown": {
+    "meta": 0,
+    "headings": 0,
+    "images": 0,
+    "links": 50,
+    "technical": 13,
+    "content": 100
+  },
+  "issues": [
+    {
+      "ruleId": "title_tag",
+      "severity": "warning",
+      "category": "meta",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Title length 6 is out of range",
+      "description": "Title length 6 is out of range",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add a title between 50 and 60 characters that includes the primary keyword.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/title_tag"
+    },
+    {
+      "ruleId": "meta_description",
+      "severity": "warning",
+      "category": "meta",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Meta description is missing",
+      "description": "Meta description is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add a meta description between 120 and 160 characters.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/meta_description"
+    },
+    {
+      "ruleId": "open_graph",
+      "severity": "info",
+      "category": "meta",
+      "audience": [
+        "dev"
+      ],
+      "title": "No Open Graph tags found",
+      "description": "No Open Graph tags found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add og:title, og:description, and og:image for better social sharing.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/open_graph"
+    },
+    {
+      "ruleId": "twitter_card",
+      "severity": "info",
+      "category": "meta",
+      "audience": [
+        "dev"
+      ],
+      "title": "Twitter card is missing",
+      "description": "Twitter card is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add <meta name=\"twitter:card\" content=\"summary_large_image\">.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/twitter_card"
+    },
+    {
+      "ruleId": "h1_tag",
+      "severity": "error",
+      "category": "headings",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "No H1 tag found",
+      "description": "No H1 tag found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add exactly one H1 that describes the page topic.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/h1_tag"
+    },
+    {
+      "ruleId": "heading_hierarchy",
+      "severity": "warning",
+      "category": "headings",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Heading hierarchy has major structural issues",
+      "description": "Heading hierarchy has major structural issues",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Start with a single H1, then use H2/H3 in order without jumping levels.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/heading_hierarchy"
+    },
+    {
+      "ruleId": "image_alt",
+      "severity": "error",
+      "category": "images",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Only 0% of images have alt text",
+      "description": "Only 0% of images have alt text",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add descriptive alt attributes to improve accessibility and SEO.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/image_alt"
+    },
+    {
+      "ruleId": "internal_links",
+      "severity": "info",
+      "category": "links",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Only 1 internal link(s) found",
+      "description": "Only 1 internal link(s) found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add at least 3 internal links to support crawling and topic clusters.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/internal_links"
+    },
+    {
+      "ruleId": "external_links",
+      "severity": "info",
+      "category": "links",
+      "audience": [
+        "writer"
+      ],
+      "title": "1/1 external links are missing rel=noopener",
+      "description": "1/1 external links are missing rel=noopener",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add rel=\"noopener noreferrer\" to all external target=_blank links.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/external_links"
+    },
+    {
+      "ruleId": "canonical_url",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Canonical URL is missing",
+      "description": "Canonical URL is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add <link rel=\"canonical\" href=\"...\"> to indicate the preferred URL.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/canonical_url"
+    },
+    {
+      "ruleId": "robots_meta",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Page has noindex directive",
+      "description": "Page has noindex directive",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Remove noindex if the page should appear in search results.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/robots_meta"
+    },
+    {
+      "ruleId": "viewport_meta",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Viewport meta tag is missing",
+      "description": "Viewport meta tag is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/viewport_meta"
+    },
+    {
+      "ruleId": "https_check",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Page is served over HTTP",
+      "description": "Page is served over HTTP",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Install a TLS certificate and redirect HTTP to HTTPS.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/https_check"
+    },
+    {
+      "ruleId": "schema_org",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "No structured data (JSON-LD) found",
+      "description": "No structured data (JSON-LD) found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add schema.org JSON-LD for Article, Product, FAQ, etc.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/schema_org"
+    },
+    {
+      "ruleId": "url_structure",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "URL is short, clean and lowercase",
+      "description": "URL is short, clean and lowercase",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/url_structure"
+    },
+    {
+      "ruleId": "language_tag",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "HTML lang attribute is missing",
+      "description": "HTML lang attribute is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add lang attribute to <html> element (e.g. lang=\"en\").",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/language_tag"
+    },
+    {
+      "ruleId": "favicon",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Favicon is missing",
+      "description": "Favicon is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add <link rel=\"icon\" href=\"/favicon.ico\">.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/favicon"
+    },
+    {
+      "ruleId": "readability",
+      "severity": "warning",
+      "category": "content",
+      "audience": [
+        "writer"
+      ],
+      "title": "Readability check skipped (lang=\"unknown\", Flesch-Kincaid is English-specific)",
+      "description": "Readability check skipped (lang=\"unknown\", Flesch-Kincaid is English-specific)",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/readability"
+    }
+  ],
+  "meta": {
+    "inputType": "html",
+    "contentStats": {
+      "words": 127,
+      "characters": 685,
+      "readingTimeSec": 31
+    },
+    "processingTimeMs": 36,
+    "ruleVersion": "1.2.0",
+    "enrichMode": "llm",
+    "suggestionSource": "template",
+    "degraded": true,
+    "cached": false,
+    "requestId": "req_7e74a2266682493b9d069c",
+    "usage": {
+      "remaining": {
+        "minute": 20,
+        "day": 500
+      },
+      "resetAt": {
+        "minute": "2026-06-17T04:44:40.820Z",
+        "day": "2026-06-18T00:00:00.000Z"
+      }
+    }
+  }
+}
