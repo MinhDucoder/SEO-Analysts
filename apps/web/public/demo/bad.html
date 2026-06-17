@@ -1,50 +1,140 @@
 <!doctype html>
-<!-- ❌ language-tag: <html> KHÔNG có thuộc tính lang -->
+<!-- ❌ language-tag: <html> thiếu thuộc tính lang -->
 <html>
 <head>
   <meta charset="utf-8">
-  <!-- ❌ viewport-meta: thiếu <meta name="viewport"> -->
-  <!-- ❌ title-tag: tiêu đề quá ngắn (< 10 ký tự) -->
-  <title>Cà phê</title>
-  <!-- ❌ meta-description: thiếu hoàn toàn -->
-  <!-- ❌ canonical-url: thiếu <link rel="canonical"> -->
-  <!-- ❌ favicon: thiếu <link rel="icon"> -->
-  <!-- ❌ open-graph: thiếu toàn bộ og:* -->
-  <!-- ❌ twitter-card: thiếu toàn bộ twitter:* -->
-  <!-- ❌ robots-meta: noindex,nofollow — chặn Google index (lỗi chí mạng) -->
+  <!-- ❌ viewport-meta: quên thẻ viewport (trang không khai báo responsive) -->
+  <!-- ❌ title-tag: title generic, ngắn, không chứa từ khóa sản phẩm -->
+  <title>Núi Cao Coffee</title>
+  <!-- ❌ meta-description: không có -->
+  <!-- ❌ canonical-url: không có -->
+  <!-- ❌ favicon: không khai báo -->
+  <!-- ❌ open-graph / twitter-card: không có thẻ chia sẻ mạng xã hội -->
+  <!-- ❌ robots-meta: sót noindex,nofollow từ lúc dev (lỗi rất hay gặp) -->
   <meta name="robots" content="noindex, nofollow">
-  <!-- ❌ schema-org: KHÔNG có JSON-LD structured data -->
+  <!-- ❌ schema-org: không có JSON-LD structured data -->
   <style>
-    body{font-family:Arial;margin:8px;color:#222}
-    .title{font-size:30px;font-weight:bold}
-    img{max-width:320px}
-    a{color:blue}
+    *{box-sizing:border-box}
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#333;background:#fff}
+    .topbar{background:#5b3a21;color:#fff;font-size:13px;padding:6px 20px;text-align:center}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #eee}
+    .logo{font-size:20px;font-weight:bold;color:#5b3a21}
+    nav a{margin-left:18px;color:#444;text-decoration:none;font-size:14px}
+    .wrap{max-width:1000px;margin:0 auto;padding:20px}
+    .crumb{font-size:13px;color:#999;margin-bottom:16px}
+    .product{display:flex;gap:30px;flex-wrap:wrap}
+    .gallery{flex:1;min-width:280px}
+    .gallery>img{width:100%;border:1px solid #eee;border-radius:6px}
+    .thumbs{display:flex;gap:8px;margin-top:10px}
+    .thumbs img{width:70px;height:70px;object-fit:cover;border:1px solid #eee;border-radius:4px}
+    .info{flex:1;min-width:280px}
+    .product-title{font-size:24px;font-weight:bold;margin-bottom:8px}
+    .rating{color:#f5a623;font-size:14px;margin-bottom:10px}
+    .price{font-size:26px;color:#c0392b;font-weight:bold;margin:14px 0}
+    .old{color:#999;text-decoration:line-through;font-size:16px;font-weight:normal;margin-left:8px}
+    .btns{display:flex;gap:10px;margin:18px 0}
+    .btn{padding:12px 22px;border:none;border-radius:5px;font-size:15px;cursor:pointer}
+    .btn-buy{background:#c0392b;color:#fff}
+    .btn-cart{background:#fff;color:#c0392b;border:1px solid #c0392b}
+    .meta-list{font-size:14px;color:#555;line-height:1.9;margin-top:14px}
+    .section{margin-top:36px}
+    .tabs{display:flex;gap:20px;border-bottom:2px solid #eee;margin-bottom:16px}
+    .tabs span{padding:10px 0;font-weight:bold;color:#5b3a21;border-bottom:2px solid #5b3a21;margin-bottom:-2px}
+    .desc{font-size:15px;line-height:1.8;color:#444}
+    h2{font-size:19px;color:#2c1d12}
+    table.spec{border-collapse:collapse;width:100%;font-size:14px}
+    table.spec td{border:1px solid #eee;padding:8px 12px}
+    table.spec td:first-child{background:#faf7f2;width:180px;color:#666}
+    .review{border-bottom:1px solid #eee;padding:12px 0}
+    .review .name{font-weight:bold}
+    .review .stars{color:#f5a623;font-size:13px}
+    footer{background:#2c1d12;color:#cbb;margin-top:48px;padding:24px 20px;font-size:13px;text-align:center}
   </style>
 </head>
 <body>
-  <!-- ❌ h1-tag: dùng <div> giả tiêu đề, KHÔNG có <h1> -->
-  <div class="title">Cà phê arabica cầu đất bán ở đây</div>
+  <div class="topbar">Miễn phí giao hàng cho đơn từ 300.000đ · Hotline 0900 123 456</div>
 
-  <!-- ❌ heading-hierarchy: nhảy thẳng xuống <h4>, bỏ h1/h2/h3 -->
-  <h4>Thông tin</h4>
+  <header>
+    <div class="logo">☕ Núi Cao Coffee</div>
+    <nav>
+      <a href="/demo/bad.html">Trang chủ</a>
+      <a href="/demo/bad.html#san-pham">Sản phẩm</a>
+      <a href="/demo/bad.html#gioi-thieu">Giới thiệu</a>
+      <a href="/demo/bad.html#lien-he">Liên hệ</a>
+    </nav>
+  </header>
 
-  <!-- ❌ image-alt + image-optimization: không alt, không width/height, không loading -->
-  <img src="assets/product.svg">
-  <img src="assets/product.svg">
+  <div class="wrap">
+    <div class="crumb">Trang chủ › Cà phê hạt › Arabica Cầu Đất 250g</div>
 
-  <!-- ❌ readability + keyword-stuffing: 1 khối text dài, nhồi từ khóa -->
-  <p>Cà phê arabica cầu đất là cà phê arabica cầu đất ngon nhất, mua cà phê arabica cầu đất giá rẻ, cà phê arabica cầu đất nguyên chất, cà phê arabica cầu đất rang mộc, cà phê arabica cầu đất 250g, cà phê arabica cầu đất chính hãng, ai cần cà phê arabica cầu đất thì mua cà phê arabica cầu đất ngay vì cà phê arabica cầu đất rất tuyệt và cà phê arabica cầu đất luôn thơm ngon đậm đà khó cưỡng nên hãy chọn cà phê arabica cầu đất của chúng tôi để có cà phê arabica cầu đất tốt nhất thị trường hiện nay.</p>
+    <div class="product" id="san-pham">
+      <div class="gallery">
+        <!-- ❌ image-alt + image-optimization: ảnh không có alt, không width/height/loading -->
+        <img src="assets/product.svg">
+        <div class="thumbs">
+          <img src="assets/product.svg">
+          <img src="assets/badge.svg">
+        </div>
+      </div>
 
-  <!-- ❌ broken-links: href="#" (link rỗng) -->
-  <a href="#">Mua ngay</a>
-  <!-- ❌ external-links: link ngoài thiếu rel; ❌ internal-links: không có link nội bộ -->
-  <a href="https://facebook.com">Facebook</a>
+      <div class="info">
+        <!-- ❌ h1-tag: tiêu đề sản phẩm dùng <div> để style, KHÔNG phải <h1> -->
+        <div class="product-title">Cà phê Arabica Cầu Đất 250g - Rang Mộc</div>
+        <div class="rating">★★★★★ <span style="color:#999">(126 đánh giá)</span></div>
 
-  <!-- ❌ page-size: bloat bằng comment lớn (đẩy kích thước HTML vượt ngưỡng).
-       Nếu report KHÔNG báo page-size, tăng độ dài đoạn padding dưới đây.
-       PADDING:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-       PADDING:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-       PADDING:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-       (lặp khối PADDING này ~50 lần khi cần để vượt ngưỡng page-size) -->
+        <div class="price">145.000đ <span class="old">180.000đ</span></div>
+
+        <div class="btns">
+          <button class="btn btn-buy">Mua ngay</button>
+          <button class="btn btn-cart">Thêm vào giỏ</button>
+        </div>
+
+        <div class="meta-list">
+          🚚 Giao hàng 2-3 ngày toàn quốc<br>
+          🔄 Đổi trả trong 7 ngày<br>
+          ✅ Cam kết nguyên chất 100%
+        </div>
+      </div>
+    </div>
+
+    <!-- ❌ heading-hierarchy: trang không có h1, các mục nhảy thẳng vào h2 -->
+    <div class="section">
+      <div class="tabs"><span>Mô tả sản phẩm</span></div>
+      <div class="desc" id="gioi-thieu">
+        <p>Cà phê Arabica Cầu Đất được trồng tại vùng cao nguyên Đà Lạt ở độ cao 1.650m,
+        nơi có khí hậu mát mẻ quanh năm. Hạt được hái chín, sơ chế kỹ và rang mộc thủ công
+        để giữ trọn hương thơm tự nhiên.</p>
+        <p>Sản phẩm phù hợp pha phin, pha máy hoặc pha lạnh. Khi thưởng thức, bạn sẽ cảm nhận
+        hương hoa nhẹ, vị chua thanh đặc trưng và hậu ngọt kéo dài.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Thông số sản phẩm</h2>
+      <table class="spec">
+        <tr><td>Khối lượng</td><td>250g</td></tr>
+        <tr><td>Giống cà phê</td><td>Arabica</td></tr>
+        <tr><td>Vùng trồng</td><td>Cầu Đất, Đà Lạt (1.650m)</td></tr>
+        <tr><td>Mức độ rang</td><td>Rang mộc (medium)</td></tr>
+        <tr><td>Hạn sử dụng</td><td>12 tháng kể từ ngày rang</td></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Đánh giá khách hàng</h2>
+      <div class="review">
+        <div class="name">Nguyễn Minh <span class="stars">★★★★★</span></div>
+        <div>Pha phin rất hợp, hương thơm tự nhiên, sẽ mua lại.</div>
+      </div>
+      <div class="review">
+        <div class="name">Trần Lan <span class="stars">★★★★★</span></div>
+        <div>Đóng gói chắc chắn, cà phê tươi, vị sạch. Giao nhanh.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer id="lien-he">
+    © 2026 Núi Cao Coffee · 123 Đường Cà Phê, Đà Lạt · 0900 123 456
+  </footer>
 </body>
 </html>

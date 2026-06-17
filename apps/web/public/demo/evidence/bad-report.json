@@ -1,10 +1,10 @@
 {
-  "score": 17,
+  "score": 22,
   "scoreBreakdown": {
     "meta": 0,
     "headings": 0,
     "images": 0,
-    "links": 50,
+    "links": 100,
     "technical": 13,
     "content": 100
   },
@@ -17,8 +17,8 @@
         "writer",
         "dev"
       ],
-      "title": "Title length 6 is out of range",
-      "description": "Title length 6 is out of range",
+      "title": "Title length 14 is out of range",
+      "description": "Title length 14 is out of range",
       "evidence": {
         "fields": {}
       },
@@ -155,16 +155,12 @@
         "writer",
         "dev"
       ],
-      "title": "Only 1 internal link(s) found",
-      "description": "Only 1 internal link(s) found",
+      "title": "4 internal links found",
+      "description": "4 internal links found",
       "evidence": {
         "fields": {}
       },
-      "suggestion": {
-        "type": "rewrite",
-        "text": "Add at least 3 internal links to support crawling and topic clusters.",
-        "rationale": ""
-      },
+      "suggestion": null,
       "docRef": "https://docs.seo-analyst.vn/rules/internal_links"
     },
     {
@@ -174,16 +170,12 @@
       "audience": [
         "writer"
       ],
-      "title": "1/1 external links are missing rel=noopener",
-      "description": "1/1 external links are missing rel=noopener",
+      "title": "No external links on the page",
+      "description": "No external links on the page",
       "evidence": {
         "fields": {}
       },
-      "suggestion": {
-        "type": "rewrite",
-        "text": "Add rel=\"noopener noreferrer\" to all external target=_blank links.",
-        "rationale": ""
-      },
+      "suggestion": null,
       "docRef": "https://docs.seo-analyst.vn/rules/external_links"
     },
     {
@@ -353,24 +345,24 @@
   "meta": {
     "inputType": "html",
     "contentStats": {
-      "words": 127,
-      "characters": 685,
-      "readingTimeSec": 31
+      "words": 301,
+      "characters": 3246,
+      "readingTimeSec": 73
     },
-    "processingTimeMs": 36,
+    "processingTimeMs": 29,
     "ruleVersion": "1.2.0",
     "enrichMode": "llm",
     "suggestionSource": "template",
     "degraded": true,
     "cached": false,
-    "requestId": "req_7e74a2266682493b9d069c",
+    "requestId": "req_f872f31a606040fcb7bed5",
     "usage": {
       "remaining": {
         "minute": 20,
         "day": 500
       },
       "resetAt": {
-        "minute": "2026-06-17T04:44:40.820Z",
+        "minute": "2026-06-17T06:56:52.824Z",
         "day": "2026-06-18T00:00:00.000Z"
       }
     }

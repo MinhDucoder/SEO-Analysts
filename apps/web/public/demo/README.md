@@ -4,14 +4,19 @@ Cặp trang minh hoạ **vòng lặp đóng (closed-loop)** của hệ thống S
 
 > `bad.html` → app phát hiện lỗi + đưa gợi ý sửa → áp dụng đúng các gợi ý → `good.html`.
 
-Bản `good.html` **không** được dựng tuỳ ý — mỗi sửa đổi bám theo một gợi ý có
-thật trong `evidence/bad-report.json` (xem bảng truy vết bên dưới).
+`bad.html` là **một trang bán hàng cơ bản, trông như shop thật** (có header, nav,
+ảnh, giá, mô tả, đánh giá, footer) — nhưng **không làm SEO** (thiếu meta, og,
+schema, alt, canonical, h1 đúng nghĩa, lang, viewport; sót `noindex`). Đây là kịch
+bản rất hay gặp ngoài thực tế.
+
+`good.html` **không** được dựng tuỳ ý — mỗi sửa đổi bám theo một gợi ý có thật
+trong `evidence/bad-report.json` (xem bảng truy vết bên dưới).
 
 ## Kết quả
 
 | | Điểm SEO | Số rule còn lỗi |
 |---|---|---|
-| **bad.html**  | **17 / 100** (poor) | 16 |
+| **bad.html**  | **22 / 100** (poor) | 14 |
 | **good.html** | **81 / 100** (good) | 4 |
 
 Điểm theo nhóm (scoreBreakdown):
@@ -21,12 +26,15 @@ thật trong `evidence/bad-report.json` (xem bảng truy vết bên dưới).
 | meta | 0 | 50¹ |
 | headings | 0 | 100 |
 | images | 0 | 100 |
-| links | 50 | 100 |
+| links | 100 | 100 |
 | technical | 13 | 81² |
 | content | 100 | 100 |
 
 ¹ meta chưa đạt 100 do bug parser og/twitter của app — xem Caveat.
 ² technical chưa 100 do `https_check` (localhost http) + `canonical_url` (html-mode) — xem Caveat.
+
+> Trang bad đã đạt sẵn nhóm **links** (100) vì có thanh nav nội bộ thật — đúng tinh
+> thần "shop thật nhưng quên SEO". Tương phản nằm ở meta/headings/images/technical.
 
 ## Cách chạy demo
 
@@ -54,13 +62,11 @@ Cột "Issue app báo" và "Gợi ý app đưa" lấy **nguyên văn** từ `evi
 
 | Rule | Issue app báo (BAD) | Gợi ý app đưa | Đã sửa ở GOOD | Pass? |
 |---|---|---|---|---|
-| title_tag | Title length 6 is out of range | Add a title between 50 and 60 characters that includes the primary keyword. | `<title>` 55 ký tự, chứa keyword + brand | ✅ |
+| title_tag | Title length 14 is out of range | Add a title between 50 and 60 characters that includes the primary keyword. | `<title>` 55 ký tự, chứa keyword + brand | ✅ |
 | meta_description | Meta description is missing | Add a meta description between 120 and 160 characters. | `<meta name=description>` 151 ký tự | ✅ |
-| h1_tag | No H1 tag found | Add exactly one H1 that describes the page topic. | Đúng 1 `<h1>` chứa keyword | ✅ |
+| h1_tag | No H1 tag found | Add exactly one H1 that describes the page topic. | Đúng 1 `<h1>` chứa keyword (thay vì div) | ✅ |
 | heading_hierarchy | Heading hierarchy has major structural issues | Start with a single H1, then use H2/H3 in order without jumping levels. | h1 → h2 → h3 đúng thứ tự | ✅ |
 | image_alt | Only 0% of images have alt text | Add descriptive alt attributes to improve accessibility and SEO. | `alt` mô tả cho 100% ảnh | ✅ |
-| internal_links | Only 1 internal link(s) found | Add at least 3 internal links to support crawling and topic clusters. | 5 link nội bộ (nav + CTA) | ✅ |
-| external_links | 1/1 external links are missing rel=noopener | Add rel="noopener noreferrer" to all external target=_blank links. | `rel="noopener noreferrer"` | ✅ |
 | robots_meta | Page has noindex directive | Remove noindex if the page should appear in search results. | `content="index, follow"` | ✅ |
 | viewport_meta | Viewport meta tag is missing | Add `<meta name="viewport" content="width=device-width, initial-scale=1">`. | Đã thêm viewport | ✅ |
 | schema_org | No structured data (JSON-LD) found | Add schema.org JSON-LD for Article, Product, FAQ, etc. | JSON-LD Product+Offer+AggregateRating + Breadcrumb (2 block) | ✅ |
@@ -70,10 +76,9 @@ Cột "Issue app báo" và "Gợi ý app đưa" lấy **nguyên văn** từ `evi
 | twitter_card | Twitter card is missing | Add `<meta name="twitter:card" content="summary_large_image">`. | Đã thêm đủ twitter:* — **nhưng app vẫn báo thiếu** (bug parser, xem Caveat) | ⚠️ |
 | canonical_url | Canonical URL is missing | Add `<link rel="canonical" href="...">`. | Đã thêm canonical — good báo "khác domain" do html-mode không có URL gốc | ⚠️ |
 | https_check | Page is served over HTTP | Install a TLS certificate and redirect HTTP to HTTPS. | Không thể đạt trên `localhost` http | ⚠️ |
-| url_structure | URL is short, clean and lowercase | _(không có gợi ý — đã đạt)_ | — | ✅ |
-| readability | Readability check skipped (lang unknown) | _(không có gợi ý)_ | `lang="vi"` — Flesch chỉ áp dụng cho tiếng Anh nên app bỏ qua | — |
 
-**12 rule chuyển fail → pass** nhờ áp dụng gợi ý của app.
+**10 rule chuyển fail → pass** nhờ áp dụng gợi ý của app. (Nhóm `links` bad đã đạt
+sẵn nên không nằm trong danh sách "fix".)
 
 ## Caveat (4 rule còn báo ở GOOD — không phải lỗi của trang)
 
