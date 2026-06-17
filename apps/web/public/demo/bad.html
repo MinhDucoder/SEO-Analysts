@@ -1,0 +1,50 @@
+<!doctype html>
+<!-- ❌ language-tag: <html> KHÔNG có thuộc tính lang -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- ❌ viewport-meta: thiếu <meta name="viewport"> -->
+  <!-- ❌ title-tag: tiêu đề quá ngắn (< 10 ký tự) -->
+  <title>Cà phê</title>
+  <!-- ❌ meta-description: thiếu hoàn toàn -->
+  <!-- ❌ canonical-url: thiếu <link rel="canonical"> -->
+  <!-- ❌ favicon: thiếu <link rel="icon"> -->
+  <!-- ❌ open-graph: thiếu toàn bộ og:* -->
+  <!-- ❌ twitter-card: thiếu toàn bộ twitter:* -->
+  <!-- ❌ robots-meta: noindex,nofollow — chặn Google index (lỗi chí mạng) -->
+  <meta name="robots" content="noindex, nofollow">
+  <!-- ❌ schema-org: KHÔNG có JSON-LD structured data -->
+  <style>
+    body{font-family:Arial;margin:8px;color:#222}
+    .title{font-size:30px;font-weight:bold}
+    img{max-width:320px}
+    a{color:blue}
+  </style>
+</head>
+<body>
+  <!-- ❌ h1-tag: dùng <div> giả tiêu đề, KHÔNG có <h1> -->
+  <div class="title">Cà phê arabica cầu đất bán ở đây</div>
+
+  <!-- ❌ heading-hierarchy: nhảy thẳng xuống <h4>, bỏ h1/h2/h3 -->
+  <h4>Thông tin</h4>
+
+  <!-- ❌ image-alt + image-optimization: không alt, không width/height, không loading -->
+  <img src="assets/product.svg">
+  <img src="assets/product.svg">
+
+  <!-- ❌ readability + keyword-stuffing: 1 khối text dài, nhồi từ khóa -->
+  <p>Cà phê arabica cầu đất là cà phê arabica cầu đất ngon nhất, mua cà phê arabica cầu đất giá rẻ, cà phê arabica cầu đất nguyên chất, cà phê arabica cầu đất rang mộc, cà phê arabica cầu đất 250g, cà phê arabica cầu đất chính hãng, ai cần cà phê arabica cầu đất thì mua cà phê arabica cầu đất ngay vì cà phê arabica cầu đất rất tuyệt và cà phê arabica cầu đất luôn thơm ngon đậm đà khó cưỡng nên hãy chọn cà phê arabica cầu đất của chúng tôi để có cà phê arabica cầu đất tốt nhất thị trường hiện nay.</p>
+
+  <!-- ❌ broken-links: href="#" (link rỗng) -->
+  <a href="#">Mua ngay</a>
+  <!-- ❌ external-links: link ngoài thiếu rel; ❌ internal-links: không có link nội bộ -->
+  <a href="https://facebook.com">Facebook</a>
+
+  <!-- ❌ page-size: bloat bằng comment lớn (đẩy kích thước HTML vượt ngưỡng).
+       Nếu report KHÔNG báo page-size, tăng độ dài đoạn padding dưới đây.
+       PADDING:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+       PADDING:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+       PADDING:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+       (lặp khối PADDING này ~50 lần khi cần để vượt ngưỡng page-size) -->
+</body>
+</html>
