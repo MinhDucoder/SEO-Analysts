@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- ✅ language-tag: app báo "HTML lang attribute is missing" → thêm lang -->
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <!-- ✅ viewport-meta: app báo "Viewport meta tag is missing" -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- ✅ title-tag: app báo "Title length 6 is out of range" → 50-60 ký tự + keyword -->
+  <title>Cà Phê Arabica Cầu Đất 250g – Rang Mộc | Núi Cao Coffee</title>
+  <!-- ✅ meta-description: app báo "Meta description is missing" → 120-160 ký tự -->
+  <meta name="description" content="Cà phê Arabica Cầu Đất 250g rang mộc nguyên chất từ vùng cao 1.650m. Hương hoa, hậu ngọt, axit thanh. Giao nhanh, đổi trả 7 ngày. Đặt mua ngay hôm nay.">
+  <!-- ✅ canonical-url: app báo "Canonical URL is missing" -->
+  <link rel="canonical" href="http://localhost:3001/demo/good.html">
+  <!-- ✅ favicon: app báo "Favicon is missing" -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <!-- ✅ robots-meta: app báo "Page has noindex directive" → bỏ noindex -->
+  <meta name="robots" content="index, follow">
+  <!-- ✅ open-graph: app báo "No Open Graph tags found" -->
+  <meta property="og:type" content="product">
+  <meta property="og:title" content="Cà Phê Arabica Cầu Đất 250g – Rang Mộc">
+  <meta property="og:description" content="Arabica Cầu Đất rang mộc nguyên chất, hương hoa hậu ngọt. Đặt mua tại Núi Cao Coffee.">
+  <meta property="og:image" content="http://localhost:3001/demo/assets/product.svg">
+  <meta property="og:url" content="http://localhost:3001/demo/good.html">
+  <!-- ✅ twitter-card: app báo "Twitter card is missing" -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cà Phê Arabica Cầu Đất 250g – Rang Mộc">
+  <meta name="twitter:description" content="Arabica Cầu Đất rang mộc nguyên chất, hương hoa hậu ngọt.">
+  <meta name="twitter:image" content="http://localhost:3001/demo/assets/product.svg">
+  <!-- ✅ schema-org: app báo "No structured data (JSON-LD) found" → Product + Offer + AggregateRating + Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Cà Phê Arabica Cầu Đất 250g – Rang Mộc",
+    "image": "http://localhost:3001/demo/assets/product.svg",
+    "description": "Cà phê Arabica Cầu Đất 250g rang mộc nguyên chất từ vùng cao 1.650m.",
+    "brand": { "@type": "Brand", "name": "Núi Cao Coffee" },
+    "offers": {
+      "@type": "Offer",
+      "price": "145000",
+      "priceCurrency": "VND",
+      "availability": "https://schema.org/InStock",
+      "url": "http://localhost:3001/demo/good.html"
+    },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "126" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "http://localhost:3001/demo/good.html" },
+      { "@type": "ListItem", "position": 2, "name": "Cà phê hạt", "item": "http://localhost:3001/demo/good.html#ca-phe-hat" },
+      { "@type": "ListItem", "position": 3, "name": "Arabica Cầu Đất 250g" }
+    ]
+  }
+  </script>
+  <style>
+    :root{--bg:#faf6ef;--ink:#2c1d12;--muted:#6b5743;--accent:#9a5b27;--card:#fff;--line:#e7dccb}
+    *{box-sizing:border-box}
+    body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;color:var(--ink);background:var(--bg);line-height:1.6}
+    header{display:flex;align-items:center;gap:10px;padding:16px 24px;border-bottom:1px solid var(--line)}
+    header img{width:36px;height:36px}
+    nav a{margin-left:16px;color:var(--muted);text-decoration:none;font-size:14px}
+    main{max-width:980px;margin:0 auto;padding:24px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+    .hero img{width:100%;height:auto;border-radius:16px;border:1px solid var(--line)}
+    h1{font-size:30px;line-height:1.25;margin:0 0 8px}
+    .price{font-size:28px;color:var(--accent);font-weight:700;margin:12px 0}
+    .buy{display:inline-block;background:var(--accent);color:#fff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600}
+    section{margin-top:40px}
+    h2{font-size:22px;border-left:4px solid var(--accent);padding-left:10px}
+    h3{font-size:17px;margin-bottom:4px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+    footer{border-top:1px solid var(--line);margin-top:48px;padding:24px;color:var(--muted);font-size:13px}
+    @media(max-width:720px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <!-- ✅ image-alt + image-optimization: alt mô tả + width/height + loading -->
+    <img src="assets/badge.svg" width="36" height="36" alt="Logo Núi Cao Coffee" loading="lazy">
+    <strong>Núi Cao Coffee</strong>
+    <!-- ✅ internal-links: app báo "Only 1 internal link(s) found" → ≥3 link nội bộ -->
+    <nav>
+      <a href="/demo/good.html#mo-ta">Mô tả</a>
+      <a href="/demo/good.html#danh-gia">Đánh giá</a>
+      <a href="/demo/good.html#dat-mua">Đặt mua</a>
+      <a href="/demo/bad.html">Sản phẩm khác</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <img src="assets/product.svg" width="640" height="640"
+           alt="Túi cà phê Arabica Cầu Đất 250g rang mộc của Núi Cao Coffee" loading="lazy">
+      <div>
+        <!-- ✅ h1-tag: app báo "No H1 tag found" → đúng 1 h1 chứa keyword -->
+        <h1>Cà Phê Arabica Cầu Đất 250g – Rang Mộc</h1>
+        <p>Hạt Arabica trồng ở độ cao 1.650m vùng Cầu Đất, rang mộc giữ trọn hương hoa và hậu ngọt tự nhiên.</p>
+        <div class="price">145.000đ</div>
+        <!-- ✅ broken-links: app cảnh báo link rỗng → href hợp lệ -->
+        <a class="buy" href="/demo/good.html#dat-mua">Đặt mua ngay</a>
+      </div>
+    </div>
+
+    <!-- ✅ heading-hierarchy: app báo "major structural issues" → h1 → h2 → h3 đúng thứ tự -->
+    <section id="mo-ta">
+      <h2>Mô tả sản phẩm</h2>
+      <p>Arabica Cầu Đất là dòng cà phê đặc sản nổi tiếng của Đà Lạt. Mỗi mẻ được rang mộc thủ công, không pha trộn, giữ nguyên đặc trưng vùng trồng.</p>
+      <div class="grid">
+        <div class="card"><h3>Vùng trồng</h3><p>Cầu Đất, Đà Lạt — độ cao 1.650m, khí hậu mát quanh năm.</p></div>
+        <div class="card"><h3>Hương vị</h3><p>Hương hoa nhẹ, vị chua thanh, hậu ngọt kéo dài.</p></div>
+        <div class="card"><h3>Cách rang</h3><p>Rang mộc medium, đóng gói van 1 chiều giữ hương.</p></div>
+      </div>
+    </section>
+
+    <section id="danh-gia">
+      <h2>Đánh giá khách hàng</h2>
+      <h3>Minh — 5★</h3>
+      <p>Pha phin rất hợp, hương thơm tự nhiên, sẽ mua lại.</p>
+      <h3>Lan — 5★</h3>
+      <p>Đóng gói chắc chắn, cà phê tươi, vị sạch.</p>
+    </section>
+
+    <section id="dat-mua">
+      <h2>Nguồn gốc &amp; chứng nhận</h2>
+      <p>Tham khảo thêm về vùng trồng tại
+        <!-- ✅ external-links: app báo "missing rel=noopener" → rel="noopener noreferrer" -->
+        <a href="https://vi.wikipedia.org/wiki/C%E1%BA%A7u_%C4%90%E1%BA%A5t" rel="noopener noreferrer" target="_blank">Cầu Đất (Wikipedia)</a>.
+      </p>
+    </section>
+  </main>
+
+  <footer>© 2026 Núi Cao Coffee · Cà phê đặc sản Cầu Đất</footer>
+</body>
+</html>

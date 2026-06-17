@@ -1,0 +1,330 @@
+{
+  "score": 81,
+  "scoreBreakdown": {
+    "meta": 50,
+    "headings": 100,
+    "images": 100,
+    "links": 100,
+    "technical": 81,
+    "content": 100
+  },
+  "issues": [
+    {
+      "ruleId": "title_tag",
+      "severity": "warning",
+      "category": "meta",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Title length 55 is optimal (50-60 chars)",
+      "description": "Title length 55 is optimal (50-60 chars)",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/title_tag"
+    },
+    {
+      "ruleId": "meta_description",
+      "severity": "warning",
+      "category": "meta",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Meta description length 151 is optimal",
+      "description": "Meta description length 151 is optimal",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/meta_description"
+    },
+    {
+      "ruleId": "open_graph",
+      "severity": "info",
+      "category": "meta",
+      "audience": [
+        "dev"
+      ],
+      "title": "No Open Graph tags found",
+      "description": "No Open Graph tags found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add og:title, og:description, and og:image for better social sharing.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/open_graph"
+    },
+    {
+      "ruleId": "twitter_card",
+      "severity": "info",
+      "category": "meta",
+      "audience": [
+        "dev"
+      ],
+      "title": "Twitter card is missing",
+      "description": "Twitter card is missing",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Add <meta name=\"twitter:card\" content=\"summary_large_image\">.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/twitter_card"
+    },
+    {
+      "ruleId": "h1_tag",
+      "severity": "error",
+      "category": "headings",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Exactly one H1 found",
+      "description": "Exactly one H1 found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/h1_tag"
+    },
+    {
+      "ruleId": "heading_hierarchy",
+      "severity": "warning",
+      "category": "headings",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "Heading hierarchy is well-structured",
+      "description": "Heading hierarchy is well-structured",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/heading_hierarchy"
+    },
+    {
+      "ruleId": "image_alt",
+      "severity": "error",
+      "category": "images",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "100% of images have alt text",
+      "description": "100% of images have alt text",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/image_alt"
+    },
+    {
+      "ruleId": "internal_links",
+      "severity": "info",
+      "category": "links",
+      "audience": [
+        "writer",
+        "dev"
+      ],
+      "title": "5 internal links found",
+      "description": "5 internal links found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/internal_links"
+    },
+    {
+      "ruleId": "external_links",
+      "severity": "info",
+      "category": "links",
+      "audience": [
+        "writer"
+      ],
+      "title": "All external links use rel=noopener",
+      "description": "All external links use rel=noopener",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/external_links"
+    },
+    {
+      "ruleId": "canonical_url",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Canonical URL points to a different domain",
+      "description": "Canonical URL points to a different domain",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Verify cross-domain canonical is intentional.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/canonical_url"
+    },
+    {
+      "ruleId": "robots_meta",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Robots meta is \"index, follow\"",
+      "description": "Robots meta is \"index, follow\"",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/robots_meta"
+    },
+    {
+      "ruleId": "viewport_meta",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Viewport meta is mobile-friendly",
+      "description": "Viewport meta is mobile-friendly",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/viewport_meta"
+    },
+    {
+      "ruleId": "https_check",
+      "severity": "warning",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Page is served over HTTP",
+      "description": "Page is served over HTTP",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": {
+        "type": "rewrite",
+        "text": "Install a TLS certificate and redirect HTTP to HTTPS.",
+        "rationale": ""
+      },
+      "docRef": "https://docs.seo-analyst.vn/rules/https_check"
+    },
+    {
+      "ruleId": "schema_org",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "2 JSON-LD block(s) found",
+      "description": "2 JSON-LD block(s) found",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/schema_org"
+    },
+    {
+      "ruleId": "url_structure",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "URL is short, clean and lowercase",
+      "description": "URL is short, clean and lowercase",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/url_structure"
+    },
+    {
+      "ruleId": "language_tag",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "HTML lang=\"vi\" declared",
+      "description": "HTML lang=\"vi\" declared",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/language_tag"
+    },
+    {
+      "ruleId": "favicon",
+      "severity": "info",
+      "category": "technical",
+      "audience": [
+        "dev"
+      ],
+      "title": "Favicon is declared",
+      "description": "Favicon is declared",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/favicon"
+    },
+    {
+      "ruleId": "readability",
+      "severity": "warning",
+      "category": "content",
+      "audience": [
+        "writer"
+      ],
+      "title": "Readability check skipped (lang=\"vi\", Flesch-Kincaid is English-specific)",
+      "description": "Readability check skipped (lang=\"vi\", Flesch-Kincaid is English-specific)",
+      "evidence": {
+        "fields": {}
+      },
+      "suggestion": null,
+      "docRef": "https://docs.seo-analyst.vn/rules/readability"
+    }
+  ],
+  "meta": {
+    "inputType": "html",
+    "contentStats": {
+      "words": 333,
+      "characters": 3238,
+      "readingTimeSec": 80
+    },
+    "processingTimeMs": 18,
+    "ruleVersion": "1.2.0",
+    "enrichMode": "llm",
+    "suggestionSource": "template",
+    "degraded": true,
+    "cached": false,
+    "requestId": "req_3399885191f74f8abb5c95",
+    "usage": {
+      "remaining": {
+        "minute": 20,
+        "day": 500
+      },
+      "resetAt": {
+        "minute": "2026-06-17T04:46:21.643Z",
+        "day": "2026-06-18T00:00:00.000Z"
+      }
+    }
+  }
+}
